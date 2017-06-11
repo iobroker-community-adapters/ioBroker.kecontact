@@ -25,7 +25,7 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "messagebox": true,
-    "readme": "https://github.com/UncleSamSwiss/ioBroker.KeContact/blob/master/README.md",
+    "readme": "https://github.com/UncleSamSwiss/ioBroker.kecontact/blob/master/README.md",
     "loglevel": "info",
     "type": "hardware",
     "keywords": [
@@ -37,7 +37,7 @@
       "e-mobility"
     ],
     "icon": "charger.png",
-    "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.KeContact/master/admin/charger.png"
+    "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.kecontact/master/admin/charger.png"
   },
   "native": {
     "host": "0.0.0.0",

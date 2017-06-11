@@ -1,0 +1,48 @@
+{
+  "common": {
+    "name": "kecontact",
+    "version": "0.0.1",
+    "news": {
+      "0.0.1": {
+        "en": "initial commit",
+        "de": "initial commit"
+      }
+    },
+    "title": "KEBA KeContact Adapter",
+    "titleLang": {
+      "en": "KEBA KeContact Adapter",
+      "de": "KEBA KeContact-Adapter",
+      "ru": "Драйвер для KEBA KeContact"
+    },
+    "desc": {
+      "en": "Communicates with a KEBA KeContact wallbox.",
+      "de": "Kommuniziert mit einer KEBA KeContact Ladestation."
+    },
+    "authors": [
+      "UncleSamSwiss <samuel.weibel@gmail.com>"
+    ],
+    "license": "Apache 2.0",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "messagebox": true,
+    "readme": "https://github.com/UncleSamSwiss/ioBroker.KeContact/blob/master/README.md",
+    "loglevel": "info",
+    "type": "hardware",
+    "keywords": [
+      "KeContact",
+      "P30",
+      "KEBA",
+      "wallbox",
+      "emobility",
+      "e-mobility"
+    ],
+    "icon": "charger.png",
+    "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.KeContact/master/admin/charger.png"
+  },
+  "native": {
+    "host": "0.0.0.0",
+    "pollInterval": 30
+  },
+  "objects": [
+  ]
+}

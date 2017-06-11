@@ -59,6 +59,11 @@ adapter.on('ready', function () {
 });
 
 function main() {
+    if (adapter.config.host == '0.0.0.0' || adapter.config.host == '127.0.0.1') {
+        adapter.log.warn('Can\'n start adapter for invalid IP address: ' + adapter.config.host);
+        return;
+    }
+
     udpSocket = createUdpSocket('0.0.0.0', false, start);
 
     var netIfs = os.networkInterfaces();
@@ -128,10 +133,11 @@ function sendUdpDatagram(message) {
     if (udpSocket) {
         udpSocket.send(message, 0, message.length, UDP_PORT, adapter.config.host, function (err, bytes) {
             if (err) {
-                throw err;
+                adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + UDP_PORT + ': ' + err);
+                return;
             }
             
-            adapter.log.debug('Sent "' + message + '"');
+            adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + UDP_PORT);
         });
     }
 }

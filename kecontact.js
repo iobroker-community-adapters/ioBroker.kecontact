@@ -13,25 +13,37 @@ var os = require('os');
 // create the adapter object
 var adapter = utils.adapter('kecontact');
 
-var UDP_PORT = 7090;
-var udpSocket;
-var broadcastRxSockets = [];
+var DEFAULT_UDP_PORT = 7090;
+var BROADCAST_UDP_PORT = 7092;
+
+var txSocket;
+var rxSocketReports;
+var rxSocketBrodacast;
 var pollTimer;
+var states = {};
 var stateChangeListeners = {};
 var currentStateValues = {};
 
 // unloading
 adapter.on('unload', function (callback) {
-    if (pollTimer) {
-        clearInterval(pollTimer);
-    }
-
-    if (udpSocket) {
-        udpSocket.close();
-    }
-
-    for (var index in broadcastRxSockets) {
-        broadcastRxSockets[index].close();
+    try {
+        if (pollTimer) {
+            clearInterval(pollTimer);
+        }
+        
+        if (txSocket) {
+            txSocket.close();
+        }
+        
+        if (rxSocketReports) {
+            rxSocketReports.close();
+        }
+        
+        if (rxSocketBrodacast) {
+            rxSocketBrodacast.close();
+        }
+    } catch (e) {
+        adapter.log.warn('Error while closing: ' + e);
     }
 
     callback();
@@ -63,18 +75,61 @@ function main() {
         adapter.log.warn('Can\'n start adapter for invalid IP address: ' + adapter.config.host);
         return;
     }
+    
+    txSocket = dgram.createSocket('udp4');
+    
+    rxSocketReports = dgram.createSocket('udp4');
+    rxSocketReports.on('listening', function () {
+        var address = rxSocketReports.address();
+        adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
+    });
+    rxSocketReports.on('message', function (message, remote) {
+        adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
+        try {
+            var msg = message.toString().trim();
+            if (msg.length === 0) {
+                return;
+            }
 
-    udpSocket = createUdpSocket('0.0.0.0', false, start);
+            if (msg[0] == '"') {
+                msg = '{ ' + msg + ' }';
+            }
 
-    var netIfs = os.networkInterfaces();
-    for (var name in netIfs) {
-        var netIf = netIfs[name];
-        for (var index in netIf) {
-            if (netIf[index].family == 'IPv4') {
-                broadcastRxSockets.push(createUdpSocket(netIf[index].address, true));
+            handleMessage(JSON.parse(msg));
+        } catch (e) {
+            adapter.log.warn('Error handling message: ' + e);
+        }
+    });
+    rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
+    
+    rxSocketBrodacast = dgram.createSocket('udp4');
+    rxSocketBrodacast.on('listening', function () {
+        rxSocketBrodacast.setBroadcast(true);
+        rxSocketBrodacast.setMulticastLoopback(true);
+        var address = rxSocketBrodacast.address();
+        adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
+    });
+    rxSocketBrodacast.on('message', function (message, remote) {
+        adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
+        try {
+            restartPollTimer(); // reset the timer so we don't send requests too often
+            requestReports();
+        } catch (e) {
+            adapter.log.warn('Error handling message: ' + e);
+        }
+    });
+    rxSocketBrodacast.bind(BROADCAST_UDP_PORT, '0.0.0.0');
+    
+    adapter.getStatesOf(function (err, data) {
+        
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].native.udpKey) {
+                states[data[i].native.udpKey] = data[i];
             }
         }
-    }
+
+        start();
+    });
 }
 
 function start() {
@@ -82,10 +137,7 @@ function start() {
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
-    var pollInterval = parseInt(adapter.config.pollInterval);
-    if (pollInterval > 0) {
-        pollTimer = setInterval(requestReports, 1000 * pollInterval);
-    }
+    restartPollTimer();
 }
 
 function requestReports() {
@@ -93,51 +145,51 @@ function requestReports() {
     sendUdpDatagram('report 3');
 }
 
-function handleMessage(message) {
+function restartPollTimer() {
+    if (pollTimer) {
+        clearInterval(pollTimer);
+    }
+
+    var pollInterval = parseInt(adapter.config.pollInterval);
+    if (pollInterval > 0) {
+        pollTimer = setInterval(requestReports, 1000 * Math.max(pollInterval, 5));
+    }
 }
 
-function createUdpSocket(address, broadcast, callback) {
-    var socket = dgram.createSocket('udp4');
-    
-    socket.on('listening', function () {
-        var address = socket.address();
-        adapter.log.debug('UDP Client listening on ' + address.address + ':' + address.port);
-        if (broadcast) {
-            socket.setBroadcast(true);
+function handleMessage(message) {
+    for (var key in message) {
+        if (states[key]) {
+            try {
+                updateState(states[key], message[key]);
+            } catch (e) {
+                adapter.log.warn("Couldn't update state " + key + ": " + e);
+            }
+        } else {
+            adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
         }
-        
-        if (callback) {
-            callback();
-        }
-    });
-    
-    socket.on('error', function (err) {
-        adapter.log.warn('UDP socket error: ' + err);
-        socket.close();
-    });
-    
-    socket.on('message', function (message, remote) {
-        adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-        try {
-            handleMessage(JSON.parse(message.toString()));
-        } catch (e) {
-            adapter.log.warn('Error handling message: ' + e);
-        }
-    });
-    
-    socket.bind(UDP_PORT, address);
-    return socket;
+
+    }
+}
+
+function updateState(stateData, value) {
+    if (stateData.common.type == 'number') {
+        value = parseFloat(value);
+    }
+    if (stateData.native.udpMultiplier) {
+        value *= parseFloat(stateData.native.udpMultiplier);
+    }
+    setStateAck(stateData._id, value);
 }
 
 function sendUdpDatagram(message) {
-    if (udpSocket) {
-        udpSocket.send(message, 0, message.length, UDP_PORT, adapter.config.host, function (err, bytes) {
+    if (txSocket) {
+        txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err, bytes) {
             if (err) {
-                adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + UDP_PORT + ': ' + err);
+                adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + DEFAULT_UDP_PORT + ': ' + err);
                 return;
             }
             
-            adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + UDP_PORT);
+            adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + DEFAULT_UDP_PORT);
         });
     }
 }

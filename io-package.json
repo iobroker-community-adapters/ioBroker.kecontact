@@ -44,5 +44,446 @@
     "pollInterval": 30
   },
   "objects": [
+  ],
+  "instanceObjects": [
+    {
+      "_id": "product",
+      "type": "state",
+      "common": {
+        "name": "Product ID",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false,
+        "desc": "Model name (variant)"
+      },
+      "native": {
+        "udpKey": "Product"
+      }
+    },
+    {
+      "_id": "serial",
+      "type": "state",
+      "common": {
+        "name": "Serial Number",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "Serial"
+      }
+    },
+    {
+      "_id": "firmware",
+      "type": "state",
+      "common": {
+        "name": "Firmware Version",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "Firmware"
+      }
+    },
+    {
+      "_id": "state",
+      "type": "state",
+      "common": {
+        "name": "State",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Current state of the wallbox"
+      },
+      "native": {
+        "udpKey": "State"
+      }
+    },
+    {
+      "_id": "error1",
+      "type": "state",
+      "common": {
+        "name": "Error 1",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Detail code for state 4; exceptions see FAQ on www.kecontact.com"
+      },
+      "native": {
+        "udpKey": "Error1"
+      }
+    },
+    {
+      "_id": "error2",
+      "type": "state",
+      "common": {
+        "name": "Error 2",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Detail code for state 4 exception #6 see FAQ on www.kecontact.com"
+      },
+      "native": {
+        "udpKey": "Error2"
+      }
+    },
+    {
+      "_id": "plug",
+      "type": "state",
+      "common": {
+        "name": "Plug",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Current condition of the loading connection"
+      },
+      "native": {
+        "udpKey": "Plug"
+      }
+    },
+    {
+      "_id": "enableSys",
+      "type": "state",
+      "common": {
+        "name": "Enable System",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Enable state for charging (contains Enable input, RFID, UDP,..)."
+      },
+      "native": {
+        "udpKey": "Enable sys"
+      }
+    },
+    {
+      "_id": "enableUser",
+      "type": "state",
+      "common": {
+        "name": "Enable User",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "Enable condition via UDP."
+      },
+      "native": {
+        "udpKey": "Enable user"
+      }
+    },
+    {
+      "_id": "maxCurrent",
+      "type": "state",
+      "common": {
+        "name": "Maximum Current",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current preset value via Control pilot in milliampere."
+      },
+      "native": {
+        "udpKey": "Max curr"
+      }
+    },
+    {
+      "_id": "maxCurrentPercent",
+      "type": "state",
+      "common": {
+        "name": "Maximum Current Percent",
+        "type": "number",
+        "role": "value",
+        "unit": "%",
+        "read": true,
+        "write": false,
+        "desc": "Current preset value via Control pilot in % of the PWM value."
+      },
+      "native": {
+        "udpKey": "Max curr %",
+        "udpMultiplier": 0.1
+      }
+    },
+    {
+      "_id": "currentHardware",
+      "type": "state",
+      "common": {
+        "name": "Maximum Current Hardware",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Highest possible charging current of the charging connection."
+      },
+      "native": {
+        "udpKey": "Curr HW"
+      }
+    },
+    {
+      "_id": "currentUser",
+      "type": "state",
+      "common": {
+        "name": "Current User",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current preset value of the user via UDP; Default = 63000mA."
+      },
+      "native": {
+        "udpKey": "Curr user"
+      }
+    },
+    {
+      "_id": "currentFailsafe",
+      "type": "state",
+      "common": {
+        "name": "Current Failsafe",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current preset value for the Failsafe function."
+      },
+      "native": {
+        "udpKey": "Curr FS"
+      }
+    },
+    {
+      "_id": "timeoutFailsafe",
+      "type": "state",
+      "common": {
+        "name": "Current Failsafe",
+        "type": "number",
+        "role": "value.interval",
+        "unit": "sec",
+        "read": true,
+        "write": false,
+        "desc": "Communication timeout before triggering the Failsafe function."
+      },
+      "native": {
+        "udpKey": "Tmo FS"
+      }
+    },
+    {
+      "_id": "output",
+      "type": "state",
+      "common": {
+        "name": "Output",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "State of the relay output X2."
+      },
+      "native": {
+        "udpKey": "Output"
+      }
+    },
+    {
+      "_id": "input",
+      "type": "state",
+      "common": {
+        "name": "Input",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "desc": "State of the potential free Enable input X1."
+      },
+      "native": {
+        "udpKey": "Input"
+      }
+    },
+    {
+      "_id": "uptime",
+      "type": "state",
+      "common": {
+        "name": "Uptime",
+        "type": "number",
+        "role": "value.interval",
+        "unit": "sec",
+        "read": true,
+        "write": false,
+        "desc": "Current system clock since restart of the wallbox."
+      },
+      "native": {
+        "udpKey": "Sec"
+      }
+    },
+    {
+      "_id": "u1",
+      "type": "state",
+      "common": {
+        "name": "Voltage 1",
+        "type": "number",
+        "role": "value",
+        "unit": "V",
+        "read": true,
+        "write": false,
+        "desc": "Current voltage in V of phase 1."
+      },
+      "native": {
+        "udpKey": "U1"
+      }
+    },
+    {
+      "_id": "u2",
+      "type": "state",
+      "common": {
+        "name": "Voltage 2",
+        "type": "number",
+        "role": "value",
+        "unit": "V",
+        "read": true,
+        "write": false,
+        "desc": "Current voltage in V of phase 2."
+      },
+      "native": {
+        "udpKey": "U2"
+      }
+    },
+    {
+      "_id": "u3",
+      "type": "state",
+      "common": {
+        "name": "Voltage 3",
+        "type": "number",
+        "role": "value",
+        "unit": "V",
+        "read": true,
+        "write": false,
+        "desc": "Current voltage in V of phase 3."
+      },
+      "native": {
+        "udpKey": "U3"
+      }
+    },
+    {
+      "_id": "i1",
+      "type": "state",
+      "common": {
+        "name": "Current 1",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current current value in mA of phase 1."
+      },
+      "native": {
+        "udpKey": "I1"
+      }
+    },
+    {
+      "_id": "i2",
+      "type": "state",
+      "common": {
+        "name": "Current 2",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current current value in mA of phase 2."
+      },
+      "native": {
+        "udpKey": "I2"
+      }
+    },
+    {
+      "_id": "i3",
+      "type": "state",
+      "common": {
+        "name": "Current 3",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "desc": "Current current value in mA of phase 3."
+      },
+      "native": {
+        "udpKey": "I3"
+      }
+    },
+    {
+      "_id": "p",
+      "type": "state",
+      "common": {
+        "name": "Power",
+        "type": "number",
+        "role": "value",
+        "unit": "mW",
+        "read": true,
+        "write": false,
+        "desc": "Current power in mW (Real Power)."
+      },
+      "native": {
+        "udpKey": "P"
+      }
+    },
+    {
+      "_id": "pf",
+      "type": "state",
+      "common": {
+        "name": "Power Factor",
+        "type": "number",
+        "role": "value",
+        "unit": "%",
+        "read": true,
+        "write": false,
+        "desc": "Power factor in % (cosphi)"
+      },
+      "native": {
+        "udpKey": "PF",
+        "udpMultiplier": 0.1
+      }
+    },
+    {
+      "_id": "ePres",
+      "type": "state",
+      "common": {
+        "name": "Power Consumption",
+        "type": "number",
+        "role": "value",
+        "unit": "Wh",
+        "read": true,
+        "write": false,
+        "desc": "Power consumption of the current loading session in Wh."
+      },
+      "native": {
+        "udpKey": "E pres",
+        "udpMultiplier": 0.1
+      }
+    },
+    {
+      "_id": "eTotal",
+      "type": "state",
+      "common": {
+        "name": "Total Power Consumption",
+        "type": "number",
+        "role": "value",
+        "unit": "Wh",
+        "read": true,
+        "write": false,
+        "desc": "Total power consumption (persistent) without current loading session in Wh."
+      },
+      "native": {
+        "udpKey": "E total",
+        "udpMultiplier": 0.1
+      }
+    }
   ]
 }

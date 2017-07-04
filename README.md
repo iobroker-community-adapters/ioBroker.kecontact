@@ -28,6 +28,14 @@ This is the interval in seconds how often the wallbox should be queried for new 
 The default value is 30 seconds which is a good balance between the load for the KeConnect and having up-to-date information in ioBroker.
 
 ## Changelog
+### 0.0.3
+* (UncleSamSwiss) Improved UDP datagram sending
+* (UncleSamSwiss) Added all known writable states
+
+### 0.0.2
+* (UncleSamSwiss) Improved UDP socket handling (thanks to ehome)
+* (UncleSamSwiss) Added reading all known states
+
 ### 0.0.1
 * (UncleSamSwiss) Initial version
 

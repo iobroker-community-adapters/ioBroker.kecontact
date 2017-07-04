@@ -1,11 +1,19 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "news": {
       "0.0.1": {
         "en": "initial commit",
         "de": "initial commit"
+      },
+      "0.0.2": {
+        "en": "Improved UDP socket handling, added reading all known states",
+        "de": "Verbessertes UDP Socket Handling, Lesen aller bekannten States hinzugefügt"
+      },
+      "0.0.3": {
+        "en": "Improved UDP datagram sending, added all known writable states",
+        "de": "Verbessertes UDP Senden, Schreiben aller bekannten States hinzugefügt"
       }
     },
     "title": "KEBA KeContact Adapter",

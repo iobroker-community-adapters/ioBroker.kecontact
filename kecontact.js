@@ -205,7 +205,7 @@ function updateState(stateData, value) {
             value *= parseFloat(stateData.native.udpMultiplier);
         }
     } else if (stateData.common.type == 'boolean') {
-        value = parseInt(value) != 0;
+        value = parseInt(value) !== 0;
     }
     setStateAck(stateData._id, value);
 }
@@ -223,7 +223,7 @@ function sendUdpDatagram(message, highPriority) {
 }
 
 function sendNextQueueDatagram() {
-    if (sendQueue.length == 0) {
+    if (sendQueue.length === 0) {
         clearInterval(sendDelayTimer);
         sendDelayTimer = null;
         return;

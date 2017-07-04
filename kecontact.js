@@ -20,15 +20,21 @@ var txSocket;
 var rxSocketReports;
 var rxSocketBrodacast;
 var pollTimer;
+var sendDelayTimer;
 var states = {};
 var stateChangeListeners = {};
 var currentStateValues = {};
+var sendQueue = [];
 
 // unloading
 adapter.on('unload', function (callback) {
     try {
         if (pollTimer) {
             clearInterval(pollTimer);
+        }
+        
+        if (sendDelayTimer) {
+            clearInterval(sendDelayTimer);
         }
         
         if (txSocket) {
@@ -90,6 +96,13 @@ function main() {
             if (msg.length === 0) {
                 return;
             }
+            
+            if (msg.startsWith('TCH-OK')) {
+                adapter.log.info('Received ' + message);
+                restartPollTimer(); // reset the timer so we don't send requests too often
+                requestReports();
+                return;
+            }
 
             if (msg[0] == '"') {
                 msg = '{ ' + msg + ' }';
@@ -114,6 +127,9 @@ function main() {
         try {
             restartPollTimer(); // reset the timer so we don't send requests too often
             requestReports();
+            
+            var msg = message.toString().trim();
+            handleMessage(JSON.parse(msg));
         } catch (e) {
             adapter.log.warn('Error handling message: ' + e);
         }
@@ -134,6 +150,17 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
+    
+    stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
+        sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
+    };
+    stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
+        sendUdpDatagram('curr ' + parseInt(newValue), true);
+    };
+    stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
+        sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
+    };
+
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
@@ -164,7 +191,7 @@ function handleMessage(message) {
             } catch (e) {
                 adapter.log.warn("Couldn't update state " + key + ": " + e);
             }
-        } else {
+        } else if (key != 'ID') {
             adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
         }
 
@@ -174,14 +201,34 @@ function handleMessage(message) {
 function updateState(stateData, value) {
     if (stateData.common.type == 'number') {
         value = parseFloat(value);
-    }
-    if (stateData.native.udpMultiplier) {
-        value *= parseFloat(stateData.native.udpMultiplier);
+        if (stateData.native.udpMultiplier) {
+            value *= parseFloat(stateData.native.udpMultiplier);
+        }
+    } else if (stateData.common.type == 'boolean') {
+        value = parseInt(value) != 0;
     }
     setStateAck(stateData._id, value);
 }
 
-function sendUdpDatagram(message) {
+function sendUdpDatagram(message, highPriority) {
+    if (highPriority) {
+        sendQueue.unshift(message);
+    } else {
+        sendQueue.push(message);
+    }
+    if (!sendDelayTimer) {
+        sendNextQueueDatagram();
+        sendDelayTimer = setInterval(sendNextQueueDatagram, 300);
+    }
+}
+
+function sendNextQueueDatagram() {
+    if (sendQueue.length == 0) {
+        clearInterval(sendDelayTimer);
+        sendDelayTimer = null;
+        return;
+    }
+    var message = sendQueue.shift();
     if (txSocket) {
         txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err, bytes) {
             if (err) {

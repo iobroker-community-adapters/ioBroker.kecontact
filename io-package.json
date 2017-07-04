@@ -154,8 +154,8 @@
       "type": "state",
       "common": {
         "name": "Enable System",
-        "type": "number",
-        "role": "value",
+        "type": "boolean",
+        "role": "indicator",
         "read": true,
         "write": false,
         "desc": "Enable state for charging (contains Enable input, RFID, UDP,..)."
@@ -169,10 +169,10 @@
       "type": "state",
       "common": {
         "name": "Enable User",
-        "type": "number",
-        "role": "value",
+        "type": "boolean",
+        "role": "switch",
         "read": true,
-        "write": false,
+        "write": true,
         "desc": "Enable condition via UDP."
       },
       "native": {
@@ -234,10 +234,10 @@
       "common": {
         "name": "Current User",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "unit": "mA",
         "read": true,
-        "write": false,
+        "write": true,
         "desc": "Current preset value of the user via UDP; Default = 63000mA."
       },
       "native": {
@@ -281,10 +281,10 @@
       "type": "state",
       "common": {
         "name": "Output",
-        "type": "number",
-        "role": "value",
+        "type": "boolean",
+        "role": "switch",
         "read": true,
-        "write": false,
+        "write": true,
         "desc": "State of the relay output X2."
       },
       "native": {
@@ -296,8 +296,8 @@
       "type": "state",
       "common": {
         "name": "Input",
-        "type": "number",
-        "role": "value",
+        "type": "boolean",
+        "role": "indicator",
         "read": true,
         "write": false,
         "desc": "State of the potential free Enable input X1."

@@ -11,7 +11,7 @@ var dgram = require('dgram');
 var os = require('os');
 
 // create the adapter object
-var adapter = utils.adapter('kecontact');
+var adapter = utils.Adapter('kecontact');
 
 var DEFAULT_UDP_PORT = 7090;
 var BROADCAST_UDP_PORT = 7092;

@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kecontact",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Adapter for ioBroker that communicates with a KeContact wallbox",
   "main": "kecontact.js",
   "scripts": {
@@ -28,6 +28,10 @@
     {
       "name": "UncleSamSwiss",
       "email": "samuel.weibel@gmail.com"
+    },
+    {
+      "name": "Sneak-L8",
+      "email": "git@sengler.de"
     }
   ],
   "license": "Apache-2.0",
@@ -35,7 +39,7 @@
     "url": "https://github.com/UncleSamSwiss/ioBroker.kecontact/issues"
   },
   "homepage": "https://github.com/UncleSamSwiss/ioBroker.kecontact",
-  "readme": "https://github.com/UncleSamSwiss/ioBroker.loxone/blob/master/README.md",
+  "readme": "https://github.com/UncleSamSwiss/ioBroker.kecontact/blob/master/README.md",
   "dependencies": {
     "dgram": "^1.0.1",
     "os": "^0.1.1"

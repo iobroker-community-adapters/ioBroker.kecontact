@@ -18,6 +18,10 @@
       "0.1.0": {
         "en": "First official version",
         "de": "Erste offizielle Version"
+      },
+      "0.2.0": {
+        "en": "added automatic regulation by output photovoltaics unit",
+        "de": "Steuerung in Abhängigkeit der Leistung einer PV-Anlage möglich"
       }
     },
     "title": "KEBA KeContact Adapter",
@@ -31,7 +35,8 @@
       "de": "Kommuniziert mit einer KEBA KeContact Ladestation."
     },
     "authors": [
-      "UncleSamSwiss <samuel.weibel@gmail.com>"
+      "UncleSamSwiss <samuel.weibel@gmail.com>",
+      "Sneak-L8 <git@sengler.de>"
     ],
     "license": "Apache 2.0",
     "platform": "Javascript/Node.js",

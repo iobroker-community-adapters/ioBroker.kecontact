@@ -21,12 +21,31 @@ var rxSocketReports;
 var rxSocketBrodacast;
 var pollTimer;
 var sendDelayTimer;
-var states = {};
+var states = {};          // contains all actual state values
 var stateChangeListeners = {};
-var currentStateValues = {};
+var currentStateValues = {}; // contains all actual state vaues
 var sendQueue = [];
 
-// unloading
+var nAktGenau   = 0;      // Aktueller genauer Ladewert
+var nAnzPhasen  = 0;      // Anzahl der Phasen, mit denen Fahrzeug lädt
+var doLog       = true;   // Aktivieren, um bei der Fehlersuche zu unterstützen
+var lAutoVerb   = false;  // Ist ein Auto mit der Ladebox verbunden?
+var oSchedule   = null;   // Schedule-Object
+
+var cStateWallboxAnAus   = "enableUser";                  /*Enable User*/
+var cStateWallboxLadung  = "currentUser";                 /*Current User*/
+var cStateWallboxP1      = "i1";                          /*Current 1*/
+var cStateWallboxP2      = "i2";                          /*Current 2*/
+var cStateWallboxP3      = "i3";                          /*Current 3*/
+var cStateWallboxVerb    = "plug";                        /*Plug, Steckerverbindung */
+var cStateWallboxStatus  = "state";                       /*State, Status der Ladung */
+var cStateAktLadung      = "p";                           /*Power - Aktuelle Ladung E-Auto*/
+var cStateLadebeginn     = "statistics.chargeTimestamp";  /*Zeitpukt, wann mit dem Laden des Autos aktiv begonnen wurde*/
+var cStateLadeverbindung = "statistics.plugTimestamp";    /*Zeitpukt, wann das Auto mit der Wallbox zuletzt verbunden wurde*/
+var cStateLadestopp      = "automatic.pauseWallbox";      /*grundsätzliches Ladeverbot z.B. wegen Nachtspeicherheizung*/
+var cStateLadeautomatik  = "automatic.photovoltaics";     /*Ladung E-Auto abhängig von PV-Leistung, false = max Ladung unabh. von PV */
+
+//unloading
 adapter.on('unload', function (callback) {
     try {
         if (pollTimer) {
@@ -58,7 +77,15 @@ adapter.on('unload', function (callback) {
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
     // Warning: state can be null if it was deleted!
-    if (!id || !state || state.ack) {
+    if (!id || !state) {
+    	return;
+    }
+    // save state changes of foreign adapters
+    if (! id.startsWith(adapter.namespace + '.')) {
+    	adapter.log.info('state ' + id + ' changed from ' + currentStateValues[id] + ' to ' + value);
+		currentStateValues[id] = value;
+    }    
+    if (state.ack) {
         return;
     }
     
@@ -89,30 +116,7 @@ function main() {
         var address = rxSocketReports.address();
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
-    rxSocketReports.on('message', function (message, remote) {
-        adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-        try {
-            var msg = message.toString().trim();
-            if (msg.length === 0) {
-                return;
-            }
-            
-            if (msg.startsWith('TCH-OK')) {
-                adapter.log.info('Received ' + message);
-                restartPollTimer(); // reset the timer so we don't send requests too often
-                requestReports();
-                return;
-            }
-
-            if (msg[0] == '"') {
-                msg = '{ ' + msg + ' }';
-            }
-
-            handleMessage(JSON.parse(msg));
-        } catch (e) {
-            adapter.log.warn('Error handling message: ' + e);
-        }
-    });
+    rxSocketReports.on('message', handleWallboxMessage);
     rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
     
     rxSocketBrodacast = dgram.createSocket('udp4');
@@ -122,34 +126,22 @@ function main() {
         var address = rxSocketBrodacast.address();
         adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
     });
-    rxSocketBrodacast.on('message', function (message, remote) {
-        adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-        try {
-            restartPollTimer(); // reset the timer so we don't send requests too often
-            requestReports();
-            
-            var msg = message.toString().trim();
-            handleMessage(JSON.parse(msg));
-        } catch (e) {
-            adapter.log.warn('Error handling message: ' + e);
-        }
-    });
+    rxSocketBrodacast.on('message', handleWallboxBroadcast);
     rxSocketBrodacast.bind(BROADCAST_UDP_PORT, '0.0.0.0');
     
     adapter.getStatesOf(function (err, data) {
-        
         for (var i = 0; i < data.length; i++) {
             if (data[i].native.udpKey) {
                 states[data[i].native.udpKey] = data[i];
             }
         }
-
         start();
     });
 }
 
 function start() {
     adapter.subscribeStates('*');
+    adapter.subscribeForeignStates('vw-carnet.0.lastUpdate'); 
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -160,12 +152,85 @@ function start() {
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
+    stateChangeListeners[adapter.namespace + '.' + cStateLadestopp] = function (oldValue, newValue) {
+        
+    };
+    stateChangeListeners[adapter.namespace + '.' + cStateLadeautomatik] = function (oldValue, newValue) {
+        
+    };
 
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
 }
+
+// handle incomming message from wallbox
+function handleWallboxMessage(message, remote) {
+    adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
+    try {
+        var msg = message.toString().trim();
+        if (msg.length === 0) {
+            return;
+        }
+        
+        if (msg.startsWith('TCH-OK')) {
+            adapter.log.info('Received ' + message);
+            restartPollTimer(); // reset the timer so we don't send requests too often
+            requestReports();
+            return;
+        }
+
+        if (msg[0] == '"') {
+            msg = '{ ' + msg + ' }';
+        }
+
+        handleMessage(JSON.parse(msg));
+    } catch (e) {
+        adapter.log.warn('Error handling message: ' + e);
+    }
+}
+
+// handle incomming broadcast message from wallbox
+function handleWallboxBroadcast(message, remote) {
+    adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
+    try {
+        restartPollTimer(); // reset the timer so we don't send requests too often
+        requestReports();
+        
+        var msg = message.toString().trim();
+        handleMessage(JSON.parse(msg));
+    } catch (e) {
+        adapter.log.warn('Error handling message: ' + e);
+    }
+}
+
+// get minimum current for wallbox
+function getMinCurrent() {
+	return 6000;
+}
+
+// get maximum current for wallbox (hardware defined by dip switch)
+function getMaxCurrent() {
+	return getStateInternal("currentHardware"/*Maximum Current Hardware*/);
+}
+
+function switchWallbox(enabled) {
+	adapter.setState(cStateWallboxAnAus, enabled);
+	if (enabled)
+		adapter.log.debug("switch charging to enabled");
+	else
+		adapter.log.debug("switch charging to disabled");
+	if (! enabled) {
+		setStateAck(cStateLadebeginn, null);
+	}
+}
+
+function regulateWallbox(milliAmpere) {
+	adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
+    adapter.setState(cStateWallboxLadung, milliAmpere);
+}
+
 
 function requestReports() {
     sendUdpDatagram('report 2');
@@ -239,6 +304,10 @@ function sendNextQueueDatagram() {
             adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + DEFAULT_UDP_PORT);
         });
     }
+}
+
+function getStateInternal(id) {
+	return currentStateValues[adapter.namespace + '.' + id];
 }
 
 function setStateAck(id, value) {

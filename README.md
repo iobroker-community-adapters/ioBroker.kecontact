@@ -30,6 +30,7 @@ The default value is 30 seconds which is a good balance between the load for the
 ## Changelog
 ### 0.2.0 (2019-02-05)
 * (Sneak-L8) added automatic regulation by output photovoltaics unit
+* (Sneak-L8) added possibility to limit wallbox to keep total power below a limit
 
 ### 0.1.0 (2019-01-12)
 * (Apollon77) Updated CI testing, update basic files

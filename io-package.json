@@ -20,8 +20,8 @@
         "de": "Erste offizielle Version"
       },
       "0.2.0": {
-        "en": "added automatic regulation by output photovoltaics unit",
-        "de": "Steuerung in Abhängigkeit der Leistung einer PV-Anlage möglich"
+        "en": "added automatic regulation by output photovoltaics unit, limitation of overall power consumption",
+        "de": "Steuerung in Abhängigkeit der Leistung einer PV-Anlage möglich, Begrezung Ladestrom auf max. Gesamtverbrauch eines Anschlusses"
       }
     },
     "title": "KEBA KeContact Adapter",
@@ -501,6 +501,78 @@
         "udpKey": "E total",
         "udpMultiplier": 0.1
       }
+    },
+    {
+      "_id": "automatic",
+      "type": "channel",
+      "common": {
+        "name": "miscellaneous automatics"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.pauseWallbox",
+      "type": "state",
+      "common": {
+        "name": "pause charging of vehicle",
+        "type": "boolean",
+        "role": "value",
+        "read": true,
+        "write": true,
+        "def": false,
+        "desc": "Switch to stop charging of vehicle. This switch has higher priority than photovoltaics and shoudl be used to stop charging of vehicle"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.photovoltaics",
+      "type": "state",
+      "common": {
+        "name": "photovoltaics automatic enabled",
+        "type": "boolean",
+        "role": "value",
+        "read": true,
+        "write": true,
+        "def": false,
+        "desc": "Switch to load vehicle according to surplus of photovoltaics; otherwise load with maximum power."
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics",
+      "type": "channel",
+      "common": {
+        "name": "additional statistic information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.plugTimestamp",
+      "type": "state",
+      "common": {
+        "name": "timestamp when vehicle was pluged to wallbox",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when car was last plugged to wallbox, null if unplugged"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.chargeTimestamp",
+      "type": "state",
+      "common": {
+        "name": "timestamp when vehicle was pluged to wallbox",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when car was first started to charge after plugged to wallbox, null if unplugged"
+      },
+      "native": {}
     }
   ]
 }

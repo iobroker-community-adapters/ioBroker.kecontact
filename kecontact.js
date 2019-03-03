@@ -180,7 +180,7 @@ function addForeignState(id) {
 		if (err) {
 			adapter.log.error(err);
 		} else {
-			setStateInternal(id, value);
+			setStateInternal(id, obj.val);
 		}
 	});
 

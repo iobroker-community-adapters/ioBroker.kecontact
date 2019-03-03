@@ -107,15 +107,15 @@ systemDictionary = {
         "en": "You can define a maximum of watts which can must not be reached by all consumers",
         "de": "Mit diesem Wert kann die Leistung der Wallbox so begrenzt werden, dass ein max. Gesamtverbrauch nicht überschritten wird. Dies ist nötig, wenn der Netzbetreiber eine max. Leistung aufgrund begrenzter Kapazität vorgibt."
     },
-    "tooltip_energyMeter1": {
+    "tooltip_stateEnergyMeter1": {
         "en": "Name of state for the 1st energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 1. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
     },
-    "tooltip_energyMeter2": {
+    "tooltip_stateEnergyMeter2": {
         "en": "Name of state for the 2nd energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 2. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
     },
-    "tooltip_energyMeter3": {
+    "tooltip_stateEnergyMeter3": {
         "en": "Name of state for the 3rd energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 3. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
     },

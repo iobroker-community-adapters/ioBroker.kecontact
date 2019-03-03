@@ -58,7 +58,17 @@
   },
   "native": {
     "host": "0.0.0.0",
-    "pollInterval": 30
+    "pollInterval": 30,
+    "stateRegard": null,
+    "stateSurplus": null,
+    "delta": 0,
+    "underusage": 0,
+    "minTime": 0,
+    "maxPower": 0,
+    "stateEnergyMeter1": null,
+    "stateEnergyMeter2": null,
+    "stateEnergyMeter3": null,
+    "wallboxNotIncluded": false
   },
   "objects": [
   ],

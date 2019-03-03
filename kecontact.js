@@ -82,8 +82,8 @@ adapter.on('stateChange', function (id, state) {
     }
     // save state changes of foreign adapters
     if (! id.startsWith(adapter.namespace + '.')) {
-    	adapter.log.info('state ' + id + ' changed from ' + currentStateValues[id] + ' to ' + value);
-		currentStateValues[id] = value;
+    	adapter.log.info('state ' + id + ' changed from ' + currentStateValues[id] + ' to ' + state.val);
+		currentStateValues[id] = state.val;
     }    
     if (state.ack) {
         return;
@@ -311,6 +311,7 @@ function getStateInternal(id) {
 }
 
 function setStateAck(id, value) {
+    adapter.log.info(id + ' set from ' + currentStateValues[adapter.namespace + '.' + id] + ' to ' + value);
     currentStateValues[adapter.namespace + '.' + id] = value;
     adapter.setState(id, {val: value, ack: true});
 }

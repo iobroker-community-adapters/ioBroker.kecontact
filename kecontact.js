@@ -82,8 +82,7 @@ adapter.on('stateChange', function (id, state) {
     }
     // save state changes of foreign adapters
     if (! id.startsWith(adapter.namespace + '.')) {
-    	adapter.log.info('state ' + id + ' changed from ' + currentStateValues[id] + ' to ' + state.val);
-		currentStateValues[id] = state.val;
+		setStateInternal(id, state.val);
     }    
     if (state.ack) {
         return;
@@ -95,7 +94,7 @@ adapter.on('stateChange', function (id, state) {
         return;
     }
     
-    stateChangeListeners[id](currentStateValues[id], state.val);
+    stateChangeListeners[id](getStateInternal(id), state.val);
 });
 
 // startup
@@ -141,7 +140,17 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    adapter.subscribeForeignStates('vw-carnet.0.lastUpdate'); 
+    addForeignState('vw-carnet.0.lastUpdate');
+    if (adapter.config.stateRegard)
+    	addForeignState(adapter.config.stateRegard);
+    if (adapter.config.stateSurplus)
+    	addForeignState(adapter.config.stateSurplus);
+    if (adapter.config.energyMeter1)
+    	addForeignState(adapter.config.energyMeter1);
+    if (adapter.config.energyMeter2)
+    	addForeignState(adapter.config.energyMeter2);
+    if (adapter.config.energyMeter3)
+    	addForeignState(adapter.config.energyMeter3);
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -153,16 +162,29 @@ function start() {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.' + cStateLadestopp] = function (oldValue, newValue) {
-        
+        adapter.log.info('change of ladestopp from ' + oldValue + ' to ' + newValue);
     };
     stateChangeListeners[adapter.namespace + '.' + cStateLadeautomatik] = function (oldValue, newValue) {
-        
+        adapter.log.info('change of Ladeautomatik from ' + oldValue + ' to ' + newValue);
     };
 
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
+}
+
+// subscribe a foreign state to save vaues in "currentStateValues"
+function addForeignState(id) {
+	adapter.getForeignState(id, function (err, obj) {
+		if (err) {
+			adapter.log.error(err);
+		} else {
+			setStateInternal(id, value);
+		}
+	});
+
+    adapter.subscribeForeignStates(id); 
 }
 
 // handle incomming message from wallbox
@@ -310,8 +332,11 @@ function getStateInternal(id) {
 	return currentStateValues[adapter.namespace + '.' + id];
 }
 
+function setStateInternal(id, value) {
+    currentStateValues[id] = value;
+}
+
 function setStateAck(id, value) {
-    adapter.log.info(id + ' set from ' + currentStateValues[adapter.namespace + '.' + id] + ' to ' + value);
-    currentStateValues[adapter.namespace + '.' + id] = value;
+    setStateInternal(adapter.namespace + '.' + id, value);
     adapter.setState(id, {val: value, ack: true});
 }

@@ -141,6 +141,7 @@ function main() {
 function start() {
     adapter.subscribeStates('*');
     addForeignState('vw-carnet.0.lastUpdate');
+    adapter.log.info('state Regard: ' + adapter.config.stateRegard);
     if (adapter.config.stateRegard)
     	addForeignState(adapter.config.stateRegard);
     if (adapter.config.stateSurplus)
@@ -176,15 +177,17 @@ function start() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
+	adapter.log.info('reg state ' + id);
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
 			adapter.log.error(err);
 		} else {
+			adapter.log.info('initial value of ' + id + ' = ' + obj.val);
 			setStateInternal(id, obj.val);
 		}
 	});
 
-    adapter.subscribeForeignStates(id); 
+    adapter.subscribeForeignStates(id);
 }
 
 // handle incomming message from wallbox

@@ -177,17 +177,15 @@ function start() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
-	adapter.log.info('reg state ' + id);
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
 			adapter.log.error(err);
 		} else {
-			adapter.log.info('initial value of ' + id + ' = ' + obj.val);
 			setStateInternal(id, obj.val);
 		}
 	});
 
-    adapter.subscribeForeignStates(id);
+    adapter.log.info('subscribe '  + id + ': ' + adapter.subscribeForeignStates(id));
 }
 
 // handle incomming message from wallbox

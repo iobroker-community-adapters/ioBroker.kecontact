@@ -76,6 +76,7 @@ adapter.on('unload', function (callback) {
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
+	adapter.log.info('Statechange of ' + id + ' -> ' + state);
     // Warning: state can be null if it was deleted!
     if (!id || !state) {
     	return;
@@ -185,7 +186,7 @@ function addForeignState(id) {
 		}
 	});
 
-    adapter.log.info('subscribe '  + id + ': ' + adapter.subscribeForeignStates(id));
+    adapter.subscribeForeignStates(id);
 }
 
 // handle incomming message from wallbox

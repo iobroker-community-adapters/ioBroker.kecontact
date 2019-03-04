@@ -76,12 +76,12 @@ adapter.on('unload', function (callback) {
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
-	adapter.log.info('Statechange of ' + id + ' -> ' + state);
     // Warning: state can be null if it was deleted!
     if (!id || !state) {
     	return;
     }
     // save state changes of foreign adapters
+	adapter.log.info('Statechange of ' + id + ' -> ' + JSON.stringify(state));
     if (! id.startsWith(adapter.namespace + '.')) {
 		setStateInternal(id, state.val);
     }    
@@ -335,6 +335,7 @@ function getStateInternal(id) {
 }
 
 function setStateInternal(id, value) {
+	adapter.log.info('set state ' + id + ' to ' + value);
     currentStateValues[id] = value;
 }
 

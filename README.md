@@ -2,7 +2,7 @@
 
 # ioBroker adapter for KEBA KeContact wallbox
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.kecontact.svg)](https://www.npmjs.com/package/iobroker.kecontact) [![Downloads](https://img.shields.io/npm/dm/iobroker.kecontact.svg)](https://www.npmjs.com/package/iobroker.kecontact) [![Travis](https://img.shields.io/travis/UncleSamSwiss/ioBroker.kecontact.svg)](https://travis-ci.org/UncleSamSwiss/ioBroker.kecontact/) [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/UncleSamSwiss/iobroker-kecontact-fxdvr.svg)](https://ci.appveyor.com/project/UncleSamSwiss/iobroker-kecontact-fxdvr) [![GitHub issues](https://img.shields.io/github/issues/UncleSamSwiss/ioBroker.kecontact.svg)](https://github.com/UncleSamSwiss/ioBroker.kecontact/issues)
+![Number of Installations](http://iobroker.live/badges/kecontact-installed.svg) ![Number of Installations](http://iobroker.live/badges/kecontact-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.kecontact.svg)](https://www.npmjs.com/package/iobroker.kecontact) [![Downloads](https://img.shields.io/npm/dm/iobroker.kecontact.svg)](https://www.npmjs.com/package/iobroker.kecontact) [![Travis](https://img.shields.io/travis/UncleSamSwiss/ioBroker.kecontact.svg)](https://travis-ci.org/UncleSamSwiss/ioBroker.kecontact/) [![AppVeyor Build Status](https://img.shields.io/appveyor/ci/UncleSamSwiss/iobroker-kecontact-fxdvr.svg)](https://ci.appveyor.com/project/UncleSamSwiss/iobroker-kecontact-fxdvr) [![GitHub issues](https://img.shields.io/github/issues/UncleSamSwiss/ioBroker.kecontact.svg)](https://github.com/UncleSamSwiss/ioBroker.kecontact/issues)
 
 Provides information about the current state of a KEBA KeContact wallbox using its UDP protocol.
 

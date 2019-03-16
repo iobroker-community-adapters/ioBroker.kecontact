@@ -75,15 +75,15 @@ adapter.on('unload', function (callback) {
             rxSocketBrodacast.close();
         }
         if (adapter.config.stateRegard)
-        	unsubscribeForeignStates(adapter.config.stateRegard);
+        	adapter.unsubscribeForeignStates(adapter.config.stateRegard);
         if (adapter.config.stateSurplus)
-        	unsubscribeForeignStates(adapter.config.stateSurplus);
+        	adapter.unsubscribeForeignStates(adapter.config.stateSurplus);
         if (adapter.config.energyMeter1)
-        	unsubscribeForeignStates(adapter.config.energyMeter1);
+        	adapter.unsubscribeForeignStates(adapter.config.energyMeter1);
         if (adapter.config.energyMeter2)
-        	unsubscribeForeignStates(adapter.config.energyMeter2);
+        	adapter.unsubscribeForeignStates(adapter.config.energyMeter2);
         if (adapter.config.energyMeter3)
-        	unsubscribeForeignStates(adapter.config.energyMeter3);
+        	adapter.unsubscribeForeignStates(adapter.config.energyMeter3);
 
     } catch (e) {
         adapter.log.warn('Error while closing: ' + e);
@@ -228,7 +228,7 @@ function checkConfig() {
     		underusage = adapter.config.underusage;
     	}
     	if (! adapter.config.minTime || adapter.config.minTime <= 0) {
-    		adapter.log.info('minimum charge time not speficied or too low, using default value of ' + amperageDelta);
+    		adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
     	} else {
     		minChargeSeconds = adapter.config.minTime;
     	}
@@ -275,7 +275,13 @@ function addForeignState(id) {
 			allesOk = false;
 			adapter.log.error(err);
 		} else {
-			setStateInternal(id, obj.val);
+			if (obj)
+				setStateInternal(id, obj.val);
+			else {
+				adapter.log.error('state ' + id + ' not found!');
+				allesOk = false;
+			}
+				
 		}
 	});
 

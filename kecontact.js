@@ -31,6 +31,13 @@ var nAnzPhasen  = 0;      // Anzahl der Phasen, mit denen Fahrzeug lädt
 var doLog       = true;   // Aktivieren, um bei der Fehlersuche zu unterstützen
 var lAutoVerb   = false;  // Ist ein Auto mit der Ladebox verbunden?
 var oSchedule   = null;   // Schedule-Object
+var photovoltaicsActive = false;  // is photovoltaics automatic active?
+var maxPowerActive      = false;  // is limiter für maximum power active?
+var maxPower            = 0       // maximum power for limitation
+var wallboxIncluded     = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
+var amperageDelta       = 500;    // default for step of amperage
+var underusage          = 0;      // maximum regard use to reach minimal charge power for vehicle
+var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient  
 
 var cStateWallboxAnAus   = "enableUser";                  /*Enable User*/
 var cStateWallboxLadung  = "currentUser";                 /*Current User*/
@@ -67,6 +74,17 @@ adapter.on('unload', function (callback) {
         if (rxSocketBrodacast) {
             rxSocketBrodacast.close();
         }
+        if (adapter.config.stateRegard)
+        	unsubscribeForeignStates(adapter.config.stateRegard);
+        if (adapter.config.stateSurplus)
+        	unsubscribeForeignStates(adapter.config.stateSurplus);
+        if (adapter.config.energyMeter1)
+        	unsubscribeForeignStates(adapter.config.energyMeter1);
+        if (adapter.config.energyMeter2)
+        	unsubscribeForeignStates(adapter.config.energyMeter2);
+        if (adapter.config.energyMeter3)
+        	unsubscribeForeignStates(adapter.config.energyMeter3);
+
     } catch (e) {
         adapter.log.warn('Error while closing: ' + e);
     }
@@ -80,8 +98,7 @@ adapter.on('stateChange', function (id, state) {
     if (!id || !state) {
     	return;
     }
-    // save state changes of foreign adapters
-	adapter.log.info('Statechange of ' + id + ' -> ' + JSON.stringify(state));
+    // save state changes of foreign adapters this is done even if value has not changed but acknowleged
     if (! id.startsWith(adapter.namespace + '.')) {
 		setStateInternal(id, state.val);
     }    
@@ -104,9 +121,9 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    if (adapter.config.host == '0.0.0.0' || adapter.config.host == '127.0.0.1') {
-        adapter.log.warn('Can\'n start adapter for invalid IP address: ' + adapter.config.host);
-        return;
+    if (! checkConfig()) {
+    	adapter.log.error('start of adapter not possible due to config errors');
+    	return;
     }
     
     txSocket = dgram.createSocket('udp4');
@@ -141,18 +158,20 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    addForeignState('vw-carnet.0.lastUpdate');
-    adapter.log.info('state Regard: ' + adapter.config.stateRegard);
-    if (adapter.config.stateRegard)
-    	addForeignState(adapter.config.stateRegard);
-    if (adapter.config.stateSurplus)
-    	addForeignState(adapter.config.stateSurplus);
-    if (adapter.config.energyMeter1)
-    	addForeignState(adapter.config.energyMeter1);
-    if (adapter.config.energyMeter2)
-    	addForeignState(adapter.config.energyMeter2);
-    if (adapter.config.energyMeter3)
-    	addForeignState(adapter.config.energyMeter3);
+    if (photovoltaicsActive) {
+    	if (adapter.config.stateRegard)
+    		addForeignState(adapter.config.stateRegard);
+    	if (adapter.config.stateSurplus)
+    		addForeignState(adapter.config.stateSurplus);
+    }
+    if (maxPowerActive) {
+    	if (adapter.config.energyMeter1)
+    		addForeignState(adapter.config.energyMeter1);
+    	if (adapter.config.energyMeter2)
+    		addForeignState(adapter.config.energyMeter2);
+    	if (adapter.config.energyMeter3)
+    		addForeignState(adapter.config.energyMeter3);
+    }
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -174,6 +193,81 @@ function start() {
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
+}
+
+// check if config data is fine for adapter start
+function checkConfig() {
+	var everythingFine = true;
+    if (adapter.config.host == '0.0.0.0' || adapter.config.host == '127.0.0.1') {
+        adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
+        everythingFine = false;
+    }
+    if (adapter.config.stateRegard) {
+    	photovoltaicsActive = true;
+    	if (! getState(adapter.config.stateRegard)) {
+    		adapter.log.error('state regard not found: ' + adapter.config.stateRegard);
+    		everythingFine = false;
+    	}
+    }
+    if (adapter.config.stateSurplus) {
+    	photovoltaicsActive = true;
+    	if (! getState(adapter.config.stateSurplus)) {
+    		adapter.log.error('state surplus not found: ' + adapter.config.stateSurplus);
+    		everythingFine = false;
+    	}
+    }
+    if (photovoltaicsActive) {
+    	if (! adapter.config.delta || adapter.config.delta <= 50) {
+    		adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
+    	} else {
+    		amperageDelta = adapter.config.delta;
+    	}
+    	if (adapter.config.underusage !== 0) {
+    		underusage = adapter.config.underusage;
+    	}
+    	if (! adapter.config.minTime || adapter.config.minTime <= 0) {
+    		adapter.log.info('minimum charge time not speficied or too low, using default value of ' + amperageDelta);
+    	} else {
+    		minChargeSeconds = adapter.config.minTime;
+    	}
+    }
+    if (adapter.config.maxPower) {
+    	maxPowerActive = true;
+    	if (adapter.config.maxPower <= 0) {
+    		adapter.log.warn('max. power negative or zero - power limitation deactivated');
+    		maxPowerActive = false;
+    	}
+    }
+    if (maxPowerActive) {
+        if (adapter.config.stateEnergyMeter1) {
+        	if (! getState(adapter.config.stateEnergyMeter1)) {
+        		adapter.log.error('state for energy meter 1 not found: ' + adapter.config.stateEnergyMeter1);
+        		everythingFine = false;
+        	}
+        }
+        if (adapter.config.stateEnergyMeter2) {
+        	if (! getState(adapter.config.stateEnergyMeter2)) {
+        		adapter.log.error('state for energy meter 2 not found: ' + adapter.config.stateEnergyMeter2);
+        		everythingFine = false;
+        	}
+        }
+        if (adapter.config.stateEnergyMeter3) {
+        	if (! getState(adapter.config.stateEnergyMeter3)) {
+        		adapter.log.error('state for energy meter 3 not found: ' + adapter.config.stateEnergyMeter3);
+        		everythingFine = false;
+        	}
+        }
+        if (adapter.config.wallboxNotIncluded) {
+        	wallboxIncluded = false;
+        }
+        if (everythingFine) {
+        	if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
+        		adapter.log.error('no energy meters defined - power limitation deactivated');
+        		maxPowerActive = false;
+        	}
+        }
+    }
+	return everythingFine;
 }
 
 // subscribe a foreign state to save vaues in "currentStateValues"
@@ -242,9 +336,9 @@ function getMaxCurrent() {
 function switchWallbox(enabled) {
 	adapter.setState(cStateWallboxAnAus, enabled);
 	if (enabled)
-		adapter.log.debug("switch charging to enabled");
+		adapter.log.debug("switched charging to enabled");
 	else
-		adapter.log.debug("switch charging to disabled");
+		adapter.log.debug("switched charging to disabled");
 	if (! enabled) {
 		setStateAck(cStateLadebeginn, null);
 	}
@@ -335,7 +429,6 @@ function getStateInternal(id) {
 }
 
 function setStateInternal(id, value) {
-	adapter.log.info('set state ' + id + ' to ' + value);
     currentStateValues[id] = value;
 }
 

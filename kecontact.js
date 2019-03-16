@@ -269,25 +269,20 @@ function checkConfig() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
-	var allesOk = true;
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
-			allesOk = false;
 			adapter.log.error(err);
 		} else {
 			if (obj)
 				setStateInternal(id, obj.val);
 			else {
 				adapter.log.error('state ' + id + ' not found!');
-				allesOk = false;
 			}
-				
 		}
 	});
 
-    adapter.subscribeForeignStates(id);
-    adapter.log.info('State ' + id + ' ' + (allesOk ? "ok" : "nicht ok"));
-    return allesOk;
+    adapter.log.info('subscribe:' + adapter.subscribeForeignStates(id));
+    return true;
 }
 
 // handle incomming message from wallbox

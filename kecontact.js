@@ -158,7 +158,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    if (photovoltaicsActive) {
+/*    if (photovoltaicsActive) {
     	if (adapter.config.stateRegard)
     		addForeignState(adapter.config.stateRegard);
     	if (adapter.config.stateSurplus)
@@ -171,7 +171,7 @@ function start() {
     		addForeignState(adapter.config.energyMeter2);
     	if (adapter.config.energyMeter3)
     		addForeignState(adapter.config.energyMeter3);
-    }
+    }*/
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -204,17 +204,19 @@ function checkConfig() {
     }
     if (adapter.config.stateRegard) {
     	photovoltaicsActive = true;
-    	if (! getState(adapter.config.stateRegard)) {
+    	everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
+    	/*if (! getState(adapter.config.stateRegard)) {
     		adapter.log.error('state regard not found: ' + adapter.config.stateRegard);
     		everythingFine = false;
-    	}
+    	}*/
     }
     if (adapter.config.stateSurplus) {
     	photovoltaicsActive = true;
-    	if (! getState(adapter.config.stateSurplus)) {
+    	everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
+    	/*if (! getState(adapter.config.stateSurplus)) {
     		adapter.log.error('state surplus not found: ' + adapter.config.stateSurplus);
     		everythingFine = false;
-    	}
+    	}*/
     }
     if (photovoltaicsActive) {
     	if (! adapter.config.delta || adapter.config.delta <= 50) {
@@ -240,22 +242,17 @@ function checkConfig() {
     }
     if (maxPowerActive) {
         if (adapter.config.stateEnergyMeter1) {
-        	if (! getState(adapter.config.stateEnergyMeter1)) {
+        	everythingFine = addForeignState(adapter.config.stateEnergyMeter1) & everythingFine;
+        	/*if (! getState(adapter.config.stateEnergyMeter1)) {
         		adapter.log.error('state for energy meter 1 not found: ' + adapter.config.stateEnergyMeter1);
         		everythingFine = false;
-        	}
+        	}*/
         }
         if (adapter.config.stateEnergyMeter2) {
-        	if (! getState(adapter.config.stateEnergyMeter2)) {
-        		adapter.log.error('state for energy meter 2 not found: ' + adapter.config.stateEnergyMeter2);
-        		everythingFine = false;
-        	}
+        	everythingFine = addForeignState(adapter.config.stateEnergyMeter2) & everythingFine;
         }
         if (adapter.config.stateEnergyMeter3) {
-        	if (! getState(adapter.config.stateEnergyMeter3)) {
-        		adapter.log.error('state for energy meter 3 not found: ' + adapter.config.stateEnergyMeter3);
-        		everythingFine = false;
-        	}
+        	everythingFine = addForeignState(adapter.config.stateEnergyMeter3) & everythingFine;
         }
         if (adapter.config.wallboxNotIncluded) {
         	wallboxIncluded = false;
@@ -272,8 +269,10 @@ function checkConfig() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
+	var allesOk = true;
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
+			allesOk = false;
 			adapter.log.error(err);
 		} else {
 			setStateInternal(id, obj.val);
@@ -281,6 +280,8 @@ function addForeignState(id) {
 	});
 
     adapter.subscribeForeignStates(id);
+    adapter.log.info('State ' + id + ' ' + (allesOk ? "ok" : "nicht ok"));
+    return allesOk;
 }
 
 // handle incomming message from wallbox

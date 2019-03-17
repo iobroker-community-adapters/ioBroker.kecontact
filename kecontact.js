@@ -158,20 +158,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-/*    if (photovoltaicsActive) {
-    	if (adapter.config.stateRegard)
-    		addForeignState(adapter.config.stateRegard);
-    	if (adapter.config.stateSurplus)
-    		addForeignState(adapter.config.stateSurplus);
-    }
-    if (maxPowerActive) {
-    	if (adapter.config.energyMeter1)
-    		addForeignState(adapter.config.energyMeter1);
-    	if (adapter.config.energyMeter2)
-    		addForeignState(adapter.config.energyMeter2);
-    	if (adapter.config.energyMeter3)
-    		addForeignState(adapter.config.energyMeter3);
-    }*/
+    checkSchedule();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -205,18 +192,10 @@ function checkConfig() {
     if (adapter.config.stateRegard) {
     	photovoltaicsActive = true;
     	everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
-    	/*if (! getState(adapter.config.stateRegard)) {
-    		adapter.log.error('state regard not found: ' + adapter.config.stateRegard);
-    		everythingFine = false;
-    	}*/
     }
     if (adapter.config.stateSurplus) {
     	photovoltaicsActive = true;
     	everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
-    	/*if (! getState(adapter.config.stateSurplus)) {
-    		adapter.log.error('state surplus not found: ' + adapter.config.stateSurplus);
-    		everythingFine = false;
-    	}*/
     }
     if (photovoltaicsActive) {
     	if (! adapter.config.delta || adapter.config.delta <= 50) {
@@ -243,10 +222,6 @@ function checkConfig() {
     if (maxPowerActive) {
         if (adapter.config.stateEnergyMeter1) {
         	everythingFine = addForeignState(adapter.config.stateEnergyMeter1) & everythingFine;
-        	/*if (! getState(adapter.config.stateEnergyMeter1)) {
-        		adapter.log.error('state for energy meter 1 not found: ' + adapter.config.stateEnergyMeter1);
-        		everythingFine = false;
-        	}*/
         }
         if (adapter.config.stateEnergyMeter2) {
         	everythingFine = addForeignState(adapter.config.stateEnergyMeter2) & everythingFine;
@@ -273,15 +248,15 @@ function addForeignState(id) {
 		if (err) {
 			adapter.log.error(err);
 		} else {
-			if (obj)
+			if (obj) {
 				setStateInternal(id, obj.val);
+				adapter.subscribeForeignStates({id: id, change: "ne"}); // es gibt leider keine Rückgabe zum Abfragen
+			}
 			else {
 				adapter.log.error('state ' + id + ' not found!');
 			}
 		}
 	});
-
-    adapter.log.info('subscribe:' + adapter.subscribeForeignStates(id));
     return true;
 }
 
@@ -295,7 +270,7 @@ function handleWallboxMessage(message, remote) {
         }
         
         if (msg.startsWith('TCH-OK')) {
-            adapter.log.info('Received ' + message);
+            //adapter.log.info('Received ' + message);
             restartPollTimer(); // reset the timer so we don't send requests too often
             requestReports();
             return;
@@ -336,21 +311,54 @@ function getMaxCurrent() {
 }
 
 function switchWallbox(enabled) {
+	if (enabled != getStateInternal(cStateWallboxAnAus)) {
+		adapter.log.debug("switched charging to " + (enabled ? "enabled" : "disabled"));
+	}
 	adapter.setState(cStateWallboxAnAus, enabled);
-	if (enabled)
-		adapter.log.debug("switched charging to enabled");
-	else
-		adapter.log.debug("switched charging to disabled");
 	if (! enabled) {
 		setStateAck(cStateLadebeginn, null);
 	}
 }
 
 function regulateWallbox(milliAmpere) {
-	adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
+	if (milliAmpere != getStateInternal(cStateWallboxLadung)) {
+		adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
+	}
     adapter.setState(cStateWallboxLadung, milliAmpere);
 }
 
+function getSurplusWithoutWallbox() {
+	return getStateDefault0(adapter.config.stateSurplus) 
+	     - getStateDefault0(adapter.config.stateRegard)
+	     + (getStateDefault0(cStateAktLadung) / 1000);
+}
+
+function getTotalPower() {
+    var result = getStateDefault0(adapter.config.stateEnergyMeter1)
+               + getStateDefault0(adapter.config.stateEnergyMeter2)
+               + getStateDefault0(adapter.config.stateEnergyMeter3);
+    if (wallboxIncluded) {
+        result -= (getStateDefault0(cStateAktLadung) / 1000);
+    }
+    return result;
+}
+
+function getTotalPowerAvailable() {
+    // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
+    if (maxPowerActive && (adapter.config.maxPower > 0)) {
+        return adapter.config.maxPower - getTotalPower();
+    }
+    return 999999;  // return defaul maximum
+}
+
+function checkWallboxPower() {
+	adapter.log.info('Available surplus: ' + getSurplusWithoutWallbox());
+	adapter.log.info('Available max power: ' + getTotalPowerAvailable());
+}
+
+function checkSchedule() {
+	schedule("*/30 * * * * *", checkWallboxPower); 
+}
 
 function requestReports() {
     sendUdpDatagram('report 2');
@@ -420,21 +428,33 @@ function sendNextQueueDatagram() {
                 adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + DEFAULT_UDP_PORT + ': ' + err);
                 return;
             }
-            
             adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + DEFAULT_UDP_PORT);
         });
     }
 }
 
 function getStateInternal(id) {
-	return currentStateValues[adapter.namespace + '.' + id];
+	var obj = id;
+	if (! obj.contains('.'))
+		obj = adapter.namespace + '.' + id;
+	return currentStateValues[obj];
+}
+
+function getStateDefault0(id) {
+	var value = getStateInternal(id);
+	if (value) then
+		return currentStateValues[obj];
+	return 0;
 }
 
 function setStateInternal(id, value) {
-    currentStateValues[id] = value;
+	var obj = id;
+	if (! obj.contains('.'))
+		obj = adapter.namespace + '.' + id;
+    currentStateValues[obj] = value;
 }
 
 function setStateAck(id, value) {
-    setStateInternal(adapter.namespace + '.' + id, value);
+    setStateInternal(id, value);
     adapter.setState(id, {val: value, ack: true});
 }

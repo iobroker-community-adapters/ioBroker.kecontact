@@ -38,7 +38,8 @@
   "readme": "https://github.com/UncleSamSwiss/ioBroker.loxone/blob/master/README.md",
   "dependencies": {
     "dgram": "^1.0.1",
-    "os": "^0.1.1"
+    "os": "^0.1.1",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

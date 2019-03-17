@@ -447,7 +447,7 @@ function getStateInternal(id) {
 function getStateDefault0(id) {
 	var value = getStateInternal(id);
 	if (value)
-		return currentStateValues[obj];
+		return value;
 	return 0;
 }
 

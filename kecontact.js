@@ -158,7 +158,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    checkTimer();
+    //checkTimer();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);

@@ -30,7 +30,7 @@ var nAktGenau   = 0;      // Aktueller genauer Ladewert
 var nAnzPhasen  = 0;      // Anzahl der Phasen, mit denen Fahrzeug lädt
 var doLog       = true;   // Aktivieren, um bei der Fehlersuche zu unterstützen
 var lAutoVerb   = false;  // Ist ein Auto mit der Ladebox verbunden?
-var oSchedule   = null;   // Schedule-Object
+var autoTimer           = null;   // interval object
 var photovoltaicsActive = false;  // is photovoltaics automatic active?
 var maxPowerActive      = false;  // is limiter für maximum power active?
 var maxPower            = 0       // maximum power for limitation
@@ -158,7 +158,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    checkSchedule();
+    checkTimer();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -354,10 +354,14 @@ function getTotalPowerAvailable() {
 function checkWallboxPower() {
 	adapter.log.info('Available surplus: ' + getSurplusWithoutWallbox());
 	adapter.log.info('Available max power: ' + getTotalPowerAvailable());
+	checkTimer();
 }
 
-function checkSchedule() {
-	schedule("*/30 * * * * *", checkWallboxPower); 
+function checkTimer() {
+	if (autoTimer) {
+		clearInterval(autoTimer);
+	}
+	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
 }
 
 function requestReports() {

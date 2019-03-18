@@ -158,7 +158,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    //checkTimer();
+    checkTimer();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -244,11 +244,13 @@ function checkConfig() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
+	adapter.log.debug('subscribe state ' + id);
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
-			adapter.log.error(err);
+			adapter.log.error('error subscribing ' + id + ': ' + err);
 		} else {
 			if (obj) {
+				adapter.log.debug('state ' + id + ' found with value: ' + obj.val);
 				setStateInternal(id, obj.val);
 				adapter.subscribeForeignStates({id: id, change: "ne"}); // es gibt leider keine Rückgabe zum Abfragen
 			}
@@ -441,6 +443,7 @@ function getStateInternal(id) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
+	adapter.log.info('Lese State ' + obj + ' mit Wert:' + currentStateValues[obj]);
 	return currentStateValues[obj];
 }
 
@@ -455,6 +458,7 @@ function setStateInternal(id, value) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
+	adapter.log.info('Speiche State ' + obj + ' mit Wert:' + value);
     currentStateValues[obj] = value;
 }
 

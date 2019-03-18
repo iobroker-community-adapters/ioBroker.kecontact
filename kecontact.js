@@ -252,7 +252,8 @@ function addForeignState(id) {
 			if (obj) {
 				adapter.log.debug('state ' + id + ' found with value: ' + obj.val);
 				setStateInternal(id, obj.val);
-				adapter.subscribeForeignStates({id: id, change: "ne"}); // es gibt leider keine Rückgabe zum Abfragen
+				adapter.subscribeForeignStates(id); // there's no return value (success, ...)
+				adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
 			}
 			else {
 				adapter.log.error('state ' + id + ' not found!');

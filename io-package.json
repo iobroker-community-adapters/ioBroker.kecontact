@@ -530,7 +530,7 @@
         "read": true,
         "write": true,
         "def": false,
-        "desc": "Switch to stop charging of vehicle. This switch has higher priority than photovoltaics and shoudl be used to stop charging of vehicle"
+        "desc": "Switch to stop charging of vehicle. This switch has higher priority than photovoltaics and should be used to stop charging of vehicle"
       },
       "native": {}
     },
@@ -544,7 +544,7 @@
         "read": true,
         "write": true,
         "def": false,
-        "desc": "Switch to load vehicle according to surplus of photovoltaics; otherwise load with maximum power."
+        "desc": "Switch to load vehicle according to surplus of photovoltaics (true); otherwise load with maximum power (false)."
       },
       "native": {}
     },

@@ -63,6 +63,8 @@ adapter.on('unload', function (callback) {
             clearInterval(sendDelayTimer);
         }
         
+        disableTimer();
+        
         if (txSocket) {
             txSocket.close();
         }
@@ -74,6 +76,7 @@ adapter.on('unload', function (callback) {
         if (rxSocketBrodacast) {
             rxSocketBrodacast.close();
         }
+        
         if (adapter.config.stateRegard)
         	adapter.unsubscribeForeignStates(adapter.config.stateRegard);
         if (adapter.config.stateSurplus)
@@ -98,10 +101,16 @@ adapter.on('stateChange', function (id, state) {
     if (!id || !state) {
     	return;
     }
-    // save state changes of foreign adapters this is done even if value has not changed but acknowleged
-    if (! id.startsWith(adapter.namespace + '.')) {
+    // save state changes of foreign adapters - this is done even if value has not changed but acknowleged
+    if (id.startsWith(adapter.namespace + '.')) {
+    	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
+    	if (id == adapter.namespace + '.' + cStateWallboxVerb) {
+    		checkWallboxPower();
+    	}
+    } else {
 		setStateInternal(id, state.val);
-    }    
+    } 
+    
     if (state.ack) {
         return;
     }
@@ -158,7 +167,7 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    checkTimer();
+    checkWallboxPower();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -170,10 +179,12 @@ function start() {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.' + cStateLadestopp] = function (oldValue, newValue) {
-        adapter.log.info('change of ladestopp from ' + oldValue + ' to ' + newValue);
+        adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
+        checkWallboxPower();
     };
     stateChangeListeners[adapter.namespace + '.' + cStateLadeautomatik] = function (oldValue, newValue) {
-        adapter.log.info('change of Ladeautomatik from ' + oldValue + ' to ' + newValue);
+        adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
+        checkWallboxPower();
     };
 
     sendUdpDatagram('i');
@@ -350,19 +361,47 @@ function getTotalPowerAvailable() {
     if (maxPowerActive && (adapter.config.maxPower > 0)) {
         return adapter.config.maxPower - getTotalPower();
     }
-    return 999999;  // return defaul maximum
+    return 999999;  // return default maximum
 }
 
 function checkWallboxPower() {
-	adapter.log.info('Available surplus: ' + getSurplusWithoutWallbox());
-	adapter.log.info('Available max power: ' + getTotalPowerAvailable());
-	checkTimer();
+    // 0 unplugged
+    // 1 plugged on charging station 
+    // 3 plugged on charging station plug locked
+    // 5 plugged on charging station             plugged on EV
+    // 7 plugged on charging station plug locked plugged on EV
+    // For wallboxes with fixed cable values of 0 and 1 not used
+	// Charging only possible with value of 7
+
+	var vehiclePlugged = false;
+	if (getStateInternal(cStateWallboxVerb) >= 5)
+		vehiclePlugged = true;
+	if (vehiclePlugged && getStateInternal(cStateLadeverbindung) === null) {
+		adapter.log.info('vehicle plugged to wallbox');
+		setStateAck(cStateLadeverbindung, new date);
+		setStateAck(cStateLadebeginn, null);
+	} else if (! vehiclePlugged && getStateInternal(cStateLadeverbindung) !== null) {
+		adapter.log.info('vehicle unplugged from wallbox');
+		setStateAck(cStateLadeverbindung, null);
+	} 
+
+	adapter.log.debug('Available surplus: ' + getSurplusWithoutWallbox());
+	adapter.log.debug('Available max power: ' + getTotalPowerAvailable());
+	
+	if (vehiclePlugged || maxPowerActive)
+		checkTimer();
+	else
+		disableTimer();
 }
 
-function checkTimer() {
+function disableTimer() {
 	if (autoTimer) {
 		clearInterval(autoTimer);
 	}
+}
+
+function checkTimer() {
+	disableTimer();
 	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
 }
 

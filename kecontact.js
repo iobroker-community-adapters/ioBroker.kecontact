@@ -244,13 +244,12 @@ function checkConfig() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
-	adapter.log.debug('subscribe state ' + id);
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
 			adapter.log.error('error subscribing ' + id + ': ' + err);
 		} else {
 			if (obj) {
-				adapter.log.debug('state ' + id + ' found with value: ' + obj.val);
+				adapter.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
 				setStateInternal(id, obj.val);
 				adapter.subscribeForeignStates(id); // there's no return value (success, ...)
 				adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
@@ -444,7 +443,6 @@ function getStateInternal(id) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.info('Lese State ' + obj + ' mit Wert:' + currentStateValues[obj]);
 	return currentStateValues[obj];
 }
 
@@ -459,7 +457,7 @@ function setStateInternal(id, value) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.info('Speiche State ' + obj + ' mit Wert:' + value);
+	adapter.log.debug('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;
 }
 

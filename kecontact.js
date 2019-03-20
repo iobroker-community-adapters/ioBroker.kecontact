@@ -180,7 +180,6 @@ function main() {
 
 function start() {
     adapter.subscribeStates('*');
-    checkWallboxPower();
     
     stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
@@ -204,6 +203,7 @@ function start() {
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
+    checkWallboxPower();
 }
 
 // check if config data is fine for adapter start

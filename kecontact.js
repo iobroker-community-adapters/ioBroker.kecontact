@@ -166,6 +166,9 @@ function main() {
         			if (obj) {
         				setStateInternal(id, obj.val);
         			}
+        			else {
+        				setStateInternal(id, null); // state was not set yet from former runs
+        			}
         		}
         	});
             if (data[i].native.udpKey) {

@@ -378,7 +378,7 @@ function checkWallboxPower() {
 		vehiclePlugged = true;
 	if (vehiclePlugged && getStateInternal(cStateLadeverbindung) === null) {
 		adapter.log.info('vehicle plugged to wallbox');
-		setStateAck(cStateLadeverbindung, new date);
+		setStateAck(cStateLadeverbindung, new Date());
 		setStateAck(cStateLadebeginn, null);
 	} else if (! vehiclePlugged && getStateInternal(cStateLadeverbindung) !== null) {
 		adapter.log.info('vehicle unplugged from wallbox');

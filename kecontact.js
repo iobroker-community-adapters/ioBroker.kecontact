@@ -158,12 +158,14 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
-        	adapter.getState(data[i]._id, function (err, obj) {
+        	var id = data[i]._id
+        	adapter.getState(id, function (err, obj) {
+        		adapter.log.info('obj = ' + JSON.stringify(obj));
         		if (err) {
-        			adapter.log.error('error reading ' + data[i]._id + ': ' + err);
+        			adapter.log.error('error reading ' + id + ': ' + err);
         		} else {
         			if (obj) {
-        				setStateInternal(data[i]._id, obj.val);
+        				setStateInternal(id, obj.val);
         			}
         			else {
         				adapter.log.error('state ' + id + ' not found!');

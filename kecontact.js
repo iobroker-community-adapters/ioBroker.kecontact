@@ -89,7 +89,8 @@ adapter.on('unload', function (callback) {
         	adapter.unsubscribeForeignStates(adapter.config.energyMeter3);
 
     } catch (e) {
-        adapter.log.warn('Error while closing: ' + e);
+    	if (adapter.log)   // got an exception "TypeError: Cannot read property 'warn' of undefined"
+    		adapter.log.warn('Error while closing: ' + e);
     }
 
     callback();

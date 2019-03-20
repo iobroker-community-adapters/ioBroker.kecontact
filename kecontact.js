@@ -158,6 +158,8 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
+        	adapter.log.info('data = ' + JSON.stringify(data))
+        	setStateInternal(data[i].id, data[i].value)
             if (data[i].native.udpKey) {
                 states[data[i].native.udpKey] = data[i];
             }
@@ -374,12 +376,13 @@ function checkWallboxPower() {
     // For wallboxes with fixed cable values of 0 and 1 not used
 	// Charging only possible with value of 7
 
-	var vehiclePlugged = getStateInternal(cStateWallboxVerb) >= 5;
-	if (vehiclePlugged && getStateInternal(cStateLadeverbindung) === null) {
+	var wasVehiclePlugged = ! (getStateInternal(cStateLadeverbindung) === null || getStateInternal(cStateLadeverbindung) === undefined);
+	var isVehiclePlugged  = getStateInternal(cStateWallboxVerb) >= 5;
+	if (isVehiclePlugged && ! wasVehiclePlugged) {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(cStateLadeverbindung, new Date());
 		setStateAck(cStateLadebeginn, null);
-	} else if (! vehiclePlugged && getStateInternal(cStateLadeverbindung) !== null) {
+	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('State = ' + getStateInternal(cStateLadeverbindung));
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(cStateLadeverbindung, null);
@@ -388,7 +391,7 @@ function checkWallboxPower() {
 	adapter.log.debug('Available surplus: ' + getSurplusWithoutWallbox());
 	adapter.log.debug('Available max power: ' + getTotalPowerAvailable());
 	
-	if (vehiclePlugged || maxPowerActive)
+	if (isVehiclePlugged || maxPowerActive)
 		checkTimer();
 	else
 		disableTimer();

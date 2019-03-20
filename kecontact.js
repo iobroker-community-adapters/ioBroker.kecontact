@@ -160,15 +160,11 @@ function main() {
         for (var i = 0; i < data.length; i++) {
         	var id = data[i]._id
         	adapter.getState(id, function (err, obj) {
-        		adapter.log.info('obj = ' + JSON.stringify(obj));
         		if (err) {
         			adapter.log.error('error reading ' + id + ': ' + err);
         		} else {
         			if (obj) {
         				setStateInternal(id, obj.val);
-        			}
-        			else {
-        				adapter.log.error('state ' + id + ' not found!');
         			}
         		}
         	});

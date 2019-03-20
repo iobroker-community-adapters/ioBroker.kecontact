@@ -158,8 +158,18 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
-        	adapter.log.info('data = ' + JSON.stringify(data))
-        	setStateInternal(data[i].id, data[i].value)
+        	adapter.getState(data[i]._id, function (err, obj) {
+        		if (err) {
+        			adapter.log.error('error reading ' + data[i]._id + ': ' + err);
+        		} else {
+        			if (obj) {
+        				setStateInternal(data[i]._id, obj.val);
+        			}
+        			else {
+        				adapter.log.error('state ' + id + ' not found!');
+        			}
+        		}
+        	});
             if (data[i].native.udpKey) {
                 states[data[i].native.udpKey] = data[i];
             }

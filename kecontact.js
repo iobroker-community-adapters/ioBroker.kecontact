@@ -158,17 +158,16 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
+        	// save all state value into internal store 
         	var id = data[i]._id
         	adapter.getState(id, function (err, obj) {
         		if (err) {
         			adapter.log.error('error reading ' + id + ': ' + err);
         		} else {
-        			if (obj) {
+        			if (obj)
         				setStateInternal(id, obj.val);
-        			}
-        			else {
+        			else
         				setStateInternal(id, null); // state was not set yet from former runs
-        			}
         		}
         	});
             if (data[i].native.udpKey) {

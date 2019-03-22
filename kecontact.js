@@ -164,11 +164,13 @@ function main() {
         		if (err) {
         			adapter.log.error('error reading ' + id + ': ' + err);
         		} else {
-        			if (obj)
+        			if (obj){
+        				adapter.log.info("state " + id + " = " + obj.val);
         				setStateInternal(id, obj.val);
-        			else
+        			} else {
         				setStateInternal(id, null); // state was not set yet from former runs
-        			adapter.log.info("state " + id + " = " + obj.val);
+        				adapter.log.info("state " + id + " fehlt");
+        			}
         		}
         	});
             if (data[i].native.udpKey) {

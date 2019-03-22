@@ -165,11 +165,10 @@ function main() {
         			adapter.log.error('error reading ' + id + ': ' + err);
         		} else {
         			if (obj){
-        				adapter.log.info("state " + id + " = " + obj.val);
+        				adapter.log.info("state " + id + " = " + JSON.stringify(obj));
         				setStateInternal(id, obj.val);
         			} else {
         				setStateInternal(id, null); // state was not set yet from former runs
-        				adapter.log.info("state " + id + " fehlt");
         			}
         		}
         	});
@@ -177,6 +176,17 @@ function main() {
                 states[data[i].native.udpKey] = data[i];
             }
         }
+    	adapter.getStates('*', function (err, obj) {
+    		if (err) {
+    			adapter.log.error('error reading states: ' + err);
+    		} else {
+    			if (obj){
+    				adapter.log.info("getStates: " + JSON.stringify(obj));
+    			} else {
+    				adapter.log.info("Gestates leer");
+    			}
+    		}
+    	});
         start();
     });
 }

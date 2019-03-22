@@ -204,7 +204,7 @@ function start() {
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
-    checkWallboxPower();
+    checkTimer();   // start automatic once (after all states should be initialized
 }
 
 // check if config data is fine for adapter start
@@ -496,7 +496,6 @@ function getStateInternal(id) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.info('read state ' + obj + ' with value:' + currentStateValues[obj]);
 	return currentStateValues[obj];
 }
 
@@ -511,7 +510,7 @@ function setStateInternal(id, value) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.info('update state ' + obj + ' with value:' + value);
+	adapter.log.debug('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;
 }
 

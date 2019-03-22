@@ -168,7 +168,7 @@ function main() {
         				setStateInternal(id, obj.val);
         			else
         				setStateInternal(id, null); // state was not set yet from former runs
-        			adapter.log.info("state")
+        			adapter.log.info("state " + id + " = " + obj.val);
         		}
         	});
             if (data[i].native.udpKey) {

@@ -171,7 +171,8 @@ function main() {
     				for (var i in obj) {
     					if (! obj.hasOwnProperty(i)) continue;
     					if (typeof obj[i] == 'object' && obj[i] !== null) {
-    						adapter.log.info('state ' + i + ': ' + obj[i].val);    
+    						setStateInternal(obj[i], obj[i].val);
+    						adapter.log.debug('state ' + i + ': ' + obj[i].val);    
     					} else {
     						adapter.log.error('unexpected state value: ' + obj[i]);
     		            }

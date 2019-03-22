@@ -170,7 +170,7 @@ function main() {
     			if (obj) {
     				for (var i in obj) {
     					if (! obj.hasOwnProperty(i)) continue;
-    					if (typeof obj[i] == 'object') {
+    					if (typeof obj[i] == 'object' && obj[i] !== null) {
     						adapter.log.info('state ' + i + ': ' + obj[i].val);    
     					} else {
     						adapter.log.error('unexpected state value: ' + obj[i]);

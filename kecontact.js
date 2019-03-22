@@ -158,32 +158,26 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
-        	// save all state value into internal store 
-        	var id = data[i]._id
-        	adapter.getState(id, function (err, obj) {
-        		if (err) {
-        			adapter.log.error('error reading ' + id + ': ' + err);
-        		} else {
-        			if (obj){
-        				adapter.log.info("state " + id + " = " + JSON.stringify(obj));
-        				setStateInternal(id, obj.val);
-        			} else {
-        				setStateInternal(id, null); // state was not set yet from former runs
-        			}
-        		}
-        	});
             if (data[i].native.udpKey) {
                 states[data[i].native.udpKey] = data[i];
             }
         }
+        // save all state value into internal store 
     	adapter.getStates('*', function (err, obj) {
     		if (err) {
     			adapter.log.error('error reading states: ' + err);
     		} else {
-    			if (obj){
-    				adapter.log.info("getStates: " + JSON.stringify(obj));
+    			if (obj) {
+    				for (var i in obj) {
+    					if (! obj.hasOwnProperty(i)) continue;
+    					if (typeof obj[i] == 'object') {
+    						adapter.log.info('state ' + i + ': ' + obj[i].val);    
+    					} else {
+    						adapter.log.error('unexpected state value: ' + obj[i]);
+    		            }
+    		        }
     			} else {
-    				adapter.log.info("Gestates leer");
+    				adapter.log.error("not states found");
     			}
     		}
     	});

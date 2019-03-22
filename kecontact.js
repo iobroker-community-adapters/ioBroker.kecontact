@@ -168,6 +168,7 @@ function main() {
         				setStateInternal(id, obj.val);
         			else
         				setStateInternal(id, null); // state was not set yet from former runs
+        			adapter.log.info("state")
         		}
         	});
             if (data[i].native.udpKey) {
@@ -495,6 +496,7 @@ function getStateInternal(id) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
+	adapter.log.info('read state ' + obj + ' with value:' + currentStateValues[obj]);
 	return currentStateValues[obj];
 }
 
@@ -509,7 +511,7 @@ function setStateInternal(id, value) {
 	var obj = id;
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.debug('update state ' + obj + ' with value:' + value);
+	adapter.log.info('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;
 }
 

@@ -48,8 +48,8 @@ var cStateWallboxVerb    = "plug";                        /*Plug, Steckerverbind
 var cStateWallboxStatus  = "state";                       /*State, Status der Ladung */
 var cStateAktLadung      = "p";                           /*Power - Aktuelle Ladung E-Auto*/
 var cStateAktLademenge   = "ePres";                       /*ePres - Aktuell geladene Wh */
-var cStateLadebeginn     = "statistics.chargeTimestamp";  /*Zeitpukt, wann mit dem Laden des Autos aktiv begonnen wurde*/
-var cStateLadeverbindung = "statistics.plugTimestamp";    /*Zeitpukt, wann das Auto mit der Wallbox zuletzt verbunden wurde*/
+var cStateLadebeginn     = "statistics.chargeTimestamp";  /*Zeitpunkt, wann mit dem Laden des Autos aktiv begonnen wurde*/
+var cStateLadeverbindung = "statistics.plugTimestamp";    /*Zeitpunkt, wann das Auto mit der Wallbox zuletzt verbunden wurde*/
 var cStateLadestopp      = "automatic.pauseWallbox";      /*grundsätzliches Ladeverbot z.B. wegen Nachtspeicherheizung*/
 var cStateLadeautomatik  = "automatic.photovoltaics";     /*Ladung E-Auto abhängig von PV-Leistung, false = max Ladung unabh. von PV */
 var cStateLastChargeStart = "statistics.lastChargeStart";  /*Zeitpukt, wann beim letzten Ladevorgang mit dem Laden begonnen wurde*/
@@ -174,17 +174,20 @@ function main() {
     			if (obj) {
     				for (var i in obj) {
     					if (! obj.hasOwnProperty(i)) continue;
-    					if (typeof obj[i] == 'object' && obj[i] !== null) {
-    						adapter.log.debug('state ' + i + ': ' + obj[i].val);    
-    						setStateInternal(i, obj[i].val);
-    					} else {
-    						adapter.log.error('unexpected state value: ' + obj[i]);
-    		            }
+    					if (obj[i] !== null) {
+    						if (typeof obj[i] == 'object') {
+    							adapter.log.debug('state ' + i + ': ' + obj[i].val);    
+    							setStateInternal(i, obj[i].val);
+    						} else {
+    							adapter.log.error('unexpected state value: ' + obj[i]);
+    						}
+    					}
     		        }
     			} else {
     				adapter.log.error("not states found");
     			}
     		}
+    		checkWallboxPower();
     	});
         start();
     });
@@ -215,7 +218,6 @@ function start() {
     sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
-    checkTimer();   // start automatic once (after all states should be initialized
 }
 
 // check if config data is fine for adapter start
@@ -398,7 +400,9 @@ function checkWallboxPower() {
     // For wallboxes with fixed cable values of 0 and 1 not used
 	// Charging only possible with value of 7
 
+	adapter.log.info('Ladeverb: ' + getStateInternal(cStateLadeverbindung));
 	var wasVehiclePlugged = ! (getStateInternal(cStateLadeverbindung) === null || getStateInternal(cStateLadeverbindung) === undefined);
+	adapter.log.info('wasPluggeD: ' + wasVehiclePlugged);
 	var isVehiclePlugged  = getStateInternal(cStateWallboxVerb) >= 5;
 	if (isVehiclePlugged && ! wasVehiclePlugged) {
 		adapter.log.info('vehicle plugged to wallbox');

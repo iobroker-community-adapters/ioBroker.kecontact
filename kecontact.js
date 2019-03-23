@@ -511,9 +511,8 @@ function sendNextQueueDatagram() {
 
 function getStateInternal(id) {
 	var obj = id;
-	if (! obj.includes('.'))
+	if (! obj.startsWith(adapter.namespace + '.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.info('get state ' + obj + ' with value:' + currentStateValues[obj]);
 	return currentStateValues[obj];
 }
 
@@ -526,7 +525,7 @@ function getStateDefault0(id) {
 
 function setStateInternal(id, value) {
 	var obj = id;
-	if (! obj.includes('.'))
+	if (! obj.startsWith(adapter.namespace + '.'))
 		obj = adapter.namespace + '.' + id;
 	adapter.log.debug('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;

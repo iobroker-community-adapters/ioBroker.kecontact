@@ -400,9 +400,7 @@ function checkWallboxPower() {
     // For wallboxes with fixed cable values of 0 and 1 not used
 	// Charging only possible with value of 7
 
-	adapter.log.info('Ladeverb: ' + getStateInternal(cStateLadeverbindung));
 	var wasVehiclePlugged = ! (getStateInternal(cStateLadeverbindung) === null || getStateInternal(cStateLadeverbindung) === undefined);
-	adapter.log.info('wasPluggeD: ' + wasVehiclePlugged);
 	var isVehiclePlugged  = getStateInternal(cStateWallboxVerb) >= 5;
 	if (isVehiclePlugged && ! wasVehiclePlugged) {
 		adapter.log.info('vehicle plugged to wallbox');

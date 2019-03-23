@@ -106,6 +106,7 @@ adapter.on('stateChange', function (id, state) {
     if (!id || !state) {
     	return;
     }
+    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowleged
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
@@ -120,7 +121,6 @@ adapter.on('stateChange', function (id, state) {
         return;
     }
     
-    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     if (!stateChangeListeners.hasOwnProperty(id)) {
         adapter.log.error('Unsupported state change: ' + id);
         return;
@@ -175,6 +175,7 @@ function main() {
     				for (var i in obj) {
     					if (! obj.hasOwnProperty(i)) continue;
     					if (typeof obj[i] == 'object' && obj[i] !== null) {
+    						adapter.log.debug('state = ' + JSON.stringify(obj[i]));    
     						setStateInternal(obj[i], obj[i].val);
     						adapter.log.debug('state ' + i + ': ' + obj[i].val);    
     					} else {

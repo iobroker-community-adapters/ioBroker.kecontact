@@ -47,10 +47,14 @@ var cStateWallboxP3      = "i3";                          /*Current 3*/
 var cStateWallboxVerb    = "plug";                        /*Plug, Steckerverbindung */
 var cStateWallboxStatus  = "state";                       /*State, Status der Ladung */
 var cStateAktLadung      = "p";                           /*Power - Aktuelle Ladung E-Auto*/
+var cStateAktLademenge   = "ePres";                       /*ePres - Aktuell geladene Wh */
 var cStateLadebeginn     = "statistics.chargeTimestamp";  /*Zeitpukt, wann mit dem Laden des Autos aktiv begonnen wurde*/
 var cStateLadeverbindung = "statistics.plugTimestamp";    /*Zeitpukt, wann das Auto mit der Wallbox zuletzt verbunden wurde*/
 var cStateLadestopp      = "automatic.pauseWallbox";      /*grundsätzliches Ladeverbot z.B. wegen Nachtspeicherheizung*/
 var cStateLadeautomatik  = "automatic.photovoltaics";     /*Ladung E-Auto abhängig von PV-Leistung, false = max Ladung unabh. von PV */
+var cStateLastChargeStart = "statistics.lastChargeStart";  /*Zeitpukt, wann beim letzten Ladevorgang mit dem Laden begonnen wurde*/
+var cStateLastChargeFinish = "statistics.lastChargeFinish";  /*Zeitpukt, wann beim letzten Ladevorgang das Laden beendet wurde*/
+var cStateLastChargeAmount = "statistics.lastChargeAmount";  /*kWh, die beim letzten Ladevorgang geladen wurden*/
 
 //unloading
 adapter.on('unload', function (callback) {
@@ -401,8 +405,10 @@ function checkWallboxPower() {
 		setStateAck(cStateLadeverbindung, new Date());
 		setStateAck(cStateLadebeginn, null);
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
-		adapter.log.info('State = ' + getStateInternal(cStateLadeverbindung));
 		adapter.log.info('vehicle unplugged from wallbox');
+		setStateAck(cStateLastChargeStart, getStateInternal(cStateLadeverbindung));
+		setStateAck(cStateLastChargeFinish, new Date());
+		setStateAck(cStateLastChargeAmount, getStateInternal(cStateAktLademenge) / 1000);
 		setStateAck(cStateLadeverbindung, null);
 	} 
 

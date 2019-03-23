@@ -580,7 +580,50 @@
         "read": true,
         "write": false,
         "def": null,
-        "desc": "date and time when car was first started to charge after plugged to wallbox, null if unplugged"
+        "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.lastChargeStart",
+      "type": "state",
+      "common": {
+        "name": "timestamp when last charging process was started",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when car was plugged to wallbox for last charging process"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.lastChargeFinish",
+      "type": "state",
+      "common": {
+        "name": "timestamp when last charging process was finished",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when car was unplugged from wallbox for last charging process"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.lastChargeAmount",
+      "type": "state",
+      "common": {
+        "name": "timestamp when last charging process was started",
+        "type": "number",
+        "role": "value",
+        "unit": "kWh",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "amount of kWh of last charging process"
       },
       "native": {}
     }

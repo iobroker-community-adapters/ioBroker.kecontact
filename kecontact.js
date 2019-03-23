@@ -521,9 +521,9 @@ function getStateDefault0(id) {
 
 function setStateInternal(id, value) {
 	var obj = id;
+	adapter.log.debug('update state ' + obj + ' with value:' + value);
 	if (! obj.includes('.'))
 		obj = adapter.namespace + '.' + id;
-	adapter.log.debug('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;
 }
 

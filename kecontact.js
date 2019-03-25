@@ -104,7 +104,7 @@ adapter.on('stateChange', function (id, state) {
     	return;
     }
     adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
-    // save state changes of foreign adapters - this is done even if value has not changed but acknowleged
+    // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
@@ -203,11 +203,13 @@ function start() {
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
-        checkWallboxPower();
+        if (oldValue != newValue)
+        	checkWallboxPower();
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
-        checkWallboxPower();
+        if (oldValue != newValue)
+        	checkWallboxPower();
     };
 
     sendUdpDatagram('i');

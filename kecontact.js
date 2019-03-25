@@ -112,9 +112,9 @@ adapter.on('stateChange', function (id, state) {
     		if (state.val != getStateInternal(id))
     			checkWallboxPower();
     	}
-    } else {
-		setStateInternal(id, state.val);
     } 
+    var oldValue = getStateInternal(id);
+    setStateInternal(id, state.val);
     
     if (state.ack) {
         return;
@@ -125,7 +125,7 @@ adapter.on('stateChange', function (id, state) {
         return;
     }
     
-    stateChangeListeners[id](getStateInternal(id), state.val);
+    stateChangeListeners[id](oldvalue, state.val);
 });
 
 // startup

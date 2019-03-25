@@ -27,7 +27,7 @@ var currentStateValues = {}; // contains all actual state vaues
 var sendQueue = [];
 
 var nAktGenau   = 0;      // Aktueller genauer Ladewert
-var nAnzPhasen  = 0;      // Anzahl der Phasen, mit denen Fahrzeug lädt
+var phaseCount  = 0;      // Number of phaes vehicle is charging
 var doLog       = true;   // Aktivieren, um bei der Fehlersuche zu unterstützen
 var lAutoVerb   = false;  // Ist ein Auto mit der Ladebox verbunden?
 var autoTimer           = null;   // interval object
@@ -37,7 +37,8 @@ var maxPower            = 0       // maximum power for limitation
 var wallboxIncluded     = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 var amperageDelta       = 500;    // default for step of amperage
 var underusage          = 0;      // maximum regard use to reach minimal charge power for vehicle
-var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient  
+var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient
+var voltage             = 230;    // calculate with european standard voltage of 230V
 
 var cStateWallboxAnAus   = "enableUser";                  /*Enable User*/
 var cStateWallboxLadung  = "currentUser";                 /*Current User*/
@@ -176,7 +177,6 @@ function main() {
     					if (! obj.hasOwnProperty(i)) continue;
     					if (obj[i] !== null) {
     						if (typeof obj[i] == 'object') {
-    							adapter.log.info('state ' + i + ': ' + obj[i].val);    
     							setStateInternal(i, obj[i].val);
     						} else {
     							adapter.log.error('unexpected state value: ' + obj[i]);
@@ -354,7 +354,7 @@ function switchWallbox(enabled) {
 	if (enabled != getStateInternal(cStateWallboxAnAus)) {
 		adapter.log.debug("switched charging to " + (enabled ? "enabled" : "disabled"));
 	}
-	adapter.setState(cStateWallboxAnAus, enabled);
+	//adapter.setState(cStateWallboxAnAus, enabled);
 	if (! enabled) {
 		setStateAck(cStateLadebeginn, null);
 	}
@@ -364,7 +364,7 @@ function regulateWallbox(milliAmpere) {
 	if (milliAmpere != getStateInternal(cStateWallboxLadung)) {
 		adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
 	}
-    adapter.setState(cStateWallboxLadung, milliAmpere);
+    //adapter.setState(cStateWallboxLadung, milliAmpere);
 }
 
 function getSurplusWithoutWallbox() {
@@ -391,6 +391,42 @@ function getTotalPowerAvailable() {
     return 999999;  // return default maximum
 }
 
+function getChargingPhaseCount() {
+    var retVal = phaseCount;
+
+    // Number of phaes can only be calculated if vehicle is charging
+    if (isVehicleCharging()) {
+        var tempCount = 0;
+        if (getStateInternal(cStateWallboxP1).val > 100) {
+        	tempCount ++;
+        }
+        if (getStateInternal(cStateWallboxP2).val > 100) {
+        	tempCount ++;
+        }
+        if (getStateInternal(cStateWallboxP3).val > 100) {
+        	tempCount ++;
+        }
+        if (tempCount > 0) {
+            // save phase count and write info message if changed
+        	if (phaseCount != tempCount)
+        		adapter.log.info("wallbox is charging with " + tempCount + " phases");
+        	phaseCount = tempCount;
+        	retVal     = tempCount;
+        } else {
+        	adapter.log.warn("wallbox is charging but no phases where recognized");
+        }
+    }
+    // if no phaes where detected then calculate with one phase
+    if (retVal <= 0) {
+    	retVal = 1;
+    }
+    return retVal;
+}
+
+function isVehicleCharging() {
+	return getStateInternal(cStateAktLadung) > 100000;
+}
+
 function checkWallboxPower() {
     // 0 unplugged
     // 1 plugged on charging station 
@@ -412,10 +448,80 @@ function checkWallboxPower() {
 		setStateAck(cStateLastChargeFinish, new Date());
 		setStateAck(cStateLastChargeAmount, getStateInternal(cStateAktLademenge) / 1000);
 		setStateAck(cStateLadeverbindung, null);
+		setStateAck(cStateLadebeginn, null);
 	} 
+	
+    var curr    = 0;      // in mA
+    var tempMax = getMaxCurrent();
+	var phases  = getChargingPhaseCount();
+	
+    // "repair" state: VIS boolean control sets value to 0/1 instead of false/true
+    if (typeof getStateInternal(cStateLadeautomatik) != "boolean") {
+        setStateAck(cStateLadeautomatik, getStateInternal(cStateLadeautomatik) == 1);
+    }
 
 	adapter.log.debug('Available surplus: ' + getSurplusWithoutWallbox());
 	adapter.log.debug('Available max power: ' + getTotalPowerAvailable());
+	
+    // first of all check maximum power allowed
+	if (maxPowerActive) {
+		 // Always calculate with three phases for safety reasons
+		var maxAmperage = Math.round(getTotalPowerAvailable() / voltage / 3 * 1000 / amperageDelta) * amperageDelta;
+		if (maxAmperage < tempMax) {
+			tempMax = maxAmperage;
+		}
+	}
+	
+	// lock wallbox if requested or available amperage below minimum
+	if (getStateInternal(cStateLadestopp) || tempMax < getMinCurrent()) {
+		curr = 0;
+	} else {
+		// if vehicle is currently charging and was not the check before, then save timestamp
+		if (getStateInternal(cStateLadebeginn) === null && isVehicleCharging()) {
+			adapter.log.info("vehicle starts/continues to charge");
+			setStateAck(cStateLadebeginn, new Date());
+		}
+        if (isVehiclePlugged && getStateInternal(cStateLadeautomatik)) {
+            var available = getSurplusWithoutWallbox();
+            curr = Math.round(available / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+            if (curr < getMinCurrent()) {
+                if (getStateInternal(cStateLadebeginn) !== null) {
+                    // if vehicle is actually charging or is allowed to do so then check limits for power off
+                    curr = Math.round((available + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+                    if (curr >= getMinCurrent()) {
+                        adapter.log.info("tolerated under-usage of charge power, continuing charging session");
+                        curr = getMinCurrent();
+                    } else {
+                        if (minChargeSeconds > 0) {
+                            if ((new Date().getTime() - getStateInternal(cStateLadebeginn).getTime()) / 1000 < minChargeSeconds) {
+                            	adapter.log.info("minimum charge time not reached, continuing charging session");
+                                curr = getMinCurrent();
+                            }
+                        }
+                    }
+                }
+            } else {
+            	adapter.log.info("dynamic adaption of charging to " + curr + " mA");
+            }
+        } else {
+            curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
+            adapter.log.debug("wallbox is running with maximum power");
+        }
+	}
+	
+    if (curr < getMinCurrent()) {
+        // deactivate wallbox and set max power to minimum for safety reasons
+        switchWallbox(false);
+        regulateWallbox(getMinCurrent());
+    } else {
+        if (curr > tempMax) {
+            curr = tempMax;
+        }
+        adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
+        regulateWallbox(curr);
+        switchWallbox(true);
+    }
+	
 	
 	if (isVehiclePlugged || maxPowerActive)
 		checkTimer();

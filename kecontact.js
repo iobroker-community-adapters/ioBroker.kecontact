@@ -108,7 +108,7 @@ adapter.on('stateChange', function (id, state) {
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
-    		adapter.og.info('Call wegen id = '  + id);
+    		adapter.log.info('Call wegen id = '  + id);
     		checkWallboxPower();
     	}
     } else {

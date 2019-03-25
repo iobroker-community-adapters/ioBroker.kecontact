@@ -352,7 +352,7 @@ function switchWallbox(enabled) {
 	if (enabled != getStateInternal(stateWallboxEnabled)) {
 		adapter.log.debug("switched charging to " + (enabled ? "enabled" : "disabled"));
 	}
-	//adapter.setState(stateWallboxEnabled, enabled);
+	adapter.setState(stateWallboxEnabled, enabled);
 	if (! enabled) {
 		setStateAck(stateChargeTimestamp, null);
 	}
@@ -362,7 +362,7 @@ function regulateWallbox(milliAmpere) {
 	if (milliAmpere != getStateInternal(stateWallboxCurrent)) {
 		adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
 	}
-    //adapter.setState(stateWallboxCurrent, milliAmpere);
+    adapter.setState(stateWallboxCurrent, milliAmpere);
 }
 
 function getSurplusWithoutWallbox() {

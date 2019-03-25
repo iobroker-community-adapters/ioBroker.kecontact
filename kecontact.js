@@ -503,7 +503,7 @@ function checkWallboxPower() {
             }
         } else {
             curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
-            adapter.log.debug("wallbox is running with maximum power of " + curr + " mA");
+            adapter.log.info("wallbox is running with maximum power of " + curr + " mA");
         }
 	}
 	

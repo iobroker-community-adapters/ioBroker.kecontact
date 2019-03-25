@@ -108,6 +108,7 @@ adapter.on('stateChange', function (id, state) {
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
+    		adapter.og.info('Call wegen id = '  + id);
     		checkWallboxPower();
     	}
     } else {
@@ -183,6 +184,7 @@ function main() {
     				adapter.log.error("not states found");
     			}
     		}
+    		adapter.log.info('initialer call');
     		checkWallboxPower();
     	});
         start();
@@ -203,13 +205,11 @@ function start() {
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue)
-        	checkWallboxPower();
+      	checkWallboxPower();
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue)
-        	checkWallboxPower();
+       	checkWallboxPower();
     };
 
     sendUdpDatagram('i');
@@ -537,6 +537,7 @@ function disableTimer() {
 
 function checkTimer() {
 	disableTimer();
+	adapter.log.info('call über timer');
 	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
 }
 

@@ -108,8 +108,9 @@ adapter.on('stateChange', function (id, state) {
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
-    		adapter.log.info('Call wegen id = '  + id);
-    		checkWallboxPower();
+    		// call only if value has changed
+    		if (state.val != getStateInternal(id))
+    			checkWallboxPower();
     	}
     } else {
 		setStateInternal(id, state.val);
@@ -184,7 +185,6 @@ function main() {
     				adapter.log.error("not states found");
     			}
     		}
-    		adapter.log.info('initialer call');
     		checkWallboxPower();
     	});
         start();
@@ -537,7 +537,6 @@ function disableTimer() {
 
 function checkTimer() {
 	disableTimer();
-	adapter.log.info('call über timer');
 	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
 }
 

@@ -125,7 +125,7 @@ adapter.on('stateChange', function (id, state) {
         return;
     }
     
-    stateChangeListeners[id](oldvalue, state.val);
+    stateChangeListeners[id](oldValue, state.val);
 });
 
 // startup

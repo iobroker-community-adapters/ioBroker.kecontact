@@ -397,13 +397,13 @@ function getChargingPhaseCount() {
     // Number of phaes can only be calculated if vehicle is charging
     if (isVehicleCharging()) {
         var tempCount = 0;
-        if (getStateInternal(stateWallboxPhase1).val > 100) {
+        if (getStateInternal(stateWallboxPhase1) > 100) {
         	tempCount ++;
         }
-        if (getStateInternal(stateWallboxPhase2).val > 100) {
+        if (getStateInternal(stateWallboxPhase2) > 100) {
         	tempCount ++;
         }
-        if (getStateInternal(stateWallboxPhase3).val > 100) {
+        if (getStateInternal(stateWallboxPhase3) > 100) {
         	tempCount ++;
         }
         if (tempCount > 0) {
@@ -478,12 +478,15 @@ function checkWallboxPower() {
 	} else {
 		// if vehicle is currently charging and was not the check before, then save timestamp
 		if (getStateInternal(stateChargeTimestamp) === null && isVehicleCharging()) {
-			adapter.log.info("vehicle starts/continues to charge");
+			adapter.log.info("vehicle (re)starts to charge");
 			setStateAck(stateChargeTimestamp, new Date());
 		}
         if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
             var available = getSurplusWithoutWallbox();
             curr = Math.round(available / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+            if (curr > tempMax) {
+                curr = tempMax;
+            }
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
                     // if vehicle is actually charging or is allowed to do so then check limits for power off
@@ -493,7 +496,7 @@ function checkWallboxPower() {
                         curr = getMinCurrent();
                     } else {
                         if (minChargeSeconds > 0) {
-                            if ((new Date().getTime() - getStateInternal(stateChargeTimestamp).getTime()) / 1000 < minChargeSeconds) {
+                            if (((new Date()).getTime() - getDateObject(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
                             	adapter.log.info("minimum charge time not reached, continuing charging session");
                                 curr = getMinCurrent();
                             }
@@ -501,11 +504,13 @@ function checkWallboxPower() {
                     }
                 }
             } else {
-            	adapter.log.info("dynamic adaption of charging to " + curr + " mA");
+            	if (getStateInternal(stateWallboxCurrent) != curr)
+            		adapter.log.info("dynamic adaption of charging to " + curr + " mA");
             }
         } else {
             curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
-            adapter.log.debug("wallbox is running with maximum power of " + curr + " mA");
+        	if (getStateInternal(stateWallboxCurrent) != curr)
+        		adapter.log.debug("wallbox is running with maximum power of " + curr + " mA");
         }
 	}
 	

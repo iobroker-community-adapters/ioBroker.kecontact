@@ -496,7 +496,7 @@ function checkWallboxPower() {
                         curr = getMinCurrent();
                     } else {
                         if (minChargeSeconds > 0) {
-                            if (((new Date()).getTime() - getDateObject(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
+                            if (((new Date()).getTime() - new Date(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
                             	adapter.log.info("minimum charge time not reached, continuing charging session");
                                 curr = getMinCurrent();
                             }

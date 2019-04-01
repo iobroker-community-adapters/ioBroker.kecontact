@@ -26,6 +26,11 @@ var stateChangeListeners = {};
 var currentStateValues = {}; // contains all actual state vaues
 var sendQueue = [];
 
+//var ioBroker_Settings
+var ioBrokerLanguage      = 'en';
+const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
+const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
+
 var phaseCount          = 0;      // Number of phaes vehicle is charging
 var autoTimer           = null;   // interval object
 var photovoltaicsActive = false;  // is photovoltaics automatic active?
@@ -159,6 +164,21 @@ function main() {
     rxSocketBrodacast.on('message', handleWallboxBroadcast);
     rxSocketBrodacast.bind(BROADCAST_UDP_PORT, '0.0.0.0');
     
+    adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
+    	if (err) {
+    		adapter.log.error('Error while fetching system.config: ' + err);
+    		return;
+    	}
+
+    	switch (ioBroker_Settings.common.language) {
+    	case 'de':
+    		ioBrokerLanguage = 'de';
+    		break;
+    	default:
+    		ioBrokerLanguage = 'en';
+    	}
+    });
+    
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
             if (data[i].native.udpKey) {
@@ -203,12 +223,17 @@ function start() {
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
+    stateChangeListeners[adapter.namespace + '.display'] = function (oldValue, newValue) {
+        sendUdpDatagram('display 0 0 0 0 ' + newValue, true);
+    };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
       	checkWallboxPower();
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
+        if (oldValue != newValue)
+        	displayChargeMode();
        	checkWallboxPower();
     };
 
@@ -427,6 +452,15 @@ function isVehicleCharging() {
 	return getStateInternal(stateWallboxPower) > 100000;
 }
 
+function displayChargeMode() {
+	var text;
+	if (getStateInternal(statePvAutomatic))
+		text = chargeTextAutomatic[ioBrokerLanguage];
+	else
+		text = chargeTextMax[ioBrokerLanguage];
+	adapter.setState("display", text);
+}
+
 function checkWallboxPower() {
     // 0 unplugged
     // 1 plugged on charging station 
@@ -442,6 +476,7 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
+		displayChargeMode();
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));

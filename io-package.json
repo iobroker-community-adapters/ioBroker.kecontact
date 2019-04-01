@@ -513,6 +513,18 @@
       }
     },
     {
+      "_id": "display",
+      "type": "state",
+      "common": {
+        "name": "Text to display on wallbox",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": true,
+        "desc": "Message to display on wallbox for a certain (short) time (max. 23 characters)"
+      }
+    },
+    {
       "_id": "automatic",
       "type": "channel",
       "common": {

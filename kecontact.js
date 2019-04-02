@@ -341,6 +341,13 @@ function handleWallboxMessage(message, remote) {
             return;
         }
 
+        if (msg.startsWith('TCH-ERR')) {
+            adapter.log.error('Error received from wallbox: ' + message);
+            restartPollTimer(); // reset the timer so we don't send requests too often
+            requestReports();
+            return;
+        }
+
         if (msg[0] == '"') {
             msg = '{ ' + msg + ' }';
         }

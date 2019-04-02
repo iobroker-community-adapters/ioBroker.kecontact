@@ -224,7 +224,7 @@ function start() {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.display'] = function (oldValue, newValue) {
-        sendUdpDatagram('display 0 0 0 0 ' + newValue, true);
+        sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, "$"), true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);

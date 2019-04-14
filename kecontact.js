@@ -115,7 +115,7 @@ adapter.on('stateChange', function (id, state) {
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
     		// call only if value has changed
     		if (state.val != getStateInternal(id))
-    			setTimeout(checkWallboxPower, 1000);  // wait 1 seconds after vehicle is plugged
+    			setTimeout(checkWallboxPower, 3000);  // wait 3 seconds after vehicle is plugged
     	}
     } 
     var oldValue = getStateInternal(id);

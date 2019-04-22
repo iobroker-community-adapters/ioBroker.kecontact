@@ -76,11 +76,67 @@
                     <td><input type="text" id="host" class="value"></td>
                 </tr>
                 <tr>
-                    <td><label class="translate" for="host">Refresh Interval</label></td>
+                    <td><label class="translate" for="pollInterval">Refresh Interval</label></td>
                     <td class="admin-icon"></td>
-                    <td><input type="text" id="pollInterval" class="value"></td>
+                    <td><input type="number" id="pollInterval" class="value"> <label class="translate">secs</label></td>
                 </tr>
-            </table>
+                <tr>
+                    <td colspan="3"><b><label class="translate">only-special-values</label></b></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="stateRegard">regard</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="text" size=50 id="stateRegard" class="value"></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="stateSurplus">surplus</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="text" size=50 id="stateSurplus" class="value"></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="delta">delta</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="number" id="delta" class="value"> <label class="translate">mA</label></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="underusage">underusage</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="number" id="underusage" class="value"> <label class="translate">watts</label></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="minTime">minTime</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="number" id="minTime" class="value"> <label class="translate">secs</label></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><b><label class="translate">powerLimitation</label></b></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="maxPower">maxPower</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="number" id="maxPower" class="value"> <label class="translate">watts</label></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="stateEnergyMeter1">energyMeter1</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="text" size=50 id="stateEnergyMeter1" class="value"></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="stateEnergyMeter2">energyMeter2</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="text" size=50 id="stateEnergyMeter2" class="value"></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="stateEnergyMeter3">energyMeter3</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="text" size=50 id="stateEnergyMeter3" class="value"></td>
+                </tr>
+                <tr>
+                    <td><label class="translate" for="wallboxNotIncluded">wallboxNotIncluded</label></td>
+                    <td class="admin-icon"></td>
+                    <td><input type="checkbox" id="wallboxNotIncluded" class="value"></td>
+                </tr>
+			</table>
         </div>
     </div>
 </body>

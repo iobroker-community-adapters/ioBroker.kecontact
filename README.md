@@ -28,6 +28,10 @@ This is the interval in seconds how often the wallbox should be queried for new 
 The default value is 30 seconds which is a good balance between the load for the KeConnect and having up-to-date information in ioBroker.
 
 ## Changelog
+### 0.2.1 (2019-11-14)
+* (Sneak-L8) handle values of undefined in getStates
+* (Sneak-L8) better recognition of max power function
+
 ### 0.2.0 (2019-02-05)
 * (Sneak-L8) added automatic regulation by output photovoltaics unit
 * (Sneak-L8) added possibility to limit wallbox to keep total power below a limit

@@ -181,7 +181,7 @@ function main() {
     
     adapter.getStatesOf(function (err, data) {
         for (var i = 0; i < data.length; i++) {
-            if (data[i].native.udpKey) {
+            if (data[i].native && data[i].native.udpKey) {
                 states[data[i].native.udpKey] = data[i];
             }
         }
@@ -250,11 +250,11 @@ function checkConfig() {
         adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
         everythingFine = false;
     }
-    if (adapter.config.stateRegard) {
+    if (adapter.config.stateRegard && adapter.config.stateRegard != "") {
     	photovoltaicsActive = true;
     	everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
     }
-    if (adapter.config.stateSurplus) {
+    if (adapter.config.stateSurplus && adapter.config.stateSurplus != "") {
     	photovoltaicsActive = true;
     	everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
     }
@@ -273,7 +273,7 @@ function checkConfig() {
     		minChargeSeconds = adapter.config.minTime;
     	}
     }
-    if (adapter.config.maxPower) {
+    if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
     	maxPowerActive = true;
     	if (adapter.config.maxPower <= 0) {
     		adapter.log.warn('max. power negative or zero - power limitation deactivated');

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -22,6 +22,10 @@
       "0.2.0": {
         "en": "added automatic regulation by output photovoltaics unit, limitation of overall power consumption",
         "de": "Steuerung in Abhängigkeit der Leistung einer PV-Anlage möglich, Begrezung Ladestrom auf max. Gesamtverbrauch eines Anschlusses"
+      },
+      "0.2.1": {
+        "en": "handle values of undefined in getStates, better recognition of max power function",
+        "de": "undefined-Werte in getStates abfangen, bessere Erkennung, ob Leistungsbegrenzng gesetzt"
       }
     },
     "title": "KEBA KeContact Adapter",

@@ -108,10 +108,7 @@ adapter.on('stateChange', function (id, state) {
     if (!id || !state) {
     	return;
     }
-    if (typeof id == "string")
-      adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
-    else
-      adapter.log('id vom Typ' + typeof id);
+    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
@@ -310,6 +307,8 @@ function checkConfig() {
 
 // subscribe a foreign state to save vaues in "currentStateValues"
 function addForeignState(id) {
+    if (typeof id != "string")
+    	return false;
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
 			adapter.log.error('error subscribing ' + id + ': ' + err);

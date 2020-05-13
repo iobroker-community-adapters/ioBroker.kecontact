@@ -385,6 +385,8 @@ function getMaxCurrent() {
 function switchWallbox(enabled) {
 	if (enabled != getStateInternal(stateWallboxEnabled)) {
 		adapter.log.debug("switched charging to " + (enabled ? "enabled" : "disabled"));
+		if (enabled)
+			displayChargeMode();
 	}
 	adapter.setState(stateWallboxEnabled, enabled);
 	if (! enabled) {

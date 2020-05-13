@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -26,6 +26,10 @@
       "0.2.1": {
         "en": "handle values of undefined in getStates, better recognition of max power function",
         "de": "undefined-Werte in getStates abfangen, bessere Erkennung, ob Leistungsbegrenzng gesetzt"
+      },
+      "0.2.2": {
+        "en": "display information about photovoltaics automatic also at begin of charging",
+        "de": "Anzeige ob Lade-Automatik aktiv ist bei jedem Ladestart"
       }
     },
     "title": "KEBA KeContact Adapter",

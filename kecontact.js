@@ -487,7 +487,7 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
-		displayChargeMode();
+		setTimeout(displayChargeMode(), 8000);
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));

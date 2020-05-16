@@ -28,8 +28,8 @@
         "de": "undefined-Werte in getStates abfangen, bessere Erkennung, ob Leistungsbegrenzng gesetzt"
       },
       "0.2.2": {
-        "en": "display information about photovoltaics automatic also at begin of charging",
-        "de": "Anzeige ob Lade-Automatik aktiv ist bei jedem Ladestart"
+        "en": "display information about photovoltaics automatic also at begin of charging and delayed display when vehicle is plugged (8 sec)",
+        "de": "Anzeige ob Lade-Automatik aktiv ist bei jedem Ladestart und nun erst verzögert (8 Sek.), wenn Fahrzeug angesteckt wird"
       }
     },
     "title": "KEBA KeContact Adapter",

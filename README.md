@@ -30,6 +30,7 @@ The default value is 30 seconds which is a good balance between the load for the
 ## Changelog
 ### 0.2.2 (2020-05-13)
 * (Sneak-L8) display information about photovoltaics automatic also at begin of charging
+* (Sneak-L8) delayed display of photovoltaics automatic when vehicle is plugged (8 sec)
 
 ### 0.2.1 (2019-11-14)
 * (Sneak-L8) handle values of undefined in getStates

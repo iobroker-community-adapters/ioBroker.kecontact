@@ -309,7 +309,7 @@ function checkConfig() {
 function addForeignState(id) {
     if (typeof id != "string")
     	return false;
-    if (id.trim().equals(""))
+    if (id == "" || id == " ")
     	return false;
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {

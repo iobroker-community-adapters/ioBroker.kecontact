@@ -309,6 +309,8 @@ function checkConfig() {
 function addForeignState(id) {
     if (typeof id != "string")
     	return false;
+    if (id.trim().equals(""))
+    	return false;
 	adapter.getForeignState(id, function (err, obj) {
 		if (err) {
 			adapter.log.error('error subscribing ' + id + ': ' + err);
@@ -487,7 +489,7 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
-		setTimeout(displayChargeMode(), 8000);
+		setTimeout(displayChargeMode, 8000);
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));

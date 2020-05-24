@@ -28,6 +28,9 @@ This is the interval in seconds how often the wallbox should be queried for new 
 The default value is 30 seconds which is a good balance between the load for the KeConnect and having up-to-date information in ioBroker.
 
 ## Changelog
+### 0.2.3 (2020-05-24)
+* (Sneak-L8) fix call to display PV automatics after vehicle is plugged, fix object in energy meter states
+
 ### 0.2.2 (2020-05-13)
 * (Sneak-L8) display information about photovoltaics automatic also at begin of charging
 * (Sneak-L8) delayed display of photovoltaics automatic when vehicle is plugged (8 sec)

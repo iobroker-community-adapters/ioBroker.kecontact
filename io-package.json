@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -34,6 +34,10 @@
       "0.2.3": {
         "en": "fix call to display PV automatics after vehicle is plugged, fix object in energy meter states",
         "de": "Anzeige der Lade-Automatik bei Anstecken des Fahrzeugs gefixt, Objekte in EnergyMeter-State korrigiert"
+      },
+      "0.2.4": {
+        "en": "new option for passive mode, set current by 'currtime' command instead of 'curr'",
+        "de": "Neue Option zum passiven Betrieb der Wallbox, Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
       }
     },
     "title": "KEBA KeContact Adapter",
@@ -70,6 +74,7 @@
   },
   "native": {
     "host": "0.0.0.0",
+    "passiveMode": true,
     "pollInterval": 30,
     "stateRegard": null,
     "stateSurplus": null,

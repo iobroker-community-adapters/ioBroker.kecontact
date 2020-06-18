@@ -10,6 +10,10 @@ systemDictionary = {
         "de": "IP-Adresse der Wallbox", 
         "ru": "IP Минисервера KeContact"
     },
+    "passive mode": {
+        "en": "passive mode",
+        "de": "passiver Modus"
+    },
     "Refresh Interval": {
         "en": "Refresh Interval",
         "de": "Aktualisierungsintervall"
@@ -78,6 +82,10 @@ systemDictionary = {
         "en": "IP address of KEBA KeContact wallbox", 
         "de": "IP-Adresse der KEBA KeContact-Wallbox",
         "ru": "IP Адрес KEBA KeContact"
+    },
+    "tooltip_passiveMode": {
+        "en": "KEBA KeContact wallbox keeps passive (no power regulation)", 
+        "de": "IKEBA KeContact-Wallbox bleibt passiv (keine Leistungsregelung)"
     },
     "tooltip_pollInterval": {
         "en": "Interval in seconds how often the wallbox should be queried for new values (minimum 5 seconds, 0 = no queries, just broadcasts)", 

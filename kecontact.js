@@ -31,6 +31,7 @@ var ioBrokerLanguage      = 'en';
 const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
+var isPassive           = true    // no automatic power regulation?
 var phaseCount          = 0;      // Number of phaes vehicle is charging
 var autoTimer           = null;   // interval object
 var photovoltaicsActive = false;  // is photovoltaics automatic active?
@@ -218,7 +219,7 @@ function start() {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
-        sendUdpDatagram('curr ' + parseInt(newValue), true);
+        sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
     };
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
@@ -250,57 +251,62 @@ function checkConfig() {
         adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
         everythingFine = false;
     }
-    if (adapter.config.stateRegard && adapter.config.stateRegard != "") {
-    	photovoltaicsActive = true;
-    	everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
-    }
-    if (adapter.config.stateSurplus && adapter.config.stateSurplus != "") {
-    	photovoltaicsActive = true;
-    	everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
-    }
-    if (photovoltaicsActive) {
-    	if (! adapter.config.delta || adapter.config.delta <= 50) {
-    		adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
-    	} else {
-    		amperageDelta = adapter.config.delta;
+    if (adapter.config.passiveMode) {
+    	isPassive = true;
+    } else {
+    	isPassive = false;
+    	if (adapter.config.stateRegard && adapter.config.stateRegard != "") {
+    		photovoltaicsActive = true;
+    		everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
     	}
-    	if (adapter.config.underusage !== 0) {
-    		underusage = adapter.config.underusage;
+    	if (adapter.config.stateSurplus && adapter.config.stateSurplus != "") {
+    		photovoltaicsActive = true;
+    		everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
     	}
-    	if (! adapter.config.minTime || adapter.config.minTime <= 0) {
-    		adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
-    	} else {
-    		minChargeSeconds = adapter.config.minTime;
+    	if (photovoltaicsActive) {
+    		if (! adapter.config.delta || adapter.config.delta <= 50) {
+    			adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
+    		} else {
+    			amperageDelta = adapter.config.delta;
+    		}
+    		if (adapter.config.underusage !== 0) {
+    			underusage = adapter.config.underusage;
+    		}
+    		if (! adapter.config.minTime || adapter.config.minTime <= 0) {
+    			adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
+    		} else {
+    			minChargeSeconds = adapter.config.minTime;
+    		}
     	}
-    }
-    if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
-    	maxPowerActive = true;
-    	if (adapter.config.maxPower <= 0) {
-    		adapter.log.warn('max. power negative or zero - power limitation deactivated');
-    		maxPowerActive = false;
+    	if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
+    		maxPowerActive = true;
+    		if (adapter.config.maxPower <= 0) {
+    			adapter.log.warn('max. power negative or zero - power limitation deactivated');
+    			maxPowerActive = false;
+    		}
     	}
-    }
-    if (maxPowerActive) {
-        if (adapter.config.stateEnergyMeter1) {
-        	everythingFine = addForeignState(adapter.config.stateEnergyMeter1) & everythingFine;
-        }
-        if (adapter.config.stateEnergyMeter2) {
-        	everythingFine = addForeignState(adapter.config.stateEnergyMeter2) & everythingFine;
-        }
-        if (adapter.config.stateEnergyMeter3) {
-        	everythingFine = addForeignState(adapter.config.stateEnergyMeter3) & everythingFine;
-        }
-        if (adapter.config.wallboxNotIncluded) {
-        	wallboxIncluded = false;
-        } else {
-        	wallboxIncluded = true;
-        }
-        if (everythingFine) {
-        	if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
-        		adapter.log.error('no energy meters defined - power limitation deactivated');
-        		maxPowerActive = false;
-        	}
-        }
+    	if (maxPowerActive) {
+    		if (adapter.config.stateEnergyMeter1) {
+    			everythingFine = addForeignState(adapter.config.stateEnergyMeter1) & everythingFine;
+    		}
+    		if (adapter.config.stateEnergyMeter2) {
+    			everythingFine = addForeignState(adapter.config.stateEnergyMeter2) & everythingFine;
+    		}
+    		if (adapter.config.stateEnergyMeter3) {
+    			everythingFine = addForeignState(adapter.config.stateEnergyMeter3) & everythingFine;
+    		}
+    		if (adapter.config.wallboxNotIncluded) {
+    			wallboxIncluded = false;
+    		} else {
+    			wallboxIncluded = true;
+    		}
+    		if (everythingFine) {
+    			if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
+    				adapter.log.error('no energy meters defined - power limitation deactivated');
+    				maxPowerActive = false;
+    			}
+    		}
+    	}
     }
 	return everythingFine;
 }
@@ -489,7 +495,8 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
-		setTimeout(displayChargeMode, 8000);
+		if (! isPassive)
+			setTimeout(displayChargeMode, 8000);
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));
@@ -498,6 +505,8 @@ function checkWallboxPower() {
 		setStateAck(statePlugTimestamp, null);
 		setStateAck(stateChargeTimestamp, null);
 	} 
+	if (isPassive)
+		return;
 	
     var curr    = 0;      // in mA
     var tempMax = getMaxCurrent();

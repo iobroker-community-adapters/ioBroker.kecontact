@@ -219,7 +219,8 @@ function start() {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
-        sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
+        //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
+        sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);

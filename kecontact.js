@@ -253,8 +253,10 @@ function checkConfig() {
     }
     if (adapter.config.passiveMode) {
     	isPassive = true;
+    	adapter.log.info('charging station in passive mode');
     } else {
     	isPassive = false;
+    	adapter.log.info('charging station in active mode');
     	if (adapter.config.stateRegard && adapter.config.stateRegard != "") {
     		photovoltaicsActive = true;
     		everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
@@ -495,8 +497,9 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
-		if (! isPassive)
+		if (! isPassive) {
 			setTimeout(displayChargeMode, 8000);
+		}
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
 		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));
@@ -554,7 +557,7 @@ function checkWallboxPower() {
                     } else {
                         if (minChargeSeconds > 0) {
                             if (((new Date()).getTime() - new Date(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
-                            	adapter.log.info("minimum charge time not reached, continuing charging session");
+                            	adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
                                 curr = getMinCurrent();
                             }
                         }

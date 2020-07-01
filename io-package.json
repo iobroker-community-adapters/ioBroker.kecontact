@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.2.4a",
+    "version": "0.2.5",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -39,7 +39,7 @@
         "en": "new option for passive mode, set current by 'currtime' command instead of 'curr'",
         "de": "Neue Option zum passiven Betrieb der Wallbox, Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
       },
-      "0.2.4a": {
+      "0.2.5": {
         "en": "bugfix",
         "de": "Bugfix"
       }

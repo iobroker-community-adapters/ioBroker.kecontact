@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -42,6 +42,10 @@
       "0.2.5": {
         "en": "bugfix",
         "de": "Bugfix"
+      },
+      "0.2.6": {
+        "en": "retry: set current by 'currtime' command instead of 'curr'",
+        "de": "2. Versuch Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
       }
     },
     "title": "KEBA KeContact Adapter",

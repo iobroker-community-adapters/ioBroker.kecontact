@@ -219,8 +219,8 @@ function start() {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
-        //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
-        sendUdpDatagram('curr ' + parseInt(newValue), true);
+        sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
+        //sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
@@ -230,13 +230,15 @@ function start() {
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
-      	checkWallboxPower();
+        if (oldValue != newValue)
+        	checkTimer(true);
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue)
+        if (oldValue != newValue) {
         	displayChargeMode();
-       	checkWallboxPower();
+        	checkTimer(true);
+        }
     };
 
     sendUdpDatagram('i');
@@ -314,7 +316,7 @@ function checkConfig() {
 	return everythingFine;
 }
 
-// subscribe a foreign state to save vaues in "currentStateValues"
+// subscribe a foreign state to save values in "currentStateValues"
 function addForeignState(id) {
     if (typeof id != "string")
     	return false;
@@ -328,7 +330,7 @@ function addForeignState(id) {
 				adapter.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
 				setStateInternal(id, obj.val);
 				adapter.subscribeForeignStates(id); // there's no return value (success, ...)
-				adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
+				//adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
 			}
 			else {
 				adapter.log.error('state ' + id + ' not found!');
@@ -598,12 +600,19 @@ function checkWallboxPower() {
 function disableTimer() {
 	if (autoTimer) {
 		clearInterval(autoTimer);
+		autoTimer = null;
 	}
 }
 
-function checkTimer() {
+function checkTimer(short) {
 	disableTimer();
-	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
+	var interval;
+	if (short)
+		interval = 3;
+	else
+		interval = 30;
+			
+	autoTimer = setInterval(checkWallboxPower, interval * 1000); 
 }
 
 function requestReports() {

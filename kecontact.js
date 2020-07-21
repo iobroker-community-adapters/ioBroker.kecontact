@@ -42,22 +42,24 @@ var underusage          = 0;      // maximum regard use to reach minimal charge 
 var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient
 var voltage             = 230;    // calculate with european standard voltage of 230V
 
-var stateWallboxEnabled      = "enableUser";                  /*Enable User*/
-var stateWallboxCurrent      = "currentUser";                 /*Current User*/
-var stateWallboxPhase1       = "i1";                          /*Current 1*/
-var stateWallboxPhase2       = "i2";                          /*Current 2*/
-var stateWallboxPhase3       = "i3";                          /*Current 3*/
-var stateWallboxPlug         = "plug";                        /*Plug status */
-var stateWallboxState        = "state";                       /*State of charging session */
-var stateWallboxPower        = "p";                           /*Power*/
-var stateWallboxChargeAmount = "ePres";                       /*ePres - amount of charged energy in Wh */
-var statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
-var stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
-var stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
-var statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
-var stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
-var stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
-var stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
+const stateWallboxEnabled      = "enableUser";                  /*Enable User*/
+const stateWallboxCurrent      = "currentUser";                 /*Current User*/
+const stateWallboxPhase1       = "i1";                          /*Current 1*/
+const stateWallboxPhase2       = "i2";                          /*Current 2*/
+const stateWallboxPhase3       = "i3";                          /*Current 3*/
+const stateWallboxPlug         = "plug";                        /*Plug status */
+const stateWallboxState        = "state";                       /*State of charging session */
+const stateWallboxPower        = "p";                           /*Power*/
+const stateWallboxChargeAmount = "ePres";                       /*ePres - amount of charged energy in Wh */
+const stateWallboxDisplay      = "display";                    
+const stateWallboxOutput       = "output";                    
+const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
+const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
+const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
+const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
+const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
+const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
+const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
 
 //unloading
 adapter.on('unload', function (callback) {
@@ -215,17 +217,17 @@ function main() {
 function start() {
     adapter.subscribeStates('*');
     
-    stateChangeListeners[adapter.namespace + '.enableUser'] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxEnabled] = function (oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrent] = function (oldValue, newValue) {
         //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
         sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
-    stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxOutput] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + '.display'] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisplay] = function (oldValue, newValue) {
         sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, "$"), true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
@@ -483,7 +485,7 @@ function displayChargeMode() {
 		text = chargeTextAutomatic[ioBrokerLanguage];
 	else
 		text = chargeTextMax[ioBrokerLanguage];
-	adapter.setState("display", text);
+	adapter.setState(stateWallboxDisplay, text);
 }
 
 function checkWallboxPower() {

@@ -584,6 +584,7 @@ function checkWallboxPower() {
         }
 	}
 	
+	adapter.log.info("Neue Berechnung: " + curr);
     if (curr < getMinCurrent()) {
         // deactivate wallbox and set max power to minimum for safety reasons
         //switchWallbox(false);

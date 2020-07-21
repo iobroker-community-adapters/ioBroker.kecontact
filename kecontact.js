@@ -424,6 +424,9 @@ function regulateWallbox(milliAmpere) {
 }
 
 function getSurplusWithoutWallbox() {
+	adapter.log.info("Surplus " + getStateDefault0(adapter.config.stateSurplus) +
+			"- Regard " + getStateDefault0(adapter.config.stateRegard) +
+			"+ Power: " + (getStateDefault0(stateWallboxPower) / 1000));
 	return getStateDefault0(adapter.config.stateSurplus) 
 	     - getStateDefault0(adapter.config.stateRegard)
 	     + (getStateDefault0(stateWallboxPower) / 1000);
@@ -584,7 +587,6 @@ function checkWallboxPower() {
         }
 	}
 	
-	adapter.log.info("Neue Berechnung: " + curr);
     if (curr < getMinCurrent()) {
         // deactivate wallbox and set max power to minimum for safety reasons
         //switchWallbox(false);

@@ -354,14 +354,14 @@ function handleWallboxMessage(message, remote) {
         if (msg.startsWith('TCH-OK')) {
             //adapter.log.info('Received ' + message);
             restartPollTimer(); // reset the timer so we don't send requests too often
-            requestReports();
+            setTimeout(requestReports, 3000);
             return;
         }
 
         if (msg.startsWith('TCH-ERR')) {
             adapter.log.error('Error received from wallbox: ' + message);
             restartPollTimer(); // reset the timer so we don't send requests too often
-            requestReports();
+            setTimeout(requestReports, 3000);
             return;
         }
 
@@ -380,7 +380,7 @@ function handleWallboxBroadcast(message, remote) {
     adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
     try {
         restartPollTimer(); // reset the timer so we don't send requests too often
-        requestReports();
+        setTimeout(requestReports, 3000);
         
         var msg = message.toString().trim();
         handleMessage(JSON.parse(msg));
@@ -626,6 +626,7 @@ function restartPollTimer() {
 
     var pollInterval = parseInt(adapter.config.pollInterval);
     if (pollInterval > 0) {
+    	adapter.log.info("set timer to " + pollInterval);
         pollTimer = setInterval(requestReports, 1000 * Math.max(pollInterval, 5));
     }
 }

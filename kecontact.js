@@ -593,7 +593,7 @@ function checkWallboxPower() {
         if (curr > tempMax) {
             curr = tempMax;
         }
-        adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
+        adapter.log.info("wallbox set to charging maximum of " + curr + " mA");
         regulateWallbox(curr);
         //switchWallbox(true);
     }

@@ -412,11 +412,15 @@ function switchWallbox(enabled) {
 }
 
 function regulateWallbox(milliAmpere) {
-	if (milliAmpere != getStateInternal(stateWallboxCurrent)) {
-		adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
+	var oldValue = 0;
+	if (getStateInternal(stateWallboxEnabled))
+		oldValue = getStateInternal(stateWallboxCurrent)
+	
+	if (milliAmpere != oldValue) {
+		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
+	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
     //adapter.setState(stateWallboxCurrent, milliAmpere);
-    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 }
 
 function getSurplusWithoutWallbox() {
@@ -626,7 +630,6 @@ function restartPollTimer() {
 
     var pollInterval = parseInt(adapter.config.pollInterval);
     if (pollInterval > 0) {
-    	adapter.log.info("set timer to " + pollInterval);
         pollTimer = setInterval(requestReports, 1000 * Math.max(pollInterval, 5));
     }
 }

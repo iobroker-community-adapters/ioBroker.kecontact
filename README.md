@@ -27,7 +27,14 @@ This is the interval in seconds how often the wallbox should be queried for new 
 
 The default value is 30 seconds which is a good balance between the load for the KeConnect and having up-to-date information in ioBroker.
 
+### other options
+
+You can also define states for PV optimized charging of car or limiting max. power of main power.
+
 ## Changelog
+### 0.3.0 (2020-07-21)
+* (Sneak-L8) regulate wallbox by PV automatics independant from state curr user
+
 ### 0.2.6 (2020-07-20)
 * (Sneak-L8) try again to regulate wallbox by currtime instead of curr as suggested
 

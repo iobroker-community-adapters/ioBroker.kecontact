@@ -46,6 +46,10 @@
       "0.2.6": {
         "en": "retry: set current by 'currtime' command instead of 'curr'",
         "de": "2. Versuch Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
+      },
+      "0.3.0": {
+        "en": "regulate wallbox by PV automatics independant from state curr user",
+        "de": "Regeln der Ladeleistung bei PVoptimiertem Laden unabhngig von curr user"
       }
     },
     "title": "KEBA KeContact Adapter",

@@ -219,8 +219,8 @@ function start() {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.currentUser'] = function (oldValue, newValue) {
-        sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
-        //sendUdpDatagram('curr ' + parseInt(newValue), true);
+        //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
+        sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
     stateChangeListeners[adapter.namespace + '.output'] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
@@ -231,13 +231,13 @@ function start() {
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue)
-        	checkTimer(true);
+        	checkWallboxPower();
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue) {
         	displayChargeMode();
-        	checkTimer(true);
+        	checkWallboxPower();
         }
     };
 
@@ -329,8 +329,8 @@ function addForeignState(id) {
 			if (obj) {
 				adapter.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
 				setStateInternal(id, obj.val);
-				adapter.subscribeForeignStates(id); // there's no return value (success, ...)
-				//adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
+				//adapter.subscribeForeignStates(id); // there's no return value (success, ...)
+				adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
 			}
 			else {
 				adapter.log.error('state ' + id + ' not found!');
@@ -413,7 +413,8 @@ function regulateWallbox(milliAmpere) {
 	if (milliAmpere != getStateInternal(stateWallboxCurrent)) {
 		adapter.log.debug("regulate wallbox to " + milliAmpere + "mA");
 	}
-    adapter.setState(stateWallboxCurrent, milliAmpere);
+    //adapter.setState(stateWallboxCurrent, milliAmpere);
+    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 }
 
 function getSurplusWithoutWallbox() {
@@ -605,15 +606,10 @@ function disableTimer() {
 	}
 }
 
-function checkTimer(short) {
+function checkTimer() {
 	disableTimer();
-	var interval;
-	if (short)
-		interval = 3;
-	else
-		interval = 30;
-			
-	autoTimer = setInterval(checkWallboxPower, interval * 1000); 
+	
+	autoTimer = setInterval(checkWallboxPower, 30 * 1000); 
 }
 
 function requestReports() {

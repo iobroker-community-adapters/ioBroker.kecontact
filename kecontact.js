@@ -420,6 +420,9 @@ function regulateWallbox(milliAmpere) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
+	if (milliAmpere == 0) {
+		setStateAck(stateChargeTimestamp, null);
+	}
     //adapter.setState(stateWallboxCurrent, milliAmpere);
 }
 
@@ -585,10 +588,12 @@ function checkWallboxPower() {
 	}
 	
     if (curr < getMinCurrent()) {
-    	adapter.log.debug("not enogh power for charging ...");
+    	adapter.log.debug("not enough power for charging ...");
         // deactivate wallbox and set max power to minimum for safety reasons
         //switchWallbox(false);
         //regulateWallbox(getMinCurrent());
+    	if (getStateInternal(stateWallboxEnabled))
+    		adapter.log.info("stop charging");
     	regulateWallbox(0);
     } else {
         if (curr > tempMax) {

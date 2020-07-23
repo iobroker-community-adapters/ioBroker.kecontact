@@ -32,6 +32,9 @@ The default value is 30 seconds which is a good balance between the load for the
 You can also define states for PV optimized charging of car or limiting max. power of main power.
 
 ## Changelog
+### 0.3.1 (2020-07-23)
+* (Sneak-L8) do not start charging when vehicle is plugged even if current is too low for photovoltaics automation
+
 ### 0.3.0 (2020-07-21)
 * (Sneak-L8) regulate wallbox by PV automatics independant from state curr user
 

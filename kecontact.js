@@ -511,7 +511,7 @@ function checkWallboxPower() {
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
 		if (! isPassive) {
-			setTimeout(displayChargeMode, 8000);
+			setTimeout(displayChargeMode, 5000);
 		}
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
@@ -527,6 +527,7 @@ function checkWallboxPower() {
     var curr    = 0;      // in mA
     var tempMax = getMaxCurrent();
 	var phases  = getChargingPhaseCount();
+	var chargingToBeStarted = false;
 	
     // "repair" state: VIS boolean control sets value to 0/1 instead of false/true
     if (typeof getStateInternal(statePvAutomatic) != "boolean") {
@@ -551,8 +552,7 @@ function checkWallboxPower() {
 	} else {
 		// if vehicle is currently charging and was not the check before, then save timestamp
 		if (getStateInternal(stateChargeTimestamp) === null && isVehicleCharging()) {
-			adapter.log.info("vehicle (re)starts to charge");
-			setStateAck(stateChargeTimestamp, new Date());
+			chargingToBeStarted = true;
 		}
         if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
             var available = getSurplusWithoutWallbox();
@@ -596,6 +596,10 @@ function checkWallboxPower() {
     		adapter.log.info("stop charging");
     	regulateWallbox(0);
     } else {
+    	if (chargingToBeStarted) {
+    		adapter.log.info("vehicle (re)starts to charge");
+    		setStateAck(stateChargeTimestamp, new Date());
+    	}
         if (curr > tempMax) {
             curr = tempMax;
         }

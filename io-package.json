@@ -619,7 +619,7 @@
       "_id": "statistics.chargeTimestamp",
       "type": "state",
       "common": {
-        "name": "timestamp when vehicle was pluged to wallbox",
+        "name": "timestamp when vehicle started to charge",
         "type": "string",
         "role": "datetime",
         "read": true,
@@ -661,14 +661,14 @@
       "_id": "statistics.lastChargeAmount",
       "type": "state",
       "common": {
-        "name": "timestamp when last charging process was started",
+        "name": "charge amount of last charging process",
         "type": "number",
         "role": "value",
         "unit": "kWh",
         "read": true,
         "write": false,
         "def": null,
-        "desc": "amount of kWh of last charging process"
+        "desc": "Power consumption of the last loading session in Wh."
       },
       "native": {}
     }

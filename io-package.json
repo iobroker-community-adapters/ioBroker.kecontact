@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -54,6 +54,10 @@
       "0.3.1": {
         "en": "fix: when vehicle is plugged, it was always charged for minimum charging time even if PV was low",
         "de": "Fix: Auto wurde zumindest immer für Mindesladedauer geladen, auch wenn PV-Leistung nicht ausreicht"
+      },
+      "0.3.2": {
+        "en": "in PV automatics mode wallbox will be disabled as long as no vehicle is plugged",
+        "de": "bei PV-Automatik bleibt Wallbox gesperrt solange kein Fahrzeug angeschlossen ist"
       }
     },
     "title": "KEBA KeContact Adapter",

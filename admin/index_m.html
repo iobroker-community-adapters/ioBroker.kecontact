@@ -68,107 +68,116 @@
             <div class="col s12 m4 l2">
                 <img src="charger.png" width="64" height="64">
             </div>
-            <div class="col s12 m4 l2">
-                <h3 class="translate">KEBA KeContact adapter settings</h3>
-            </div>
         </div>
 
-        <!-- Put your content here -->
-
-        <!-- For example columns with settings: -->
         <div class="row">
             <div class="col s6 input-field">
-                <input type="checkbox" class="value" id="option1" />
-                <label for="option1" class="translate">option1</label>
+                <input type="text" id="host" class="value" />
+                <label for="host" class="translate">KeContact IP Address</label>
             </div>
+        </div>
 
+        <div class="row">
             <div class="col s6 input-field">
-                <input type="text" class="value" id="option2" />
-                <label for="option2" class="translate">option2</label>
+                <input type="checkbox" id="passiveMode" class="value" />
+                <label for="passiveMode" class="translate">passive mode</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="number" id="pollInterval" class="value" />
+                <label for="pollInterval" class="translate">Refresh Interval</label>
+                <span class="helper-text translate">secs</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <h2 class="translate">only-special-values</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="text" size="50" id="stateRegard" class="value" />
+                <label for="stateRegard" class="translate">regard</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="text" size="50" id="stateSurplus" class="value" />
+                <label for="stateSurplus" class="translate">surplus</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="number" id="delta" class="value" />
+                <label for="delta" class="translate">delta</label>
+                <span class="helper-text translate">mA</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="number" id="underusage" class="value" />
+                <label for="underusage" class="translate">underusage</label>
+                <span class="helper-text translate">watts</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="number" id="minTime" class="value" />
+                <label for="minTime" class="translate">minTime</label>
+                <span class="helper-text translate">secs</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <h2 class="translate">powerLimitation</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="number" id="maxPower" class="value" />
+                <label for="maxPower" class="translate">maxPower</label>
+                <span class="helper-text translate">watts</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="text" size="50" id="stateEnergyMeter1" class="value" />
+                <label for="stateEnergyMeter1" class="translate">energyMeter1</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="text" size="50" id="stateEnergyMeter2" class="value" />
+                <label for="stateEnergyMeter2" class="translate">energyMeter2</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="text" size="50" id="stateEnergyMeter3" class="value" />
+                <label for="stateEnergyMeter3" class="translate">energyMeter3</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 input-field">
+                <input type="checkbox" id="wallboxNotIncluded" class="value" />
+                <label for="wallboxNotIncluded" class="translate">wallboxNotIncluded</label>
             </div>
         </div>
 
     </div>
-
-    <!-- 
-    <div id="adapter-container">
-        <table><tr><td><img src="charger.png" width="64" height="64"></td><td><h3 class="translate">KEBA KeContact adapter settings</h3></td></tr></table>
-        <div id="settings">
-            <table>
-                <tr>
-                    <td><label class="translate" for="host">KeContact IP Address</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" id="host" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="passiveMode">passive mode</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="checkbox" id="passiveMode" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="pollInterval">Refresh Interval</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="number" id="pollInterval" class="value"> <label class="translate">secs</label></td>
-                </tr>
-                <tr>
-                    <td colspan="3"><b><label class="translate">only-special-values</label></b></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="stateRegard">regard</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" size=50 id="stateRegard" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="stateSurplus">surplus</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" size=50 id="stateSurplus" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="delta">delta</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="number" id="delta" class="value"> <label class="translate">mA</label></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="underusage">underusage</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="number" id="underusage" class="value"> <label class="translate">watts</label></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="minTime">minTime</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="number" id="minTime" class="value"> <label class="translate">secs</label></td>
-                </tr>
-                <tr>
-                    <td colspan="3"><b><label class="translate">powerLimitation</label></b></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="maxPower">maxPower</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="number" id="maxPower" class="value"> <label class="translate">watts</label></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="stateEnergyMeter1">energyMeter1</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" size=50 id="stateEnergyMeter1" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="stateEnergyMeter2">energyMeter2</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" size=50 id="stateEnergyMeter2" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="stateEnergyMeter3">energyMeter3</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="text" size=50 id="stateEnergyMeter3" class="value"></td>
-                </tr>
-                <tr>
-                    <td><label class="translate" for="wallboxNotIncluded">wallboxNotIncluded</label></td>
-                    <td class="admin-icon"></td>
-                    <td><input type="checkbox" id="wallboxNotIncluded" class="value"></td>
-                </tr>
-			</table>
-        </div>
-    </div>
-    -->
 </body>
 </html> 

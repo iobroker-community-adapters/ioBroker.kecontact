@@ -181,7 +181,7 @@ systemDictionary = {
     },
     "energyMeter1":   {
         "en": "Name of state for 1st energy meter",
-        "de": "Name des States für 1. Energy-Meter"",
+        "de": "Name des States für 1. Energy-Meter",
         "ru": "Название государства для 1-го счетчика электроэнергии",
         "pt": "Nome do estado do primeiro medidor de energia",
         "nl": "Staatsnaam voor 1e energiemeter",

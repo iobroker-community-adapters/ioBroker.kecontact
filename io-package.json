@@ -60,11 +60,11 @@
         "de": "bei PV-Automatik bleibt Wallbox gesperrt solange kein Fahrzeug angeschlossen ist"
       }
     },
-    "title": "KEBA KeContact Adapter",
+    "title": "KEBA KeContact Wallbox",
     "titleLang": {
-      "en": "KEBA KeContact Adapter",
-      "de": "KEBA KeContact-Adapter",
-      "ru": "Драйвер для KEBA KeContact"
+      "en": "KEBA KeContact Wallbox",
+      "de": "KEBA KeContact Wallbox",
+      "ru": "KEBA KeContact Wallbox"
     },
     "desc": {
       "en": "Communicates with a KEBA KeContact wallbox.",

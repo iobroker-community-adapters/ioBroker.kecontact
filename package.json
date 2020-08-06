@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/UncleSamSwiss/ioBroker.kecontact.git"
+    "url": "git+https://github.com/iobroker-community-adapters/ioBroker.kecontact.git"
   },
   "keywords": [
     "KeContact",
@@ -36,10 +36,10 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/UncleSamSwiss/ioBroker.kecontact/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues"
   },
-  "homepage": "https://github.com/UncleSamSwiss/ioBroker.kecontact",
-  "readme": "https://github.com/UncleSamSwiss/ioBroker.kecontact/blob/master/README.md",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.kecontact",
+  "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
   "dependencies": {
     "dgram": "^1.0.1",
     "os": "^0.1.1",

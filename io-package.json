@@ -78,6 +78,7 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "messagebox": true,
+    "materialize": true,
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
     "loglevel": "info",
     "type": "hardware",

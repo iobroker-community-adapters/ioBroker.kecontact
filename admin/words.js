@@ -3,132 +3,384 @@ systemDictionary = {
     "KEBA KeContact adapter settings": {
         "en": "KEBA KeContact adapter settings",
         "de": "KEBA KeContact Adapter-Einstellungen",
-        "ru": "Настройки драйвера KEBA KeContact"
+        "ru": "Настройки адаптера KEBA KeContact",
+        "pt": "Configurações do adaptador KEBA KeContact",
+        "nl": "KEBA KeContact adapter instellingen",
+        "fr": "Paramètres de l'adaptateur KEBA KeContact",
+        "it": "Impostazioni dell'adattatore KEBA KeContact",
+        "es": "Configuración del adaptador KEBA KeContact",
+        "pl": "Ustawienia adaptera KEBA KeContact",
+        "zh-cn": "KEBA KeContact适配器设置"
     },
     "KeContact IP Address": {
         "en": "Wallbox IP Address", 
-        "de": "IP-Adresse der Wallbox", 
-        "ru": "IP Минисервера KeContact"
+        "ru": "IP-адрес Wallbox",
+        "pt": "Endereço IP da Wallbox",
+        "nl": "Wallbox IP-adres",
+        "fr": "Adresse IP de la Wallbox",
+        "it": "Indirizzo IP Wallbox",
+        "es": "Dirección IP de Wallbox",
+        "pl": "Adres IP stacji Wallbox",
+        "zh-cn": "Wallbox IP地址"
     },
     "passive mode": {
         "en": "passive mode",
-        "de": "passiver Modus"
+        "de": "passiver Modus",
+        "ru": "пассивный режим",
+        "pt": "modo passivo",
+        "nl": "passieve modus",
+        "fr": "mode passif",
+        "it": "modalità passiva",
+        "es": "Modo pasivo",
+        "pl": "tryb pasywny",
+        "zh-cn": "被动模式"
     },
     "Refresh Interval": {
         "en": "Refresh Interval",
-        "de": "Aktualisierungsintervall"
+        "de": "Aktualisierungsintervall",
+        "ru": "Интервал обновления",
+        "pt": "Intervalo de atualização",
+        "nl": "Vernieuwingsinterval",
+        "fr": "Intervalle de rafraîchissement",
+        "it": "Intervallo di aggiornamento",
+        "es": "Intervalo de actualización",
+        "pl": "Częstotliwość odświeżania",
+        "zh-cn": "刷新间隔"
     },
     "secs": {
         "en": "seconds",
-        "de": "Sekunden"
+        "de": "Sekunden",
+        "ru": "секунд",
+        "pt": "segundos",
+        "nl": "seconden",
+        "fr": "secondes",
+        "it": "secondi",
+        "es": "segundos",
+        "pl": "sekundy",
+        "zh-cn": "秒"
     },
     "mA": {
         "en": "mA",
-        "de": "mA"
+        "de": "mA",
+        "ru": "мА",
+        "pt": "mA",
+        "nl": "mA",
+        "fr": "mA",
+        "it": "mA",
+        "es": "mA",
+        "pl": "mA",
+        "zh-cn": "mA"
     },
     "watts": {
         "en": "watts",
-        "de": "W"
+        "de": "W",
+        "ru": "Вт",
+        "pt": "W",
+        "nl": "W",
+        "fr": "W",
+        "it": "W",
+        "es": "W",
+        "pl": "W",
+        "zh-cn": "瓦特"
     },
     "only-special-values": {
         "en": "Following values are only needed if wallbox is to be regulated by photovoltaics unit",
-        "de": "Folgende Werte werden nur benötigt, wenn die Wallbox abhängig von einer PV-Anlage geregelt werden soll"
+        "de": "Folgende Werte werden nur benötigt, wenn die Wallbox abhängig von einer PV-Anlage geregelt werden soll",
+        "ru": "Следующие значения необходимы только в том случае, если настенная коробка должна регулироваться фотоэлектрической установкой.",
+        "pt": "Os seguintes valores são necessários apenas se a caixa de parede for regulada pela unidade fotovoltaica",
+        "nl": "De volgende waarden zijn alleen nodig als de wallbox door een fotovoltaïsche installatie moet worden geregeld",
+        "fr": "Les valeurs suivantes ne sont nécessaires que si la wallbox doit être régulée par une unité photovoltaïque",
+        "it": "I seguenti valori sono necessari solo se la wallbox deve essere regolata dall'unità fotovoltaica",
+        "es": "Los siguientes valores solo son necesarios si la caja de empotrar se va a regular mediante una unidad fotovoltaica",
+        "pl": "Poniższe wartości są potrzebne tylko wtedy, gdy wallbox ma być regulowany przez moduł fotowoltaiczny",
+        "zh-cn": "仅当要通过光伏装置调节壁箱时才需要以下值"
     },
     "regard": {
         "en": "Name of regard state",
-        "de": "Name des States für Netzbezug"
+        "de": "Name des States für Netzbezug",
+        "ru": "Название состояния рассмотрения",
+        "pt": "Nome do estado de consideração",
+        "nl": "Naam van aanzien staat",
+        "fr": "Nom de l'état de regard",
+        "it": "Nome dello stato di riferimento",
+        "es": "Nombre del estado de consideración",
+        "pl": "Nazwa stanu szacunku",
+        "zh-cn": "注意状态的名称"
     },
     "surplus": {
         "en": "Name of surplus state",
-        "de": "Name des States für Netzeinspeisung"
+        "de": "Name des States für Netzeinspeisung",
+        "ru": "Название избыточного состояния",
+        "pt": "Nome do estado excedente",
+        "nl": "Naam van de overtollige staat",
+        "fr": "Nom de l'état excédentaire",
+        "it": "Nome dello stato in eccedenza",
+        "es": "Nombre del estado excedente",
+        "pl": "Nazwa stanu nadwyżkowego",
+        "zh-cn": "剩余状态名称"
     },
     "delta":   {
         "en": "Step size",
-        "de": "Schrittweite"
+        "de": "Schrittweite",
+        "ru": "Размер шага",
+        "pt": "Tamanho do passo",
+        "nl": "Stapgrootte",
+        "fr": "Taille de pas",
+        "it": "Dimensione del passo",
+        "es": "Numero de pie",
+        "pl": "Rozmiar kroku",
+        "zh-cn": "一步的大小"
     },
     "underusage":   {
         "en": "Charging under-usage",
-        "de": "Ladeunterschreitung"
+        "de": "Ladeunterschreitung",
+        "ru": "Недостаточная зарядка",
+        "pt": "Carregamento subutilizado",
+        "nl": "Opladen onder gebruik",
+        "fr": "Charge de sous-utilisation",
+        "it": "Ricarica sotto utilizzo",
+        "es": "Carga insuficiente",
+        "pl": "Niewystarczające zużycie energii",
+        "zh-cn": "充电不足使用"
     },
     "minTime":   {
         "en": "Minimum charging time",
-        "de": "Mindestladezeit"
+        "de": "Mindestladezeit",
+        "ru": "Минимальное время зарядки",
+        "pt": "Tempo mínimo de carregamento",
+        "nl": "Minimale oplaadtijd",
+        "fr": "Temps de charge minimum",
+        "it": "Tempo minimo di ricarica",
+        "es": "Tiempo mínimo de carga",
+        "pl": "Minimalny czas ładowania",
+        "zh-cn": "最短充电时间"
     },
     "powerLimitation": {
         "en": "Following values are only needed if maximum power must be limited",
-        "de": "Folgende Werte werden nur benötigt, wenn die Gesamtleistung begrenzt ist"
+        "de": "Folgende Werte werden nur benötigt, wenn die Gesamtleistung begrenzt ist",
+        "ru": "Следующие значения необходимы только в случае ограничения максимальной мощности.",
+        "pt": "Os seguintes valores são necessários apenas se a potência máxima deve ser limitada",
+        "nl": "De volgende waarden zijn alleen nodig als het maximale vermogen moet worden beperkt",
+        "fr": "Les valeurs suivantes ne sont nécessaires que si la puissance maximale doit être limitée",
+        "it": "I seguenti valori sono necessari solo se la potenza massima deve essere limitata",
+        "es": "Los siguientes valores solo son necesarios si se debe limitar la potencia máxima",
+        "pl": "Poniższe wartości są potrzebne tylko wtedy, gdy trzeba ograniczyć maksymalną moc",
+        "zh-cn": "仅当必须限制最大功率时才需要以下值"
     },
     "maxPower":   {
         "en": "Maximum power consumption surplus",
-        "de": "Maximaler Netzbezug"
+        "de": "Maximaler Netzbezug",
+        "ru": "Максимальный избыток потребляемой мощности",
+        "pt": "Excesso de consumo máximo de energia",
+        "nl": "Maximaal energieverbruik overschot",
+        "fr": "Excédent de consommation électrique maximum",
+        "it": "Massima potenza assorbita in eccesso",
+        "es": "Excedente de consumo máximo de energía",
+        "pl": "Nadwyżka maksymalnego poboru mocy",
+        "zh-cn": "最大耗电量盈余"
     },
     "energyMeter1":   {
         "en": "Name of state for 1st energy meter",
-        "de": "Name des States für 1. Energy-Meter"
+        "de": "Name des States für 1. Energy-Meter"",
+        "ru": "Название государства для 1-го счетчика электроэнергии",
+        "pt": "Nome do estado do primeiro medidor de energia",
+        "nl": "Staatsnaam voor 1e energiemeter",
+        "fr": "Nom de l'état du 1er compteur d'énergie",
+        "it": "Nome dello stato del 1 ° contatore di energia",
+        "es": "Nombre del estado para el primer medidor de energía",
+        "pl": "Nazwa stanu dla 1. licznika energii",
+        "zh-cn": "第一个电表的状态名称"
     },
     "energyMeter2":   {
         "en": "Name of state for 2nd energy meter",
-        "de": "Name des States für 2. Energy-Meter"
+        "de": "Name des States für 2. Energy-Meter",
+        "ru": "Название состояния для 2-го счетчика электроэнергии",
+        "pt": "Nome do estado para o 2º medidor de energia",
+        "nl": "Staatsnaam voor 2e energiemeter",
+        "fr": "Nom de l'état du 2ème compteur d'énergie",
+        "it": "Nome dello stato per il 2 ° contatore di energia",
+        "es": "Nombre del estado para el segundo medidor de energía",
+        "pl": "Nazwa stanu dla 2. licznika energii",
+        "zh-cn": "第二电表的状态名称"
     },
     "energyMeter3":   {
         "en": "Name of state for 3rd energy meter",
-        "de": "Name des States für 3. Energy-Meter"
+        "de": "Name des States für 3. Energy-Meter",
+        "ru": "Название государства для 3-го счетчика электроэнергии",
+        "pt": "Nome do estado para o 3º medidor de energia",
+        "nl": "Staatsnaam voor 3e energiemeter",
+        "fr": "Nom de l'état du 3ème compteur d'énergie",
+        "it": "Nome dello stato del 3 ° contatore di energia",
+        "es": "Nombre del estado para el tercer medidor de energía",
+        "pl": "Nazwa stanu dla 3. licznika energii",
+        "zh-cn": "第三电表的状态名称"
     },
     "wallboxNotIncluded":   {
         "en": "Power of wallbox NOT included in energy meter(s)",
-        "de": "Verbrauch der Wallbox in keinem der Energy-Meter enthalten"
+        "de": "Verbrauch der Wallbox in keinem der Energy-Meter enthalten",
+        "ru": "Мощность настенной коробки НЕ включена в счетчики энергии",
+        "pt": "Potência da caixa de embutir NÃO incluída nos medidores de energia",
+        "nl": "Vermogen van wallbox NIET inbegrepen in energiemeters",
+        "fr": "Puissance de la wallbox NON incluse dans les compteurs d'énergie",
+        "it": "Potenza della wallbox NON inclusa nei contatori di energia",
+        "es": "Potencia de wallbox NO incluida en los contadores de energía",
+        "pl": "Moc Wallbox NIE jest uwzględniona w licznikach energii",
+        "zh-cn": "电表的功率不包括在电表中"
     },
     "tooltip_host": {
         "en": "IP address of KEBA KeContact wallbox", 
         "de": "IP-Adresse der KEBA KeContact-Wallbox",
-        "ru": "IP Адрес KEBA KeContact"
+        "ru": "IP-адрес настенного бокса KEBA KeContact",
+        "pt": "Endereço IP da caixa de embutir KEBA KeContact",
+        "nl": "IP-adres van KEBA KeContact wallbox",
+        "fr": "Adresse IP de la wallbox KEBA KeContact",
+        "it": "Indirizzo IP della wallbox KEBA KeContact",
+        "es": "Dirección IP de KEBA KeContact wallbox",
+        "pl": "Adres IP wallboxa KEBA KeContact",
+        "zh-cn": "KEBA KeContact墙盒的IP地址"
     },
     "tooltip_passiveMode": {
         "en": "KEBA KeContact wallbox keeps passive (no power regulation)", 
-        "de": "IKEBA KeContact-Wallbox bleibt passiv (keine Leistungsregelung)"
+        "de": "KEBA KeContact-Wallbox bleibt passiv (keine Leistungsregelung)",
+        "ru": "Настенная коробка KEBA KeContact остается пассивной (без регулирования мощности)",
+        "pt": "A caixa de embutir KEBA KeContact permanece passiva (sem regulação de energia)",
+        "nl": "KEBA KeContact wallbox blijft passief (geen vermogensregeling)",
+        "fr": "La wallbox KEBA KeContact reste passive (pas de régulation de puissance)",
+        "it": "La wallbox KEBA KeContact rimane passiva (nessuna regolazione della potenza)",
+        "es": "La caja de empotrar KEBA KeContact se mantiene pasiva (sin regulación de potencia)",
+        "pl": "Wallbox KEBA KeContact zachowuje pasywność (brak regulacji mocy)",
+        "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
     "tooltip_pollInterval": {
         "en": "Interval in seconds how often the wallbox should be queried for new values (minimum 5 seconds, 0 = no queries, just broadcasts)", 
-        "de": "Intervall in Sekunden (mind. 5 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = keine Abfrage, nur Broadcast lesen)"
+        "de": "Intervall in Sekunden (mind. 5 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = keine Abfrage, nur Broadcast lesen)",
+        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (минимум 5 секунд, 0 = без запросов, только трансляции)",
+        "pt": "Intervalo em segundos com a frequência com que a caixa de parede deve ser consultada para novos valores (mínimo 5 segundos, 0 = sem consultas, apenas transmissões)",
+        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (minimaal 5 seconden, 0 = geen vragen, alleen uitzendingen)",
+        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (minimum 5 secondes, 0 = aucune requête, juste des diffusions)",
+        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (minimo 5 secondi, 0 = nessuna query, solo trasmissioni)",
+        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (mínimo 5 segundos, 0 = sin consultas, solo transmisiones)",
+        "pl": "Odstęp w sekundach, jak często stacja Wallbox powinna być odpytywana o nowe wartości (minimum 5 sekund, 0 = brak zapytań, tylko transmisje)",
+        "zh-cn": "以秒为间隔的时间间隔，应查询壁箱以获取新值的频率（最少5秒，0 =无查询，仅广播）"
     },
     "tooltip_stateRegard": {
         "en": "Name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 
-        "de": "Name des States für den Netzbezug des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und der Netzbezug ist positiv und die Einspeisung negativ, dann ist er hier nur anzugeben."
+        "de": "Name des States für den Netzbezug des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und der Netzbezug ist positiv und die Einspeisung negativ, dann ist er hier nur anzugeben.",
+        "ru": "Название государства, в котором учитывается значение счетчика энергии. Если и учет, и излишек содержатся в одном состоянии, укажите здесь состояние только в том случае, если отношение является положительным значением, а излишек - отрицательным.",
+        "pt": "Nome do estado que mantém o valor do medidor de energia. Se a consideração e o excedente estiverem contidos em um estado, preencha o estado aqui apenas se a consideração for um valor positivo e o excedente for negativo.",
+        "nl": "Naam van de staat die betrekking heeft op de waarde van de energiemeter. Indien zowel aanzien als overschot in één staat aanwezig zijn, vul hier dan alleen staat in als aanzien een positieve waarde is en het overschot negatief is.",
+        "fr": "Nom de l'état qui détient la valeur du compteur d'énergie. Si le regard et le surplus sont tous deux contenus dans un même état, ne remplissez ici que si le regard est une valeur positive et le surplus est négatif.",
+        "it": "Nome dello stato che detiene il valore del contatore di energia. Se sia il rispetto che il surplus sono contenuti in uno stato, compilare lo stato qui solo se il riguardo è un valore positivo e il surplus è negativo.",
+        "es": "Nombre del estado que tiene en cuenta el valor del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si la consideración es un valor positivo y el excedente es negativo.",
+        "pl": "Nazwa stanu, który dotyczy wartości licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy szacunek jest wartością dodatnią, a nadwyżka ujemna.",
+        "zh-cn": "持有电度表考虑值的状态名称。如果关注和剩余都包含在一个状态中，则仅当关注为正值且剩余为负时，才在此处填写状态。"
     },
     "tooltip_stateSurplus": {
         "en": "Name of state which holds surplus value of energy meter. If both regard and surplus are contained in one state, fill in state here only if surplus is a positive value and regard is negative.",
-        "de": "Name des States für die Netzeinspeisung des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und die Einspeisung ist positiv und der Netzbezug negativ, dann ist er hier nur anzugeben."
+        "de": "Name des States für die Netzeinspeisung des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und die Einspeisung ist positiv und der Netzbezug negativ, dann ist er hier nur anzugeben.",
+        "ru": "Название государства, в котором хранится прибавочная стоимость счетчика энергии. Если и учет, и излишек содержатся в одном состоянии, укажите здесь состояние, только если излишек является положительной величиной, а отношение отрицательным.",
+        "pt": "Nome do estado que detém o valor excedente do medidor de energia. Se tanto a consideração quanto o excedente estiverem contidos em um estado, preencha o estado aqui apenas se o excedente for um valor positivo e a consideração for negativa.",
+        "nl": "Naam van de staat met een meerwaarde van de energiemeter. Als zowel aanzien als overschot in één staat voorkomen, vul hier dan alleen staat in als het overschot een positieve waarde is en aanzien negatief is.",
+        "fr": "Nom de l'État qui détient la plus-value du compteur d'énergie. Si le regard et le surplus sont tous deux contenus dans un même état, ne remplissez ici que si le surplus est une valeur positive et le regard est négatif.",
+        "it": "Nome dello stato che detiene il plusvalore del contatore di energia. Se sia il rispetto che il surplus sono contenuti in uno stato, compilare qui state solo se il surplus è un valore positivo e il riguardo è negativo.",
+        "es": "Nombre del estado que tiene la plusvalía del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si el excedente es un valor positivo y la consideración es negativa.",
+        "pl": "Nazwa państwa, w którym znajduje się wartość dodatkowa licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy nadwyżka jest wartością dodatnią, a szacunek jest ujemna.",
+        "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
     },
     "tooltip_delta": {
         "en": "Controlled process variable by which charging station is regulated",
-        "de": "Regelung der Wallbox erfolgt in den angegebenen Schritten"
+        "de": "Regelung der Wallbox erfolgt in den angegebenen Schritten",
+        "ru": "Контролируемый параметр процесса, с помощью которого регулируется зарядная станция",
+        "pt": "Variável de processo controlada pela qual a estação de carregamento é regulada",
+        "nl": "Gecontroleerde procesvariabele waarmee het laadstation wordt geregeld",
+        "fr": "Variable de processus contrôlée par laquelle la station de charge est régulée",
+        "it": "Variabile di processo controllata in base alla quale è regolata la stazione di ricarica",
+        "es": "Variable de proceso controlada por la que se regula la estación de carga",
+        "pl": "Kontrolowana zmienna procesowa, według której regulowana jest stacja ładowania",
+        "zh-cn": "调节充电站的受控过程变量"
     },
     "tooltip_underusage": {
         "en": "If photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless more than the specified watts are taken from extern",
-        "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst bei einem Netzbezug über der angegebenen Wattzahl unterbrochen werden"
+        "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst bei einem Netzbezug über der angegebenen Wattzahl unterbrochen werden",
+        "ru": "Если у фотоэлектрической батареи меньше излишков, чем необходимо для минимальной зарядки вашего электромобиля, зарядка будет продолжаться, если только внешняя мощность не будет превышена.",
+        "pt": "Se a energia fotovoltaica tiver menos excedente do que o necessário para carregar minimamente seu EV, o carregamento deve continuar, a menos que mais do que os watts especificados sejam retirados do exterior",
+        "nl": "Als fotovoltaïsche zonne-energie minder overschot heeft dan nodig is om uw EV minimaal op te laden, gaat het opladen door, tenzij er meer dan de gespecificeerde watt wordt afgenomen van extern",
+        "fr": "Si le photovoltaïque a moins d'excédent que nécessaire pour charger au minimum votre VE, la charge continuera à moins que plus que les watts spécifiés ne soient prélevés à l'extérieur.",
+        "it": "Se il fotovoltaico ha un surplus inferiore a quello necessario per caricare al minimo il tuo veicolo elettrico, la ricarica continuerà a meno che non vengano prelevati dall'esterno più watt di quelli specificati",
+        "es": "Si la energía fotovoltaica tiene menos excedente de lo necesario para cargar mínimamente su EV, la carga continuará a menos que se tomen más de los vatios especificados desde el exterior.",
+        "pl": "Jeśli fotowoltaika ma mniejszą nadwyżkę niż jest to potrzebne do minimalnego naładowania twojego pojazdu elektrycznego, ładowanie będzie kontynuowane, chyba że więcej niż określone waty zostanie pobrane z zewnętrznego",
+        "zh-cn": "如果光伏电池的剩余电量不足以对您的EV进行最小充电，则除非从外部获得的瓦数超过指定的瓦特，否则应继续充电"
     },
     "tooltip_minTime": {
         "en": "If photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless the EV was charged for the specified amount of time",
-        "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst unterbrochen werden, wenn mindestens die angegebene Zeit geladen wurde"
+        "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst unterbrochen werden, wenn mindestens die angegebene Zeit geladen wurde",
+        "ru": "Если у фотоэлектрических элементов меньше излишков, чем необходимо для минимальной зарядки вашего электромобиля, зарядка будет продолжаться, если электромобиль не был заряжен в течение указанного периода времени.",
+        "pt": "Se a energia fotovoltaica tiver menos excedente do que o necessário para carregar minimamente o seu EV, o carregamento deve continuar, a menos que o EV tenha sido cobrado pelo período de tempo especificado",
+        "nl": "Als fotovoltaïsche zonne-energie minder overschot heeft dan nodig is om uw EV minimaal op te laden, gaat het opladen door, tenzij de EV gedurende de gespecificeerde tijd is opgeladen",
+        "fr": "Si le photovoltaïque a moins d'excédent que nécessaire pour charger au minimum votre VE, la charge continuera à moins que le VE n'ait été facturé pendant la durée spécifiée.",
+        "it": "Se il fotovoltaico ha un surplus inferiore a quello necessario per caricare al minimo il tuo veicolo elettrico, la ricarica continuerà a meno che il veicolo elettrico non sia stato addebitato per il periodo di tempo specificato",
+        "es": "Si la energía fotovoltaica tiene menos excedente de lo necesario para cargar mínimamente su vehículo eléctrico, la carga continuará a menos que el vehículo eléctrico se haya cargado durante la cantidad de tiempo especificada.",
+        "pl": "Jeśli fotowoltaika ma mniejszą nadwyżkę niż jest to potrzebne do minimalnego naładowania twojego EV, ładowanie będzie kontynuowane, chyba że EV był ładowany przez określony czas",
+        "zh-cn": "如果光伏电池的剩余电量不足以对您的EV进行最小充电，则除非该EV在指定时间内充电，否则应继续充电"
     },
     "tooltip_maxPower": {
         "en": "You can define a maximum of watts which can must not be reached by all consumers",
-        "de": "Mit diesem Wert kann die Leistung der Wallbox so begrenzt werden, dass ein max. Gesamtverbrauch nicht überschritten wird. Dies ist nötig, wenn der Netzbetreiber eine max. Leistung aufgrund begrenzter Kapazität vorgibt."
+        "de": "Mit diesem Wert kann die Leistung der Wallbox so begrenzt werden, dass ein max. Gesamtverbrauch nicht überschritten wird. Dies ist nötig, wenn der Netzbetreiber eine max. Leistung aufgrund begrenzter Kapazität vorgibt.",
+        "ru": "Вы можете определить максимальную мощность, которая не должна достигаться всеми потребителями.",
+        "pt": "Você pode definir um máximo de watts que não deve ser alcançado por todos os consumidores",
+        "nl": "U kunt een maximum aantal watt definiëren dat niet door alle verbruikers mag worden bereikt",
+        "fr": "Vous pouvez définir un maximum de watts qui ne peut pas être atteint par tous les consommateurs",
+        "it": "È possibile definire un massimo di watt che non può essere raggiunto da tutti i consumatori",
+        "es": "Puede definir un máximo de vatios que no deben alcanzar todos los consumidores",
+        "pl": "Możesz zdefiniować maksymalną liczbę watów, której nie mogą osiągnąć wszyscy konsumenci",
+        "zh-cn": "您可以定义所有使用者都不能达到的最大瓦数"
     },
     "tooltip_stateEnergyMeter1": {
         "en": "Name of state for the 1st energy meter which shall be used to calculate max. power consumption for power limitation",
-        "de": "Name des States des 1. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
+        "de": "Name des States des 1. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
+        "ru": "Название государства для 1-го счетчика энергии, который будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
+        "pt": "Nome do estado do primeiro medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
+        "nl": "Staatsnaam voor de 1e energiemeter die zal worden gebruikt om max. stroomverbruik voor stroombeperking",
+        "fr": "Nom de l'état du 1er compteur d'énergie qui doit être utilisé pour calculer la valeur max. consommation d'énergie pour la limitation de puissance",
+        "it": "Nome dello stato per il 1 ° contatore di energia che deve essere utilizzato per calcolare max. consumo di energia per la limitazione della potenza",
+        "es": "Nombre del estado del primer contador de energía que se utilizará para calcular el máx. consumo de energía por limitación de energía",
+        "pl": "Nazwa stanu dla 1. licznika energii, na podstawie którego obliczane są maks. pobór mocy w celu ograniczenia mocy",
+        "zh-cn": "用于计算最大功率的第一个电度表的状态名称。功耗以限制功率"
     },
     "tooltip_stateEnergyMeter2": {
         "en": "Name of state for the 2nd energy meter which shall be used to calculate max. power consumption for power limitation",
-        "de": "Name des States des 2. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
+        "de": "Name des States des 2. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
+        "ru": "Название состояния для 2-го счетчика энергии, которое будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
+        "pt": "Nome do estado do segundo medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
+        "nl": "Staatsnaam voor de 2e energiemeter die zal worden gebruikt om max. stroomverbruik voor stroombeperking",
+        "fr": "Nom de l'état du 2ème compteur d'énergie qui sera utilisé pour calculer la puissance max. consommation d'énergie pour la limitation de puissance",
+        "it": "Nome dello stato per il 2 ° contatore di energia che deve essere utilizzato per calcolare max. consumo di energia per la limitazione della potenza",
+        "es": "Nombre del estado del segundo contador de energía que se utilizará para calcular el máx. consumo de energía por limitación de energía",
+        "pl": "Nazwa stanu dla 2. licznika energii, na podstawie którego obliczane są maks. pobór mocy w celu ograniczenia mocy",
+        "zh-cn": "第二个电度表的状态名称，用于计算最大值。功耗以限制功率"
     },
     "tooltip_stateEnergyMeter3": {
         "en": "Name of state for the 3rd energy meter which shall be used to calculate max. power consumption for power limitation",
-        "de": "Name des States des 3. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird."
+        "de": "Name des States des 3. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
+        "ru": "Название государства для 3-го счетчика энергии, который будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
+        "pt": "Nome do estado do terceiro medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
+        "nl": "Staatsnaam voor de 3e energiemeter die zal worden gebruikt om max. stroomverbruik voor stroombeperking",
+        "fr": "Nom de l'état du 3ème compteur d'énergie qui sera utilisé pour calculer la puissance max. consommation d'énergie pour la limitation de puissance",
+        "it": "Nome dello stato per il 3 ° contatore di energia che deve essere utilizzato per calcolare max. consumo di energia per la limitazione della potenza",
+        "es": "Nombre del estado del tercer contador de energía que se utilizará para calcular el máx. consumo de energía por limitación de energía",
+        "pl": "Nazwa stanu dla 3. licznika energii, na podstawie którego oblicza się maks. pobór mocy w celu ograniczenia mocy",
+        "zh-cn": "用于计算最大功率的第三个电度表的状态名称。功耗以限制功率"
     },
     "tooltip_wallboxNotIncluded": {
         "en": "Check if none of the listed energy meters also cover power consumption of wallbox",
-        "de": "Die Option ist zu markieren, wenn der Verbrauch der Wallbox nicht in der Leistung der Energy-Meter enthalten ist."
+        "de": "Die Option ist zu markieren, wenn der Verbrauch der Wallbox nicht in der Leistung der Energy-Meter enthalten ist.",
+        "ru": "Убедитесь, что ни один из перечисленных счетчиков энергии также не покрывает потребляемую мощность настенной коробки",
+        "pt": "Verifique se nenhum dos medidores de energia listados também cobre o consumo de energia da caixa de embutir",
+        "nl": "Controleer of geen van de vermelde energiemeters ook het stroomverbruik van de wallbox dekt",
+        "fr": "Vérifiez si aucun des compteurs d'énergie répertoriés ne couvre également la consommation électrique de la Wallbox",
+        "it": "Verificare che nessuno dei contatori di energia elencati copra anche il consumo energetico della wallbox",
+        "es": "Compruebe si ninguno de los medidores de energía enumerados también cubre el consumo de energía de la caja de empotrar",
+        "pl": "Sprawdź, czy żaden z wymienionych liczników energii nie obejmuje również poboru mocy przez Wallbox",
+        "zh-cn": "检查列出的电表是否也不能涵盖墙盒的功耗"
     },
 };

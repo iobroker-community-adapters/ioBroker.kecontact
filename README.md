@@ -27,7 +27,34 @@ This is the interval in seconds how often the wallbox should be queried for new 
 
 The default value is 30 seconds which is a good balance between the load for the KeConnect and having up-to-date information in ioBroker.
 
+### other options
+
+You can also define states for PV optimized charging of car or limiting max. power of main power.
+
 ## Changelog
+### 0.3.2 (2020-08-04)
+* (Sneak-L8) in PV automatics mode wallbox will be disabled as long as no vehicle is plugged
+
+### 0.3.1 (2020-07-23)
+* (Sneak-L8) do not start charging when vehicle is plugged even if current is too low for photovoltaics automation
+
+### 0.3.0 (2020-07-21)
+* (Sneak-L8) regulate wallbox by PV automatics independant from state curr user
+
+### 0.2.6 (2020-07-20)
+* (Sneak-L8) try again to regulate wallbox by currtime instead of curr as suggested
+
+### 0.2.3 (2020-05-24)
+* (Sneak-L8) fix call to display PV automatics after vehicle is plugged, fix object in energy meter states
+
+### 0.2.2 (2020-05-13)
+* (Sneak-L8) display information about photovoltaics automatic also at begin of charging
+* (Sneak-L8) delayed display of photovoltaics automatic when vehicle is plugged (8 sec)
+
+### 0.2.1 (2019-11-14)
+* (Sneak-L8) handle values of undefined in getStates
+* (Sneak-L8) better recognition of max power function
+
 ### 0.2.0 (2019-02-05)
 * (Sneak-L8) added automatic regulation by output photovoltaics unit
 * (Sneak-L8) added possibility to limit wallbox to keep total power below a limit

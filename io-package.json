@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "0.3.2",
+    "version": "1.0.0",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -58,6 +58,10 @@
       "0.3.2": {
         "en": "in PV automatics mode wallbox will be disabled as long as no vehicle is plugged",
         "de": "bei PV-Automatik bleibt Wallbox gesperrt solange kein Fahrzeug angeschlossen ist"
+      },
+      "1.0.0": {
+        "en": "change settings layout to material design, first official version",
+        "de": "Umstellung Einstallungsdialog auf Material-Design, erste offizielle Version"
       }
     },
     "title": "KEBA KeContact Wallbox",
@@ -78,6 +82,7 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "messagebox": true,
+    "materialize": true,
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
     "loglevel": "info",
     "type": "hardware",

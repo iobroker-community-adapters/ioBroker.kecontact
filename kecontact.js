@@ -19,7 +19,8 @@ var BROADCAST_UDP_PORT = 7092;
 var txSocket;
 var rxSocketReports;
 var rxSocketBrodacast;
-var pollTimer;
+var pollTimer = null;
+var currTimeout = null;
 var sendDelayTimer;
 var states = {};          // contains all actual state values
 var stateChangeListeners = {};
@@ -67,7 +68,10 @@ adapter.on('unload', function (callback) {
         if (pollTimer) {
             clearInterval(pollTimer);
         }
-        
+        if (currTimeout) {
+            clearTimeout(currTimeout);
+        }
+       
         if (sendDelayTimer) {
             clearInterval(sendDelayTimer);
         }
@@ -118,7 +122,7 @@ adapter.on('stateChange', function (id, state) {
     	if (id == adapter.namespace + '.' + stateWallboxPlug) {
     		// call only if value has changed
     		if (state.val != getStateInternal(id))
-    			setTimeout(checkWallboxPower, 3000);  // wait 3 seconds after vehicle is plugged
+    			currTimeout = setTimeout(checkWallboxPower, 3000);  // wait 3 seconds after vehicle is plugged
     	}
     } 
     var oldValue = getStateInternal(id);

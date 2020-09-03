@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -62,6 +62,10 @@
       "1.0.0": {
         "en": "change settings layout to material design, first official version",
         "de": "Umstellung Einstallungsdialog auf Material-Design, erste offizielle Version"
+      },
+      "1.0.1": {
+        "en": "add missing german translation for IP address setting",
+        "de": "deutsche Übersetzung für Einstellung 'IP-Adresse' ergänzt"
       }
     },
     "title": "KEBA KeContact Wallbox",

@@ -14,6 +14,7 @@ systemDictionary = {
     },
     "KeContact IP Address": {
         "en": "Wallbox IP Address", 
+        "de": "IP-Adresse der Wallbox", 
         "ru": "IP-адрес Wallbox",
         "pt": "Endereço IP da Wallbox",
         "nl": "Wallbox IP-adres",

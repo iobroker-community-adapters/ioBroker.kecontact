@@ -32,6 +32,9 @@ The default value is 30 seconds which is a good balance between the load for the
 You can also define states for PV optimized charging of car or limiting max. power of main power.
 
 ## Changelog
+### 1.0.1 (2020-08-20)
+* (Sneak-L8) add missing german translation for IP address setting
+
 ### 1.0.0 (2020-08-20)
 * (UncleSam) change settings layout to material design, first offical version
 

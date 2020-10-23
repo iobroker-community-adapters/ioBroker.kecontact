@@ -663,7 +663,7 @@ function handleMessage(message) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
 		var sessionid = message.ID.substr(1)
 		for (var key in message){
-			if (states['Session_' + sessionid + '.' + key] {
+			if (states['Session_' + sessionid + '.' + key]) {
 				try {
 					updateState(states['Session_' + sessionid + '.' + key], message[key]);
 				} catch (e) {

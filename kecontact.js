@@ -663,11 +663,11 @@ function handleMessage(message) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
 		var sessionid = message.ID.substr(1)
 		for (var key in message){
-			if (states[(session_ + sessionid).key]) {
+			if (states[('Session_' + sessionid).key]) {
 				try {
-					updateState[(states(session_ + sessionid).key], message[key]);
+					updateState[(states('Session_' + sessionid).key], message[key]);
 				} catch (e) {
-					adapter.log.warn("Couldn't update state " + (session_ + sessionid).key + ": " + e);
+					adapter.log.warn("Couldn't update state " + ('Session_' + sessionid).key + ": " + e);
 				}
 			} else if (key != 'ID'){
 				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);

@@ -663,9 +663,9 @@ function handleMessage(message) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
 		var sessionid = message.ID.substr(1)
 		for (var key in message){
-			if (states['Session_' + sessionid + '.' + key]) {
+			if (states[sessionid + '_' + key]) {
 				try {
-					updateState(states['Session_' + sessionid + '.' + key], message[key]);
+					updateState(states[sessionid + '_' + key], message[key]);
 				} catch (e) {
 					adapter.log.warn("Couldn't update state " + 'Session_' + sessionid + '.' + key + ": " + e);
 				}
@@ -776,7 +776,7 @@ function CreateHistory() {
                     "desc":  "unique Session ID",
                 },
                 "native": {
-
+					"udpKey": session + i + "_sessionid"
                 }
             });
 			
@@ -793,7 +793,7 @@ function CreateHistory() {
 					"unit":  "mA",
                 },
                 "native": {
-
+					"udpKey": session + i + "_curr_hw"
                 }
             });
 
@@ -810,7 +810,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-
+					"udpKey": session + i + "_e_start"
                 }
             });
 			
@@ -827,7 +827,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-
+					"udpKey": session + i + "_e_pres"
                 }
             });
 			
@@ -844,7 +844,7 @@ function CreateHistory() {
 					"unit":  "s",
                 },
                 "native": {
-
+					"udpKey": session + i + "_started_s"
                 }
             });
 	
@@ -861,7 +861,7 @@ function CreateHistory() {
 					"unit":  "s",
                 },
                 "native": {
-
+					"udpKey": session + i + "_ended_s"
                 }
             });
 			
@@ -877,7 +877,7 @@ function CreateHistory() {
                     "desc":  "Time at Charging Session Start",
                 },
                 "native": {
-
+					"udpKey": session + i + "_started"
                 }
             });
 	
@@ -893,7 +893,7 @@ function CreateHistory() {
                     "desc":  "Time at Charging Session End",
                 },
                 "native": {
-
+					"udpKey": session + i + "_ended"
                 }
             });
 	
@@ -909,7 +909,7 @@ function CreateHistory() {
                     "desc":  "Reason for End of Charging Session",
                 },
                 "native": {
-
+					"udpKey": session + i + "_reason"
                 }
             });
 	
@@ -925,7 +925,7 @@ function CreateHistory() {
                     "desc":  "Time Synchronisation Mode",
                 },
                 "native": {
-
+					"udpKey": session + i + "_timeq"
                 }
             });
 	
@@ -941,7 +941,7 @@ function CreateHistory() {
                     "desc":  "RFID Token used for Charging Session",
                 },
                 "native": {
-
+					"udpKey": session + i + "_rfid_tag"
                 }
             });
 	
@@ -957,7 +957,7 @@ function CreateHistory() {
                     "desc":  "RFID Class used for Session",
                 },
                 "native": {
-
+					"udpKey": session + i + "_rfid_class"
                 }
             });
 	
@@ -973,7 +973,7 @@ function CreateHistory() {
                     "desc":  "Serial Number of Device",
                 },
                 "native": {
-
+					"udpKey": session + i + "_serial"
                 }
             });
 	
@@ -989,7 +989,7 @@ function CreateHistory() {
                     "desc":  "Current State of System Clock since Startup of Device",
                 },
                 "native": {
-
+					"udpKey": session + i + "_sec"
                 }
             });
 	

@@ -658,11 +658,19 @@ function restartPollTimer() {
 }
 
 function handleMessage(message) {
+	// message auf ID Kennung für Session History prüfen
 	if (message.ID >= 100 && message.ID <= 130) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
+		var sessionid = message.ID.substr(1)
 		for (var key in message){
-			if (key != 'ID'){
-				adapter.log.debug('History received: ' + key + message[key]);
+			if (states[(session_ + sessionid).key]) {
+				try {
+					updateState[(states(session_ + sessionid).key], message[key]);
+				} catch (e) {
+					adapter.log.warn("Couldn't update state " + (session_ + sessionid).key + ": " + e);
+				}
+			} else if (key != 'ID'){
+				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
 			}
 		}
 	} else {	

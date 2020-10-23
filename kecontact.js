@@ -654,7 +654,12 @@ function restartPollTimer() {
 
 function handleMessage(message) {
 	if (message.ID >= 100 && message.ID <= 130) {
-		adapter.log.debug('History received: ' + message);
+		adapter.log.debug('History ID received: ' + message[ID].substr(1));
+		for (var key in message){
+			if (key != 'ID'){
+				adapter.log.debug('History received: ' + key + message[key]);
+			}
+		}
 	} else {	
 		for (var key in message) {
 			if (states[key]) {

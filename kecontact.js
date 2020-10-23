@@ -670,7 +670,7 @@ function handleMessage(message) {
 					adapter.log.warn("Couldn't update state " + ('Session_' + sessionid).key + ": " + e);
 				}
 			} else if (key != 'ID'){
-				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
+				adapter.log.debug('Unknown Session value received: ' + key + '=' + message[key]);
 			}
 		}
 	} else {	

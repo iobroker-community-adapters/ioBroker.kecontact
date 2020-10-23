@@ -145,6 +145,8 @@ CreateHistory();
 
 // startup
 adapter.on('ready', function () {
+	//History Datenpunkte anlegen
+	CreateHistory();
     main();
 });
 

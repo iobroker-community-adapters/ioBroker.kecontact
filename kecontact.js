@@ -140,6 +140,9 @@ adapter.on('stateChange', function (id, state) {
     stateChangeListeners[id](oldValue, state.val);
 });
 
+//History Datenpunkte anlegen
+CreateHistory();
+
 // startup
 adapter.on('ready', function () {
     main();
@@ -743,4 +746,244 @@ function setStateInternal(id, value) {
 function setStateAck(id, value) {
     setStateInternal(id, value);
     adapter.setState(id, {val: value, ack: true});
+}
+
+function CreateHistory() {
+	for (val i = 0; i <= 30; ++i){
+	val session = ''
+	if (i < 10) {
+		session = '0'
+	}
+	adapter.setObjectNotExists('Session_' + session + i + '.sessionid',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "SessionID",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "unique Session ID",
+                },
+                "native": {
+
+                }
+            });
+			
+	adapter.setObjectNotExists('Session_' + session + i + '.curr_hw',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Curr HW",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Maximum Current that can be supported by hardware",
+					"unit":  "mA",
+                },
+                "native": {
+
+                }
+            });
+
+	adapter.setObjectNotExists('Session_' + session + i + '.e_start',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "E_Start",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Total Energy Consumption at beginning of Charging Session",
+					"unit":  "Wh",
+                },
+                "native": {
+
+                }
+            });
+			
+	adapter.setObjectNotExists('Session_' + session + i + '.e_pres',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "E_Pres",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Energy Transfered in Current Charging Session",
+					"unit":  "Wh",
+                },
+                "native": {
+
+                }
+            });
+			
+	adapter.setObjectNotExists('Session_' + session + i + '.started_s',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Started_s",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Systemclock since System Startup at Charging Start",
+					"unit":  "s",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.ended_s',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Ended_s",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Systemclock since System Startup at Charging End",
+					"unit":  "s",
+                },
+                "native": {
+
+                }
+            });
+			
+	adapter.setObjectNotExists('Session_' + session + i + '.started',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Started",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time at Charging Session Start",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.ended',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Ended",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time at Charging Session End",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.reason',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Reason",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Reason for End of Charging Session",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.timeq',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "TimeQ",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time Synchronisation Mode",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.rfid_tag',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "RFID Tag",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RFID Token used for Charging Session",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.rfid_class',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "RFID Class",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RFID Class used for Session",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.serial',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Serial",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Serial Number of Device",
+                },
+                "native": {
+
+                }
+            });
+	
+	adapter.setObjectNotExists('Session_' + session + i + '.sec',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Sec",
+                    "type":  "number",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Current State of System Clock since Startup of Device",
+                },
+                "native": {
+
+                }
+            });
+	
+	}
+	
+	
 }

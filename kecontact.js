@@ -653,16 +653,20 @@ function restartPollTimer() {
 }
 
 function handleMessage(message) {
-    for (var key in message) {
-        if (states[key]) {
-            try {
-                updateState(states[key], message[key]);
-            } catch (e) {
-                adapter.log.warn("Couldn't update state " + key + ": " + e);
-            }
-        } else if (key != 'ID') {
-            adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
-        }
+	if (message.ID >= 100 && message.ID <= 130) {
+		adapter.log.debug('History received: ' + message);
+	} else {	
+		for (var key in message) {
+			if (states[key]) {
+				try {
+					updateState(states[key], message[key]);
+				} catch (e) {
+					adapter.log.warn("Couldn't update state " + key + ": " + e);
+				}
+			} else if (key != 'ID') {
+				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
+			}
+		}
 
     }
 }

@@ -636,7 +636,7 @@ function checkTimer() {
 function requestReports() {
     sendUdpDatagram('report 2');
     sendUdpDatagram('report 3');
-	for (i = 100; i <= 130; i++) {
+	for (var i = 100; i <= 130; i++) {
 		sendUdpDatagram('report ' + i);
 	}
 }

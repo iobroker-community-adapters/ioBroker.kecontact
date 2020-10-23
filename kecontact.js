@@ -776,7 +776,7 @@ function CreateHistory() {
                     "desc":  "unique Session ID",
                 },
                 "native": {
-					"udpKey": session + i + "_sessionid"
+					"udpKey": session + i + "_Session ID"
                 }
             });
 			
@@ -793,7 +793,7 @@ function CreateHistory() {
 					"unit":  "mA",
                 },
                 "native": {
-					"udpKey": session + i + "_curr_hw"
+					"udpKey": session + i + "_Curr HW"
                 }
             });
 
@@ -810,7 +810,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-					"udpKey": session + i + "_e_start"
+					"udpKey": session + i + "_E start"
                 }
             });
 			
@@ -827,7 +827,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-					"udpKey": session + i + "_e_pres"
+					"udpKey": session + i + "_E pres"
                 }
             });
 			
@@ -844,7 +844,7 @@ function CreateHistory() {
 					"unit":  "s",
                 },
                 "native": {
-					"udpKey": session + i + "_started_s"
+					"udpKey": session + i + "_started[s]"
                 }
             });
 	
@@ -861,7 +861,7 @@ function CreateHistory() {
 					"unit":  "s",
                 },
                 "native": {
-					"udpKey": session + i + "_ended_s"
+					"udpKey": session + i + "_ended[s]"
                 }
             });
 			
@@ -925,7 +925,7 @@ function CreateHistory() {
                     "desc":  "Time Synchronisation Mode",
                 },
                 "native": {
-					"udpKey": session + i + "_timeq"
+					"udpKey": session + i + "_timeQ"
                 }
             });
 	
@@ -957,7 +957,7 @@ function CreateHistory() {
                     "desc":  "RFID Class used for Session",
                 },
                 "native": {
-					"udpKey": session + i + "_rfid_class"
+					"udpKey": session + i + "_RFID class"
                 }
             });
 	
@@ -973,7 +973,7 @@ function CreateHistory() {
                     "desc":  "Serial Number of Device",
                 },
                 "native": {
-					"udpKey": session + i + "_serial"
+					"udpKey": session + i + "_Serial"
                 }
             });
 	
@@ -989,7 +989,7 @@ function CreateHistory() {
                     "desc":  "Current State of System Clock since Startup of Device",
                 },
                 "native": {
-					"udpKey": session + i + "_sec"
+					"udpKey": session + i + "_Sec"
                 }
             });
 	

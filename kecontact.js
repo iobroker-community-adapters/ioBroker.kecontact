@@ -749,7 +749,7 @@ function setStateAck(id, value) {
 }
 
 function CreateHistory() {
-	for (val i = 0; i <= 30; ++i){
+	for (val i = 0; i <= 30; i++){
 	val session = ''
 	if (i < 10) {
 		session = '0'

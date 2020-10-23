@@ -665,7 +665,7 @@ function handleMessage(message) {
 		for (var key in message){
 			if (states[('Session_' + sessionid).key]) {
 				try {
-					updateState[(states('Session_' + sessionid).key], message[key]);
+					updateState(states[('Session_' + sessionid)].key, message[key]);
 				} catch (e) {
 					adapter.log.warn("Couldn't update state " + ('Session_' + sessionid).key + ": " + e);
 				}

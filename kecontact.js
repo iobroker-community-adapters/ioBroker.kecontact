@@ -140,14 +140,12 @@ adapter.on('stateChange', function (id, state) {
     stateChangeListeners[id](oldValue, state.val);
 });
 
-//History Datenpunkte anlegen
-CreateHistory();
-
 // startup
 adapter.on('ready', function () {
 	//History Datenpunkte anlegen
 	CreateHistory();
-    main();
+	// wait 5 seconds for History States creation
+    setTimeout(main(), 5000);
 });
 
 function main() {

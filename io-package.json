@@ -162,6 +162,76 @@
         "udpKey": "Firmware"
       }
     },
+	{
+      "_id": "COM-module",
+      "type": "state",
+      "common": {
+        "name": "COM-Module present",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "COM-module"
+      }
+    },
+	{
+      "_id": "Backend",
+      "type": "state",
+      "common": {
+        "name": "Backend communication present",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "Backend"
+      }
+    },
+	{
+      "_id": "timeQ",
+      "type": "state",
+      "common": {
+        "name": "Time Sync Quality",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "timeQ"
+      }
+    },
+	{
+      "_id": "DIP-Sw1",
+      "type": "state",
+      "common": {
+        "name": "Hex Value of Dip Switch 1 Setting",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "DIP-Sw1"
+      }
+    },
+	{
+      "_id": "DIP-Sw2",
+      "type": "state",
+      "common": {
+        "name": "Hex Value of Dip Switch 2 Setting",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "DIP-Sw2"
+      }
+    },
     {
       "_id": "state",
       "type": "state",

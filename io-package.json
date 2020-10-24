@@ -611,7 +611,7 @@
       "_id": "AuthON",
       "type": "state",
       "common": {
-        "name": "Authorization active",
+        "name": "Authorization Function active",
         "type": "boolean",
         "role": "indicator",
         "read": true,
@@ -626,7 +626,7 @@
       "_id": "Authreq",
       "type": "state",
       "common": {
-        "name": "Status of Authorization via RFID",
+        "name": "State of Authorization via RFID",
         "type": "boolean",
         "role": "indicator",
         "read": true,

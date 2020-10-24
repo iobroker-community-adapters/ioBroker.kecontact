@@ -391,7 +391,7 @@
       "_id": "currentTimer",
       "type": "state",
       "common": {
-        "name": "Current Timer",
+        "name": "Current for Timer",
         "type": "number",
         "role": "level",
         "unit": "mA",
@@ -439,7 +439,7 @@
       "_id": "timeoutFailsafe",
       "type": "state",
       "common": {
-        "name": "Current Failsafe",
+        "name": "Current Failsafe Timer",
         "type": "number",
         "role": "value.interval",
         "unit": "sec",

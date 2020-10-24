@@ -600,7 +600,7 @@
         "unit": "Wh",
         "read": true,
         "write": true,
-        "desc": "Energy value in Wh defined by the last setenergy command (setenergy 10000 specifies 10 kWh). Max. value is 99999999 Wh (higher values will cause a counter overflow)."
+        "desc": "Energy value in Wh defined by the last setenergy command. Max. value is 99999999 Wh (higher values will cause a counter overflow)."
       },
       "native": {
         "udpKey": "Setenergy",
@@ -619,7 +619,7 @@
         "desc": "Indicates if the Authorization Function is activated"
       },
       "native": {
-        "udpKey": "AuthON",
+        "udpKey": "AuthON"
       }
     },
 	{
@@ -634,7 +634,7 @@
         "desc": "Authorization is neccesary (box locked) or already done"
       },
       "native": {
-        "udpKey": "Authreq",
+        "udpKey": "Authreq"
       }
     },
     {

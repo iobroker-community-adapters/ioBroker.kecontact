@@ -317,6 +317,38 @@
         "udpKey": "Curr user"
       }
     },
+	{
+      "_id": "currentTimer",
+      "type": "state",
+      "common": {
+        "name": "Current Timer",
+        "type": "number",
+        "role": "level",
+        "unit": "mA",
+        "read": true,
+        "write": true,
+        "desc": "Current value in mA that will replace the setting in the “Curr user” field as soon as “Tmo CT” expires."
+      },
+      "native": {
+        "udpKey": "Curr timer"
+      }
+    },
+	{
+      "_id": "timeoutCurrentTimer",
+      "type": "state",
+      "common": {
+        "name": "timeout Current Timer",
+        "type": "number",
+        "role": "value.interval",
+        "unit": "sec",
+        "read": true,
+        "write": true,
+        "desc": "Timeout in seconds before the current setting defined by the last currtime command will be applied."
+      },
+      "native": {
+        "udpKey": "Tmo CT"
+      }
+    },
     {
       "_id": "currentFailsafe",
       "type": "state",
@@ -556,6 +588,53 @@
       "native": {
         "udpKey": "E total",
         "udpMultiplier": 0.1
+      }
+    },
+	{
+      "_id": "Setenergy",
+      "type": "state",
+      "common": {
+        "name": "Energy Value to Charge into Battery",
+        "type": "number",
+        "role": "value",
+        "unit": "Wh",
+        "read": true,
+        "write": true,
+        "desc": "Energy value in Wh defined by the last setenergy command (setenergy 10000 specifies 10 kWh). Max. value is 99999999 Wh (higher values will cause a counter overflow)."
+      },
+      "native": {
+        "udpKey": "Setenergy",
+        "udpMultiplier": 0.1
+      }
+    },
+	{
+      "_id": "AuthON",
+      "type": "state",
+      "common": {
+        "name": "Authorization active",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false,
+        "desc": "Indicates if the Authorization Function is activated"
+      },
+      "native": {
+        "udpKey": "AuthON",
+      }
+    },
+	{
+      "_id": "Authreq",
+      "type": "state",
+      "common": {
+        "name": "Status of Authorization via RFID",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false,
+        "desc": "Authorization is neccesary (box locked) or already done"
+      },
+      "native": {
+        "udpKey": "Authreq",
       }
     },
     {

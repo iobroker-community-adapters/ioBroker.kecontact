@@ -145,7 +145,7 @@ adapter.on('ready', function () {
 	//History Datenpunkte anlegen
 	CreateHistory();
 	// wait 5 seconds for History States creation
-    setTimeout(main(), 5000);
+    setTimeout(main, 5000);
 });
 
 function main() {

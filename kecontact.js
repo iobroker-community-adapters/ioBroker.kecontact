@@ -762,7 +762,7 @@ function CreateHistory() {
 	if (i < 10) {
 		session = '0'
 	}
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.sessionid',
+	adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
             {
                 "type": "state",
                 "common": {
@@ -778,7 +778,7 @@ function CreateHistory() {
                 }
             });
 			
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.curr_hw',
+	adapter.setObject('Sessions.Session_' + session + i + '.curr_hw',
             {
                 "type": "state",
                 "common": {
@@ -795,7 +795,7 @@ function CreateHistory() {
                 }
             });
 
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.e_start',
+	adapter.setObject('Sessions.Session_' + session + i + '.e_start',
             {
                 "type": "state",
                 "common": {
@@ -809,10 +809,11 @@ function CreateHistory() {
                 },
                 "native": {
 					"udpKey": session + i + "_E start"
+					"udpMultiplier": 0.1
                 }
             });
 			
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.e_pres',
+	adapter.setObject('Sessions.Session_' + session + i + '.e_pres',
             {
                 "type": "state",
                 "common": {
@@ -826,10 +827,11 @@ function CreateHistory() {
                 },
                 "native": {
 					"udpKey": session + i + "_E pres"
+					"udpMultiplier": 0.1
                 }
             });
 			
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.started_s',
+	adapter.setObject('Sessions.Session_' + session + i + '.started_s',
             {
                 "type": "state",
                 "common": {
@@ -846,7 +848,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.ended_s',
+	adapter.setObject('Sessions.Session_' + session + i + '.ended_s',
             {
                 "type": "state",
                 "common": {
@@ -863,7 +865,7 @@ function CreateHistory() {
                 }
             });
 			
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.started',
+	adapter.setObject('Sessions.Session_' + session + i + '.started',
             {
                 "type": "state",
                 "common": {
@@ -879,7 +881,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.ended',
+	adapter.setObject('Sessions.Session_' + session + i + '.ended',
             {
                 "type": "state",
                 "common": {
@@ -895,7 +897,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.reason',
+	adapter.setObject('Sessions.Session_' + session + i + '.reason',
             {
                 "type": "state",
                 "common": {
@@ -911,7 +913,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.timeq',
+	adapter.setObject('Sessions.Session_' + session + i + '.timeq',
             {
                 "type": "state",
                 "common": {
@@ -927,7 +929,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.rfid_tag',
+	adapter.setObject('Sessions.Session_' + session + i + '.rfid_tag',
             {
                 "type": "state",
                 "common": {
@@ -943,7 +945,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.rfid_class',
+	adapter.setObject('Sessions.Session_' + session + i + '.rfid_class',
             {
                 "type": "state",
                 "common": {
@@ -959,7 +961,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.serial',
+	adapter.setObject('Sessions.Session_' + session + i + '.serial',
             {
                 "type": "state",
                 "common": {
@@ -975,7 +977,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObjectNotExists('Sessions.Session_' + session + i + '.sec',
+	adapter.setObject('Sessions.Session_' + session + i + '.sec',
             {
                 "type": "state",
                 "common": {

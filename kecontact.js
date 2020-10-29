@@ -808,7 +808,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-					"udpKey": session + i + "_E start"
+					"udpKey": session + i + "_E start",
 					"udpMultiplier": 0.1
                 }
             });
@@ -826,7 +826,7 @@ function CreateHistory() {
 					"unit":  "Wh",
                 },
                 "native": {
-					"udpKey": session + i + "_E pres"
+					"udpKey": session + i + "_E pres",
 					"udpMultiplier": 0.1
                 }
             });

@@ -150,18 +150,17 @@ function main() {
     	adapter.log.error('start of adapter not possible due to config errors');
     	return;
     }
-    adapter.log.info('Before create tx-socket via dgram');
     txSocket = dgram.createSocket('udp4');
-    adapter.log.info('After create tx-socket via dgram');
-    
-    adapter.log.info('Before create rx-socket via dgram');
+
     rxSocketReports = dgram.createSocket('udp4');
-    adapter.log.info('After create rx-socket via dgram');
+    rxSocketReports.on('error', (err) => {
+      adapter.log.error(`server error:\n${err.stack}`);
+      rxSocketReports.close();
+    });
     rxSocketReports.on('listening', function () {
         var address = rxSocketReports.address();
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
-    adapter.log.info('After rx-socket listening');
     rxSocketReports.on('message', handleWallboxMessage);
     rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
     adapter.log.info('After bind rx-socket udp port');

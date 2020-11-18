@@ -18,7 +18,7 @@ var BROADCAST_UDP_PORT = 7092;
 
 var txSocket;
 var rxSocketReports;
-var rxSocketBrodacast;
+var rxSocketBroadcast;
 var pollTimer = null;
 var currTimeout = null;
 var sendDelayTimer;
@@ -86,8 +86,8 @@ adapter.on('unload', function (callback) {
             rxSocketReports.close();
         }
         
-        if (rxSocketBrodacast) {
-            rxSocketBrodacast.close();
+        if (rxSocketBroadcast) {
+            rxSocketBroadcast.close();
         }
         
         if (adapter.config.stateRegard)
@@ -154,7 +154,7 @@ function main() {
 
     rxSocketReports = dgram.createSocket('udp4');
     rxSocketReports.on('error', (err) => {
-      adapter.log.error(`server error:\n${err.stack}`);
+      adapter.log.error(`RxSocketReports Error:\n${err.stack}`);
       rxSocketReports.close();
     });
     rxSocketReports.on('listening', function () {
@@ -162,17 +162,20 @@ function main() {
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
     rxSocketReports.on('message', handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
-    adapter.log.info('After bind rx-socket udp port');
-    rxSocketBrodacast = dgram.createSocket('udp4');
-    rxSocketBrodacast.on('listening', function () {
-        rxSocketBrodacast.setBroadcast(true);
-        rxSocketBrodacast.setMulticastLoopback(true);
-        var address = rxSocketBrodacast.address();
+    rxSocketReports.bind(DEFAULT_UDP_PORT);
+    rxSocketBroadcast = dgram.createSocket('udp4');
+    rxSocketBroadcast.on('error', (err) => {
+      adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
+      rxSocketBroadcast.close();
+    });
+    rxSocketBroadcast.on('listening', function () {
+        rxSocketBroadcast.setBroadcast(true);
+        rxSocketBroadcast.setMulticastLoopback(true);
+        var address = rxSocketBroadcast.address();
         adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
     });
-    rxSocketBrodacast.on('message', handleWallboxBroadcast);
-    rxSocketBrodacast.bind(BROADCAST_UDP_PORT, '0.0.0.0');
+    rxSocketBroadcast.on('message', handleWallboxBroadcast);
+    rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
     
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
     	if (err) {

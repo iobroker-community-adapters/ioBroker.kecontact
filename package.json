@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kecontact",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Adapter for ioBroker that communicates with a KeContact wallbox",
   "main": "kecontact.js",
   "scripts": {

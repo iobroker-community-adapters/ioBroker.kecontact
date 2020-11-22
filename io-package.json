@@ -66,6 +66,10 @@
       "1.0.1": {
         "en": "add missing german translation for IP address setting",
         "de": "deutsche Übersetzung für Einstellung 'IP-Adresse' ergänzt"
+      },
+	  "1.0.2": {
+        "en": "Added readout of last 30 Charging Sessions from Wallbox; Enabled "setenergy" State to send and set Charging Goal in Wh to Wallbox",
+        "de": "Auslesen der letzten 30 Ladesessions aus Wallbox hinzugefügt; "setenergy" Wert zum setzen eines Ladeziels in Wh in der Wallbox aktiviert"
       }
     },
     "title": "KEBA KeContact Wallbox",

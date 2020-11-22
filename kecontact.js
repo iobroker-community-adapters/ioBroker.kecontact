@@ -663,7 +663,7 @@ function handleMessage(message) {
 	if (message.ID >= 100 && message.ID <= 130) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
 		var sessionid = message.ID.substr(1);
-		updateState(states[sessionid + '_json'], JSON.stringify(message));
+		updateState(states[sessionid + '_json'], JSON.stringify([message]));
 		for (var key in message){
 			if (states[sessionid + '_' + key]) {
 				try {

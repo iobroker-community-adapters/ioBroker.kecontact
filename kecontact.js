@@ -766,7 +766,7 @@ function CreateHistory() {
 	if (i < 10) {
 		session = '0'
 	}
-	adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
+	adapter.setObject('Sessions.Session_' + session + i + '.json',
             {
                 "type": "state",
                 "common": {

@@ -662,7 +662,8 @@ function handleMessage(message) {
 	// message auf ID Kennung für Session History prüfen
 	if (message.ID >= 100 && message.ID <= 130) {
 		adapter.log.debug('History ID received: ' + message.ID.substr(1));
-		var sessionid = message.ID.substr(1)
+		var sessionid = message.ID.substr(1);
+		updateState(states[sessionid + '_json'], JSON.stringify(message));
 		for (var key in message){
 			if (states[sessionid + '_' + key]) {
 				try {
@@ -765,6 +766,22 @@ function CreateHistory() {
 	if (i < 10) {
 		session = '0'
 	}
+	adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "json",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RAW_Json message",
+                },
+                "native": {
+					"udpKey": session + i + "_json"
+                }
+            });
+	
 	adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
             {
                 "type": "state",

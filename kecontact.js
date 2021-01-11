@@ -768,7 +768,7 @@ function CreateHistory() {
         name: 'Sessions Statistics'
       },
       native: {}
-    },
+    }),
 // create Datapoints for 31 Sessions	
 	for (var i = 0; i <= 30; i++){
 	var session = ''
@@ -781,7 +781,8 @@ function CreateHistory() {
         name: 'Session_' +session + i + 'Statistics'
       },
       native: {}
-    },
+    });
+	
 	adapter.setObject('Sessions.Session_' + session + i + '.json',
             {
                 "type": "state",

@@ -761,18 +761,34 @@ function setStateAck(id, value) {
 }
 
 function CreateHistory() {
+	// create Sessions Channel
+	adapter.setObject('Sessions', {
+      type: 'channel',
+      common: {
+        name: 'Sessions Statistics'
+      },
+      native: {}
+    },
+// create Datapoints for 31 Sessions	
 	for (var i = 0; i <= 30; i++){
 	var session = ''
 	if (i < 10) {
 		session = '0'
 	}
+	adapter.setObject('Sessions.Session_' + session + i, {
+      type: 'channel',
+      common: {
+        name: 'Session_' +session + i + 'Statistics'
+      },
+      native: {}
+    },
 	adapter.setObject('Sessions.Session_' + session + i + '.json',
             {
                 "type": "state",
                 "common": {
-                    "name":  "json",
+                    "name":  "Raw json string from Wallbox",
                     "type":  "string",
-                    "role":  "text",
+                    "role":  "json",
                     "read":  true,
                     "write": false,
                     "desc":  "RAW_Json message",
@@ -786,9 +802,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "SessionID",
+                    "name":  "SessionID of Charging Session",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "unique Session ID",
@@ -802,9 +818,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Curr HW",
+                    "name":  "Maximum Current of Hardware",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Maximum Current that can be supported by hardware",
@@ -819,9 +835,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "E_Start",
+                    "name":  "Energy Counter Value at Start",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Total Energy Consumption at beginning of Charging Session",
@@ -837,9 +853,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "E_Pres",
+                    "name":  "Charged Energy in Current Session",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Energy Transfered in Current Charging Session",
@@ -855,9 +871,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Started_s",
+                    "name":  "Time or Systemclock at Charging Start in Seconds",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Systemclock since System Startup at Charging Start",
@@ -872,9 +888,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Ended_s",
+                    "name":  "Time or Systemclock at Charging End in Seconds",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Systemclock since System Startup at Charging End",
@@ -889,9 +905,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Started",
+                    "name":  "Time at Start of Charging",
                     "type":  "string",
-                    "role":  "text",
+                    "role":  "date",
                     "read":  true,
                     "write": false,
                     "desc":  "Time at Charging Session Start",
@@ -905,9 +921,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Ended",
+                    "name":  "Time at End of Charging",
                     "type":  "string",
-                    "role":  "text",
+                    "role":  "date",
                     "read":  true,
                     "write": false,
                     "desc":  "Time at Charging Session End",
@@ -921,9 +937,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Reason",
+                    "name":  "Reason for End of Session",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Reason for End of Charging Session",
@@ -937,7 +953,7 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "TimeQ",
+                    "name":  "Time Sync Quality",
                     "type":  "string",
                     "role":  "text",
                     "read":  true,
@@ -953,7 +969,7 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "RFID Tag",
+                    "name":  "RFID Tag of Card used to Start/Stop Session",
                     "type":  "string",
                     "role":  "text",
                     "read":  true,
@@ -969,7 +985,7 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "RFID Class",
+                    "name":  "RFID Class of Card used to Start/Stop Session",
                     "type":  "string",
                     "role":  "text",
                     "read":  true,
@@ -985,7 +1001,7 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Serial",
+                    "name":  "Serialnumber of Device",
                     "type":  "string",
                     "role":  "text",
                     "read":  true,
@@ -1001,9 +1017,9 @@ function CreateHistory() {
             {
                 "type": "state",
                 "common": {
-                    "name":  "Sec",
+                    "name":  "Current State of Systemclock",
                     "type":  "number",
-                    "role":  "text",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Current State of System Clock since Startup of Device",

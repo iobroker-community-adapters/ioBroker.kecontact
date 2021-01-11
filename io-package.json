@@ -670,7 +670,7 @@
       "common": {
         "name": "Energy Value to Charge into Battery",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "unit": "Wh",
         "read": true,
         "write": true,

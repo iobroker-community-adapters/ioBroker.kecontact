@@ -695,7 +695,7 @@ function updateState(stateData, value) {
     if (stateData.common.type == 'number') {
         value = parseFloat(value);
         if (stateData.native.udpMultiplier) {
-            value *= parseFloat(stateData.native.udpMultiplier);
+            value *= parseFloat(stateData.native.udpMultiplier).toFixed(1);
         }
     } else if (stateData.common.type == 'boolean') {
         value = parseInt(value) !== 0;
@@ -781,7 +781,7 @@ function CreateHistory() {
 			{
 				type: 'channel',
 				common: {
-					name: 'Session_' +session + i + 'Statistics'
+					name: 'Session_' +session + i + ' Statistics'
 					},
 				native: {}
 			});

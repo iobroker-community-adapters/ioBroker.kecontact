@@ -695,7 +695,10 @@ function updateState(stateData, value) {
     if (stateData.common.type == 'number') {
         value = parseFloat(value);
         if (stateData.native.udpMultiplier) {
-            value *= parseFloat(stateData.native.udpMultiplier).toFixed(1);
+            value *= parseFloat(stateData.native.udpMultiplier);
+			//Workaround for Javascript parseFloat round error for max. 2 digits after comma
+			value = Math.round(value * 100) / 100;
+			//
         }
     } else if (stateData.common.type == 'boolean') {
         value = parseInt(value) !== 0;

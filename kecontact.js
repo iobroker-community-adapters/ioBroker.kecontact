@@ -762,26 +762,29 @@ function setStateAck(id, value) {
 
 function CreateHistory() {
 	// create Sessions Channel
-	adapter.setObject('Sessions', {
-      type: 'channel',
-      common: {
-        name: 'Sessions Statistics'
-      },
-      native: {}
-    }),
+	adapter.setObject('Sessions', 
+			{
+				type: 'channel',
+				common: {
+					name: 'Sessions Statistics'
+					},
+				native: {}
+			});
 // create Datapoints for 31 Sessions	
 	for (var i = 0; i <= 30; i++){
 	var session = ''
 	if (i < 10) {
 		session = '0'
 	}
-	adapter.setObject('Sessions.Session_' + session + i, {
-      type: 'channel',
-      common: {
-        name: 'Session_' +session + i + 'Statistics'
-      },
-      native: {}
-    });
+	
+	adapter.setObject('Sessions.Session_' + session + i, 
+			{
+				type: 'channel',
+				common: {
+					name: 'Session_' +session + i + 'Statistics'
+					},
+				native: {}
+			});
 	
 	adapter.setObject('Sessions.Session_' + session + i + '.json',
             {

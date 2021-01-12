@@ -181,7 +181,7 @@
       }
     },
 	{
-      "_id": "Backend",
+      "_id": "backend",
       "type": "state",
       "common": {
         "name": "Backend communication present",
@@ -665,7 +665,7 @@
       }
     },
 	{
-      "_id": "Setenergy",
+      "_id": "setenergy",
       "type": "state",
       "common": {
         "name": "Energy Value to Charge into Battery",
@@ -682,7 +682,7 @@
       }
     },
 	{
-      "_id": "AuthON",
+      "_id": "authON",
       "type": "state",
       "common": {
         "name": "Authorization Function active",
@@ -697,7 +697,7 @@
       }
     },
 	{
-      "_id": "Authreq",
+      "_id": "authreq",
       "type": "state",
       "common": {
         "name": "State of Authorization via RFID",

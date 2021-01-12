@@ -821,7 +821,7 @@ function CreateHistory() {
                 }
             });
 			
-	adapter.setObject('Sessions.Session_' + session + i + '.curr_hw',
+	adapter.setObject('Sessions.Session_' + session + i + '.currentHardware',
             {
                 "type": "state",
                 "common": {
@@ -838,7 +838,7 @@ function CreateHistory() {
                 }
             });
 
-	adapter.setObject('Sessions.Session_' + session + i + '.e_start',
+	adapter.setObject('Sessions.Session_' + session + i + '.eStart',
             {
                 "type": "state",
                 "common": {
@@ -856,7 +856,7 @@ function CreateHistory() {
                 }
             });
 			
-	adapter.setObject('Sessions.Session_' + session + i + '.e_pres',
+	adapter.setObject('Sessions.Session_' + session + i + '.ePres',
             {
                 "type": "state",
                 "common": {
@@ -956,7 +956,7 @@ function CreateHistory() {
                 }
             });
 	
-	adapter.setObject('Sessions.Session_' + session + i + '.timeq',
+	adapter.setObject('Sessions.Session_' + session + i + '.timeQ',
             {
                 "type": "state",
                 "common": {

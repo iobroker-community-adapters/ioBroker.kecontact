@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -66,6 +66,10 @@
       "1.0.1": {
         "en": "add missing german translation for IP address setting",
         "de": "deutsche Übersetzung für Einstellung 'IP-Adresse' ergänzt"
+      },
+	  "1.0.2": {
+        "en": "Added readout of last 30 Charging Sessions from Wallbox; Enabled 'setenergy' State to send and set Charging Goal in Wh to Wallbox",
+        "de": "Auslesen der letzten 30 Ladesessions aus Wallbox hinzugefügt; 'setenergy' Wert zum setzen eines Ladeziels in Wh in der Wallbox aktiviert"
       }
     },
     "title": "KEBA KeContact Wallbox",
@@ -160,6 +164,76 @@
       },
       "native": {
         "udpKey": "Firmware"
+      }
+    },
+	{
+      "_id": "COM-module",
+      "type": "state",
+      "common": {
+        "name": "COM-Module present",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "COM-module"
+      }
+    },
+	{
+      "_id": "backend",
+      "type": "state",
+      "common": {
+        "name": "Backend communication present",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "Backend"
+      }
+    },
+	{
+      "_id": "timeQ",
+      "type": "state",
+      "common": {
+        "name": "Time Sync Quality",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "timeQ"
+      }
+    },
+	{
+      "_id": "DIP-Sw1",
+      "type": "state",
+      "common": {
+        "name": "Hex Value of Dip Switch 1 Setting",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "DIP-Sw1"
+      }
+    },
+	{
+      "_id": "DIP-Sw2",
+      "type": "state",
+      "common": {
+        "name": "Hex Value of Dip Switch 2 Setting",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "DIP-Sw2"
       }
     },
     {
@@ -317,6 +391,38 @@
         "udpKey": "Curr user"
       }
     },
+	{
+      "_id": "currentTimer",
+      "type": "state",
+      "common": {
+        "name": "Current for Timer",
+        "type": "number",
+        "role": "level",
+        "unit": "mA",
+        "read": true,
+        "write": true,
+        "desc": "Current value in mA that will replace the setting in the “Curr user” field as soon as “Tmo CT” expires."
+      },
+      "native": {
+        "udpKey": "Curr timer"
+      }
+    },
+	{
+      "_id": "timeoutCurrentTimer",
+      "type": "state",
+      "common": {
+        "name": "timeout Current Timer",
+        "type": "number",
+        "role": "value.interval",
+        "unit": "sec",
+        "read": true,
+        "write": true,
+        "desc": "Timeout in seconds before the current setting defined by the last currtime command will be applied."
+      },
+      "native": {
+        "udpKey": "Tmo CT"
+      }
+    },
     {
       "_id": "currentFailsafe",
       "type": "state",
@@ -337,7 +443,7 @@
       "_id": "timeoutFailsafe",
       "type": "state",
       "common": {
-        "name": "Current Failsafe",
+        "name": "Current Failsafe Timer",
         "type": "number",
         "role": "value.interval",
         "unit": "sec",
@@ -556,6 +662,53 @@
       "native": {
         "udpKey": "E total",
         "udpMultiplier": 0.1
+      }
+    },
+	{
+      "_id": "setenergy",
+      "type": "state",
+      "common": {
+        "name": "Energy Value to Charge into Battery",
+        "type": "number",
+        "role": "level",
+        "unit": "Wh",
+        "read": true,
+        "write": true,
+        "desc": "Energy value in Wh defined by the last setenergy command. Max. value is 99999999 Wh (higher values will cause a counter overflow)."
+      },
+      "native": {
+        "udpKey": "Setenergy",
+        "udpMultiplier": 0.1
+      }
+    },
+	{
+      "_id": "authON",
+      "type": "state",
+      "common": {
+        "name": "Authorization Function active",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false,
+        "desc": "Indicates if the Authorization Function is activated"
+      },
+      "native": {
+        "udpKey": "AuthON"
+      }
+    },
+	{
+      "_id": "authreq",
+      "type": "state",
+      "common": {
+        "name": "State of Authorization via RFID",
+        "type": "boolean",
+        "role": "indicator",
+        "read": true,
+        "write": false,
+        "desc": "Authorization is neccesary (box locked) or already done"
+      },
+      "native": {
+        "udpKey": "Authreq"
       }
     },
     {

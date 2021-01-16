@@ -142,7 +142,10 @@ adapter.on('stateChange', function (id, state) {
 
 // startup
 adapter.on('ready', function () {
-    main();
+	//History Datenpunkte anlegen
+	CreateHistory();
+	// wait 5 seconds for History States creation
+    setTimeout(main, 5000);
 });
 
 function main() {
@@ -245,6 +248,9 @@ function start() {
         	displayChargeMode();
         	checkWallboxPower();
         }
+    };
+	stateChangeListeners[adapter.namespace + '.' + 'Setenergy'] = function (oldValue, newValue) {
+        sendUdpDatagram('setenergy ' + parseInt(newValue * 10), true);
     };
 
     sendUdpDatagram('i');
@@ -636,6 +642,9 @@ function checkTimer() {
 function requestReports() {
     sendUdpDatagram('report 2');
     sendUdpDatagram('report 3');
+	for (var i = 100; i <= 130; i++) {
+		sendUdpDatagram('report ' + i);
+	}
 }
 
 function restartPollTimer() {
@@ -650,16 +659,34 @@ function restartPollTimer() {
 }
 
 function handleMessage(message) {
-    for (var key in message) {
-        if (states[key]) {
-            try {
-                updateState(states[key], message[key]);
-            } catch (e) {
-                adapter.log.warn("Couldn't update state " + key + ": " + e);
-            }
-        } else if (key != 'ID') {
-            adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
-        }
+	// message auf ID Kennung für Session History prüfen
+	if (message.ID >= 100 && message.ID <= 130) {
+		adapter.log.debug('History ID received: ' + message.ID.substr(1));
+		var sessionid = message.ID.substr(1);
+		updateState(states[sessionid + '_json'], JSON.stringify([message]));
+		for (var key in message){
+			if (states[sessionid + '_' + key]) {
+				try {
+					updateState(states[sessionid + '_' + key], message[key]);
+				} catch (e) {
+					adapter.log.warn("Couldn't update state " + 'Session_' + sessionid + '.' + key + ": " + e);
+				}
+			} else if (key != 'ID'){
+				adapter.log.debug('Unknown Session value received: ' + key + '=' + message[key]);
+			}
+		}
+	} else {	
+		for (var key in message) {
+			if (states[key]) {
+				try {
+					updateState(states[key], message[key]);
+				} catch (e) {
+					adapter.log.warn("Couldn't update state " + key + ": " + e);
+				}
+			} else if (key != 'ID') {
+				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
+			}
+		}
 
     }
 }
@@ -669,6 +696,9 @@ function updateState(stateData, value) {
         value = parseFloat(value);
         if (stateData.native.udpMultiplier) {
             value *= parseFloat(stateData.native.udpMultiplier);
+			//Workaround for Javascript parseFloat round error for max. 2 digits after comma
+			value = Math.round(value * 100) / 100;
+			//
         }
     } else if (stateData.common.type == 'boolean') {
         value = parseInt(value) !== 0;
@@ -731,4 +761,282 @@ function setStateInternal(id, value) {
 function setStateAck(id, value) {
     setStateInternal(id, value);
     adapter.setState(id, {val: value, ack: true});
+}
+
+function CreateHistory() {
+	// create Sessions Channel
+	adapter.setObject('Sessions', 
+			{
+				type: 'channel',
+				common: {
+					name: 'Sessions Statistics'
+					},
+				native: {}
+			});
+// create Datapoints for 31 Sessions	
+	for (var i = 0; i <= 30; i++){
+	var session = ''
+	if (i < 10) {
+		session = '0'
+	}
+	
+	adapter.setObject('Sessions.Session_' + session + i, 
+			{
+				type: 'channel',
+				common: {
+					name: 'Session_' +session + i + ' Statistics'
+					},
+				native: {}
+			});
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.json',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Raw json string from Wallbox",
+                    "type":  "string",
+                    "role":  "json",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RAW_Json message",
+                },
+                "native": {
+					"udpKey": session + i + "_json"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "SessionID of Charging Session",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "unique Session ID",
+                },
+                "native": {
+					"udpKey": session + i + "_Session ID"
+                }
+            });
+			
+	adapter.setObject('Sessions.Session_' + session + i + '.currentHardware',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Maximum Current of Hardware",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Maximum Current that can be supported by hardware",
+					"unit":  "mA",
+                },
+                "native": {
+					"udpKey": session + i + "_Curr HW"
+                }
+            });
+
+	adapter.setObject('Sessions.Session_' + session + i + '.eStart',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Energy Counter Value at Start",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Total Energy Consumption at beginning of Charging Session",
+					"unit":  "Wh",
+                },
+                "native": {
+					"udpKey": session + i + "_E start",
+					"udpMultiplier": 0.1
+                }
+            });
+			
+	adapter.setObject('Sessions.Session_' + session + i + '.ePres',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Charged Energy in Current Session",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Energy Transfered in Current Charging Session",
+					"unit":  "Wh",
+                },
+                "native": {
+					"udpKey": session + i + "_E pres",
+					"udpMultiplier": 0.1
+                }
+            });
+			
+	adapter.setObject('Sessions.Session_' + session + i + '.started_s',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Time or Systemclock at Charging Start in Seconds",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Systemclock since System Startup at Charging Start",
+					"unit":  "s",
+                },
+                "native": {
+					"udpKey": session + i + "_started[s]"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.ended_s',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Time or Systemclock at Charging End in Seconds",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Systemclock since System Startup at Charging End",
+					"unit":  "s",
+                },
+                "native": {
+					"udpKey": session + i + "_ended[s]"
+                }
+            });
+			
+	adapter.setObject('Sessions.Session_' + session + i + '.started',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Time at Start of Charging",
+                    "type":  "string",
+                    "role":  "date",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time at Charging Session Start",
+                },
+                "native": {
+					"udpKey": session + i + "_started"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.ended',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Time at End of Charging",
+                    "type":  "string",
+                    "role":  "date",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time at Charging Session End",
+                },
+                "native": {
+					"udpKey": session + i + "_ended"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.reason',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Reason for End of Session",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Reason for End of Charging Session",
+                },
+                "native": {
+					"udpKey": session + i + "_reason"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.timeQ',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Time Sync Quality",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Time Synchronisation Mode",
+                },
+                "native": {
+					"udpKey": session + i + "_timeQ"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.rfid_tag',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "RFID Tag of Card used to Start/Stop Session",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RFID Token used for Charging Session",
+                },
+                "native": {
+					"udpKey": session + i + "_rfid_tag"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.rfid_class',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "RFID Class of Card used to Start/Stop Session",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "RFID Class used for Session",
+                },
+                "native": {
+					"udpKey": session + i + "_RFID class"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.serial',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Serialnumber of Device",
+                    "type":  "string",
+                    "role":  "text",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Serial Number of Device",
+                },
+                "native": {
+					"udpKey": session + i + "_Serial"
+                }
+            });
+	
+	adapter.setObject('Sessions.Session_' + session + i + '.sec',
+            {
+                "type": "state",
+                "common": {
+                    "name":  "Current State of Systemclock",
+                    "type":  "number",
+                    "role":  "value",
+                    "read":  true,
+                    "write": false,
+                    "desc":  "Current State of System Clock since Startup of Device",
+                },
+                "native": {
+					"udpKey": session + i + "_Sec"
+                }
+            });
+	
+	}
+	
+	
 }

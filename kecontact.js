@@ -249,7 +249,7 @@ function start() {
         	checkWallboxPower();
         }
     };
-	stateChangeListeners[adapter.namespace + '.' + 'Setenergy'] = function (oldValue, newValue) {
+	stateChangeListeners[adapter.namespace + '.' + 'setenergy'] = function (oldValue, newValue) {
         sendUdpDatagram('setenergy ' + parseInt(newValue * 10), true);
     };
 

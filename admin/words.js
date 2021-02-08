@@ -120,6 +120,14 @@ systemDictionary = {
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
     },
+    "minAmperage":   {
+        "en": "Minimum aperage to start charging",
+        "de": "Mindest-Ampere mit der das Laden startet"
+    },
+    "addPower":   {
+        "en": "additional regard value",
+        "de": "Dauerhaft zulässiger Netzbezug"
+    },
     "delta":   {
         "en": "Step size",
         "de": "Schrittweite",
@@ -287,6 +295,14 @@ systemDictionary = {
         "es": "Nombre del estado que tiene la plusvalía del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si el excedente es un valor positivo y la consideración es negativa.",
         "pl": "Nazwa państwa, w którym znajduje się wartość dodatkowa licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy nadwyżka jest wartością dodatnią, a szacunek jest ujemna.",
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
+    },
+    "tooltip_minAmperage": {
+        "en": "Minimum value of aperage with which charging station still start (e.g. Renault Zoe needs at least 8A to start charging)",
+        "de": "Mindest-Ampere mit der die Wallbox das Laden startet. Manche Fahrzeuge (z.B. Renaut Zoe) können nicht mit 6A laden, dann kann hier ein höherer Mindestwert eingestellt werden"
+    },
+    "tooltip_addPower": {
+        "en": "Additional regard power that may be permanently used for running charging session.",
+        "de": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten."
     },
     "tooltip_delta": {
         "en": "Controlled process variable by which charging station is regulated",

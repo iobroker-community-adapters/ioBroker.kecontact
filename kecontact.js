@@ -40,6 +40,8 @@ var maxPowerActive      = false;  // is limiter für maximum power active?
 var wallboxIncluded     = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 var amperageDelta       = 500;    // default for step of amperage
 var underusage          = 0;      // maximum regard use to reach minimal charge power for vehicle
+var minAmperage         = 6000;   // minimum amperage to start charging session
+var addPower            = 0;      // additional regard to run charging session
 var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient
 var voltage             = 230;    // calculate with european standard voltage of 230V
 
@@ -286,6 +288,14 @@ function checkConfig() {
     		} else {
     			amperageDelta = adapter.config.delta;
     		}
+    		if (! adapter.config.minAmperage || adapter.config.minAmperage <= 6000) {
+    			adapter.log.info('minimum amperage not speficied or too low, using default value of ' + minAmperage);
+    		} else {
+    			minAmperage = adapter.config.minAmperage;
+    		}
+    		if (adapter.config.addPower !== 0) {
+    			addPower = adapter.config.addPower;
+    		}
     		if (adapter.config.underusage !== 0) {
     			underusage = adapter.config.underusage;
     		}
@@ -401,7 +411,7 @@ function handleWallboxBroadcast(message, remote) {
 
 // get minimum current for wallbox
 function getMinCurrent() {
-	return 6000;
+	return minAmperage;
 }
 
 // get maximum current for wallbox (hardware defined by dip switch)
@@ -572,9 +582,15 @@ function checkWallboxPower() {
                 curr = tempMax;
             }
             if (curr < getMinCurrent()) {
+            	// Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
+            	if (Math.round((available + addPower) / voltage * 1000 / amperageDelta / phases) * amperageDelta >= getMinCurrent()) {
+            		curr = getMinCurrect();
+            	}
+            }
+            if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
-                    // if vehicle is actually charging or is allowed to do so then check limits for power off
-                    curr = Math.round((available + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+                    // if vehicle is currently charging or is allowed to do so then check limits for power off
+                    curr = Math.round((available + addPower + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
                     if (curr >= getMinCurrent()) {
                         adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                         curr = getMinCurrent();

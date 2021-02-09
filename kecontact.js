@@ -584,7 +584,7 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
             	// Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
             	if (Math.round((available + addPower) / voltage * 1000 / amperageDelta / phases) * amperageDelta >= getMinCurrent()) {
-            		curr = getMinCurrect();
+            		curr = getMinCurrent();
             	}
             }
             if (curr < getMinCurrent()) {

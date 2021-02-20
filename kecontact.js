@@ -494,7 +494,7 @@ function getChargingPhaseCount() {
         }
         if (tempCount > 0) {
             // save phase count and write info message if changed
-        	if (phaseCount != tempCount)
+        	if (retVal != tempCount)
         		adapter.log.info("wallbox is charging with " + tempCount + " phases");
         	setStateAck(stateChargingPhases, tempCount);
         	retVal     = tempCount;

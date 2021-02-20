@@ -261,7 +261,7 @@ function start() {
 		if (oldValue != newValue)
 			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
     };
-
+    
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
@@ -565,7 +565,7 @@ function checkWallboxPower() {
 	if (maxPowerActive) {
 		 // Always calculate with three phases for safety reasons
 	    var maxPower = getTotalPowerAvailable();
-	    setStateAck(stateMaxPower, maxPower);
+	    setStateAck(stateMaxPower, Math.round(maxPower));
 		adapter.log.debug('Available max power: ' + maxPower);
 		var maxAmperage = Math.round(maxPower / voltage / 3 * 1000 / amperageDelta) * amperageDelta;
 		if (maxAmperage < tempMax) {
@@ -584,7 +584,7 @@ function checkWallboxPower() {
 		}
         if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
             var available = getSurplusWithoutWallbox();
-            setStateAck(stateSurplus, available);
+            setStateAck(stateSurplus, Math.round(available));
         	adapter.log.debug('Available surplus: ' + available);
             curr = Math.round(available / voltage * 1000 / amperageDelta / phases) * amperageDelta;
             if (curr > tempMax) {

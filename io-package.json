@@ -806,7 +806,7 @@
       "native": {}
     },
     {
-      "_id": "automatic.maxPower",
+      "_id": "statistics.maxPower",
       "type": "state",
       "common": {
         "name": "maximum power for wallbox",
@@ -821,7 +821,7 @@
       "native": {}
     },
     {
-      "_id": "automatic.chargingPhases",
+      "_id": "statistics.chargingPhases",
       "type": "state",
       "common": {
         "name": "number of current charging phases",

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -73,7 +73,11 @@
       },
       "1.0.3": {
         "en": "new options for minimal amerage (e.g. Renault Zoe) and permanent regard value",
-        "de": "neue Optionen für Mindeststromstärke (z.B. für Renault Zoe) unddauerhaft zulässigem Netzbezug"
+        "de": "neue Optionen für Mindeststromstärke (z.B. für Renault Zoe) und dauerhaft zulässigem Netzbezug"
+      },
+      "1.1.0": {
+        "en": "intermediate results saved as states values, additional power for charging session as state",
+        "de": "Zwischenergebnisse als states ablegen, dauerhaft zulässiger Netzbezug als State"
       }
     },
     "title": "KEBA KeContact Wallbox",
@@ -764,10 +768,69 @@
       "native": {}
     },
     {
+      "_id": "automatic.addPower",
+      "type": "state",
+      "common": {
+        "name": "additional regard to run charging session",
+        "type": "number",
+        "role": "value",
+        "unit": "W",
+        "read": true,
+        "write": true,
+        "def": false,
+        "desc": "amount of watts to be used as regard to start charging session"
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics",
       "type": "channel",
       "common": {
         "name": "additional statistic information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.surplus",
+      "type": "state",
+      "common": {
+        "name": "current surplus for PV automatics",
+        "type": "number",
+        "role": "value",
+        "unit": "W",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "Surplus used for last calculation of PV automatics"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.maxPower",
+      "type": "state",
+      "common": {
+        "name": "maximum power for wallbox",
+        "type": "number",
+        "role": "value",
+        "unit": "W",
+        "read": true,
+        "write": false,
+        "def": false,
+        "desc": "maximum amount of watts available for charging station in case of power limitation"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.chargingPhases",
+      "type": "state",
+      "common": {
+        "name": "number of current charging phases",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "def": false,
+        "desc": "number of phases with which vehicle is currently charging"
       },
       "native": {}
     },

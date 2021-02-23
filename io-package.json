@@ -777,7 +777,7 @@
         "unit": "W",
         "read": true,
         "write": true,
-        "def": false,
+        "def": 0,
         "desc": "amount of watts to be used as regard to start charging session"
       },
       "native": {}

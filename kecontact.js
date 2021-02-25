@@ -441,7 +441,7 @@ function switchWallbox(enabled) {
 function regulateWallbox(milliAmpere) {
 	var oldValue = 0;
 	if (getStateInternal(stateWallboxEnabled))
-		oldValue = getStateInternal(stateWallboxCurrent)
+		oldValue = getStateInternal(stateWallboxCurrent);
 	
 	if (milliAmpere != oldValue) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
@@ -784,7 +784,9 @@ function setStateInternal(id, value) {
 }
 
 function setStateAck(id, value) {
-    setStateInternal(id, value);
+	// State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkenung
+	// von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
+    //setStateInternal(id, value); 
     adapter.setState(id, {val: value, ack: true});
 }
 

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -78,6 +78,10 @@
       "1.1.0": {
         "en": "intermediate results saved as states values, additional power for charging session as state",
         "de": "Zwischenergebnisse als states ablegen, dauerhaft zulässiger Netzbezug als State"
+      },
+      "1.1.1": {
+        "en": "internal state update prevented recognition of state change",
+        "de": "internes State-Handling verhinderte Erkennung von Wert-Änderungen"
       }
     },
     "title": "KEBA KeContact Wallbox",

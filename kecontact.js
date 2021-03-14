@@ -33,13 +33,13 @@ const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte L
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
 var isPassive           = true    // no automatic power regulation?
-var phaseCount          = 0;      // Number of phaes vehicle is charging
 var autoTimer           = null;   // interval object
 var photovoltaicsActive = false;  // is photovoltaics automatic active?
 var maxPowerActive      = false;  // is limiter für maximum power active?
 var wallboxIncluded     = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 var amperageDelta       = 500;    // default for step of amperage
 var underusage          = 0;      // maximum regard use to reach minimal charge power for vehicle
+var minAmperage         = 6000;   // minimum amperage to start charging session
 var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient
 var voltage             = 230;    // calculate with european standard voltage of 230V
 
@@ -53,11 +53,16 @@ const stateWallboxState        = "state";                       /*State of charg
 const stateWallboxPower        = "p";                           /*Power*/
 const stateWallboxChargeAmount = "ePres";                       /*ePres - amount of charged energy in Wh */
 const stateWallboxDisplay      = "display";                    
-const stateWallboxOutput       = "output";                    
+const stateWallboxOutput       = "output";
+const stateSetEnergy           = "setenergy";
+const stateSurplus             = "statistics.surplus";          /*current surplus for PV automatics*/
+const stateMaxPower            = "statistics.maxPower";         /*maximum power for wallbox*/
+const stateChargingPhases      = "statistics.chargingPhases";   /*number of phases with which vehicle is currently charging*/
 const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
 const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
 const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
 const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
+const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
@@ -249,10 +254,14 @@ function start() {
         	checkWallboxPower();
         }
     };
-	stateChangeListeners[adapter.namespace + '.' + 'setenergy'] = function (oldValue, newValue) {
+	stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (oldValue, newValue) {
         sendUdpDatagram('setenergy ' + parseInt(newValue * 10), true);
     };
-
+	stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function (oldValue, newValue) {
+		if (oldValue != newValue)
+			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
+    };
+    
     sendUdpDatagram('i');
     sendUdpDatagram('report 1');
     requestReports();
@@ -285,6 +294,14 @@ function checkConfig() {
     			adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
     		} else {
     			amperageDelta = adapter.config.delta;
+    		}
+    		if (! adapter.config.minAmperage || adapter.config.minAmperage <= 6000) {
+    			adapter.log.info('minimum amperage not speficied or too low, using default value of ' + minAmperage);
+    		} else {
+    			minAmperage = adapter.config.minAmperage;
+    		}
+    		if (adapter.config.addPower !== 0) {
+    			setStateAck(stateAddPower, adapter.config.addPower);
     		}
     		if (adapter.config.underusage !== 0) {
     			underusage = adapter.config.underusage;
@@ -401,7 +418,7 @@ function handleWallboxBroadcast(message, remote) {
 
 // get minimum current for wallbox
 function getMinCurrent() {
-	return 6000;
+	return minAmperage;
 }
 
 // get maximum current for wallbox (hardware defined by dip switch)
@@ -424,7 +441,7 @@ function switchWallbox(enabled) {
 function regulateWallbox(milliAmpere) {
 	var oldValue = 0;
 	if (getStateInternal(stateWallboxEnabled))
-		oldValue = getStateInternal(stateWallboxCurrent)
+		oldValue = getStateInternal(stateWallboxCurrent);
 	
 	if (milliAmpere != oldValue) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
@@ -461,7 +478,7 @@ function getTotalPowerAvailable() {
 }
 
 function getChargingPhaseCount() {
-    var retVal = phaseCount;
+    var retVal = getStateDefault0(stateChargingPhases);
 
     // Number of phaes can only be calculated if vehicle is charging
     if (isVehicleCharging()) {
@@ -477,9 +494,9 @@ function getChargingPhaseCount() {
         }
         if (tempCount > 0) {
             // save phase count and write info message if changed
-        	if (phaseCount != tempCount)
+        	if (retVal != tempCount)
         		adapter.log.info("wallbox is charging with " + tempCount + " phases");
-        	phaseCount = tempCount;
+        	setStateAck(stateChargingPhases, tempCount);
         	retVal     = tempCount;
         } else {
         	adapter.log.warn("wallbox is charging but no phases where recognized");
@@ -544,13 +561,13 @@ function checkWallboxPower() {
         setStateAck(statePvAutomatic, getStateInternal(statePvAutomatic) == 1);
     }
 
-	adapter.log.debug('Available surplus: ' + getSurplusWithoutWallbox());
-	adapter.log.debug('Available max power: ' + getTotalPowerAvailable());
-	
     // first of all check maximum power allowed
 	if (maxPowerActive) {
 		 // Always calculate with three phases for safety reasons
-		var maxAmperage = Math.round(getTotalPowerAvailable() / voltage / 3 * 1000 / amperageDelta) * amperageDelta;
+	    var maxPower = getTotalPowerAvailable();
+	    setStateAck(stateMaxPower, Math.round(maxPower));
+		adapter.log.debug('Available max power: ' + maxPower);
+		var maxAmperage = Math.round(maxPower / voltage / 3 * 1000 / amperageDelta) * amperageDelta;
 		if (maxAmperage < tempMax) {
 			tempMax = maxAmperage;
 		}
@@ -567,14 +584,22 @@ function checkWallboxPower() {
 		}
         if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
             var available = getSurplusWithoutWallbox();
+            setStateAck(stateSurplus, Math.round(available));
+        	adapter.log.debug('Available surplus: ' + available);
             curr = Math.round(available / voltage * 1000 / amperageDelta / phases) * amperageDelta;
             if (curr > tempMax) {
                 curr = tempMax;
             }
             if (curr < getMinCurrent()) {
+            	// Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
+            	if (Math.round((available + getStateDefault0(stateAddPower)) / voltage * 1000 / amperageDelta / phases) * amperageDelta >= getMinCurrent()) {
+            		curr = getMinCurrent();
+            	}
+            }
+            if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
-                    // if vehicle is actually charging or is allowed to do so then check limits for power off
-                    curr = Math.round((available + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+                    // if vehicle is currently charging or is allowed to do so then check limits for power off
+                    curr = Math.round((available + getStateDefault0(stateAddPower) + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
                     if (curr >= getMinCurrent()) {
                         adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                         curr = getMinCurrent();
@@ -759,7 +784,9 @@ function setStateInternal(id, value) {
 }
 
 function setStateAck(id, value) {
-    setStateInternal(id, value);
+	// State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkenung
+	// von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
+    //setStateInternal(id, value); 
     adapter.setState(id, {val: value, ack: true});
 }
 

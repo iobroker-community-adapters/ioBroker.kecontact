@@ -32,6 +32,20 @@ The default value is 30 seconds which is a good balance between the load for the
 You can also define states for PV optimized charging of car or limiting max. power of main power.
 
 ## Changelog
+
+### 1.1.1 (2021-02-25)
+* (Sneak-L8) internal state update prevented recognition of state change
+
+### 1.1.0 (2021-02-20)
+* (Sneak-L8) intermediate results saved as states values
+* (Sneak-L8) additional power for charging session as state
+
+### 1.0.3 (2021-02-08)
+* (Sneak-L8) new options for minimal amerage (e.g. Renault Zoe) and permanent regard value
+
+### 1.0.2
+* Added readout of last 30 Charging Sessions from Wallbox; Enabled 'setenergy' State to send and set Charging Goal in Wh to Wallbox
+
 ### 1.0.1 (2020-08-20)
 * (Sneak-L8) add missing german translation for IP address setting
 

@@ -48,6 +48,10 @@ systemDictionary = {
         "pl": "Częstotliwość odświeżania",
         "zh-cn": "刷新间隔"
     },
+    "loadChargingSessions": {
+        "en": "load latest charging sessions",
+        "de": "lade letzte Ladesitzungen"
+    },
     "secs": {
         "en": "seconds",
         "de": "Sekunden",
@@ -271,6 +275,10 @@ systemDictionary = {
         "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (mínimo 5 segundos, 0 = sin consultas, solo transmisiones)",
         "pl": "Odstęp w sekundach, jak często stacja Wallbox powinna być odpytywana o nowe wartości (minimum 5 sekund, 0 = brak zapytań, tylko transmisje)",
         "zh-cn": "以秒为间隔的时间间隔，应查询壁箱以获取新值的频率（最少5秒，0 =无查询，仅广播）"
+    },
+    "tooltip_loadChargingSessions": {
+        "en": "check, if charging sessions save in wallbox should be loaded as states in iobroker", 
+        "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden"
     },
     "tooltip_stateRegard": {
         "en": "Name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 

@@ -9,6 +9,8 @@ var utils = require('@iobroker/adapter-core');
 // other dependencies:
 var dgram = require('dgram');
 var os = require('os');
+const request = require('request');
+
 
 // create the adapter object
 var adapter = utils.Adapter('kecontact');
@@ -24,7 +26,7 @@ var currTimeout = null;
 var sendDelayTimer;
 var states = {};          // contains all actual state values
 var stateChangeListeners = {};
-var currentStateValues = {}; // contains all actual state vaues
+var currentStateValues = {}; // contains all actual state values
 var sendQueue = [];
 
 //var ioBroker_Settings
@@ -32,16 +34,26 @@ var ioBrokerLanguage      = 'en';
 const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
-var isPassive           = true    // no automatic power regulation?
-var autoTimer           = null;   // interval object
-var photovoltaicsActive = false;  // is photovoltaics automatic active?
-var maxPowerActive      = false;  // is limiter für maximum power active?
-var wallboxIncluded     = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
-var amperageDelta       = 500;    // default for step of amperage
-var underusage          = 0;      // maximum regard use to reach minimal charge power for vehicle
-var minAmperage         = 6000;   // minimum amperage to start charging session
-var minChargeSeconds    = 0;      // minimum of charge time even when surplus is not sufficient
-var voltage             = 230;    // calculate with european standard voltage of 230V
+var isPassive            = true    // no automatic power regulation?
+var autoTimer            = null;   // interval object
+var photovoltaicsActive  = false;  // is photovoltaics automatic active?
+var maxPowerActive       = false;  // is limiter für maximum power active?
+var wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
+var amperageDelta        = 500;    // default for step of amperage
+var underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
+var minAmperage          = 6000;   // minimum amperage to start charging session
+var minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
+var voltage              = 230;    // calculate with european standard voltage of 230V
+var loadChargingSessions = false;
+var lastloadChargingSessions = null;
+const intervalChargingSessions = 1 * 60 * 60 * 1000;  // check charging sessions every hour
+var lastFirmwareCheck    = null;
+const firmwareUrl        = "https://www.keba.com/de/emobility/service-support/downloads/downloads";
+const intervalFirmwareCheck = 24 * 60 * 60 * 1000;  // check firmware every 24 hours
+const regexP30cSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<H3/gi;
+const regexP30xSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<H3/gi;
+const regexFirmware      = /<div class="mt-3">Firmware-Update\s+((?:.)*?)<\/div>/gi;
+const regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
 
 const stateWallboxEnabled      = "enableUser";                  /*Enable User*/
 const stateWallboxCurrent      = "currentUser";                 /*Current User*/
@@ -55,6 +67,9 @@ const stateWallboxChargeAmount = "ePres";                       /*ePres - amount
 const stateWallboxDisplay      = "display";                    
 const stateWallboxOutput       = "output";
 const stateSetEnergy           = "setenergy";
+const stateProduct             = "product";
+const stateFirmware            = "firmware";                    /*current running version of firmware*/
+const stateFirmwareAvailable   = "statistics.availableFirmware";/*current version of firmware available at keba.com*/
 const stateSurplus             = "statistics.surplus";          /*current surplus for PV automatics*/
 const stateMaxPower            = "statistics.maxPower";         /*maximum power for wallbox*/
 const stateChargingPhases      = "statistics.chargingPhases";   /*number of phases with which vehicle is currently charging*/
@@ -250,7 +265,8 @@ function start() {
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue) {
-        	displayChargeMode();
+            if (photovoltaicsActive)
+        	    displayChargeMode();
         	checkWallboxPower();
         }
     };
@@ -275,6 +291,9 @@ function checkConfig() {
         adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
         everythingFine = false;
     }
+    if (adapter.config.loadChargingSessions == true) {
+        loadChargingSessions = true;
+    }
     if (adapter.config.passiveMode) {
     	isPassive = true;
     	adapter.log.info('starting charging station in passive mode');
@@ -295,7 +314,7 @@ function checkConfig() {
     		} else {
     			amperageDelta = adapter.config.delta;
     		}
-    		if (! adapter.config.minAmperage || adapter.config.minAmperage <= 6000) {
+    		if (! adapter.config.minAmperage || adapter.config.minAmperage < 6000) {
     			adapter.log.info('minimum amperage not speficied or too low, using default value of ' + minAmperage);
     		} else {
     			minAmperage = adapter.config.minAmperage;
@@ -522,6 +541,12 @@ function displayChargeMode() {
 	adapter.setState(stateWallboxDisplay, text);
 }
 
+function getAmperage(power, phases) {
+    var curr = Math.round(power / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+    adapter.log.debug("power: " + power + " / voltage: " + voltage + " * 1000 / delta: " + amperageDelta + " / phases: " + phases + " * delta = " + curr);
+    return curr;
+}
+
 function checkWallboxPower() {
     // 0 unplugged
     // 1 plugged on charging station 
@@ -538,7 +563,7 @@ function checkWallboxPower() {
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
 		if (! isPassive) {
-			setTimeout(displayChargeMode, 5000);
+			displayChargeMode();
 		}
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
@@ -567,7 +592,7 @@ function checkWallboxPower() {
 	    var maxPower = getTotalPowerAvailable();
 	    setStateAck(stateMaxPower, Math.round(maxPower));
 		adapter.log.debug('Available max power: ' + maxPower);
-		var maxAmperage = Math.round(maxPower / voltage / 3 * 1000 / amperageDelta) * amperageDelta;
+		var maxAmperage = getAmperage(maxPower, phases);
 		if (maxAmperage < tempMax) {
 			tempMax = maxAmperage;
 		}
@@ -586,20 +611,24 @@ function checkWallboxPower() {
             var available = getSurplusWithoutWallbox();
             setStateAck(stateSurplus, Math.round(available));
         	adapter.log.debug('Available surplus: ' + available);
-            curr = Math.round(available / voltage * 1000 / amperageDelta / phases) * amperageDelta;
-            if (curr > tempMax) {
+            curr = getAmperage(available, phases);
+        	if (curr > tempMax) {
                 curr = tempMax;
             }
-            if (curr < getMinCurrent()) {
+            var addPower = getStateDefault0(stateAddPower);
+            if (curr < getMinCurrent() && addPower > 0) {
             	// Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
-            	if (Math.round((available + getStateDefault0(stateAddPower)) / voltage * 1000 / amperageDelta / phases) * amperageDelta >= getMinCurrent()) {
+                console.log.debug("check with additional power of: " + addPower);
+            	if (getAmperage(available + addPower, phases) >= getMinCurrent()) {
+                    adapter.log.debug('Minimum amperage reached by addPower of ' + addPower);
             		curr = getMinCurrent();
             	}
             }
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
-                    curr = Math.round((available + getStateDefault0(stateAddPower) + underusage) / voltage * 1000 / amperageDelta / phases) * amperageDelta;
+                    console.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
+                    curr = getAmperage(available + addPower + underusage, phases);
                     if (curr >= getMinCurrent()) {
                         adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                         curr = getMinCurrent();
@@ -613,7 +642,7 @@ function checkWallboxPower() {
                     }
                 }
             } else {
-            	if (getStateInternal(stateWallboxCurrent) != curr)
+            	if (getStateInternal(stateWallboxCurrent) != curr || getStateInternal(stateWallboxEnabled) == false)
             		adapter.log.info("dynamic adaption of charging to " + curr + " mA");
             }
         } else {
@@ -667,9 +696,19 @@ function checkTimer() {
 function requestReports() {
     sendUdpDatagram('report 2');
     sendUdpDatagram('report 3');
-	for (var i = 100; i <= 130; i++) {
-		sendUdpDatagram('report ' + i);
-	}
+    loadChargingSessionsFromWallbox();
+}
+
+function loadChargingSessionsFromWallbox() {
+    if (loadChargingSessions) {
+        var newDate = new Date();
+        if (lastloadChargingSessions == null || newDate.getTime() - lastloadChargingSessions.getTime() > intervalChargingSessions) {
+            for (var i = 100; i <= 130; i++) {
+		        sendUdpDatagram('report ' + i);
+            }
+            lastloadChargingSessions = newDate;
+	    }
+    }
 }
 
 function restartPollTimer() {
@@ -714,6 +753,7 @@ function handleMessage(message) {
 		}
 
     }
+    checkFirmware();
 }
 
 function updateState(stateData, value) {
@@ -788,6 +828,64 @@ function setStateAck(id, value) {
 	// von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
     //setStateInternal(id, value); 
     adapter.setState(id, {val: value, ack: true});
+}
+
+function checkFirmware() {
+    var newDate = new Date();
+    if (lastFirmwareCheck == null || (newDate.getTime() - lastFirmwareCheck.getTime() >= intervalFirmwareCheck)) {
+        request.get(firmwareUrl, processFirmwarePage);
+        lastFirmwareCheck = newDate;
+    }
+    return;
+}
+
+function processFirmwarePage(err, stat, body) {
+    var prefix = "Keba firmware check: ";
+    if (err) {
+        adapter.log.warn(prefix + err);
+    }
+    else if (body) {
+        var type = getStateInternal(stateProduct);
+        var regexPattern;
+        if (type.startsWith("KC-P30-E")) {
+            regexPattern = regexP30cSeries;
+        } else if (type.startsWith("KC-P30-X")) {
+            regexPattern = regexP30xSeries;
+        } else {
+            adapter.log.error(prefix + "unknown wallbox type " + type);
+            return;
+        }
+        var list;
+        regexPattern.lastIndex = 0;
+
+        if (list = regexPattern.exec(body)) {
+            regexFirmware.lastIndex = 0;
+            var block;
+            if (block = regexFirmware.exec(list[1])) {
+                setStateAck(stateFirmwareAvailable, block[1]);
+                var currFirmware;
+                if (currFirmware = regexCurrFirmware.exec(getStateInternal(stateFirmware))) {
+                    currFirmware[1] = "V"+currFirmware[1];
+                    if (block[1] == currFirmware[1]) {
+                        adapter.log.info(prefix + "latest firmware installed");
+                    } else {
+                        adapter.log.warn(prefix + "new firmware " + currFirmware[1]);
+                    }
+                } else {
+                    adapter.log.error(prefix + "current firmare unknown: " + getStateInternal(stateFirmware));
+                }
+            } else {
+                adapter.log.warn(prefix + "no firmware found");
+                adapter.log.debug(block);
+            }
+        } else {
+            adapter.log.warn(prefix + "no section found");
+            adapter.log.debug(body);
+        }
+    } else {
+        adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
+    }
+    return true;
 }
 
 function CreateHistory() {

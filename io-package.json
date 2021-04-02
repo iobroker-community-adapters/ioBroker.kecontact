@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "news": {
       "0.0.1": {
         "en": "initial commit",
@@ -49,11 +49,11 @@
       },
       "0.3.0": {
         "en": "regulate wallbox by PV automatics independant from state curr user",
-        "de": "Regeln der Ladeleistung bei PVoptimiertem Laden unabhngig von curr user"
+        "de": "Regeln der Ladeleistung bei PV-optimiertem Laden unabhängig von curr user"
       },
       "0.3.1": {
         "en": "fix: when vehicle is plugged, it was always charged for minimum charging time even if PV was low",
-        "de": "Fix: Auto wurde zumindest immer für Mindesladedauer geladen, auch wenn PV-Leistung nicht ausreicht"
+        "de": "Fix: Auto wurde zumindest immer für Mindestladedauer geladen, auch wenn PV-Leistung nicht ausreicht"
       },
       "0.3.2": {
         "en": "in PV automatics mode wallbox will be disabled as long as no vehicle is plugged",
@@ -82,6 +82,10 @@
       "1.1.1": {
         "en": "internal state update prevented recognition of state change",
         "de": "internes State-Handling verhinderte Erkennung von Wert-Änderungen"
+      },
+      "1.1.2": {
+        "en": "default state of photovoltaics automatic set to true for new users; new option for charging sessions list retrieval on/off, download no too often; firmware version check",
+        "de": "PV-Automatik standardmäßig ein bei Neuinstallation; neue Option, ob Ladelog geladen werden soll oder nicht und dieses seltener Laden; Prüfung auf aktuelle Firmware"
       }
     },
     "title": "KEBA KeContact Wallbox",
@@ -106,6 +110,8 @@
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
     "loglevel": "info",
     "type": "hardware",
+    "connectionType": "local",
+    "dataSource": "push",
     "keywords": [
       "KeContact",
       "P30",
@@ -766,7 +772,7 @@
         "role": "value",
         "read": true,
         "write": true,
-        "def": false,
+        "def": true,
         "desc": "Switch to load vehicle according to surplus of photovoltaics (true); otherwise load with maximum power (false)."
       },
       "native": {}
@@ -795,6 +801,20 @@
       "native": {}
     },
     {
+      "_id": "statistics.availableFirmware",
+      "type": "state",
+      "common": {
+        "name": "current available firmware version on keba.com",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "current version of firmware found on keba.com website"
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics.surplus",
       "type": "state",
       "common": {
@@ -819,7 +839,7 @@
         "unit": "W",
         "read": true,
         "write": false,
-        "def": false,
+        "def": null,
         "desc": "maximum amount of watts available for charging station in case of power limitation"
       },
       "native": {}
@@ -833,7 +853,7 @@
         "role": "value",
         "read": true,
         "write": false,
-        "def": false,
+        "def": null,
         "desc": "number of phases with which vehicle is currently charging"
       },
       "native": {}

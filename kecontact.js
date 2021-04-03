@@ -502,13 +502,13 @@ function getChargingPhaseCount() {
     // Number of phaes can only be calculated if vehicle is charging
     if (isVehicleCharging()) {
         var tempCount = 0;
-        if (getStateInternal(stateWallboxPhase1) > 100) {
+        if (getStateDefault0(stateWallboxPhase1) > 1000) {
         	tempCount ++;
         }
-        if (getStateInternal(stateWallboxPhase2) > 100) {
+        if (getStateDefault0(stateWallboxPhase2) > 1000) {
         	tempCount ++;
         }
-        if (getStateInternal(stateWallboxPhase3) > 100) {
+        if (getStateDefault0(stateWallboxPhase3) > 1000) {
         	tempCount ++;
         }
         if (tempCount > 0) {
@@ -516,13 +516,14 @@ function getChargingPhaseCount() {
         	if (retVal != tempCount)
         		adapter.log.info("wallbox is charging with " + tempCount + " phases");
         	setStateAck(stateChargingPhases, tempCount);
-        	retVal     = tempCount;
+        	retVal = tempCount;
         } else {
         	adapter.log.warn("wallbox is charging but no phases where recognized");
         }
     }
     // if no phaes where detected then calculate with one phase
     if (retVal <= 0) {
+        adapter.log.debug("Setting phase count to 1");
     	retVal = 1;
     }
     return retVal;

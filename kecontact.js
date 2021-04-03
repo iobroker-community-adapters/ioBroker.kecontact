@@ -871,7 +871,7 @@ function processFirmwarePage(err, stat, body) {
                     if (block[1] == currFirmware[1]) {
                         adapter.log.info(prefix + "latest firmware installed");
                     } else {
-                        adapter.log.warn(prefix + "current firmware V" + currFirmware[1] + ", new firmware " + block[1] + "available at " + firmwareUrl);
+                        adapter.log.warn(prefix + "current firmware " + currFirmware[1] + ", <a href='" + firmwareUrl + "'>new firmware " + block[1] + " available</a>");
                     }
                 } else {
                     adapter.log.error(prefix + "current firmare unknown: " + getStateInternal(stateFirmware));

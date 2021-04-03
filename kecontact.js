@@ -620,7 +620,7 @@ function checkWallboxPower() {
             var addPower = getStateDefault0(stateAddPower);
             if (curr < getMinCurrent() && addPower > 0) {
             	// Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
-                console.log.debug("check with additional power of: " + addPower);
+                adapter.log.debug("check with additional power of: " + addPower);
             	if (getAmperage(available + addPower, phases) >= getMinCurrent()) {
                     adapter.log.debug('Minimum amperage reached by addPower of ' + addPower);
             		curr = getMinCurrent();
@@ -629,7 +629,7 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
-                    console.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
+                    adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
                     curr = getAmperage(available + addPower + underusage, phases);
                     if (curr >= getMinCurrent()) {
                         adapter.log.info("tolerated under-usage of charge power, continuing charging session");

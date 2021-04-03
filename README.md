@@ -32,6 +32,7 @@ Activate this option if you wnat to control your wallbox by your own and yu do n
 ### Load charging sessions
 
 You can check this option to periodically download the latest charging sessions (30) from your wall box.
+ATTENTION for users from version v1.1.1 and below: you have to check this option to still receive for charging sessions!
 
 ### Refresh Interval
 
@@ -58,6 +59,7 @@ You can also limit max. power of your wallbox to limit main power. E.g. when run
 ### 1.1.2 (2021-04-02)
 * (Sneak-L8) default state of photovoltaics automatic set to true for new users
 * (Sneak-L8) new option to select whether charging sessions list should be downloaded and be saved in states or not, do so only once an hour
+             ATTENTION for users from version v1.1.1 and below: you have to check this option to still receive for charging sessions!
 * (Sneak-L8) firmware version check
 * (Sneak-L8) expanded readme
 

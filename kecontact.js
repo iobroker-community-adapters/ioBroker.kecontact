@@ -503,13 +503,13 @@ function getChargingPhaseCount() {
     // Number of phaes can only be calculated if vehicle is charging
     if (isVehicleCharging()) {
         var tempCount = 0;
-        if (getStateDefault0(stateWallboxPhase1) > 1000) {
+        if (getStateDefault0(stateWallboxPhase1) > 250) {
         	tempCount ++;
         }
-        if (getStateDefault0(stateWallboxPhase2) > 1000) {
+        if (getStateDefault0(stateWallboxPhase2) > 250) {
         	tempCount ++;
         }
-        if (getStateDefault0(stateWallboxPhase3) > 1000) {
+        if (getStateDefault0(stateWallboxPhase3) > 250) {
         	tempCount ++;
         }
         if (tempCount > 0) {

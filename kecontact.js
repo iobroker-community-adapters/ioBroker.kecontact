@@ -163,18 +163,21 @@ adapter.on('stateChange', function (id, state) {
 
 // startup
 adapter.on('ready', function () {
-	//History Datenpunkte anlegen
-	CreateHistory();
-	// wait 5 seconds for History States creation
-    setTimeout(main, 5000);
-});
-
-function main() {
     if (! checkConfig()) {
     	adapter.log.error('start of adapter not possible due to config errors');
     	return;
     }
-    
+    if (loadChargingSessions) {
+        //History Datenpunkte anlegen
+        CreateHistory();
+        // wait 5 seconds for History States creation
+        setTimeout(main, 5000);
+    } else {
+        main();
+    }
+});
+
+function main() {
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');

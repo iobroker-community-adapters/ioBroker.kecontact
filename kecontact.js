@@ -321,15 +321,15 @@ function checkConfig() {
     			minAmperage = adapter.config.minAmperage;
     		}
     		if (adapter.config.addPower !== 0) {
-    			setStateAck(stateAddPower, adapter.config.addPower);
+    			setStateAck(stateAddPower, getNumber(adapter.config.addPower));
     		}
     		if (adapter.config.underusage !== 0) {
-    			underusage = adapter.config.underusage;
+    			underusage = getNumber(adapter.config.underusage);
     		}
     		if (! adapter.config.minTime || adapter.config.minTime <= 0) {
     			adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
     		} else {
-    			minChargeSeconds = adapter.config.minTime;
+    			minChargeSeconds = getNumber(adapter.config.minTime);
     		}
     	}
     	if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
@@ -810,11 +810,21 @@ function getStateInternal(id) {
 	return currentStateValues[obj];
 }
 
-function getStateDefault0(id) {
-	var value = getStateInternal(id);
-	if (value)
-		return value;
+function getNumber(value) {
+	if (value) {
+        if (typeof value !== 'number') {
+            value = parseFloat(value);
+            if (value == NaN) {
+                value = 0;
+            } 
+        }
+        return value;
+    }
 	return 0;
+}
+
+function getStateDefault0(id) {
+	return getNumber(getStateInternal(id));
 }
 
 function setStateInternal(id, value) {

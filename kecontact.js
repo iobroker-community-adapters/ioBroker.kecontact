@@ -470,7 +470,7 @@ function regulateWallbox(milliAmpere) {
 	if (milliAmpere != oldValue) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
         // block calculation for 5 seconds to give wallbox change to complete operation
-        pauseTime = new Date.getTime() + 5000;    
+        pauseTime = (new Date()).getTime() + 5000;    
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
 	if (milliAmpere == 0) {
@@ -587,7 +587,8 @@ function checkWallboxPower() {
 	if (isPassive)
 		return;
 
-    if (pauseTime > 0 && (new Date.getTime() < pauseTime)) {
+    if (pauseTime > 0 && ((new Date()).getTime() < pauseTime)) {
+        adapter.log.debug("wait a second because of last currTime command");
         currTimeout = setTimeout(checkWallboxPower, 1000);   // wait 1 seconds to not proceed before pauseTime
     }
     pauseTime = 0;

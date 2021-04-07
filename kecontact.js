@@ -44,6 +44,7 @@ var underusage           = 0;      // maximum regard use to reach minimal charge
 var minAmperage          = 6000;   // minimum amperage to start charging session
 var minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 var voltage              = 230;    // calculate with european standard voltage of 230V
+var pauseTime            = 0;      // time to wait until next PV automatics calculation
 var loadChargingSessions = false;
 var lastloadChargingSessions = null;
 const intervalChargingSessions = 1 * 60 * 60 * 1000;  // check charging sessions every hour
@@ -135,7 +136,7 @@ adapter.on('stateChange', function (id, state) {
     if (!id || !state) {
     	return;
     }
-    adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+    //adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
     if (id.startsWith(adapter.namespace + '.')) {
     	// if vehicle is (un)plugged check if schedule has to be disabled/enabled
@@ -468,6 +469,8 @@ function regulateWallbox(milliAmpere) {
 	
 	if (milliAmpere != oldValue) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
+        // block calculation for 5 seconds to give wallbox change to complete operation
+        pauseTime = new Date.getTime() + 5000;    
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
 	if (milliAmpere == 0) {
@@ -553,6 +556,9 @@ function getAmperage(power, phases) {
 }
 
 function checkWallboxPower() {
+    if (currTimeout) {
+        clearTimeout(currTimeout);
+    }
     // 0 unplugged
     // 1 plugged on charging station 
     // 3 plugged on charging station plug locked
@@ -580,6 +586,11 @@ function checkWallboxPower() {
 	} 
 	if (isPassive)
 		return;
+
+    if (pauseTime > 0 && (new Date.getTime() < pauseTime)) {
+        currTimeout = setTimeout(checkWallboxPower, 1000);   // wait 1 seconds to not proceed before pauseTime
+    }
+    pauseTime = 0;
 	
     var curr    = 0;      // in mA
     var tempMax = getMaxCurrent();
@@ -608,7 +619,7 @@ function checkWallboxPower() {
 		(photovoltaicsActive && getStateInternal(statePvAutomatic) && ! isVehiclePlugged)) {
 		curr = 0;
 	} else {
-		// if vehicle is currently charging and was not the check before, then save timestamp
+		// if vehicle is currently charging and was not before, then save timestamp
 		if (getStateInternal(stateChargeTimestamp) === null && isVehicleCharging()) {
 			chargingToBeStarted = true;
 		}
@@ -665,6 +676,7 @@ function checkWallboxPower() {
     	if (getStateInternal(stateWallboxEnabled))
     		adapter.log.info("stop charging");
     	regulateWallbox(0);
+        setStateAck(stateChargeTimestamp, null);
     } else {
     	if (chargingToBeStarted) {
     		adapter.log.info("vehicle (re)starts to charge");

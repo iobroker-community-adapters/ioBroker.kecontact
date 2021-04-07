@@ -878,16 +878,17 @@ function processFirmwarePage(err, stat, body) {
             var block;
             if (block = regexFirmware.exec(list[1])) {
                 setStateAck(stateFirmwareAvailable, block[1]);
-                var currFirmware;
-                if (currFirmware = regexCurrFirmware.exec(getStateInternal(stateFirmware))) {
-                    currFirmware[1] = "V"+currFirmware[1];
-                    if (block[1] == currFirmware[1]) {
+                var currFirmware = getStateInternal(stateFirmware);
+                var currFirmwareList;
+                if (currFirmwareList = regexCurrFirmware.exec(currFirmware)) {
+                    currFirmwareList[1] = "V"+currFirmwareList[1];
+                    if (block[1] == currFirmwareList[1]) {
                         adapter.log.info(prefix + "latest firmware installed");
                     } else {
-                        adapter.log.warn(prefix + "current firmware " + currFirmware[1] + ", <a href='" + firmwareUrl + "'>new firmware " + block[1] + " available</a>");
+                        adapter.log.warn(prefix + "current firmware " + currFirmwareList[1] + ", <a href='" + firmwareUrl + "'>new firmware " + block[1] + " available</a>");
                     }
                 } else {
-                    adapter.log.error(prefix + "current firmare unknown: " + getStateInternal(stateFirmware));
+                    adapter.log.error(prefix + "current firmare unknown: " + currFirmware);
                 }
             } else {
                 adapter.log.warn(prefix + "no firmware found");

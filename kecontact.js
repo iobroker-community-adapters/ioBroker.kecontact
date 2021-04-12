@@ -885,14 +885,14 @@ function processFirmwarePage(err, stat, body) {
         }
         var list;
         regexPattern.lastIndex = 0;
-
         if (list = regexPattern.exec(body)) {
-            regexFirmware.lastIndex = 0;
             var block;
+            regexFirmware.lastIndex = 0;
             if (block = regexFirmware.exec(list[1])) {
                 setStateAck(stateFirmwareAvailable, block[1]);
                 var currFirmware = getStateInternal(stateFirmware);
                 var currFirmwareList;
+                regexCurrFirmware.lastIndex = 0;
                 if (currFirmwareList = regexCurrFirmware.exec(currFirmware)) {
                     currFirmwareList[1] = "V"+currFirmwareList[1];
                     if (block[1] == currFirmwareList[1]) {

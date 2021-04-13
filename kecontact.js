@@ -159,7 +159,7 @@ adapter.on('stateChange', function (id, state) {
     }
     
     stateChangeListeners[id](oldValue, state.val);
-    state.ack = true;
+    setStateAck(id, state.val)
 });
 
 // startup

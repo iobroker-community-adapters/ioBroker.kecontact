@@ -284,7 +284,6 @@ function start() {
     };
     
     sendUdpDatagram('i');
-    sendUdpDatagram('report 1');
     requestReports();
     restartPollTimer();
 }
@@ -712,6 +711,7 @@ function checkTimer() {
 }
 
 function requestReports() {
+    sendUdpDatagram('report 1');
     sendUdpDatagram('report 2');
     sendUdpDatagram('report 3');
     loadChargingSessionsFromWallbox();

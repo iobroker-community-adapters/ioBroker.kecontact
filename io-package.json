@@ -74,18 +74,6 @@
       "0.1.0": {
         "en": "First official version",
         "de": "Erste offizielle Version"
-      },
-      "0.0.3": {
-        "en": "Improved UDP datagram sending, added all known writable states",
-        "de": "Verbessertes UDP Senden, Schreiben aller bekannten States hinzugefügt"
-      },
-      "0.0.2": {
-        "en": "Improved UDP socket handling, added reading all known states",
-        "de": "Verbessertes UDP Socket Handling, Lesen aller bekannten States hinzugefügt"
-      },
-       "0.0.1": {
-        "en": "initial commit",
-        "de": "initial commit"
       }
     },
     "title": "KEBA KeContact Wallbox",

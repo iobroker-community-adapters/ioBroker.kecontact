@@ -50,7 +50,15 @@ systemDictionary = {
     },
     "loadChargingSessions": {
         "en": "load latest charging sessions",
-        "de": "lade letzte Ladesitzungen"
+        "de": "lade letzte Ladesitzungen",
+        "ru": "загрузить последние сеансы зарядки",
+        "pt": "carregue as últimas sessões de carregamento",
+        "nl": "laad de laatste laadsessies",
+        "fr": "charger les dernières sessions de charge",
+        "it": "caricare le ultime sessioni di ricarica",
+        "es": "cargar las últimas sesiones de carga",
+        "pl": "załaduj ostatnie sesje ładowania",
+        "zh-cn": "加载最新的充电会话"
     },
     "secs": {
         "en": "seconds",
@@ -125,12 +133,28 @@ systemDictionary = {
         "zh-cn": "剩余状态名称"
     },
     "minAmperage":   {
-        "en": "Minimum aperage to start charging",
-        "de": "Mindest-Ampere mit der das Laden startet"
+        "en": "Minimum amperage to start charging",
+        "de": "Mindeststromstärke zum Starten des Ladevorgangs",
+        "ru": "Минимальная сила тока для начала зарядки",
+        "pt": "Amperagem mínima para começar a carregar",
+        "nl": "Minimale stroomsterkte om te beginnen met opladen",
+        "fr": "Ampérage minimum pour commencer la charge",
+        "it": "Amperaggio minimo per avviare la ricarica",
+        "es": "Amperaje mínimo para comenzar a cargar",
+        "pl": "Minimalne natężenie prądu do rozpoczęcia ładowania",
+        "zh-cn": "最小安培数开始充电"
     },
     "addPower":   {
         "en": "additional regard value",
-        "de": "Dauerhaft zulässiger Netzbezug"
+        "de": "Dauerhaft zulässiger Netzbezug",
+        "ru": "дополнительная ценность",
+        "pt": "valor de consideração adicional",
+        "nl": "extra aanzien waarde",
+        "fr": "valeur de regard supplémentaire",
+        "it": "valore di considerazione aggiuntivo",
+        "es": "valor de consideración adicional",
+        "pl": "Dodatkowa wartość szacunku",
+        "zh-cn": "附加价值"
     },
     "delta":   {
         "en": "Step size",
@@ -277,8 +301,16 @@ systemDictionary = {
         "zh-cn": "以秒为间隔的时间间隔，应查询壁箱以获取新值的频率（最少5秒，0 =无查询，仅广播）"
     },
     "tooltip_loadChargingSessions": {
-        "en": "check, if charging sessions save in wallbox should be loaded as states in iobroker", 
+        "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 
         "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden"
+        "ru": "проверьте, должны ли сеансы зарядки, сохраненные в wallbox, загружаться как состояния в iobroker",
+        "pt": "verifique se as sessões de cobrança salvas na caixa de parede devem ser carregadas como estados no iobroker",
+        "nl": "controleer of laadsessies opgeslagen in wallbox moeten worden geladen als statussen in iobroker",
+        "fr": "vérifiez si les sessions de charge enregistrées dans la wallbox doivent être chargées en tant qu'états dans iobroker",
+        "it": "verificare se le sessioni di ricarica salvate nella wallbox devono essere caricate come stati in iobroker",
+        "es": "compruebe si las sesiones de carga guardadas en wallbox deben cargarse como estados en iobroker",
+        "pl": "sprawdź, czy sesje ładowania zapisane w wallboxie powinny być ładowane jako stany w iobrokerze",
+        "zh-cn": "检查是否应将保存在wallbox中的充电会话作为iobroker中的状态加载"
     },
     "tooltip_stateRegard": {
         "en": "Name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 
@@ -305,12 +337,28 @@ systemDictionary = {
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
     },
     "tooltip_minAmperage": {
-        "en": "Minimum value of aperage with which charging station still start (e.g. Renault Zoe needs at least 8A to start charging)",
-        "de": "Mindest-Ampere mit der die Wallbox das Laden startet. Manche Fahrzeuge (z.B. Renaut Zoe) können nicht mit 6A laden, dann kann hier ein höherer Mindestwert eingestellt werden"
+        "en": "Minimum value of amperage with which charging station will start (e.g. Renault Zoe needs at least 8A to start charging)",
+        "de": "Mindest-Ampere mit der die Wallbox das Laden startet. Manche Fahrzeuge (z.B. Renaut Zoe) können nicht mit 6A laden, dann kann hier ein höherer Mindestwert eingestellt werden",
+        "ru": "Минимальное значение силы тока, при котором зарядная станция все еще запускается (например, Renault Zoe требуется не менее 8 А для начала зарядки)",
+        "pt": "Valor mínimo da amperagem com a qual a estação de carregamento ainda inicia (por exemplo, Renault Zoe precisa de pelo menos 8A para começar a carregar)",
+        "nl": "Minimale stroomsterkte waarmee het laadstation nog start (bijv.Renault Zoe heeft minimaal 8A nodig om te beginnen met laden)",
+        "fr": "Valeur minimale de l'ampérage avec laquelle la station de charge démarre encore (par exemple, Renault Zoe a besoin d'au moins 8 A pour démarrer la charge)",
+        "it": "Valore minimo di amperaggio con cui la stazione di ricarica parte ancora (es.Renault Zoe necessita di almeno 8A per avviare la ricarica)",
+        "es": "Valor mínimo de amperaje con el que la estación de carga aún se inicia (por ejemplo, Renault Zoe necesita al menos 8A para comenzar a cargar)",
+        "pl": "Minimalna wartość natężenia prądu, z jakim stacja ładowania nadal się uruchamia (np. Renault Zoe potrzebuje co najmniej 8 A do rozpoczęcia ładowania)",
+        "zh-cn": "充电站仍可启动的最小安培数（例如，雷诺佐伊（Renault Zoe）至少需要8A才能开始充电）"
     },
     "tooltip_addPower": {
-        "en": "Additional regard power that may be permanently used for running charging session.",
-        "de": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten."
+        "en": "Additional regard power that may be permanently used for running charging session",
+        "de": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten",
+        "ru": "Дополнительная мощность, которая может постоянно использоваться для запуска сеанса зарядки",
+        "pt": "Poder de consideração adicional que pode ser usado permanentemente para executar a sessão de carregamento",
+        "nl": "Bijkomend vermogen dat permanent kan worden gebruikt voor het uitvoeren van een oplaadsessie",
+        "fr": "Puissance de regard supplémentaire pouvant être utilisée en permanence pour exécuter la session de charge",
+        "it": "Potenza aggiuntiva che può essere utilizzata in modo permanente per l'esecuzione della sessione di ricarica",
+        "es": "Respecto a la potencia adicional que se puede utilizar permanentemente para ejecutar la sesión de carga",
+        "pl": "Dodatkowo należy zwrócić uwagę na moc, która może być wykorzystana na stałe podczas sesji ładowania",
+        "zh-cn": "可以永久用于运行充电会话的附加功能"
     },
     "tooltip_delta": {
         "en": "Controlled process variable by which charging station is regulated",

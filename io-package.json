@@ -236,8 +236,8 @@
       "type": "state",
       "common": {
         "name": "Hex Value of Dip Switch 2 Setting",
-        "type": "number",
-        "role": "value",
+        "type": "string",
+        "role": "text",
         "read": true,
         "write": false
       },

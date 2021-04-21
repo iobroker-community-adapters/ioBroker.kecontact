@@ -1138,7 +1138,7 @@ function CreateHistory() {
                     "desc":  "RFID Token used for Charging Session",
                 },
                 "native": {
-					"udpKey": session + i + "_rfid_tag"
+					"udpKey": session + i + "_RFID tag"
                 }
             });
 	

@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "news": {
+      "1.1.3": {
+        "en": "new time option to continue charging session with regard; support for compact mode",
+        "de": "neue Zeit-option den Ladevorgang für eine (kurze) Zeit bei Netzbezug fortzusetzen; Unterstützung für compact-Mode"
+      },
       "1.1.2": {
         "en": "default state of photovoltaics automatic set to true for new users; new option for charging sessions list retrieval on/off, download no too often; firmware version check",
         "de": "PV-Automatik standardmäßig ein bei Neuinstallation; neue Option, ob Ladelog geladen werden soll oder nicht und dieses seltener Laden; Prüfung auf aktuelle Firmware"
@@ -123,6 +127,7 @@
     "delta": 0,
     "underusage": 500,
     "minTime": 300,
+    "regardTime": 0,
     "maxPower": 0,
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",
@@ -874,6 +879,20 @@
         "write": false,
         "def": null,
         "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.regardTimestamp",
+      "type": "state",
+      "common": {
+        "name": "timestamp when charging session was continued with regard",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when charging was continued even when there were no longer a surplus"
       },
       "native": {}
     },

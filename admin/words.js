@@ -192,6 +192,18 @@ systemDictionary = {
         "pl": "Minimalny czas ładowania",
         "zh-cn": "最短充电时间"
     },
+    "regardTime":   {
+        "en": "Time to continue charging even with regard",
+        "de": "Laden auch bei zu geringem Überschuss für diese Dauer fortsetzen",
+        "ru": "Пора продолжать зарядку даже с учетом",
+        "pt": "É hora de continuar a carregar, mesmo em relação",
+        "nl": "Tijd om door te gaan met opladen, zelfs met betrekking tot",
+        "fr": "Il est temps de continuer à charger même en ce qui concerne",
+        "it": "È ora di continuare a caricare anche per quanto riguarda",
+        "es": "Es hora de seguir cargando incluso con respecto",
+        "pl": "Czas kontynuować ładowanie, nawet z szacunkiem",
+        "zh-cn": "是时候继续充电了"
+    },
     "powerLimitation": {
         "en": "Following values are only needed if maximum power must be limited",
         "de": "Folgende Werte werden nur benötigt, wenn die Gesamtleistung begrenzt ist",
@@ -395,6 +407,18 @@ systemDictionary = {
         "es": "Si la energía fotovoltaica tiene menos excedente de lo necesario para cargar mínimamente su vehículo eléctrico, la carga continuará a menos que el vehículo eléctrico se haya cargado durante la cantidad de tiempo especificada.",
         "pl": "Jeśli fotowoltaika ma mniejszą nadwyżkę niż jest to potrzebne do minimalnego naładowania twojego EV, ładowanie będzie kontynuowane, chyba że EV był ładowany przez określony czas",
         "zh-cn": "如果光伏电池的剩余电量不足以对您的EV进行最小充电，则除非该EV在指定时间内充电，否则应继续充电"
+    },
+    "tooltip_regardTime": {
+        "en": "Each time photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue at least for the specified amount of time",
+        "de": "Jedes Mal wenn der Überschuss der PV-Anlage die minimale Ladestärke unterschreitet, soll der Ladevorgang noch für die angegebene Zeit aufrecht erhalten werden",
+        "ru": "Каждый раз, когда у фотоэлектрических элементов излишка меньше, чем необходимо для минимальной зарядки вашего электромобиля, зарядка должна продолжаться как минимум в течение указанного периода времени.",
+        "pt": "Cada vez que a energia fotovoltaica tem menos excedente do que o necessário para carregar minimamente o seu EV, o carregamento deve continuar pelo menos pelo período de tempo especificado",
+        "nl": "Elke keer dat fotovoltaïsche zonne-energie minder overschot heeft dan nodig is om uw EV minimaal op te laden, gaat het opladen minstens de gespecificeerde tijd door",
+        "fr": "Chaque fois que le photovoltaïque a moins d'excédent que nécessaire pour charger au minimum votre véhicule électrique, la charge doit continuer au moins pendant la durée spécifiée.",
+        "it": "Ogni volta che il fotovoltaico ha un surplus inferiore a quello necessario per caricare al minimo il tuo veicolo elettrico, la ricarica deve continuare almeno per il periodo di tempo specificato",
+        "es": "Cada vez que la energía fotovoltaica tenga menos excedente de lo necesario para cargar mínimamente su vehículo eléctrico, la carga continuará al menos durante el tiempo especificado.",
+        "pl": "Za każdym razem, gdy fotowoltaika ma mniejszą nadwyżkę niż jest to potrzebne do minimalnego naładowania twojego pojazdu elektrycznego, ładowanie powinno trwać co najmniej przez określony czas",
+        "zh-cn": "每次光伏电池剩余电量少于为您的EV最低充电所需的电量时，剩余电量将至少持续指定的时间"
     },
     "tooltip_maxPower": {
         "en": "You can define a maximum of watts which can must not be reached by all consumers",

@@ -49,6 +49,7 @@ To charge your vehicle accordingly to a surplus (e.g. by photovoltaics) you can 
 * an increment for amperage (suggested 500 mA)
 * a value of regard that may be temporarily used to uphold charging session (that means charging will stop later even if enough surplus is no longer available - starting regard will be added - suggested 500 W)
 * minimum duration of charging session (even if surplus is no longer sufficient, a charging session wil llast at least this time - suggested 300 sec)
+* time to continue charging session each time surplus is no longer sufficient (to bridge the time on cloudy days)
 
 ### power limitation
 
@@ -58,6 +59,10 @@ Up to three states of energy meters can be specified for limitation. All values 
 An extra checkbox is used to specified whether wallbox power is included (in this case wallbox power will be subtracted from the state values).
 
 ## Changelog
+
+### 1.1.3 (2021-04-26)
+* (Sneak-L8) new time option to continue charging session with regard
+* (Sneak-L8) support for compact mode
 
 ### 1.1.2 (2021-04-02)
 * (Sneak-L8) default state of photovoltaics automatic set to true for new users

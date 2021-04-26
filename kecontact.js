@@ -43,6 +43,7 @@ var amperageDelta        = 500;    // default for step of amperage
 var underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
 var minAmperage          = 6000;   // minimum amperage to start charging session
 var minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
+var minRegardSeconds        = 0;      // maximum time to accept regard when charging
 var voltage              = 230;    // calculate with european standard voltage of 230V
 var pauseTime            = 0;      // time to wait until next PV automatics calculation
 var loadChargingSessions = false;
@@ -76,6 +77,7 @@ const stateMaxPower            = "statistics.maxPower";         /*maximum power 
 const stateChargingPhases      = "statistics.chargingPhases";   /*number of phases with which vehicle is currently charging*/
 const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
 const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
+const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when charging session was continued with regard */
 const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
 const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
 const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
@@ -316,12 +318,12 @@ function checkConfig() {
     		if (! adapter.config.delta || adapter.config.delta <= 50) {
     			adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
     		} else {
-    			amperageDelta = adapter.config.delta;
+    			amperageDelta = getNumber(adapter.config.delta);
     		}
     		if (! adapter.config.minAmperage || adapter.config.minAmperage < 6000) {
     			adapter.log.info('minimum amperage not speficied or too low, using default value of ' + minAmperage);
     		} else {
-    			minAmperage = adapter.config.minAmperage;
+    			minAmperage = getNumber(adapter.config.minAmperage);
     		}
     		if (adapter.config.addPower !== 0) {
     			setStateAck(stateAddPower, getNumber(adapter.config.addPower));
@@ -329,10 +331,15 @@ function checkConfig() {
     		if (adapter.config.underusage !== 0) {
     			underusage = getNumber(adapter.config.underusage);
     		}
-    		if (! adapter.config.minTime || adapter.config.minTime <= 0) {
+    		if (! adapter.config.minTime || adapter.config.minTime < 0) {
     			adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
     		} else {
     			minChargeSeconds = getNumber(adapter.config.minTime);
+    		}
+    		if (! adapter.config.regardTime || adapter.config.regardTime < 0) {
+    			adapter.log.info('minimum regard time not speficied or too low, using default value of ' + minRegardSeconds);
+    		} else {
+    			minRegardSeconds = getNumber(adapter.config.regardTime);
     		}
     	}
     	if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
@@ -648,16 +655,31 @@ function checkWallboxPower() {
                     if (curr >= getMinCurrent()) {
                         adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                         curr = getMinCurrent();
-                    } else {
-                        if (minChargeSeconds > 0) {
-                            if (((new Date()).getTime() - new Date(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
-                            	adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
-                                curr = getMinCurrent();
-                            }
+                    }
+                }
+            }
+            if (curr < getMinCurrent()) {
+                if (getStateInternal(stateChargeTimestamp) !== null) {
+                    if (minChargeSeconds > 0) {
+                        if (((new Date()).getTime() - new Date(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
+                            adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
+                            curr = getMinCurrent();
                         }
                     }
                 }
-            } else {
+            }
+            if (curr < getMinCurrent()) {
+                if (getStateInternal(stateRegardTimestamp) == null) {
+                    setStateAck(stateRegardTimestamp, new Date());
+                }
+                if (minRegardSeconds > 0) {
+                    if (((new Date()).getTime() - new Date(getStateInternal(stateRegardTimestamp)).getTime()) / 1000 < minRegardSeconds) {
+                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
+                        curr = getMinCurrent();
+                    }
+                }
+            }
+            if (curr >= getMinCurrent()) {
             	if (getStateInternal(stateWallboxCurrent) != curr || getStateInternal(stateWallboxEnabled) == false)
             		adapter.log.info("dynamic adaption of charging to " + curr + " mA");
             }

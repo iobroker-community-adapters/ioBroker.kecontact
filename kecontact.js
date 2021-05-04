@@ -51,7 +51,9 @@ var minChargeSeconds     = 0;      // minimum of charge time even when surplus i
 var minRegardSeconds     = 0;      // maximum time to accept regard when charging
 var voltage              = 230;    // calculate with european standard voltage of 230V
 var pauseTime            = 0;      // time to wait until next PV automatics calculation
+var lastFirmwareCheck    = null;
 const firmwareUrl        = "https://www.keba.com/de/emobility/service-support/downloads/downloads";
+const intervalFirmwareCheck = 24 * 60 * 60 * 1000;  // check firmware every 24 hours
 const regexP30cSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<H3/gi;
 const regexP30xSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<H3/gi;
 const regexFirmware      = /<div class="mt-3">Firmware-Update\s+((?:.)*?)<\/div>/gi;
@@ -899,7 +901,7 @@ function setStateAck(id, value) {
 
 function checkFirmware() {
     var newDate = new Date();
-    if (lastFirmwareCheck == null || (newDate.getTime() - lastFirmwareCheck.getTime() >= intervalDeviceDataUpdate)) {
+    if (lastFirmwareCheck == null || (newDate.getTime() - lastFirmwareCheck.getTime() >= intervalFirmwareCheck)) {
         request.get(firmwareUrl, processFirmwarePage);
         lastFirmwareCheck = newDate;
     }

@@ -314,7 +314,7 @@ systemDictionary = {
     },
     "tooltip_loadChargingSessions": {
         "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 
-        "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden"
+        "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden",
         "ru": "проверьте, должны ли сеансы зарядки, сохраненные в wallbox, загружаться как состояния в iobroker",
         "pt": "verifique se as sessões de cobrança salvas na caixa de parede devem ser carregadas como estados no iobroker",
         "nl": "controleer of laadsessies opgeslagen in wallbox moeten worden geladen als statussen in iobroker",

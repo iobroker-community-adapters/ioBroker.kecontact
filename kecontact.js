@@ -33,11 +33,10 @@ const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte L
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
 var isPassive            = true    // no automatic power regulation?
-var timerForDeviceData   = null;   // interval object for device information
+var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
-var timerForChargingData = null;
+var lastChargingData = null;       // time of last check for charging information
 const intervalChargingData = 10 * 60 * 1000;  // check charging information every 10 minutes
-const minIntervalChargingData = 5 * 1000;  // minimum timer for charging information is 5 seconds
 var timerForPower        = null;   // interval object for calculating timer
 const intervalPowerUpdate = 30 * 1000;  // check current power (and calculate PV-automatics/power limitation every 30 seconds (report 3))
 var loadChargingSessions = false;
@@ -94,8 +93,6 @@ adapter.on('unload', function (callback) {
             clearInterval(sendDelayTimer);
         }
         
-        disableDeviceDataTimer();
-        disableChargingDataTimer();
         disablePowerTimer();
         
         if (txSocket) {
@@ -182,6 +179,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
+    adapter.log.info("V1");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -268,14 +266,14 @@ function start() {
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
         adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue)
-            requestPowerReport();
+            requestReports();
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
         adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue) {
             if (photovoltaicsActive)
         	    displayChargeMode();
-            requestPowerReport();
+            requestReports();
         }
     };
 	stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (oldValue, newValue) {
@@ -297,7 +295,7 @@ function checkConfig() {
         adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
         everythingFine = false;
     }
-    if (adapter.config.pollInterval > minIntervalChargingData) {
+    if (adapter.config.pollInterval >= intervalPowerUpdate) {
         intervalChargingData = getNumber(adapter.config.pollInterval);
     }
     if (adapter.config.loadChargingSessions == true) {
@@ -704,36 +702,6 @@ function checkWallboxPower() {
         regulateWallbox(curr);
         //switchWallbox(true);
     }
-	
-	
-	if (isVehiclePlugged || maxPowerActive)
-		enablePowerTimer();
-	else
-		disablePowerTimer();
-}
-
-function disableDeviceDataTimer() {
-	if (timerForDeviceData) {
-		clearInterval(timerForDeviceData);
-		timerForDeviceData = null;
-	}
-}
-
-function enableDeviceDataTimer() {
-	disableDeviceDataTimer();
-	timerForDeviceData = setInterval(requestDeviceDataReport, intervalDeviceDataUpdate); 
-}
-
-function disableChargingDataTimer() {
-	if (timerForChargingData) {
-		clearInterval(timerForChargingData);
-		timerForChargingData = null;
-	}
-}
-
-function enableChargingDataTimer() {
-	disableChargingDataTimer();
-	timerForChargingData = setInterval(requestChargingDataReport, intervalChargingData); 
 }
 
 function disablePowerTimer() {
@@ -747,7 +715,7 @@ function enablePowerTimer(time) {
 	disablePowerTimer();
     if (! time)
         time = intervalPowerUpdate;
-	timerForPower = setInterval(requestPowerReport, time); 
+	timerForPower = setInterval(requestReports, time); 
 }
 
 function requestReports() {
@@ -757,20 +725,26 @@ function requestReports() {
 }
 
 function requestDeviceDataReport() {
-    disableDeviceDataTimer();
-    sendUdpDatagram('report 1');
-    loadChargingSessionsFromWallbox();
-    enableDeviceDataTimer();
+    var newDate = new Date();
+    if (lastDeviceData == null || newDate.getTime() - lastDeviceData.getTime() >= intervalDeviceDataUpdate) {
+        sendUdpDatagram('report 1');
+        loadChargingSessionsFromWallbox();
+        lastDeviceData = newDate;
+    }
 }
 
 function requestChargingDataReport() {
-    disableChargingDataTimer();
-    sendUdpDatagram('report 2');
-    enableChargingDataTimer();
+    var newDate = new Date();
+    if (lastChargingData == null || newDate.getTime() - lastChargingData.getTime() >= intervalChargingData) {
+        sendUdpDatagram('report 2');
+        lastChargingData = newDate;
+    }
 }
 
 function requestPowerReport() {
+    disablePowerTimer();
     sendUdpDatagram('report 3');
+    enablePowerTimer();
 }
 
 function loadChargingSessionsFromWallbox() {

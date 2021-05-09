@@ -20,7 +20,7 @@ var BROADCAST_UDP_PORT = 7092;
 
 var txSocket;
 var rxSocketReports;
-var rxSocketBrodacast;
+var rxSocketBroadcast;
 var sendDelayTimer = null;
 var states = {};          // contains all actual state values
 var stateChangeListeners = {};
@@ -37,6 +37,7 @@ var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
 var lastChargingData = null;       // time of last check for charging information
 const intervalChargingData = 10 * 60 * 1000;  // check charging information every 10 minutes
+var forceChargingData    = false;  // when switching enableUser report is needed to acknowlegde switch
 var timerForPower        = null;   // interval object for calculating timer
 const intervalPowerUpdate = 30 * 1000;  // check current power (and calculate PV-automatics/power limitation every 30 seconds (report 3))
 var loadChargingSessions = false;
@@ -103,8 +104,8 @@ adapter.on('unload', function (callback) {
             rxSocketReports.close();
         }
         
-        if (rxSocketBrodacast) {
-            rxSocketBrodacast.close();
+        if (rxSocketBroadcast) {
+            rxSocketBroadcast.close();
         }
         
         if (adapter.config.stateRegard)
@@ -138,8 +139,11 @@ adapter.on('stateChange', function (id, state) {
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
     if (id == adapter.namespace + '.' + stateWallboxPlug) {
         // call only if value has changed
-        if (state.val != getStateInternal(id))
+        if (state.val != getStateInternal(id)) {
+            if (state.val)
+                displayChargeMode();
             requestPowerReport;
+        }
     }
     var oldValue = getStateInternal(id);
     setStateInternal(id, state.val);
@@ -179,26 +183,34 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V1");
+    adapter.log.info("V2");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
+    rxSocketReports.on('error', (err) => {
+        adapter.log.error(`RxSocketReports Error:\n${err.stack}`);
+        rxSocketReports.close();
+      });
     rxSocketReports.on('listening', function () {
         var address = rxSocketReports.address();
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
     rxSocketReports.on('message', handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
+    rxSocketReports.bind(DEFAULT_UDP_PORT);
     
-    rxSocketBrodacast = dgram.createSocket('udp4');
-    rxSocketBrodacast.on('listening', function () {
-        rxSocketBrodacast.setBroadcast(true);
-        rxSocketBrodacast.setMulticastLoopback(true);
-        var address = rxSocketBrodacast.address();
+    rxSocketBroadcast = dgram.createSocket('udp4');
+    rxSocketBroadcast.on('error', (err) => {
+        adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
+        rxSocketBroadcast.close();
+      });
+    rxSocketBroadcast.on('listening', function () {
+        rxSocketBroadcast.setBroadcast(true);
+        rxSocketBroadcast.setMulticastLoopback(true);
+        var address = rxSocketBroadcast.address();
         adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
     });
-    rxSocketBrodacast.on('message', handleWallboxBroadcast);
-    rxSocketBrodacast.bind(BROADCAST_UDP_PORT, '0.0.0.0');
+    rxSocketBroadcast.on('message', handleWallboxBroadcast);
+    rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
     
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
     	if (err) {
@@ -471,6 +483,10 @@ function regulateWallbox(milliAmpere) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
         // block calculation for 5 seconds to give wallbox change to complete operation
         pauseTime = (new Date()).getTime() + 5000;    
+        if ((milliAmpere == 0) || (oldValue == 0)) {
+            // when wallbox is to be switched off or on, also force to get report 2 to update state enableUser
+            forceChargingData = true;
+        }
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
 	if (milliAmpere == 0) {
@@ -588,6 +604,7 @@ function checkWallboxPower() {
         adapter.log.debug("wait a second because of last currTime command");
         enablePowerTimer(1000);   // wait 1 seconds to not proceed before pauseTime
     }
+    forceChargingData = false;
     pauseTime = 0;
 	
     var curr    = 0;      // in mA
@@ -641,11 +658,13 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
-                    adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
-                    curr = getAmperage(available + addPower + underusage, phases);
-                    if (curr >= getMinCurrent()) {
-                        adapter.log.info("tolerated under-usage of charge power, continuing charging session");
-                        curr = getMinCurrent();
+                    if (addPower > 0) {
+                        adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
+                        curr = getAmperage(available + addPower + underusage, phases);
+                        if (curr >= getMinCurrent()) {
+                            adapter.log.info("tolerated under-usage of charge power, continuing charging session");
+                            curr = getMinCurrent();
+                        }
                     }
                 }
             }
@@ -735,7 +754,7 @@ function requestDeviceDataReport() {
 
 function requestChargingDataReport() {
     var newDate = new Date();
-    if (lastChargingData == null || newDate.getTime() - lastChargingData.getTime() >= intervalChargingData) {
+    if (forceChargingData || lastChargingData == null || newDate.getTime() - lastChargingData.getTime() >= intervalChargingData) {
         sendUdpDatagram('report 2');
         lastChargingData = newDate;
     }

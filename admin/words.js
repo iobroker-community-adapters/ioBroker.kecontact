@@ -301,16 +301,16 @@ systemDictionary = {
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
     "tooltip_pollInterval": {
-        "en": "Interval in seconds how often the wallbox should be queried for new values (minimum 30 seconds, 0 = no queries, just broadcasts)", 
-        "de": "Intervall in Sekunden (mind. 30 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = keine Abfrage, nur Broadcast lesen)",
-        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (минимум 30 секунд, 0 = без запросов, только трансляции)",
-        "pt": "Intervalo em segundos com a frequência com que a caixa de parede deve ser consultada para novos valores (mínimo 30 segundos, 0 = sem consultas, apenas transmissões)",
-        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (minimaal 30 seconden, 0 = geen vragen, alleen uitzendingen)",
-        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (minimum 30 secondes, 0 = aucune requête, juste des diffusions)",
-        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (minimo 30 secondi, 0 = nessuna query, solo trasmissioni)",
-        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (mínimo 30 segundos, 0 = sin consultas, solo transmisiones)",
-        "pl": "Odstęp w sekundach, jak często stacja Wallbox powinna być odpytywana o nowe wartości (minimum 30 sekund, 0 = brak zapytań, tylko transmisje)",
-        "zh-cn": "以秒为间隔的时间间隔，应查询壁箱以获取新值的频率（最少5秒，0 =无查询，仅广播）"
+        "en": "Interval in seconds how often the wallbox should be queried for new values (at least 30 seconds, 0 = default value of 10 minutes)", 
+        "de": "Intervall in Sekunden (min. 30 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = default von 10 Minuten)",
+        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (не менее 30 секунд, 0 = значение по умолчанию 10 минут)",
+        "pt": "Intervalo em segundos com que frequência a caixa de parede deve ser consultada para novos valores (pelo menos 30 segundos, 0 = valor padrão de 10 minutos)",
+        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (minimaal 30 seconden, 0 = standaardwaarde van 10 minuten)",
+        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (au moins 30 secondes, 0 = valeur par défaut de 10 minutes)",
+        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (almeno 30 secondi, 0 = valore predefinito di 10 minuti)",
+        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (al menos 30 segundos, 0 = valor predeterminado de 10 minutos)",
+        "pl": "Odstęp w sekundach, z jaką częstotliwością należy pytać wallbox o nowe wartości (co najmniej 30 sekund, 0 = domyślna wartość 10 minut)",
+        "zh-cn": "以秒为单位的时间间隔，应查询壁箱以获取新值的频率（至少30秒，0 =默认值10分钟）"
     },
     "tooltip_loadChargingSessions": {
         "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 

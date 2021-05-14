@@ -683,7 +683,7 @@ function checkWallboxPower() {
                 }
             }
             if (curr < getMinCurrent()) {
-                var chargeDate = getStateInternal(stateChargeTimestamp);
+                var chargeDate = new Date(getStateInternal(stateChargeTimestamp));
                 if (chargeDate !== null) {
                     var aktDate = new Date();
                     if (minChargeSeconds > 0) {
@@ -697,7 +697,7 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (minRegardSeconds > 0) {
                     var aktDate = new Date();
-                    var regardDate = getStateInternal(stateRegardTimestamp);
+                    var regardDate = new Date(getStateInternal(stateRegardTimestamp));
                     if (regardDate == null) {
                         setStateAck(stateRegardTimestamp, aktDate);
                         regardDate = aktDate;

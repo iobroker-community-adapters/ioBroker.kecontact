@@ -698,7 +698,8 @@ function checkWallboxPower() {
                 if (minRegardSeconds > 0) {
                     var aktDate = new Date();
                     var regardDate = new Date(getStateInternal(stateRegardTimestamp));  // ensure that it is a correct date object
-                    adapter.log.info("regard time timestamp" + regardDate);
+                    adapter.log.info("regard time timestamp" + getStateInternal(stateRegardTimestamp));
+                    adapter.log.info("regard time timestamp2" + regardDate);
                     if (regardDate == null) {
                         setStateAck(stateRegardTimestamp, aktDate);
                         regardDate = aktDate;

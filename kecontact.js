@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V8");
+    adapter.log.info("V9");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -900,7 +900,7 @@ function getStateAsDate(id) {
     var result = getStateInternal(id);
     // state come as timestamp string => to be converted to date object
     if (result != null) {
-        result = new Date(regardDate);
+        result = new Date(result);
     }
     return result;
 }

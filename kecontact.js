@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V5");
+    adapter.log.info("V6");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -496,10 +496,11 @@ function regulateWallbox(milliAmpere) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
         // block calculation for 5 seconds to give wallbox change to complete operation
         pauseTime = (new Date()).getTime() + 5000;    
-        if ((milliAmpere == 0) || (oldValue == 0)) {
+        //if ((milliAmpere == 0) || (oldValue == 0)) {
             // when wallbox is to be switched off or on, also force to get report 2 to update state enableUser
+            // also needed when chaning currUser, so switch has to be set on all changes
             forceChargingData = true;
-        }
+        //}
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
 	if (milliAmpere == 0) {
@@ -682,10 +683,11 @@ function checkWallboxPower() {
                 }
             }
             if (curr < getMinCurrent()) {
-                if (getStateInternal(stateChargeTimestamp) !== null) {
+                var chargeDate = getStateInternal(stateChargeTimestamp);
+                if (chargeDate !== null) {
                     var aktDate = new Date();
                     if (minChargeSeconds > 0) {
-                        if ((aktDate.getTime() - getStateInternal(stateChargeTimestamp)).getTime() / 1000 < minChargeSeconds) {
+                        if ((aktDate.getTime() - chargeDate.getTime()) / 1000 < minChargeSeconds) {
                             adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
                             curr = getMinCurrent();
                         }

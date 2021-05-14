@@ -169,7 +169,7 @@ adapter.on('stateChange', function (id, state) {
         }
     }
 
-    if (id == adapter.namespace + '.' + statePvAu) {
+    if (id == adapter.namespace + '.' + stateAddPower) {
 		if (oldValue != newValue)
 			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
     }
@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V3");
+    adapter.log.info("V4");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');

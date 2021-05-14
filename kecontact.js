@@ -136,21 +136,42 @@ adapter.on('stateChange', function (id, state) {
     //adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
 
+    var oldValue = getStateInternal(id);
+    var newValue = state.val;
+    setStateInternal(id, newValue);
+    
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
     if (id == adapter.namespace + '.' + stateWallboxPlug) {
         // call only if value has changed
-        if (state.val != getStateInternal(id)) {
-            if (state.val)
+        if (oldValue == false && newValue == true) {
+            if (newValue == true)
                 displayChargeMode();
             requestPowerReport;
         }
     }
-    var oldValue = getStateInternal(id);
-    setStateInternal(id, state.val);
-    
+
     if (id == adapter.namespace + '.' + stateWallboxPower) {
         // calculation needs "p" from wallbox. Therefore always request "report 3" and checkWallboxPower when getting p value from UDP answer
         checkWallboxPower();
+    }
+
+    if (id == adapter.namespace + '.' + stateWallboxDisabled) {
+        adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
+        if (oldValue != newValue)
+            requestReports();
+    }
+
+    if (id == adapter.namespace + '.' + statePvAutomatic) {
+        adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
+        if (oldValue != newValue) {
+            displayChargeMode();
+            requestReports();
+        }
+    }
+
+    if (id == adapter.namespace + '.' + statePvAu) {
+		if (oldValue != newValue)
+			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
     }
 
     if (state.ack) {
@@ -183,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V2");
+    adapter.log.info("V3");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -276,24 +297,16 @@ function start() {
         sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, "$"), true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (oldValue, newValue) {
-        adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue)
-            requestReports();
+        // no real action to do
     };
     stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (oldValue, newValue) {
-        adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue) {
-            if (photovoltaicsActive)
-        	    displayChargeMode();
-            requestReports();
-        }
+        // no real action to do
     };
 	stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (oldValue, newValue) {
         sendUdpDatagram('setenergy ' + parseInt(newValue * 10), true);
     };
 	stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function (oldValue, newValue) {
-		if (oldValue != newValue)
-			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
+        // no real action to do
     };
     
     //sendUdpDatagram('i');   only needed for discovery
@@ -671,7 +684,7 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
                     if (minChargeSeconds > 0) {
-                        if (((new Date()).getTime() - new Date(getStateInternal(stateChargeTimestamp)).getTime()) / 1000 < minChargeSeconds) {
+                        if (((new Date()).getTime() - getStateInternal(stateChargeTimestamp).getTime()) / 1000 < minChargeSeconds) {
                             adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
                             curr = getMinCurrent();
                         }
@@ -679,15 +692,17 @@ function checkWallboxPower() {
                 }
             }
             if (curr < getMinCurrent()) {
-                if (getStateInternal(stateRegardTimestamp) == null) {
-                    setStateAck(stateRegardTimestamp, new Date());
-                }
                 if (minRegardSeconds > 0) {
-                    if (((new Date()).getTime() - new Date(getStateInternal(stateRegardTimestamp)).getTime()) / 1000 < minRegardSeconds) {
+                    if (getStateInternal(stateRegardTimestamp) == null) {
+                        setStateAck(stateRegardTimestamp, new Date());
+                    }
+                    if (((new Date()).getTime() - getStateInternal(stateRegardTimestamp).getTime()) / 1000 < minRegardSeconds) {
                         adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
                         curr = getMinCurrent();
                     }
                 }
+            } else {
+                setStateAck(stateRegardTimestamp, null);
             }
             if (curr >= getMinCurrent()) {
             	if (getStateInternal(stateWallboxCurrent) != curr || getStateInternal(stateWallboxEnabled) == false)

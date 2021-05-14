@@ -484,6 +484,7 @@ function switchWallbox(enabled) {
 	adapter.setState(stateWallboxEnabled, enabled);
 	if (! enabled) {
 		setStateAck(stateChargeTimestamp, null);
+        setStateAck(stateRegardTimestamp, null);
 	}
 }
 
@@ -506,6 +507,7 @@ function regulateWallbox(milliAmpere) {
 	}
 	if (milliAmpere == 0) {
 		setStateAck(stateChargeTimestamp, null);
+        setStateAck(stateRegardTimestamp, null);
 	}
     //adapter.setState(stateWallboxCurrent, milliAmpere);
 }
@@ -601,7 +603,8 @@ function checkWallboxPower() {
 		adapter.log.info('vehicle plugged to wallbox');
 		setStateAck(statePlugTimestamp, new Date());
 		setStateAck(stateChargeTimestamp, null);
-		if (! isPassive) {
+        setStateAck(stateRegardTimestamp, null);
+        if (! isPassive) {
 			displayChargeMode();
 		}
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
@@ -611,6 +614,7 @@ function checkWallboxPower() {
 		setStateAck(stateLastChargeAmount, getStateInternal(stateWallboxChargeAmount) / 1000);
 		setStateAck(statePlugTimestamp, null);
 		setStateAck(stateChargeTimestamp, null);
+        setStateAck(stateRegardTimestamp, null);
 	} 
 	if (isPassive)
 		return;
@@ -670,8 +674,9 @@ function checkWallboxPower() {
             		curr = getMinCurrent();
             	}
             }
-            if (curr < getMinCurrent()) {
-                if (getStateAsDate(stateChargeTimestamp) !== null) {
+            var chargeTimestamp = getStateAsDate(stateChargeTimestamp);
+            if (chargeTimestamp !== null) {
+                if (curr < getMinCurrent()) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
                     if (addPower > 0) {
                         adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
@@ -682,35 +687,30 @@ function checkWallboxPower() {
                         }
                     }
                 }
-            }
-            if (curr < getMinCurrent()) {
-                var chargeDate = getStateAsDate(stateChargeTimestamp);  
-                if (chargeDate !== null) {
+                if (curr < getMinCurrent()) {
                     if (minChargeSeconds > 0) {
-                        if (((new Date()).getTime() - chargeDate.getTime()) / 1000 < minChargeSeconds) {
+                        if (((new Date()).getTime() - chargeTimestamp.getTime()) / 1000 < minChargeSeconds) {
                             adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
                             curr = getMinCurrent();
                         }
                     }
                 }
-            }
-            if (curr < getMinCurrent()) {
-                if (minRegardSeconds > 0) {
-                    var aktDate = new Date();
-                    var regardDate = getStateAsDate(stateRegardTimestamp);
-                    if (regardDate == null) {
-                        setStateAck(stateRegardTimestamp, aktDate);
-                        regardDate = aktDate;
-                        adapter.log.info("set current date");
+                if (curr < getMinCurrent()) {
+                    if (minRegardSeconds > 0) {
+                        var aktDate = new Date();
+                        var regardDate = getStateAsDate(stateRegardTimestamp);
+                        if (regardDate == null) {
+                            setStateAck(stateRegardTimestamp, aktDate);
+                            regardDate = aktDate;
+                        }
+                        if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
+                            adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
+                            curr = getMinCurrent();
+                        }
                     }
-                    adapter.log.info("regard time timestamp2" + regardDate);
-                    if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
-                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
-                        curr = getMinCurrent();
-                    }
+                } else {
+                    setStateAck(stateRegardTimestamp, null);
                 }
-            } else {
-                setStateAck(stateRegardTimestamp, null);
             }
             if (curr >= getMinCurrent()) {
             	if (getStateInternal(stateWallboxCurrent) != curr || getStateInternal(stateWallboxEnabled) == false)
@@ -732,6 +732,7 @@ function checkWallboxPower() {
     		adapter.log.info("stop charging");
     	regulateWallbox(0);
         setStateAck(stateChargeTimestamp, null);
+        setStateAck(stateRegardTimestamp, null);
     } else {
     	if (chargingToBeStarted) {
     		adapter.log.info("vehicle (re)starts to charge");

@@ -496,12 +496,12 @@ function regulateWallbox(milliAmpere) {
 		adapter.log.debug("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA");
         // block calculation for 5 seconds to give wallbox change to complete operation
         pauseTime = (new Date()).getTime() + 5000;  
-        // change of currUser will be broadcasted automatically by wallbox, no "forceCharging" needed  
-        if ((milliAmpere == 0) || (oldValue == 0)) {
+        // change of currUser will be broadcasted automatically by wallbox, but only in "maxCurrent", therefore also "forceCharging" needed  
+        //if ((milliAmpere == 0) || (oldValue == 0)) {
             // when wallbox is to be switched off or on,  force to get report 2 to update state enableUser
             forceChargingData = true;
             enablePowerTimer(3000); // re-request currect data after three seconds (otherwise it will come up only after up to 30 seconds)
-        }
+        //}
 	    sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
 	}
 	if (milliAmpere == 0) {
@@ -760,6 +760,7 @@ function enablePowerTimer(time) {
 }
 
 function requestReports() {
+    disablePowerTimer();
     requestDeviceDataReport();
     requestChargingDataReport();
     requestPowerReport();
@@ -783,7 +784,6 @@ function requestChargingDataReport() {
 }
 
 function requestPowerReport() {
-    disablePowerTimer();
     sendUdpDatagram('report 3');
     enablePowerTimer();
 }

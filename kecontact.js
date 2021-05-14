@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V4");
+    adapter.log.info("V5");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -683,8 +683,9 @@ function checkWallboxPower() {
             }
             if (curr < getMinCurrent()) {
                 if (getStateInternal(stateChargeTimestamp) !== null) {
+                    var aktDate = new Date();
                     if (minChargeSeconds > 0) {
-                        if (((new Date()).getTime() - getStateInternal(stateChargeTimestamp).getTime()) / 1000 < minChargeSeconds) {
+                        if ((aktDate.getTime() - getStateInternal(stateChargeTimestamp)).getTime() / 1000 < minChargeSeconds) {
                             adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
                             curr = getMinCurrent();
                         }
@@ -693,10 +694,13 @@ function checkWallboxPower() {
             }
             if (curr < getMinCurrent()) {
                 if (minRegardSeconds > 0) {
-                    if (getStateInternal(stateRegardTimestamp) == null) {
-                        setStateAck(stateRegardTimestamp, new Date());
+                    var aktDate = new Date();
+                    var regardDate = getStateInternal(stateRegardTimestamp);
+                    if (regardDate == null) {
+                        setStateAck(stateRegardTimestamp, aktDate);
+                        regardDate = aktDate;
                     }
-                    if (((new Date()).getTime() - getStateInternal(stateRegardTimestamp).getTime()) / 1000 < minRegardSeconds) {
+                    if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
                         adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
                         curr = getMinCurrent();
                     }

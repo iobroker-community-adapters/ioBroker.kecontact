@@ -697,14 +697,14 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (minRegardSeconds > 0) {
                     var aktDate = new Date();
-                    var regardDate = getStateInternal(stateRegardTimestamp);  // ensure that it is a correct date object
+                    var regardDate = getStateInternal(stateRegardTimestamp);
                     adapter.log.info("regard time timestamp" + regardDate + typeof regardDate);
                     if (regardDate == null) {
                         setStateAck(stateRegardTimestamp, aktDate);
                         regardDate = aktDate;
                         adapter.log.info("set current date");
                     } else {
-                        regardDate = new DataView(regardDate);
+                        regardDate = new Date(regardDate);
                     }
                     adapter.log.info("regard time timestamp2" + regardDate);
                     if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {

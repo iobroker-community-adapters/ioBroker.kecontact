@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V7");
+    adapter.log.info("V8");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -684,7 +684,7 @@ function checkWallboxPower() {
                 }
             }
             if (curr < getMinCurrent()) {
-                var chargeDate = new Date(getStateInternal(stateRegardTimestamp));  // ensure that it is a correct date object
+                var chargeDate = new Date(getStateInternal(stateChargeTimestamp));  // ensure that it is a correct date object
                 if (chargeDate !== null) {
                     if (minChargeSeconds > 0) {
                         if (((new Date()).getTime() - chargeDate.getTime()) / 1000 < minChargeSeconds) {
@@ -698,9 +698,11 @@ function checkWallboxPower() {
                 if (minRegardSeconds > 0) {
                     var aktDate = new Date();
                     var regardDate = new Date(getStateInternal(stateRegardTimestamp));  // ensure that it is a correct date object
+                    adapter.log.info("regard time timestamp" + regardDate);
                     if (regardDate == null) {
                         setStateAck(stateRegardTimestamp, aktDate);
                         regardDate = aktDate;
+                        adapter.log.info("set current date");
                     }
                     if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
                         adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");

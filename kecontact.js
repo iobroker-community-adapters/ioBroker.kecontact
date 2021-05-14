@@ -595,7 +595,7 @@ function checkWallboxPower() {
     // For wallboxes with fixed cable values of 0 and 1 not used
 	// Charging only possible with value of 7
 
-	var wasVehiclePlugged = ! (getStateInternal(statePlugTimestamp) === null || getStateInternal(statePlugTimestamp) === undefined);
+	var wasVehiclePlugged = ! (getStateAsDate(statePlugTimestamp) === null || getStateAsDate(statePlugTimestamp) === undefined);
 	var isVehiclePlugged  = getStateInternal(stateWallboxPlug) >= 5;
 	if (isVehiclePlugged && ! wasVehiclePlugged) {
 		adapter.log.info('vehicle plugged to wallbox');
@@ -606,7 +606,7 @@ function checkWallboxPower() {
 		}
 	} else if (! isVehiclePlugged && wasVehiclePlugged) {
 		adapter.log.info('vehicle unplugged from wallbox');
-		setStateAck(stateLastChargeStart, getStateInternal(statePlugTimestamp));
+		setStateAck(stateLastChargeStart, getStateAsDate(statePlugTimestamp));
 		setStateAck(stateLastChargeFinish, new Date());
 		setStateAck(stateLastChargeAmount, getStateInternal(stateWallboxChargeAmount) / 1000);
 		setStateAck(statePlugTimestamp, null);
@@ -650,7 +650,7 @@ function checkWallboxPower() {
 		curr = 0;
 	} else {
 		// if vehicle is currently charging and was not before, then save timestamp
-		if (getStateInternal(stateChargeTimestamp) === null && isVehicleCharging()) {
+		if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging()) {
 			chargingToBeStarted = true;
 		}
         if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
@@ -671,7 +671,7 @@ function checkWallboxPower() {
             	}
             }
             if (curr < getMinCurrent()) {
-                if (getStateInternal(stateChargeTimestamp) !== null) {
+                if (getStateAsDate(stateChargeTimestamp) !== null) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
                     if (addPower > 0) {
                         adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
@@ -684,7 +684,7 @@ function checkWallboxPower() {
                 }
             }
             if (curr < getMinCurrent()) {
-                var chargeDate = new Date(getStateInternal(stateChargeTimestamp));  // ensure that it is a correct date object
+                var chargeDate = getStateAsDate(stateChargeTimestamp);  
                 if (chargeDate !== null) {
                     if (minChargeSeconds > 0) {
                         if (((new Date()).getTime() - chargeDate.getTime()) / 1000 < minChargeSeconds) {
@@ -697,14 +697,11 @@ function checkWallboxPower() {
             if (curr < getMinCurrent()) {
                 if (minRegardSeconds > 0) {
                     var aktDate = new Date();
-                    var regardDate = getStateInternal(stateRegardTimestamp);
-                    adapter.log.info("regard time timestamp" + regardDate + typeof regardDate);
+                    var regardDate = getStateAsDate(stateRegardTimestamp);
                     if (regardDate == null) {
                         setStateAck(stateRegardTimestamp, aktDate);
                         regardDate = aktDate;
                         adapter.log.info("set current date");
-                    } else {
-                        regardDate = new Date(regardDate);
                     }
                     adapter.log.info("regard time timestamp2" + regardDate);
                     if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
@@ -897,6 +894,15 @@ function getNumber(value) {
         return value;
     }
 	return 0;
+}
+
+function getStateAsDate(id) {
+    var result = getStateInternal(id);
+    // state come as timestamp string => to be converted to date object
+    if (result != null) {
+        result = new Date(regardDate);
+    }
+    return result;
 }
 
 function getStateDefault0(id) {

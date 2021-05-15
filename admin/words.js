@@ -37,16 +37,16 @@ systemDictionary = {
         "zh-cn": "被动模式"
     },
     "Refresh Interval": {
-        "en": "Refresh Interval",
-        "de": "Aktualisierungsintervall",
-        "ru": "Интервал обновления",
-        "pt": "Intervalo de atualização",
-        "nl": "Vernieuwingsinterval",
-        "fr": "Intervalle de rafraîchissement",
-        "it": "Intervallo di aggiornamento",
-        "es": "Intervalo de actualización",
-        "pl": "Częstotliwość odświeżania",
-        "zh-cn": "刷新间隔"
+        "en": "Refresh Interval (for passive mode)",
+        "de": "Aktualisierungsintervall (für passiven Modus)",
+        "ru": "Интервал обновления (для пассивного режима)",
+        "pt": "Intervalo de atualização (para modo passivo)",
+        "nl": "Vernieuwingsinterval (voor passieve modus)",
+        "fr": "Intervalle de rafraîchissement (pour le mode passif)",
+        "it": "Intervallo di aggiornamento (per modalità passiva)",
+        "es": "Intervalo de actualización (para modo pasivo)",
+        "pl": "Interwał odświeżania (dla trybu pasywnego)",
+        "zh-cn": "刷新间隔（用于被动模式）"
     },
     "loadChargingSessions": {
         "en": "load latest charging sessions",
@@ -301,17 +301,17 @@ systemDictionary = {
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
     "tooltip_pollInterval": {
-        "en": "Interval in seconds how often the wallbox should be queried for new values (at least 30 seconds, 0 = default value of 10 minutes)", 
+        "en": "Interval in seconds how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
         "de": "Intervall in Sekunden (min. 30 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = default von 10 Minuten)",
-        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (не менее 30 секунд, 0 = значение по умолчанию 10 минут)",
-        "pt": "Intervalo em segundos com que frequência a caixa de parede deve ser consultada para novos valores (pelo menos 30 segundos, 0 = valor padrão de 10 minutos)",
-        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (minimaal 30 seconden, 0 = standaardwaarde van 10 minuten)",
-        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (au moins 30 secondes, 0 = valeur par défaut de 10 minutes)",
-        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (almeno 30 secondi, 0 = valore predefinito di 10 minuti)",
-        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (al menos 30 segundos, 0 = valor predeterminado de 10 minutos)",
-        "pl": "Odstęp w sekundach, z jaką częstotliwością należy pytać wallbox o nowe wartości (co najmniej 30 sekund, 0 = domyślna wartość 10 minut)",
-        "zh-cn": "以秒为单位的时间间隔，应查询壁箱以获取新值的频率（至少30秒，0 =默认值10分钟）"
-    },
+        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (0 = значение по умолчанию 10 минут)",
+        "pt": "Intervalo em segundos com que frequência a caixa de parede deve ser consultada para novos valores (0 = valor padrão de 10 minutos)",
+        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (0 = standaardwaarde van 10 minuten)",
+        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (0 = valeur par défaut de 10 minutes)",
+        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (0 = valore predefinito di 10 minuti)",
+        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (0 = valor predeterminado de 10 minutos)",
+        "pl": "Odstęp w sekundach, jak często należy pytać Wallbox o nowe wartości (0 = domyślna wartość 10 minut)",
+        "zh-cn": "以秒为单位的时间间隔，应多久查询一次壁盒以获取新值（0 =默认值10分钟）"
+  },
     "tooltip_loadChargingSessions": {
         "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 
         "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden",

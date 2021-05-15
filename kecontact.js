@@ -40,7 +40,6 @@ var timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
 var lastCalculating      = null;   // time of last check for charging information
 const intervalCalculating = 25 * 60 * 1000;  // calculate charging poser every 25(-30) seconds
-var doCalculation        = false;  
 var loadChargingSessions = false;
 var photovoltaicsActive  = false;  // is photovoltaics automatic active?
 var maxPowerActive       = false;  // is limiter für maximum power active?
@@ -141,17 +140,23 @@ adapter.on('stateChange', function (id, state) {
     
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
     if (id == adapter.namespace + '.' + stateWallboxPlug) {
-        // call only if value has changed
-        if (oldValue == false && newValue == true) {
-            if (newValue == true)
-                displayChargeMode();
+        // 0 unplugged
+        // 1 plugged on charging station 
+        // 3 plugged on charging station plug locked
+        // 5 plugged on charging station             plugged on EV
+        // 7 plugged on charging station plug locked plugged on EV
+        // For wallboxes with fixed cable values of 0 and 1 not used
+        // Charging only possible with value of 7
+        var wasVehiclePlugged = oldValue < 5;
+        var isVehiclePlugged  = newValue >= 5;
+        if (isVehiclePlugged && ! wasVehiclePlugged) {
+            adapter.log.info('vehicle plugged to wallbox');
+            initChargingSession();
             forceUpdateOfCalculation();
-        }
-    }
-
-    if (id == adapter.namespace + '.' + stateWallboxPower) {
-        // calculation needs "p" from wallbox. Therefore always request "report 3" and checkWallboxPower when getting p value from UDP answer
-        doCalculation = true;
+        } else if (! isVehiclePlugged && wasVehiclePlugged) {
+            adapter.log.info('vehicle unplugged from wallbox');
+            finishChargingSession();
+        } 
     }
 
     if (id == adapter.namespace + '.' + stateWallboxDisabled) {
@@ -482,7 +487,6 @@ function handleMessage(message) {
 			}
 		}
 	} else {
-        doCalculation = false;	
 		for (var key in message) {
 			if (states[key]) {
 				try {
@@ -494,7 +498,8 @@ function handleMessage(message) {
 				adapter.log.debug('Unknown value received: ' + key + '=' + message[key]);
 			}
 		}
-        if (doCalculation) {
+        if (message.ID == 3) {
+            // Do calculation after processing "report 3"
             checkWallboxPower();
         }
     }
@@ -546,9 +551,7 @@ function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
 function initChargingSession() {
     resetChargingSessionData();
     setStateAck(statePlugTimestamp, new Date());
-    if (! isPassive) {
-        displayChargeMode();
-    }
+    displayChargeMode();
 }
 
 function finishChargingSession() {
@@ -619,6 +622,9 @@ function isVehicleCharging() {
 }
 
 function displayChargeMode() {
+    if (isPassive) {
+        return;
+    }
 	var text;
 	if (getStateInternal(statePvAutomatic))
 		text = chargeTextAutomatic[ioBrokerLanguage];
@@ -634,23 +640,6 @@ function getAmperage(power, phases) {
 }
 
 function checkWallboxPower() {
-    // 0 unplugged
-    // 1 plugged on charging station 
-    // 3 plugged on charging station plug locked
-    // 5 plugged on charging station             plugged on EV
-    // 7 plugged on charging station plug locked plugged on EV
-    // For wallboxes with fixed cable values of 0 and 1 not used
-	// Charging only possible with value of 7
-
-	var wasVehiclePlugged = getStateAsDate(statePlugTimestamp) !== null;
-	var isVehiclePlugged  = getStateInternal(stateWallboxPlug) >= 5;
-	if (isVehiclePlugged && ! wasVehiclePlugged) {
-		adapter.log.info('vehicle plugged to wallbox');
-        initChargingSession();
-	} else if (! isVehiclePlugged && wasVehiclePlugged) {
-		adapter.log.info('vehicle unplugged from wallbox');
-        finishChargingSession();
-	} 
 	if (isPassive)
 		return;
 

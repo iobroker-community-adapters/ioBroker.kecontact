@@ -659,6 +659,7 @@ function checkWallboxPower() {
     }
 
     var newDate = new Date();
+    adapter.log.info("last: " + lastCalculating + " diff: " + (lastCalculating == null ? "x" : (newDate.getTime() - lastCalculating.getTime())));
     if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
         return
     }

@@ -649,7 +649,7 @@ function checkWallboxPower() {
     }
 
     var newDate = new Date();
-    if (lastChargingData !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
+    if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
         return
     }
     lastCalculating = newDate;

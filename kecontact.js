@@ -140,15 +140,8 @@ adapter.on('stateChange', function (id, state) {
     
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
     if (id == adapter.namespace + '.' + stateWallboxPlug) {
-        // 0 unplugged
-        // 1 plugged on charging station 
-        // 3 plugged on charging station plug locked
-        // 5 plugged on charging station             plugged on EV
-        // 7 plugged on charging station plug locked plugged on EV
-        // For wallboxes with fixed cable values of 0 and 1 not used
-        // Charging only possible with value of 7
-        var wasVehiclePlugged = oldValue < 5;
-        var isVehiclePlugged  = newValue >= 5;
+        var wasVehiclePlugged = isVehiclePlugged(oldValue);
+        var isVehiclePlugged  = isVehiclePlugged(newValue);
         if (isVehiclePlugged && ! wasVehiclePlugged) {
             adapter.log.info('vehicle plugged to wallbox');
             initChargingSession();
@@ -621,6 +614,23 @@ function isVehicleCharging() {
 	return getStateInternal(stateWallboxPower) > 100000;
 }
 
+function isVehiclePlugged(myValue) {
+    var value;
+    if (myValue) {
+        value = myValue;
+    } else {
+        value = getStateInternal(stateWallboxPlug);
+    }
+    // 0 unplugged
+    // 1 plugged on charging station 
+    // 3 plugged on charging station plug locked
+    // 5 plugged on charging station             plugged on EV
+    // 7 plugged on charging station plug locked plugged on EV
+    // For wallboxes with fixed cable values of 0 and 1 not used
+    // Charging only possible with value of 7
+    return value >= 5;
+}
+
 function displayChargeMode() {
     if (isPassive) {
         return;
@@ -674,14 +684,14 @@ function checkWallboxPower() {
 	
 	// lock wallbox if requested or available amperage below minimum
 	if (getStateInternal(stateWallboxDisabled) || tempMax < getMinCurrent() ||
-		(photovoltaicsActive && getStateInternal(statePvAutomatic) && ! isVehiclePlugged)) {
+		(photovoltaicsActive && getStateInternal(statePvAutomatic) && ! isVehiclePlugged())) {
 		curr = 0;
 	} else {
 		// if vehicle is currently charging and was not before, then save timestamp
 		if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging()) {
 			chargingToBeStarted = true;
 		}
-        if (isVehiclePlugged && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
+        if (isVehiclePlugged() && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
             var available = getSurplusWithoutWallbox();
             setStateAck(stateSurplus, Math.round(available));
         	adapter.log.debug('Available surplus: ' + available);

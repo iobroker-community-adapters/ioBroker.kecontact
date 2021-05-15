@@ -39,7 +39,7 @@ const intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information eve
 var timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
 var lastCalculating      = null;   // time of last check for charging information
-const intervalCalculating = 25 * 60 * 1000;  // calculate charging poser every 25(-30) seconds
+const intervalCalculating = 25 * 1000;  // calculate charging poser every 25(-30) seconds
 var loadChargingSessions = false;
 var photovoltaicsActive  = false;  // is photovoltaics automatic active?
 var maxPowerActive       = false;  // is limiter für maximum power active?
@@ -202,7 +202,6 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V10");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -659,7 +658,6 @@ function checkWallboxPower() {
     }
 
     var newDate = new Date();
-    adapter.log.info("last: " + lastCalculating + " diff: " + (lastCalculating == null ? "x" : (newDate.getTime() - lastCalculating.getTime())));
     if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
         return
     }

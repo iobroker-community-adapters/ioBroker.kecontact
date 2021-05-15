@@ -204,7 +204,7 @@ adapter.on('ready', function () {
 });
 
 function main() {
-    adapter.log.info("V9");
+    adapter.log.info("V10");
     txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
@@ -776,7 +776,7 @@ function disableChargingTimer() {
 	}
 }
 
-function enableChargingTimer() {
+function enableChargingTimer(time) {
 	disableChargingTimer();
 	timerDataUpdate = setInterval(requestReports, time); 
 }

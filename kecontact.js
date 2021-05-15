@@ -140,13 +140,13 @@ adapter.on('stateChange', function (id, state) {
     
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
     if (id == adapter.namespace + '.' + stateWallboxPlug) {
-        var wasVehiclePlugged = isVehiclePlugged(oldValue);
-        var isVehiclePlugged  = isVehiclePlugged(newValue);
-        if (isVehiclePlugged && ! wasVehiclePlugged) {
+        var wasVehiclePlugged   = isVehiclePlugged(oldValue);
+        var isNowVehiclePlugged = isVehiclePlugged(newValue);
+        if (isNowVehiclePlugged && ! wasVehiclePlugged) {
             adapter.log.info('vehicle plugged to wallbox');
             initChargingSession();
             forceUpdateOfCalculation();
-        } else if (! isVehiclePlugged && wasVehiclePlugged) {
+        } else if (! isNowVehiclePlugged && wasVehiclePlugged) {
             adapter.log.info('vehicle unplugged from wallbox');
             finishChargingSession();
         } 

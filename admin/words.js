@@ -301,16 +301,16 @@ systemDictionary = {
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
     "tooltip_pollInterval": {
-        "en": "Interval in seconds how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
-        "de": "Intervall in Sekunden (min. 30 Sek.) wie oft neue Werte in der Wallbox abgefragt werden sollen (0 = default von 10 Minuten)",
-        "ru": "Интервал в секундах, как часто настенный ящик должен запрашивать новые значения (0 = значение по умолчанию 10 минут)",
-        "pt": "Intervalo em segundos com que frequência a caixa de parede deve ser consultada para novos valores (0 = valor padrão de 10 minutos)",
-        "nl": "Interval in seconden hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (0 = standaardwaarde van 10 minuten)",
-        "fr": "Intervalle en secondes à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (0 = valeur par défaut de 10 minutes)",
-        "it": "Intervallo in secondi la frequenza con cui richiedere alla wallbox nuovi valori (0 = valore predefinito di 10 minuti)",
-        "es": "Intervalo en segundos con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (0 = valor predeterminado de 10 minutos)",
-        "pl": "Odstęp w sekundach, jak często należy pytać Wallbox o nowe wartości (0 = domyślna wartość 10 minut)",
-        "zh-cn": "以秒为单位的时间间隔，应多久查询一次壁盒以获取新值（0 =默认值10分钟）"
+        "en": "Interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
+        "de": "Intervall in Sekunden im passiven Modus, wie oft die Wallbox nach neuen Werten abgefragt werden soll (0 = Standardwert von 10 Minuten)",
+        "ru": "Интервал в секундах в пассивном режиме, как часто настенный ящик должен запрашивать новые значения (0 = значение по умолчанию 10 минут)",
+        "pt": "Intervalo em segundos no modo passivo com que frequência a caixa de parede deve ser consultada para novos valores (0 = valor padrão de 10 minutos)",
+        "nl": "Interval in seconden in passieve modus hoe vaak de wallbox moet worden opgevraagd voor nieuwe waarden (0 = standaardwaarde van 10 minuten)",
+        "fr": "Intervalle en secondes en mode passif à quelle fréquence la wallbox doit être interrogée pour de nouvelles valeurs (0 = valeur par défaut de 10 minutes)",
+        "it": "Intervallo in secondi in modalità passiva la frequenza con cui richiedere alla wallbox nuovi valori (0 = valore predefinito di 10 minuti)",
+        "es": "Intervalo en segundos en modo pasivo con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (0 = valor predeterminado de 10 minutos)",
+        "pl": "Odstęp w sekundach w trybie pasywnym, jak często należy pytać Wallbox o nowe wartości (0 = domyślna wartość 10 minut)",
+        "zh-cn": "被动模式下的时间间隔（以秒为单位），应多久查询壁盒以获取新值（0 = 10分钟的默认值）"
   },
     "tooltip_loadChargingSessions": {
         "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 

@@ -35,7 +35,7 @@ const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleist
 var isPassive            = true    // no automatic power regulation?
 var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
-const intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information every 10 minutes
+var intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information every 10 minutes
 var timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
 var lastCalculating      = null;   // time of last check for charging information

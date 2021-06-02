@@ -322,8 +322,8 @@ function checkConfig() {
     if (adapter.config.passiveMode) {
     	isPassive = true;
     	adapter.log.info('starting charging station in passive mode');
-        if (adapter.config.pollInterval !== 0) {
-            intervalPassiveUpdate = getNumber(adapter.config.pollInterval);
+        if (adapter.config.pollInterval > 0) {
+            intervalPassiveUpdate = getNumber(adapter.config.pollInterval) * 1000;
         }
     } else {
     	isPassive = false;

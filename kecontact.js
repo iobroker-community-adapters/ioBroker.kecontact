@@ -429,6 +429,11 @@ function handleWallboxMessage(message, remote) {
         if (msg.length === 0) {
             return;
         }
+
+        if (msg == "i") {
+            adapter.log.debug('Received: ' + message);
+            return;
+        }
         
         if (msg.startsWith('TCH-OK')) {
             adapter.log.debug('Received ' + message);

@@ -13,7 +13,7 @@ const request = require('request');
 
 
 // create the adapter object
-var adapter = utils.Adapter('kecontact');
+let adapter;
 
 var DEFAULT_UDP_PORT = 7090;
 var BROADCAST_UDP_PORT = 7092;
@@ -85,8 +85,42 @@ const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
 
+// If started as allInOne/compact mode => return function to create instance
+if (module && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
+}
+
+function startAdapter(options) {
+
+    options = options || {};
+    Object.assign(options, {
+         name: 'kecontact',
+         ready: onAdapterReady,
+         unload: onAdapterUnload,
+         stateChange: onAdapterStateChange
+    });
+    adapter = new utils.Adapter(options);
+    return adapter;
+};
+
+// startup
+function onAdapterReady() {
+    if (! checkConfig()) {
+    	adapter.log.error('start of adapter not possible due to config errors');
+    	return;
+    }
+    if (loadChargingSessions) {
+        //History Datenpunkte anlegen
+        CreateHistory();
+    } 
+    main();
+};
+
 //unloading
-adapter.on('unload', function (callback) {
+function onAdapterUnload(callback) {
     try {
         if (sendDelayTimer) {
             clearInterval(sendDelayTimer);
@@ -123,10 +157,10 @@ adapter.on('unload', function (callback) {
     }
 
     callback();
-});
+};
 
 // is called if a subscribed state changes
-adapter.on('stateChange', function (id, state) {
+function onAdapterStateChange (id, state) {
     // Warning: state can be null if it was deleted!
     if (!id || !state) {
     	return;
@@ -186,20 +220,7 @@ adapter.on('stateChange', function (id, state) {
     
     stateChangeListeners[id](oldValue, state.val);
     setStateAck(id, state.val)
-});
-
-// startup
-adapter.on('ready', function () {
-    if (! checkConfig()) {
-    	adapter.log.error('start of adapter not possible due to config errors');
-    	return;
-    }
-    if (loadChargingSessions) {
-        //History Datenpunkte anlegen
-        CreateHistory();
-    } 
-    main();
-});
+};
 
 function main() {
     txSocket = dgram.createSocket('udp4');

@@ -335,6 +335,9 @@ function start() {
 	stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function (oldValue, newValue) {
         // no real action to do
     };
+    stateChangeListeners[adapter.namespace + '.' + stateManualPhases] = function (oldValue, newValue) {
+        // no real action to do
+    };
     
     //sendUdpDatagram('i');   only needed for discovery
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);
@@ -970,7 +973,7 @@ function sendWallboxWarning(message) {
 }
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
-    if (type.startsWith("KC-P30-X")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
+    if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
         sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
         return TYPE_D_EDITION;
     } 

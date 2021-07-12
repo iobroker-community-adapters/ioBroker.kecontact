@@ -15,8 +15,8 @@ const request = require('request');
 // create the adapter object
 let adapter;
 
-var DEFAULT_UDP_PORT = 7090;
-var BROADCAST_UDP_PORT = 7092;
+const DEFAULT_UDP_PORT = 7090;
+const BROADCAST_UDP_PORT = 7092;
 
 var txSocket;
 var rxSocketReports;
@@ -27,9 +27,12 @@ var stateChangeListeners = {};
 var currentStateValues = {}; // contains all actual state values
 var sendQueue = [];
 var wallboxType = 0;
-const TYPE_C_SERIES = 1;
-const TYPE_X_SERIES = 2;
-const TYPE_D_EDITION = 3;
+const TYPE_A_SERIES = 1;     // sample product ID unknown
+const TYPE_B_SERIES = 2;     // sample product ID unknown
+const TYPE_C_SERIES = 3;     // product ID is like KC-P30-EC240422-E00
+const TYPE_E_SERIES = 4;     // product ID is like KC-P30-EC240422-E00
+const TYPE_X_SERIES = 5;     // sample product ID unknown
+const TYPE_D_EDITION = 6;    // product id is KC-P30-EC220112-000-DE, there's no other
 
 
 //var ioBroker_Settings
@@ -37,7 +40,7 @@ var ioBrokerLanguage      = 'en';
 const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
-var deEditionWarningSent = false;  // Warning for inacurate regulation with Deutshcland Edition
+var wallboxWarningSent   = false;  // Warning for inacurate regulation with Deutshcland Edition
 var isPassive            = true    // no automatic power regulation?
 var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
@@ -958,29 +961,49 @@ function checkFirmware() {
     return;
 }
 
+function sendWallboxWarning(message) {
+    if (! wallboxWarningSent) {
+        adapter.log.warn(message);
+        wallboxWarningSent = true;
+    }
+
+}
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
-    var regexPattern;
-    if (type.startsWith("KC-P30-E")) {
-        if (type.endsWith("-DE")) {
-            if (! deEditionWarningSent) {
-                adapter.log.warn("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
-                deEditionWarningSent = true;
-            }
-            return TYPE_D_EDITION;
-        } else {
-            return TYPE_C_SERIES;
+    if (type.startsWith("KC-P30-X")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
+        sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
+        return TYPE_D_EDITION;
+    } 
+    if (type.startsWith("KC-P30") && (type.substr(15, 1) == "-")) {
+        switch (type.substr(13,1)) {
+            case "0": return TYPE_E_SERIES;
+            case "1":
+                sendWallboxWarning("KeContact P30 b-series will not be supported!");
+                return TYPE_B_SERIES;
+            case "2": return TYPE_C_SERIES;
+            case "3": 
+                sendWallboxWarning("KeContact P30 b-series will not be supported!");
+                return TYPE_A_SERIES;
+            case "B":  // x-series WLAN
+            case "C":  // x-series WLAN + 3G
+            case "E":  // x-series WLAN + 4G
+            case "G":  // x-series 3G
+            case "H":  // x-series 4G
+                return TYPE_X_SERIES;
         }
-    } else if (type.startsWith("KC-P30-X")) {
-        return TYPE_X_SERIES;
-    } else {
-        adapter.log.error(prefix + "unknown wallbox type " + type);
-        return 0;
+
     }
+    adapter.log.error(prefix + "unknown wallbox type " + type);
+    if (adapter.supportsFeature && adapter.supportsFeature('PLUGINS')) {
+        const sentryInstance = adapter.getPluginInstance('sentry');
+        if (sentryInstance) {
+            sentryInstance.getSentryObject().captureException("unknown wallbox type " + type);
+        }
+    }
+    return 0;
 }
 
 function getFirmwareRegEx() {
-    var regexPattern;
     switch (getWallboxType()) {
         case TYPE_C_SERIES :
         case TYPE_D_EDITION :

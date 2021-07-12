@@ -4,8 +4,8 @@
     "version": "1.2.0",
     "news": {
       "1.2.0": {
-        "en": "Support for compact mode",
-        "de": "Unterstützung des compact mode"
+        "en": "Support for compact mode and KeContact P30 Deutschland-Edition, using sentry.io to track errors",
+        "de": "Unterstützung des compact mode und KeContact P30 Deutschland-Edition, sentry.io zur Fehlerverfolgung implementiert"
       },
       "1.1.3": {
         "en": "new time option to continue charging session with regard; optimized surplus calculation",
@@ -118,7 +118,13 @@
       "e-mobility"
     ],
     "icon": "charger.png",
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.kecontact/master/admin/charger.png"
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.kecontact/master/admin/charger.png",
+    "plugins": {
+      "sentry": {
+          "dsn": "https://01d409e4ecea470485101a0f53720ee5@sentry.iobroker.net/139"
+      }
+  }
+
   },
   "native": {
     "host": "0.0.0.0",

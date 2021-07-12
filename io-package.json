@@ -800,6 +800,21 @@
       "native": {}
     },
     {
+      "_id": "automatic.calcPhases",
+      "type": "state",
+      "common": {
+        "name": "count of phases to calculate with for KeContact Deutschland-Edition",
+        "type": "number",
+        "role": "value",
+        "unit": "phases",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "Keba charging station KeContact Deutschland-Edition has no energy meter. Therefore the adapter cannot measure power comsuptions of vehicle. The help estimation please enter number of phases here."
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics",
       "type": "channel",
       "common": {

@@ -961,7 +961,6 @@ function checkFirmware() {
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
     var regexPattern;
-    huhu();
     if (type.startsWith("KC-P30-E")) {
         if (type.endsWith("-DE")) {
             if (! deEditionWarningSent) {

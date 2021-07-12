@@ -37,6 +37,7 @@ var ioBrokerLanguage      = 'en';
 const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
+var deEditionWarningSent = false;  // Warning for inacurate regulation with Deutshcland Edition
 var isPassive            = true    // no automatic power regulation?
 var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
@@ -960,8 +961,13 @@ function checkFirmware() {
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
     var regexPattern;
+    huhu();
     if (type.startsWith("KC-P30-E")) {
         if (type.endsWith("-DE")) {
+            if (! deEditionWarningSent) {
+                adapter.log.warn("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
+                deEditionWarningSent = true;
+            }
             return TYPE_D_EDITION;
         } else {
             return TYPE_C_SERIES;

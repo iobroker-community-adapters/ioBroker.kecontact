@@ -26,6 +26,11 @@ var states = {};          // contains all actual state values
 var stateChangeListeners = {};
 var currentStateValues = {}; // contains all actual state values
 var sendQueue = [];
+var wallboxType = 0;
+const TYPE_C_SERIES = 1;
+const TYPE_X_SERIES = 2;
+const TYPE_D_EDITION = 3;
+
 
 //var ioBroker_Settings
 var ioBrokerLanguage      = 'en';
@@ -49,7 +54,7 @@ var underusage           = 0;      // maximum regard use to reach minimal charge
 var minAmperage          = 6000;   // minimum amperage to start charging session
 var minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 var minRegardSeconds     = 0;      // maximum time to accept regard when charging
-var voltage              = 230;    // calculate with european standard voltage of 230V
+const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/de/emobility/service-support/downloads/downloads";
 const intervalFirmwareCheck = 24 * 60 * 60 * 1000;  // check firmware every 24 hours
 const regexP30cSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<H3/gi;
@@ -81,6 +86,7 @@ const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when
 const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
 const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
 const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
+const stateManualPhases        = "automatic.calcPhases";        /*count of phases to calculate with for KeContact Deutschland-Edition*/
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
@@ -578,10 +584,22 @@ function finishChargingSession() {
     resetChargingSessionData();
 }
 
+function getWallboxPowerInWatts() {
+    if (getWallboxType() == TYPE_D_EDITION) {
+        if (getStateInternal(stateWallboxEnabled)) {
+            return getStateDefault0(stateWallboxCurrent) * voltage * getChargingPhaseCount();
+        } else {
+            return 0;
+        }
+    } else {
+        return getStateDefault0(stateWallboxPower) / 1000;
+    }
+}
+
 function getSurplusWithoutWallbox() {
 	return getStateDefault0(adapter.config.stateSurplus) 
 	     - getStateDefault0(adapter.config.stateRegard)
-	     + (getStateDefault0(stateWallboxPower) / 1000);
+	     + getWallboxPowerInWatts();
 }
 
 function getTotalPower() {
@@ -589,7 +607,7 @@ function getTotalPower() {
                + getStateDefault0(adapter.config.stateEnergyMeter2)
                + getStateDefault0(adapter.config.stateEnergyMeter3);
     if (wallboxIncluded) {
-        result -= (getStateDefault0(stateWallboxPower) / 1000);
+        result -= getWallboxPowerInWatts();
     }
     return result;
 }
@@ -604,6 +622,9 @@ function getTotalPowerAvailable() {
 
 function getChargingPhaseCount() {
     var retVal = getStateDefault0(stateChargingPhases);
+    if ((getWallboxType() == TYPE_D_EDITION) || (retVal == 0)) {
+        retVal = getStateDefault0(stateManualPhases);
+    }
 
     // Number of phaes can only be calculated if vehicle is charging
     if (isVehicleCharging()) {
@@ -636,7 +657,7 @@ function getChargingPhaseCount() {
 }
 
 function isVehicleCharging() {
-	return getStateInternal(stateWallboxPower) > 100000;
+	return getWallboxPowerInWatts() > 100 ;
 }
 
 function isVehiclePlugged(myValue) {
@@ -936,20 +957,44 @@ function checkFirmware() {
     return;
 }
 
+function getWallboxType() {
+    const type = getStateInternal(stateProduct);
+    var regexPattern;
+    if (type.startsWith("KC-P30-E")) {
+        if (type.endsWith("-DE")) {
+            return TYPE_D_EDITION;
+        } else {
+            return TYPE_C_SERIES;
+        }
+    } else if (type.startsWith("KC-P30-X")) {
+        return TYPE_X_SERIES;
+    } else {
+        adapter.log.error(prefix + "unknown wallbox type " + type);
+        return 0;
+    }
+}
+
+function getFirmwareRegEx() {
+    var regexPattern;
+    switch (getWallboxType()) {
+        case TYPE_C_SERIES :
+        case TYPE_D_EDITION :
+            return regexP30cSeries;
+        case TYPE_X_SERIES :
+            return regexP30xSeries;
+        default:
+            return null;
+    }
+}
+
 function processFirmwarePage(err, stat, body) {
     var prefix = "Keba firmware check: ";
     if (err) {
         adapter.log.warn(prefix + err);
     }
     else if (body) {
-        var type = getStateInternal(stateProduct);
-        var regexPattern;
-        if (type.startsWith("KC-P30-E")) {
-            regexPattern = regexP30cSeries;
-        } else if (type.startsWith("KC-P30-X")) {
-            regexPattern = regexP30xSeries;
-        } else {
-            adapter.log.error(prefix + "unknown wallbox type " + type);
+        const regexPattern = getFirmwareRegEx();
+        if (! regexPattern || (regexPattern == null)) {
             return;
         }
         var list;

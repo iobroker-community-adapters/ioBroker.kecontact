@@ -634,7 +634,7 @@ function getChargingPhaseCount() {
     }
 
     // Number of phaes can only be calculated if vehicle is charging
-    if (isVehicleCharging()) {
+    if ((getWallboxType() != TYPE_D_EDITION) && isVehicleCharging()) {
         var tempCount = 0;
         if (getStateDefault0(stateWallboxPhase1) > 250) {
         	tempCount ++;

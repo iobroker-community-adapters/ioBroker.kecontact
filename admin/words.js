@@ -132,6 +132,18 @@ systemDictionary = {
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
     },
+    "use X1 switch": {
+        "en": "use X1 switch of charging station for control of automatic",
+        "de": "X1-Schalter der Wallbox zur Steuerung der PV-Automatik nutzen",
+        "ru": "используйте переключатель X1 зарядной станции для управления автоматическим",
+        "pt": "use o interruptor X1 da estação de carregamento para controle automático",
+        "nl": "gebruik X1-schakelaar van laadstation voor besturing van automatisch",
+        "fr": "utiliser l'interrupteur X1 de la station de charge pour le contrôle de l'automatique",
+        "it": "utilizzare l'interruttore X1 della stazione di ricarica per il controllo automatico",
+        "es": "Utilice el interruptor X1 de la estación de carga para controlar la",
+        "pl": "użyj przełącznika X1 stacji ładującej do sterowania automatyką;",
+        "zh-cn": "使用充电站的X1开关控制自动"
+    },
     "minAmperage":   {
         "en": "Minimum amperage to start charging",
         "de": "Mindeststromstärke zum Starten des Ladevorgangs",
@@ -347,6 +359,18 @@ systemDictionary = {
         "es": "Nombre del estado que tiene la plusvalía del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si el excedente es un valor positivo y la consideración es negativa.",
         "pl": "Nazwa państwa, w którym znajduje się wartość dodatkowa licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy nadwyżka jest wartością dodatnią, a szacunek jest ujemna.",
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
+    },
+    "tooltip_useX1": {
+        "en": "Activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.", 
+        "de": "Checkbox aktivieren, wenn der Eingang X1 der Wallbox verwendet werden soll, um die PV-Automatik beim Schließen zu deaktivieren. So kann über einen physikalischen Schalter die V-Automatik (de)aktiviert werden.",
+        "ru": "Установите флажок, если вход X1 зарядной станции должен использоваться для автоматического отключения фотоэлектрических элементов при закрытии. Таким образом, можно использовать физический выключатель для автоматического включения (отключения) фотоэлектрической энергии.",
+        "pt": "Ative a caixa de seleção se a entrada X1 da estação de carregamento deve ser usada para desativar a energia fotovoltaica automática quando fechada. Assim, um interruptor físico pode ser usado para (des) ativar a fotovoltaica automática.",
+        "nl": "Activeer het selectievakje als X1-ingang van het laadstation moet worden gebruikt om de automatische fotovoltaïsche installatie in gesloten toestand uit te schakelen. Zo kan een fysieke schakelaar worden gebruikt om de fotovoltaïsche automaat te (de)activeren.",
+        "fr": "Cochez la case si l'entrée X1 de la borne de recharge doit être utilisée pour désactiver automatiquement le photovoltaïque lorsqu'elle est fermée. Ainsi, un interrupteur physique peut être utilisé pour (dés)activer le photovoltaïque automatiquement.",
+        "it": "Attivare la checkbox se l'ingresso X1 della stazione di ricarica deve essere utilizzato per disattivare il fotovoltaico in automatico alla chiusura. Pertanto, un interruttore fisico può essere utilizzato per (dis)attivare automaticamente il fotovoltaico.",
+        "es": "Active la casilla de verificación si se debe utilizar la entrada X1 de la estación de carga para desactivar la energía fotovoltaica automática cuando está cerrada. Por lo tanto, se puede utilizar un interruptor físico para (des) activar la energía fotovoltaica de forma automática.",
+        "pl": "Aktywuj pole wyboru, jeśli wejście X1 stacji ładującej ma być używane do dezaktywacji automatycznej fotowoltaiki po zamknięciu. W ten sposób fizyczny przełącznik może być użyty do (dez)aktywacji fotowoltaiki automatycznej.",
+        "zh-cn": "如果应使用充电站的 X1 输入在关闭时自动停用光伏，则激活复选框。因此，物理开关可用于（去）激活光伏自动。"
     },
     "tooltip_minAmperage": {
         "en": "Minimum value of amperage with which charging station will start (e.g. Renault Zoe needs at least 8A to start charging)",

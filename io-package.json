@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "news": {
+      "1.2.1": {
+        "en": "support X1 contact of charging station to switch photovoltaics automatic",
+        "de": "Neue Option um den X1-Kontakt der Wallbox zur Steuerung der PV-Automativ zu nutzen"
+      },
       "1.2.0": {
         "en": "Support for compact mode and KeContact P30 Deutschland-Edition, using sentry.io to track errors",
         "de": "Unterstützung des compact mode und KeContact P30 Deutschland-Edition, sentry.io zur Fehlerverfolgung implementiert"
@@ -131,6 +135,7 @@
     "passiveMode": true,
     "pollInterval": 30,
     "loadChargingSessions": false,
+    "useX1forAutomatic": true,
     "stateRegard": null,
     "stateSurplus": null,
     "minAmperage": 0,

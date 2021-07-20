@@ -51,6 +51,7 @@ var lastCalculating      = null;   // time of last check for charging informatio
 const intervalCalculating = 25 * 1000;  // calculate charging poser every 25(-30) seconds
 var loadChargingSessions = false;
 var photovoltaicsActive  = false;  // is photovoltaics automatic active?
+var useX1switchForAutomatic = true;
 var maxPowerActive       = false;  // is limiter für maximum power active?
 var wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 var amperageDelta        = 500;    // default for step of amperage
@@ -79,6 +80,7 @@ const stateWallboxDisplay      = "display";
 const stateWallboxOutput       = "output";
 const stateSetEnergy           = "setenergy";
 const stateProduct             = "product";
+const stateX1input             = "input";
 const stateFirmware            = "firmware";                    /*current running version of firmware*/
 const stateFirmwareAvailable   = "statistics.availableFirmware";/*current version of firmware available at keba.com*/
 const stateSurplus             = "statistics.surplus";          /*current surplus for PV automatics*/
@@ -371,6 +373,11 @@ function checkConfig() {
     		everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
     	}
     	if (photovoltaicsActive) {
+            if (adapter.config.useX1forAutomatic) {
+                useX1switchForAutomatic = true;
+            } else {
+                useX1switchForAutomatic = false;
+            }
     		if (! adapter.config.delta || adapter.config.delta <= 50) {
     			adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
     		} else {
@@ -684,12 +691,27 @@ function isVehiclePlugged(myValue) {
     return value >= 5;
 }
 
+function isPvAutomaticsActive() {
+    if (isPassive || ! photovoltaicsActive) {
+        return false;
+    }
+    if (useX1switchForAutomatic) {
+        if (getStateInternal(stateX1input) == true) {
+            return false;
+        }
+    }
+    if (getStateInternal(statePvAutomatic))
+        return true;
+    else
+        return false;
+}
+
 function displayChargeMode() {
     if (isPassive) {
         return;
     }
 	var text;
-	if (getStateInternal(statePvAutomatic))
+	if (isPvAutomaticsActive())
 		text = chargeTextAutomatic[ioBrokerLanguage];
 	else
 		text = chargeTextMax[ioBrokerLanguage];
@@ -737,14 +759,14 @@ function checkWallboxPower() {
 	
 	// lock wallbox if requested or available amperage below minimum
 	if (getStateInternal(stateWallboxDisabled) || tempMax < getMinCurrent() ||
-		(photovoltaicsActive && getStateInternal(statePvAutomatic) && ! isVehiclePlugged())) {
+		(isPvAutomaticsActive() && ! isVehiclePlugged())) {
 		curr = 0;
 	} else {
 		// if vehicle is currently charging and was not before, then save timestamp
 		if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging()) {
 			chargingToBeStarted = true;
 		}
-        if (isVehiclePlugged() && photovoltaicsActive && getStateInternal(statePvAutomatic)) {
+        if (isVehiclePlugged() && isPvAutomaticsActive()) {
             var available = getSurplusWithoutWallbox();
             setStateAck(stateSurplus, Math.round(available));
         	adapter.log.debug('Available surplus: ' + available);

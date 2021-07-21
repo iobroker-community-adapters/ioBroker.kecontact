@@ -362,7 +362,7 @@ systemDictionary = {
     },
     "tooltip_useX1": {
         "en": "Activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.", 
-        "de": "Checkbox aktivieren, wenn der Eingang X1 der Wallbox verwendet werden soll, um die PV-Automatik beim Schließen zu deaktivieren. So kann über einen physikalischen Schalter die V-Automatik (de)aktiviert werden.",
+        "de": "Checkbox aktivieren, wenn der Eingang X1 der Wallbox verwendet werden soll, um die PV-Automatik beim Schließen zu deaktivieren. So kann über einen physikalischen Schalter die PV-Automatik (de)aktiviert werden.",
         "ru": "Установите флажок, если вход X1 зарядной станции должен использоваться для автоматического отключения фотоэлектрических элементов при закрытии. Таким образом, можно использовать физический выключатель для автоматического включения (отключения) фотоэлектрической энергии.",
         "pt": "Ative a caixa de seleção se a entrada X1 da estação de carregamento deve ser usada para desativar a energia fotovoltaica automática quando fechada. Assim, um interruptor físico pode ser usado para (des) ativar a fotovoltaica automática.",
         "nl": "Activeer het selectievakje als X1-ingang van het laadstation moet worden gebruikt om de automatische fotovoltaïsche installatie in gesloten toestand uit te schakelen. Zo kan een fysieke schakelaar worden gebruikt om de fotovoltaïsche automaat te (de)activeren.",

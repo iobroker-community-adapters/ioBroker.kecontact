@@ -212,6 +212,16 @@ function onAdapterStateChange (id, state) {
         }
     }
 
+    if (id == adapter.namespace + '.' + stateX1input) {
+        if (useX1switchForAutomatic) {
+            adapter.log.info('change of photovoltaics automatic via X1 from ' + oldValue + ' to ' + newValue);
+            if (oldValue != newValue) {
+                displayChargeMode();
+                forceUpdateOfCalculation();
+            }
+        }
+    }
+
     if (id == adapter.namespace + '.' + stateAddPower) {
 		if (oldValue != newValue)
 			adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);

@@ -133,16 +133,16 @@ systemDictionary = {
         "zh-cn": "剩余状态名称"
     },
     "use X1 switch": {
-        "en": "use X1 switch of charging station for control of automatic",
-        "de": "X1-Schalter der Wallbox zur Steuerung der PV-Automatik nutzen",
-        "ru": "используйте переключатель X1 зарядной станции для управления автоматическим",
-        "pt": "use o interruptor X1 da estação de carregamento para controle automático",
-        "nl": "gebruik X1-schakelaar van laadstation voor besturing van automatisch",
-        "fr": "utiliser l'interrupteur X1 de la station de charge pour le contrôle de l'automatique",
-        "it": "utilizzare l'interruttore X1 della stazione di ricarica per il controllo automatico",
-        "es": "Utilice el interruptor X1 de la estación de carga para controlar la",
-        "pl": "użyj przełącznika X1 stacji ładującej do sterowania automatyką;",
-        "zh-cn": "使用充电站的X1开关控制自动"
+        "en": "use X1 switch for photovoltaic automatic",
+        "de": "X1-Schalter für PV-Automatik nutzen",
+        "ru": "используйте переключатель X1 для фотоэлектрической автоматической",
+        "pt": "use o interruptor X1 para fotovoltaico automático",
+        "nl": "gebruik X1-schakelaar voor fotovoltaïsche automaat",
+        "fr": "utiliser le commutateur X1 pour le photovoltaïque automatique",
+        "it": "utilizzare l'interruttore X1 per il fotovoltaico automatico",
+        "es": "utilizar interruptor X1 para fotovoltaica automática",
+        "pl": "Użyj przełącznika X1 do automatycznego fotowoltaicznego;",
+        "zh-cn": "使用X1开关进行光伏自动"
     },
     "minAmperage":   {
         "en": "Minimum amperage to start charging",

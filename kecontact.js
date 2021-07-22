@@ -1028,7 +1028,7 @@ function getWallboxType() {
         }
 
     }
-    adapter.log.error(prefix + "unknown wallbox type " + type);
+    adapter.log.error("unknown wallbox type " + type);
     if (adapter.supportsFeature && adapter.supportsFeature('PLUGINS')) {
         const sentryInstance = adapter.getPluginInstance('sentry');
         if (sentryInstance) {

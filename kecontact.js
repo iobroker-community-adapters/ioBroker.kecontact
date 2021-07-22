@@ -648,6 +648,14 @@ function getChargingPhaseCount() {
     var retVal = getStateDefault0(stateChargingPhases);
     if ((getWallboxType() == TYPE_D_EDITION) || (retVal == 0)) {
         retVal = getStateDefault0(stateManualPhases);
+        if (retVal < 0) {
+            adapter.log.warn("invalid manual phases count " + retVal + " using 1 phases");
+            retVal = 1;
+        }
+        if (retVal > 3) {
+            adapter.log.warn("invalid manual phases count " + retVal + " using 3 phases");
+            retVal = 3;
+        }
     }
 
     // Number of phaes can only be calculated if vehicle is charging

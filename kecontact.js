@@ -199,14 +199,15 @@ function onAdapterStateChange (id, state) {
     }
 
     if (id == adapter.namespace + '.' + stateWallboxDisabled) {
-        adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
-        if (oldValue != newValue)
+        if (oldValue != newValue) {
+            adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
             forceUpdateOfCalculation();
+        }
     }
 
     if (id == adapter.namespace + '.' + statePvAutomatic) {
-        adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
         if (oldValue != newValue) {
+            adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
             displayChargeMode();
             forceUpdateOfCalculation();
         }
@@ -214,8 +215,8 @@ function onAdapterStateChange (id, state) {
 
     if (id == adapter.namespace + '.' + stateX1input) {
         if (useX1switchForAutomatic) {
-            adapter.log.info('change of photovoltaics automatic via X1 from ' + oldValue + ' to ' + newValue);
             if (oldValue != newValue) {
+                adapter.log.info('change of photovoltaics automatic via X1 from ' + oldValue + ' to ' + newValue);
                 displayChargeMode();
                 forceUpdateOfCalculation();
             }

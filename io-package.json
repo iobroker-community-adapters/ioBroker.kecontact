@@ -135,7 +135,7 @@
     "passiveMode": true,
     "pollInterval": 30,
     "loadChargingSessions": false,
-    "useX1forAutomatic": true,
+    "useX1forAutomatic": false,
     "stateRegard": null,
     "stateSurplus": null,
     "minAmperage": 0,

@@ -815,7 +815,7 @@
         "name": "limit dynamic charging to this value of amperage (0 = no limitation)",
         "type": "number",
         "role": "value",
-        "unit": "A",
+        "unit": "mA",
         "read": true,
         "write": true,
         "def": 0,

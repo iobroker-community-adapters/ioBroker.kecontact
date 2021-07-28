@@ -353,6 +353,9 @@ function start() {
     stateChangeListeners[adapter.namespace + '.' + stateManualPhases] = function (oldValue, newValue) {
         // no real action to do
     };
+    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent] = function (oldValue, newValue) {
+        // no real action to do
+    };
     
     //sendUdpDatagram('i');   only needed for discovery
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);

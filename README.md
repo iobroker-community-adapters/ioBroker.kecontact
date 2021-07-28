@@ -60,6 +60,10 @@ An extra checkbox is used to specified whether wallbox power is included (in thi
 
 ## Changelog
 
+### 1.2.2 (2021-07-28)
+* (Sneak-L8) new: limit max. charging current dynamically
+* (Sneak-L8) support BMW charging staion (Keba OEM, Sentry IOBROKER-KECONTACT-3)
+
 ### 1.2.1 (2021-07-20)
 * (Sneak-L8) support X1 contact of charging station to switch photovoltaics automatic
 * (Sneak-L8) prevent a crash case (Sentry IOBROKER-KECONTACT-2)

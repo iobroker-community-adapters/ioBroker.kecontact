@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "news": {
+      "1.2.2": {
+        "en": "limit max. charging current dynamically, support BMW charging staion (Keba OEM)",
+        "de": "Möglichkeit, die Ladestärke per State dynamisch zu begrenzen, Untestützung der BMW-Wallbox (Keba OEM)"
+      },
       "1.2.1": {
         "en": "support X1 contact of charging station to switch photovoltaics automatic",
         "de": "Neue Option um den X1-Kontakt der Wallbox zur Steuerung der PV-Automativ zu nutzen"
@@ -145,9 +149,9 @@
     "minTime": 300,
     "regardTime": 0,
     "maxPower": 0,
-    "stateEnergyMeter1": "",
-    "stateEnergyMeter2": "",
-    "stateEnergyMeter3": "",
+    "stateEnergyMeter1": null,
+    "stateEnergyMeter2": null,
+    "stateEnergyMeter3": null,
     "wallboxNotIncluded": false
   },
   "objects": [
@@ -797,6 +801,21 @@
         "type": "number",
         "role": "value",
         "unit": "W",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "amount of watts to be used as regard to start charging session"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.limitCurrent",
+      "type": "state",
+      "common": {
+        "name": "limit dynamic charging to this value of amperage (0 = no limitation)",
+        "type": "number",
+        "role": "value",
+        "unit": "A",
         "read": true,
         "write": true,
         "def": 0,

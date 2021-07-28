@@ -488,7 +488,7 @@ function addForeignState(id) {
 // handle incomming message from wallbox
 function handleWallboxMessage(message, remote) {
     adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-    const jsonMsg;
+    var jsonMsg = null;
     try {
         var msg = message.toString().trim();
         if (msg.length === 0) {

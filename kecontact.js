@@ -973,6 +973,9 @@ function sendNextQueueDatagram() {
 }
 
 function getStateInternal(id) {
+    if ((id == null) || (typeof id !== "string") || (id.trim().length == 0)) {
+        return null;
+    }
 	var obj = id;
 	if (! obj.startsWith(adapter.namespace + '.'))
 		obj = adapter.namespace + '.' + id;
@@ -1002,6 +1005,8 @@ function getStateAsDate(id) {
 }
 
 function getStateDefault0(id) {
+    if (id == null)
+      return 0;
 	return getNumber(getStateInternal(id));
 }
 

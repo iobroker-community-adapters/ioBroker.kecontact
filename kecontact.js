@@ -358,6 +358,22 @@ function start() {
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);
 }
 
+function isForeignStateSpecified(stateValue) {
+    return stateValue && stateValue !== null && stateValue != "";
+}
+
+function addForeignStateFromConfig(stateValue) {
+    if (isForeignStateSpecified(stateValue)) {
+        if (addForeignState(adapter.config.stateRegard)) {
+            return true;
+        } else {
+            adapter.log.error("Error when adding foreign state '" + stateValue + "'");
+            return false;
+        }
+    }
+    return true;
+}
+
 // check if config data is fine for adapter start
 function checkConfig() {
 	var everythingFine = true;
@@ -377,13 +393,13 @@ function checkConfig() {
     } else {
     	isPassive = false;
     	adapter.log.info('starting charging station in active mode');
-    	if (adapter.config.stateRegard && adapter.config.stateRegard != "") {
+    	if (isForeignStateSpecified(adapter.config.stateRegard)) {
     		photovoltaicsActive = true;
-    		everythingFine = addForeignState(adapter.config.stateRegard) & everythingFine;
+    		everythingFine = addForeignStateFromConfig(adapter.config.stateRegard) & everythingFine;
     	}
-    	if (adapter.config.stateSurplus && adapter.config.stateSurplus != "") {
+    	if (isForeignStateSpecified(adapter.config.stateSurplus)) {
     		photovoltaicsActive = true;
-    		everythingFine = addForeignState(adapter.config.stateSurplus) & everythingFine;
+    		everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) & everythingFine;
     	}
     	if (photovoltaicsActive) {
             if (adapter.config.useX1forAutomatic) {
@@ -426,15 +442,9 @@ function checkConfig() {
     		}
     	}
     	if (maxPowerActive) {
-    		if (adapter.config.stateEnergyMeter1) {
-    			everythingFine = addForeignState(adapter.config.stateEnergyMeter1) & everythingFine;
-    		}
-    		if (adapter.config.stateEnergyMeter2) {
-    			everythingFine = addForeignState(adapter.config.stateEnergyMeter2) & everythingFine;
-    		}
-    		if (adapter.config.stateEnergyMeter3) {
-    			everythingFine = addForeignState(adapter.config.stateEnergyMeter3) & everythingFine;
-    		}
+    		everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter1) & everythingFine;
+    		everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter2) & everythingFine;
+    		everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter3) & everythingFine;
     		if (adapter.config.wallboxNotIncluded) {
     			wallboxIncluded = false;
     		} else {

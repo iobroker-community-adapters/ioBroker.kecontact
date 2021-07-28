@@ -69,6 +69,7 @@ const regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
 
 const stateWallboxEnabled      = "enableUser";                  /*Enable User*/
 const stateWallboxCurrent      = "currentUser";                 /*Current User*/
+const stateWallboxMaxCurrent   = "currentHardware";             /*Maximum Current Hardware*/
 const stateWallboxPhase1       = "i1";                          /*Current 1*/
 const stateWallboxPhase2       = "i2";                          /*Current 2*/
 const stateWallboxPhase3       = "i3";                          /*Current 3*/
@@ -92,6 +93,7 @@ const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when
 const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
 const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
 const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
+const stateLimitCurrent        = "automatic.limitCurrent";      /*maximum amperage for charging*/
 const stateManualPhases        = "automatic.calcPhases";        /*count of phases to calculate with for KeContact Deutschland-Edition*/
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
@@ -561,7 +563,12 @@ function getMinCurrent() {
 
 // get maximum current for wallbox (hardware defined by dip switch)
 function getMaxCurrent() {
-	return getStateInternal("currentHardware"/*Maximum Current Hardware*/);
+	var max = getStateDefault0(stateWallboxMaxCurrent);
+    const limit = getStateDefault0(stateLimitCurrent);
+    if ((limit > 0) && (limit < max)) {
+        max = limit;
+    }
+    return limit;
 }
 
 function resetChargingSessionData() {
@@ -1018,7 +1025,7 @@ function getWallboxType() {
         sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
         return TYPE_D_EDITION;
     } 
-    if (type.startsWith("KC-P30") && (type.substr(15, 1) == "-")) {
+    if ((type.startsWith("KC-P30") || type.startsWith("BMW-10")) && (type.substr(15, 1) == "-")) {
         switch (type.substr(13,1)) {
             case "0": return TYPE_E_SERIES;
             case "1":

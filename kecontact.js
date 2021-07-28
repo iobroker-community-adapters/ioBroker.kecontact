@@ -513,10 +513,11 @@ function handleWallboxMessage(message, remote) {
             msg = '{ ' + msg + ' }';
         }
 
-        handleMessage(JSON.parse(msg));
+        const jsonMsg = JSON.parse(msg);
     } catch (e) {
         adapter.log.warn('Error handling message: ' + e + ' (' + msg + ')');
     }
+    handleMessage(jsonMsg);
 }
 
 // handle incomming broadcast message from wallbox

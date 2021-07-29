@@ -4,8 +4,8 @@
     "version": "1.2.2",
     "news": {
       "1.2.2": {
-        "en": "limit max. charging current dynamically, support BMW charging staion (Keba OEM)",
-        "de": "Möglichkeit, die Ladestärke per State dynamisch zu begrenzen, Untestützung der BMW-Wallbox (Keba OEM)"
+        "en": "limit max. charging current dynamically, support BMW charging staion (Keba OEM), optimized power calculation for Deutschland edition",
+        "de": "Möglichkeit, die Ladestärke per State dynamisch zu begrenzen, Untestützung der BMW-Wallbox (Keba OEM), optimierte Brechnung Ladeleistung bei Deutschland edition"
       },
       "1.2.1": {
         "en": "support X1 contact of charging station to switch photovoltaics automatic",

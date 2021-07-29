@@ -634,7 +634,7 @@ function finishChargingSession() {
 
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
-        if (getStateInternal(stateWallboxEnabled)) {
+        if (isVehiclePlugged() && getStateInternal(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
             return getStateDefault0(stateWallboxCurrent) * voltage * getChargingPhaseCount() / 1000;
         } else {
             return 0;

@@ -367,7 +367,7 @@ function isForeignStateSpecified(stateValue) {
 
 function addForeignStateFromConfig(stateValue) {
     if (isForeignStateSpecified(stateValue)) {
-        if (addForeignState(adapter.config.stateRegard)) {
+        if (addForeignState(stateValue)) {
             return true;
         } else {
             adapter.log.error("Error when adding foreign state '" + stateValue + "'");

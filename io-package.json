@@ -140,8 +140,8 @@
     "pollInterval": 30,
     "loadChargingSessions": false,
     "useX1forAutomatic": false,
-    "stateRegard": null,
-    "stateSurplus": null,
+    "stateRegard": "",
+    "stateSurplus": "",
     "minAmperage": 0,
     "addPower": 0,
     "delta": 0,
@@ -149,9 +149,9 @@
     "minTime": 300,
     "regardTime": 0,
     "maxPower": 0,
-    "stateEnergyMeter1": null,
-    "stateEnergyMeter2": null,
-    "stateEnergyMeter3": null,
+    "stateEnergyMeter1": "",
+    "stateEnergyMeter2": "",
+    "stateEnergyMeter3": "",
     "wallboxNotIncluded": false
   },
   "objects": [

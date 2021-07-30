@@ -584,7 +584,7 @@ function getMaxCurrent() {
     if ((limit > 0) && (limit < max)) {
         max = limit;
     }
-    return limit;
+    return max;
 }
 
 function resetChargingSessionData() {

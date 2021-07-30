@@ -362,7 +362,7 @@ function start() {
 }
 
 function isForeignStateSpecified(stateValue) {
-    return stateValue && stateValue !== null && stateValue != "";
+    return stateValue && stateValue !== null && typeof stateValue == "string" && stateValue != "" && stateValue != "[object Object]";
 }
 
 function addForeignStateFromConfig(stateValue) {

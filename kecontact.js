@@ -27,6 +27,7 @@ var stateChangeListeners = {};
 var currentStateValues = {}; // contains all actual state values
 var sendQueue = [];
 var wallboxType = 0;
+const TYPE_P20      = 0;     // product ID is like KC-P20-ES240030-000-ST
 const TYPE_A_SERIES = 1;     // sample product ID unknown
 const TYPE_B_SERIES = 2;     // sample product ID unknown
 const TYPE_C_SERIES = 3;     // product ID is like KC-P30-EC240422-E00
@@ -1046,6 +1047,9 @@ function getWallboxType() {
         sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
         return TYPE_D_EDITION;
     } 
+    if (type.startsWith("KC-P20")) {
+        return TYPE_P20;
+    }
     if ((type.startsWith("KC-P30") || type.startsWith("BMW-10")) && (type.substr(15, 1) == "-")) {
         switch (type.substr(13,1)) {
             case "0": return TYPE_E_SERIES;
@@ -1054,7 +1058,7 @@ function getWallboxType() {
                 return TYPE_B_SERIES;
             case "2": return TYPE_C_SERIES;
             case "3": 
-                sendWallboxWarning("KeContact P30 b-series will not be supported!");
+                sendWallboxWarning("KeContact P30 a-series will not be supported!");
                 return TYPE_A_SERIES;
             case "B":  // x-series WLAN
             case "C":  // x-series WLAN + 3G

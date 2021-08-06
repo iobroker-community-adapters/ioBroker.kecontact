@@ -252,8 +252,8 @@ function onAdapterStateChange (id, state) {
         return;
     }
     
-    stateChangeListeners[id](oldValue, state.val);
-    setStateAck(id, state.val)
+    stateChangeListeners[id](oldValue, newValue);
+    setStateAck(id, newValue)
 };
 
 function main() {

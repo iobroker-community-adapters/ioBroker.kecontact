@@ -26,14 +26,15 @@ var states = {};          // contains all actual state values
 var stateChangeListeners = {};
 var currentStateValues = {}; // contains all actual state values
 var sendQueue = [];
-var wallboxType = 0;
-const TYPE_P20      = 0;     // product ID is like KC-P20-ES240030-000-ST
-const TYPE_A_SERIES = 1;     // sample product ID unknown
-const TYPE_B_SERIES = 2;     // sample product ID unknown
-const TYPE_C_SERIES = 3;     // product ID is like KC-P30-EC240422-E00
-const TYPE_E_SERIES = 4;     // product ID is like KC-P30-EC240422-E00
-const TYPE_X_SERIES = 5;     // sample product ID unknown
-const TYPE_D_EDITION = 6;    // product id is KC-P30-EC220112-000-DE, there's no other
+const MODEL_P20 = 1;        // product ID is like KC-P20-ES240030-000-ST
+const MODEL_P30 = 2;
+const MODEL_BMW = 3;
+const TYPE_A_SERIES = 1;     
+const TYPE_B_SERIES = 2;     
+const TYPE_C_SERIES = 3;     // product ID for P30 is like KC-P30-EC240422-E00
+const TYPE_E_SERIES = 4;     // product ID for P30 is like KC-P30-EC240422-E00
+const TYPE_X_SERIES = 5;     
+const TYPE_D_EDITION = 6;    // product id (only P30) is KC-P30-EC220112-000-DE, there's no other
 
 
 //var ioBroker_Settings
@@ -42,6 +43,7 @@ const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte L
 const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
 var wallboxWarningSent   = false;  // Warning for inacurate regulation with Deutshcland Edition
+var wallboxUnknownSent   = false;  // Warning wallbox not recognized
 var isPassive            = true    // no automatic power regulation?
 var lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
@@ -204,6 +206,7 @@ function onAdapterStateChange (id, state) {
     if (id == adapter.namespace + '.' + stateWallboxDisabled) {
         if (oldValue != newValue) {
             adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
+            newValue = getBoolean(newValue);
             forceUpdateOfCalculation();
         }
     }
@@ -211,6 +214,7 @@ function onAdapterStateChange (id, state) {
     if (id == adapter.namespace + '.' + statePvAutomatic) {
         if (oldValue != newValue) {
             adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
+            newValue = getBoolean(newValue);
             displayChargeMode();
             forceUpdateOfCalculation();
         }
@@ -237,6 +241,10 @@ function onAdapterStateChange (id, state) {
 
     if (state.ack) {
         return;
+    }
+    if (! id.startsWith(adapter.namespace)) {
+        // do not care for foreign states
+        return
     }
     
     if (!stateChangeListeners.hasOwnProperty(id)) {
@@ -606,7 +614,7 @@ function stopCharging(isMaxPowerCalculation) {
 
 function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
 	var oldValue = 0;
-	if (getStateInternal(stateWallboxEnabled))
+	if (getStateDefaultFalse(stateWallboxEnabled))
 		oldValue = getStateInternal(stateWallboxCurrent);
 
 	if (milliAmpere != oldValue) {
@@ -635,7 +643,7 @@ function finishChargingSession() {
 
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
-        if (isVehiclePlugged() && getStateInternal(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
+        if (isVehiclePlugged() && getStateDefaultFalse(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
             return getStateDefault0(stateWallboxCurrent) * voltage * getChargingPhaseCount() / 1000;
         } else {
             return 0;
@@ -739,11 +747,11 @@ function isPvAutomaticsActive() {
         return false;
     }
     if (useX1switchForAutomatic) {
-        if (getStateInternal(stateX1input) == true) {
+        if (getStateDefaultFalse(stateX1input) == true) {
             return false;
         }
     }
-    if (getStateInternal(statePvAutomatic))
+    if (getStateDefaultFalse(statePvAutomatic))
         return true;
     else
         return false;
@@ -771,11 +779,6 @@ function checkWallboxPower() {
 	if (isPassive)
 		return;
 
-    // "repair" state: VIS boolean control sets value to 0/1 instead of false/true
-    if (typeof getStateInternal(statePvAutomatic) != "boolean") {
-        setStateAck(statePvAutomatic, getStateInternal(statePvAutomatic) == 1);
-    }
-
     var newDate = new Date();
     if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
         return
@@ -801,7 +804,7 @@ function checkWallboxPower() {
 	}
 	
 	// lock wallbox if requested or available amperage below minimum
-	if (getStateInternal(stateWallboxDisabled) || tempMax < getMinCurrent() ||
+	if (getStateDefaultFalse(stateWallboxDisabled) || tempMax < getMinCurrent() ||
 		(isPvAutomaticsActive() && ! isVehiclePlugged())) {
 		curr = 0;
 	} else {
@@ -1008,6 +1011,19 @@ function getStateAsDate(id) {
     return result;
 }
 
+function getBoolean(value) {
+    // "repair" state: VIS boolean control sets value to 0/1 instead of false/true
+    if (typeof value != "boolean") {
+        return value == 1;
+    }
+    return value;
+}
+function getStateDefaultFalse(id) {
+    if (id == null)
+      return false;
+	return getBoolean(getStateInternal(id));
+}
+
 function getStateDefault0(id) {
     if (id == null)
       return 0;
@@ -1023,7 +1039,7 @@ function setStateInternal(id, value) {
 }
 
 function setStateAck(id, value) {
-	// State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkenung
+	// State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
 	// von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
     //setStateInternal(id, value); 
     adapter.setState(id, {val: value, ack: true});
@@ -1041,35 +1057,72 @@ function sendWallboxWarning(message) {
     }
 
 }
+
+function getWallboxModel() {
+    const type = getStateInternal(stateProduct);
+    if (type.startsWith("KC-P20")) {
+        return MODEL_P20;
+    }
+    if (type.startsWith("KC-P30") && (type.substr(15, 1) == "-")) {
+        return MODEL_P30;
+    }
+    if (type.startsWith("BMW-10")  && (type.substr(15, 1) == "-")) {
+        return MODEL_BMW;
+    } 
+    return 0;
+}
+
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
-    if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
-        sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
-        return TYPE_D_EDITION;
-    } 
-    if (type.startsWith("KC-P20")) {
-        return TYPE_P20;
+    switch (getWallboxModel()) {
+        case MODEL_P20: 
+        case MODEL_P30:
+            if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
+                sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
+                return TYPE_D_EDITION;
+            } 
+            switch (type.substr(13,1)) {
+                case "0": return TYPE_E_SERIES;
+                case "1":
+                    sendWallboxWarning("KeContact P20 b-series will not be supported!");
+                    return TYPE_B_SERIES;
+                case "2":  // c-series
+                case "3":  // c-series + PLC (only P20)
+                case "A": return TYPE_C_SERIES;  // c-series + WLAN
+                case "B":  // x-series
+                case "C":  // x-series + GSM
+                case "D":  // x-series + GSM + PLC
+                    return TYPE_X_SERIES;
+            }
+            break;
+        case MODEL_BMW:
+            switch (type.substr(13,1)) {
+                case "0": return TYPE_E_SERIES;
+                case "1":
+                    sendWallboxWarning("KeContact P30 b-series will not be supported!");
+                    return TYPE_B_SERIES;
+                case "2": return TYPE_C_SERIES;
+                case "3": 
+                    sendWallboxWarning("KeContact P30 a-series will not be supported!");
+                    return TYPE_A_SERIES;
+                case "B":  // x-series WLAN
+                case "C":  // x-series WLAN + 3G
+                case "E":  // x-series WLAN + 4G
+                case "G":  // x-series 3G
+                case "H":  // x-series 4G
+                    return TYPE_X_SERIES;
+            }
+            break;
+        default: 
     }
-    if ((type.startsWith("KC-P30") || type.startsWith("BMW-10")) && (type.substr(15, 1) == "-")) {
-        switch (type.substr(13,1)) {
-            case "0": return TYPE_E_SERIES;
-            case "1":
-                sendWallboxWarning("KeContact P30 b-series will not be supported!");
-                return TYPE_B_SERIES;
-            case "2": return TYPE_C_SERIES;
-            case "3": 
-                sendWallboxWarning("KeContact P30 a-series will not be supported!");
-                return TYPE_A_SERIES;
-            case "B":  // x-series WLAN
-            case "C":  // x-series WLAN + 3G
-            case "E":  // x-series WLAN + 4G
-            case "G":  // x-series 3G
-            case "H":  // x-series 4G
-                return TYPE_X_SERIES;
-        }
+    if (! wallboxUnknownSent) {
+        sendSentryMessage( "unknown wallbox type " + type);
+        wallboxUnknownSent = true;
+    }
+    return 0;
+}
 
-    }
-    const msg = "unknown wallbox type " + type;
+function sendSentryMessage(msg) {
     adapter.log.error(msg);
     if (adapter.supportsFeature && adapter.supportsFeature('PLUGINS')) {
         const sentryInstance = adapter.getPluginInstance('sentry');
@@ -1077,16 +1130,22 @@ function getWallboxType() {
             sentryInstance.getSentryObject().captureException(msg);
         }
     }
-    return 0;
 }
 
 function getFirmwareRegEx() {
-    switch (getWallboxType()) {
-        case TYPE_C_SERIES :
-        case TYPE_D_EDITION :
-            return regexP30cSeries;
-        case TYPE_X_SERIES :
-            return regexP30xSeries;
+    switch (getWallboxModel()) {
+        case MODEL_P30 :
+            switch (getWallboxType()) {
+                case TYPE_C_SERIES :
+                case TYPE_D_EDITION :
+                    return regexP30cSeries;
+                case TYPE_X_SERIES :
+                    return regexP30xSeries;
+                default:
+                    return null;
+            }
+        case MODEL_P20 :
+        case MODEL_BMW :
         default:
             return null;
     }

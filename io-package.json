@@ -99,8 +99,8 @@
       "ru": "KEBA KeContact Wallbox"
     },
     "desc": {
-      "en": "Communicates with a KEBA KeContact wallbox.",
-      "de": "Kommuniziert mit einer KEBA KeContact Ladestation."
+      "en": "Communicates with a KEBA KeContact P20/P30 or BMW i wallbox.",
+      "de": "Kommuniziert mit einer KEBA KeContact P20 oder P30 oder BMW i Ladestation."
     },
     "authors": [
       "UncleSamSwiss <samuel.weibel@gmail.com>",

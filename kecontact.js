@@ -1144,7 +1144,7 @@ function getFirmwareRegEx() {
                 default:
                     return null;
             }
-        case MODEL_P20 :
+        case MODEL_P20 :  // as mail of Keba on 06th august 2021 there will be no forther firmware updates
         case MODEL_BMW :
         default:
             return null;

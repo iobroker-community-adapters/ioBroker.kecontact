@@ -12,8 +12,8 @@ systemDictionary = {
         "pl": "Ustawienia adaptera KEBA KeContact",
         "zh-cn": "KEBA KeContact适配器设置"
     },
-    "KeContact IP Address": {
-        "en": "Wallbox IP Address", 
+    "KeContact IP address": {
+        "en": "wallbox IP address", 
         "de": "IP-Adresse der Wallbox", 
         "ru": "IP-адрес Wallbox",
         "pt": "Endereço IP da Wallbox",
@@ -36,8 +36,8 @@ systemDictionary = {
         "pl": "tryb pasywny",
         "zh-cn": "被动模式"
     },
-    "Refresh Interval": {
-        "en": "Refresh Interval (for passive mode)",
+    "refresh interval": {
+        "en": "refresh interval (for passive mode)",
         "de": "Aktualisierungsintervall (für passiven Modus)",
         "ru": "Интервал обновления (для пассивного режима)",
         "pt": "Intervalo de atualização (para modo passivo)",
@@ -109,7 +109,7 @@ systemDictionary = {
         "zh-cn": "仅当要通过光伏装置调节壁箱时才需要以下值"
     },
     "regard": {
-        "en": "Name of regard state",
+        "en": "name of regard state",
         "de": "Name des States für Netzbezug",
         "ru": "Название состояния рассмотрения",
         "pt": "Nome do estado de consideração",
@@ -121,7 +121,7 @@ systemDictionary = {
         "zh-cn": "注意状态的名称"
     },
     "surplus": {
-        "en": "Name of surplus state",
+        "en": "name of surplus state",
         "de": "Name des States für Netzeinspeisung",
         "ru": "Название избыточного состояния",
         "pt": "Nome do estado excedente",
@@ -145,7 +145,7 @@ systemDictionary = {
         "zh-cn": "使用X1开关进行光伏自动"
     },
     "minAmperage":   {
-        "en": "Minimum amperage to start charging",
+        "en": "minimum amperage to start charging",
         "de": "Mindeststromstärke zum Starten des Ladevorgangs",
         "ru": "Минимальная сила тока для начала зарядки",
         "pt": "Amperagem mínima para começar a carregar",
@@ -169,7 +169,7 @@ systemDictionary = {
         "zh-cn": "附加价值"
     },
     "delta":   {
-        "en": "Step size",
+        "en": "step size",
         "de": "Schrittweite",
         "ru": "Размер шага",
         "pt": "Tamanho do passo",
@@ -181,7 +181,7 @@ systemDictionary = {
         "zh-cn": "一步的大小"
     },
     "underusage":   {
-        "en": "Charging under-usage",
+        "en": "charging under-usage",
         "de": "Ladeunterschreitung",
         "ru": "Недостаточная зарядка",
         "pt": "Carregamento subutilizado",
@@ -193,7 +193,7 @@ systemDictionary = {
         "zh-cn": "充电不足使用"
     },
     "minTime":   {
-        "en": "Minimum charging time",
+        "en": "minimum charging time",
         "de": "Mindestladezeit",
         "ru": "Минимальное время зарядки",
         "pt": "Tempo mínimo de carregamento",
@@ -205,7 +205,7 @@ systemDictionary = {
         "zh-cn": "最短充电时间"
     },
     "regardTime":   {
-        "en": "Time to continue charging even with regard",
+        "en": "time to continue charging even with regard",
         "de": "Laden auch bei zu geringem Überschuss für diese Dauer fortsetzen",
         "ru": "Пора продолжать зарядку даже с учетом",
         "pt": "É hora de continuar a carregar, mesmo em relação",
@@ -229,7 +229,7 @@ systemDictionary = {
         "zh-cn": "仅当必须限制最大功率时才需要以下值"
     },
     "maxPower":   {
-        "en": "Maximum power consumption surplus",
+        "en": "maximum power consumption surplus",
         "de": "Maximaler Netzbezug",
         "ru": "Максимальный избыток потребляемой мощности",
         "pt": "Excesso de consumo máximo de energia",
@@ -241,7 +241,7 @@ systemDictionary = {
         "zh-cn": "最大耗电量盈余"
     },
     "energyMeter1":   {
-        "en": "Name of state for 1st energy meter",
+        "en": "name of state for 1st energy meter",
         "de": "Name des States für 1. Energy-Meter",
         "ru": "Название государства для 1-го счетчика электроэнергии",
         "pt": "Nome do estado do primeiro medidor de energia",
@@ -253,7 +253,7 @@ systemDictionary = {
         "zh-cn": "第一个电表的状态名称"
     },
     "energyMeter2":   {
-        "en": "Name of state for 2nd energy meter",
+        "en": "name of state for 2nd energy meter",
         "de": "Name des States für 2. Energy-Meter",
         "ru": "Название состояния для 2-го счетчика электроэнергии",
         "pt": "Nome do estado para o 2º medidor de energia",
@@ -265,7 +265,7 @@ systemDictionary = {
         "zh-cn": "第二电表的状态名称"
     },
     "energyMeter3":   {
-        "en": "Name of state for 3rd energy meter",
+        "en": "name of state for 3rd energy meter",
         "de": "Name des States für 3. Energy-Meter",
         "ru": "Название государства для 3-го счетчика электроэнергии",
         "pt": "Nome do estado para o 3º medidor de energia",
@@ -277,7 +277,7 @@ systemDictionary = {
         "zh-cn": "第三电表的状态名称"
     },
     "wallboxNotIncluded":   {
-        "en": "Power of wallbox NOT included in energy meter(s)",
+        "en": "power of wallbox NOT included in energy meter(s)",
         "de": "Verbrauch der Wallbox in keinem der Energy-Meter enthalten",
         "ru": "Мощность настенной коробки НЕ включена в счетчики энергии",
         "pt": "Potência da caixa de embutir NÃO incluída nos medidores de energia",
@@ -313,7 +313,7 @@ systemDictionary = {
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
     "tooltip_pollInterval": {
-        "en": "Interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
+        "en": "interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
         "de": "Intervall in Sekunden im passiven Modus, wie oft die Wallbox nach neuen Werten abgefragt werden soll (0 = Standardwert von 10 Minuten)",
         "ru": "Интервал в секундах в пассивном режиме, как часто настенный ящик должен запрашивать новые значения (0 = значение по умолчанию 10 минут)",
         "pt": "Intervalo em segundos no modo passivo com que frequência a caixa de parede deve ser consultada para novos valores (0 = valor padrão de 10 minutos)",
@@ -337,7 +337,7 @@ systemDictionary = {
         "zh-cn": "检查是否应将保存在wallbox中的充电会话作为iobroker中的状态加载"
     },
     "tooltip_stateRegard": {
-        "en": "Name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 
+        "en": "name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 
         "de": "Name des States für den Netzbezug des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und der Netzbezug ist positiv und die Einspeisung negativ, dann ist er hier nur anzugeben.",
         "ru": "Название государства, в котором учитывается значение счетчика энергии. Если и учет, и излишек содержатся в одном состоянии, укажите здесь состояние только в том случае, если отношение является положительным значением, а излишек - отрицательным.",
         "pt": "Nome do estado que mantém o valor do medidor de energia. Se a consideração e o excedente estiverem contidos em um estado, preencha o estado aqui apenas se a consideração for um valor positivo e o excedente for negativo.",
@@ -349,7 +349,7 @@ systemDictionary = {
         "zh-cn": "持有电度表考虑值的状态名称。如果关注和剩余都包含在一个状态中，则仅当关注为正值且剩余为负时，才在此处填写状态。"
     },
     "tooltip_stateSurplus": {
-        "en": "Name of state which holds surplus value of energy meter. If both regard and surplus are contained in one state, fill in state here only if surplus is a positive value and regard is negative.",
+        "en": "name of state which holds surplus value of energy meter. If both regard and surplus are contained in one state, fill in state here only if surplus is a positive value and regard is negative.",
         "de": "Name des States für die Netzeinspeisung des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und die Einspeisung ist positiv und der Netzbezug negativ, dann ist er hier nur anzugeben.",
         "ru": "Название государства, в котором хранится прибавочная стоимость счетчика энергии. Если и учет, и излишек содержатся в одном состоянии, укажите здесь состояние, только если излишек является положительной величиной, а отношение отрицательным.",
         "pt": "Nome do estado que detém o valor excedente do medidor de energia. Se tanto a consideração quanto o excedente estiverem contidos em um estado, preencha o estado aqui apenas se o excedente for um valor positivo e a consideração for negativa.",
@@ -361,7 +361,7 @@ systemDictionary = {
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
     },
     "tooltip_useX1": {
-        "en": "Activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.", 
+        "en": "activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.", 
         "de": "Checkbox aktivieren, wenn der Eingang X1 der Wallbox verwendet werden soll, um die PV-Automatik beim Schließen zu deaktivieren. So kann über einen physikalischen Schalter die PV-Automatik (de)aktiviert werden.",
         "ru": "Установите флажок, если вход X1 зарядной станции должен использоваться для автоматического отключения фотоэлектрических элементов при закрытии. Таким образом, можно использовать физический выключатель для автоматического включения (отключения) фотоэлектрической энергии.",
         "pt": "Ative a caixa de seleção se a entrada X1 da estação de carregamento deve ser usada para desativar a energia fotovoltaica automática quando fechada. Assim, um interruptor físico pode ser usado para (des) ativar a fotovoltaica automática.",
@@ -373,7 +373,7 @@ systemDictionary = {
         "zh-cn": "如果应使用充电站的 X1 输入在关闭时自动停用光伏，则激活复选框。因此，物理开关可用于（去）激活光伏自动。"
     },
     "tooltip_minAmperage": {
-        "en": "Minimum value of amperage with which charging station will start (e.g. Renault Zoe needs at least 8A to start charging)",
+        "en": "minimum value of amperage with which charging station will start (e.g. Renault Zoe needs at least 8A to start charging)",
         "de": "Mindest-Ampere mit der die Wallbox das Laden startet. Manche Fahrzeuge (z.B. Renaut Zoe) können nicht mit 6A laden, dann kann hier ein höherer Mindestwert eingestellt werden",
         "ru": "Минимальное значение силы тока, при котором зарядная станция все еще запускается (например, Renault Zoe требуется не менее 8 А для начала зарядки)",
         "pt": "Valor mínimo da amperagem com a qual a estação de carregamento ainda inicia (por exemplo, Renault Zoe precisa de pelo menos 8A para começar a carregar)",
@@ -385,7 +385,7 @@ systemDictionary = {
         "zh-cn": "充电站仍可启动的最小安培数（例如，雷诺佐伊（Renault Zoe）至少需要8A才能开始充电）"
     },
     "tooltip_addPower": {
-        "en": "Additional regard power that may be permanently used for running charging session",
+        "en": "additional regard power that may be permanently used for running charging session",
         "de": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten",
         "ru": "Дополнительная мощность, которая может постоянно использоваться для запуска сеанса зарядки",
         "pt": "Poder de consideração adicional que pode ser usado permanentemente para executar a sessão de carregamento",
@@ -397,7 +397,7 @@ systemDictionary = {
         "zh-cn": "可以永久用于运行充电会话的附加功能"
     },
     "tooltip_delta": {
-        "en": "Controlled process variable by which charging station is regulated",
+        "en": "controlled process variable by which charging station is regulated",
         "de": "Regelung der Wallbox erfolgt in den angegebenen Schritten",
         "ru": "Контролируемый параметр процесса, с помощью которого регулируется зарядная станция",
         "pt": "Variável de processo controlada pela qual a estação de carregamento é regulada",
@@ -409,7 +409,7 @@ systemDictionary = {
         "zh-cn": "调节充电站的受控过程变量"
     },
     "tooltip_underusage": {
-        "en": "If photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless more than the specified watts are taken from extern",
+        "en": "if photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless more than the specified watts are taken from extern",
         "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst bei einem Netzbezug über der angegebenen Wattzahl unterbrochen werden",
         "ru": "Если у фотоэлектрической батареи меньше излишков, чем необходимо для минимальной зарядки вашего электромобиля, зарядка будет продолжаться, если только внешняя мощность не будет превышена.",
         "pt": "Se a energia fotovoltaica tiver menos excedente do que o necessário para carregar minimamente seu EV, o carregamento deve continuar, a menos que mais do que os watts especificados sejam retirados do exterior",
@@ -421,7 +421,7 @@ systemDictionary = {
         "zh-cn": "如果光伏电池的剩余电量不足以对您的EV进行最小充电，则除非从外部获得的瓦数超过指定的瓦特，否则应继续充电"
     },
     "tooltip_minTime": {
-        "en": "If photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless the EV was charged for the specified amount of time",
+        "en": "if photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue unless the EV was charged for the specified amount of time",
         "de": "Unterschreitet der Überschuss der PV-Anlage die minimale Ladestärke, soll der Ladevorgang erst unterbrochen werden, wenn mindestens die angegebene Zeit geladen wurde",
         "ru": "Если у фотоэлектрических элементов меньше излишков, чем необходимо для минимальной зарядки вашего электромобиля, зарядка будет продолжаться, если электромобиль не был заряжен в течение указанного периода времени.",
         "pt": "Se a energia fotovoltaica tiver menos excedente do que o necessário para carregar minimamente o seu EV, o carregamento deve continuar, a menos que o EV tenha sido cobrado pelo período de tempo especificado",
@@ -433,7 +433,7 @@ systemDictionary = {
         "zh-cn": "如果光伏电池的剩余电量不足以对您的EV进行最小充电，则除非该EV在指定时间内充电，否则应继续充电"
     },
     "tooltip_regardTime": {
-        "en": "Each time photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue at least for the specified amount of time",
+        "en": "each time photovoltaics has less surplus than needed to minimally charge your EV, charging shall continue at least for the specified amount of time",
         "de": "Jedes Mal wenn der Überschuss der PV-Anlage die minimale Ladestärke unterschreitet, soll der Ladevorgang noch für die angegebene Zeit aufrecht erhalten werden",
         "ru": "Каждый раз, когда у фотоэлектрических элементов излишка меньше, чем необходимо для минимальной зарядки вашего электромобиля, зарядка должна продолжаться как минимум в течение указанного периода времени.",
         "pt": "Cada vez que a energia fotovoltaica tem menos excedente do que o necessário para carregar minimamente o seu EV, o carregamento deve continuar pelo menos pelo período de tempo especificado",
@@ -445,7 +445,7 @@ systemDictionary = {
         "zh-cn": "每次光伏电池剩余电量少于为您的EV最低充电所需的电量时，剩余电量将至少持续指定的时间"
     },
     "tooltip_maxPower": {
-        "en": "You can define a maximum of watts which can must not be reached by all consumers",
+        "en": "you can define a maximum of watts which can must not be reached by all consumers",
         "de": "Mit diesem Wert kann die Leistung der Wallbox so begrenzt werden, dass ein max. Gesamtverbrauch nicht überschritten wird. Dies ist nötig, wenn der Netzbetreiber eine max. Leistung aufgrund begrenzter Kapazität vorgibt.",
         "ru": "Вы можете определить максимальную мощность, которая не должна достигаться всеми потребителями.",
         "pt": "Você pode definir um máximo de watts que não deve ser alcançado por todos os consumidores",
@@ -457,7 +457,7 @@ systemDictionary = {
         "zh-cn": "您可以定义所有使用者都不能达到的最大瓦数"
     },
     "tooltip_stateEnergyMeter1": {
-        "en": "Name of state for the 1st energy meter which shall be used to calculate max. power consumption for power limitation",
+        "en": "name of state for the 1st energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 1. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
         "ru": "Название государства для 1-го счетчика энергии, который будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
         "pt": "Nome do estado do primeiro medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
@@ -469,7 +469,7 @@ systemDictionary = {
         "zh-cn": "用于计算最大功率的第一个电度表的状态名称。功耗以限制功率"
     },
     "tooltip_stateEnergyMeter2": {
-        "en": "Name of state for the 2nd energy meter which shall be used to calculate max. power consumption for power limitation",
+        "en": "name of state for the 2nd energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 2. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
         "ru": "Название состояния для 2-го счетчика энергии, которое будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
         "pt": "Nome do estado do segundo medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
@@ -481,7 +481,7 @@ systemDictionary = {
         "zh-cn": "第二个电度表的状态名称，用于计算最大值。功耗以限制功率"
     },
     "tooltip_stateEnergyMeter3": {
-        "en": "Name of state for the 3rd energy meter which shall be used to calculate max. power consumption for power limitation",
+        "en": "name of state for the 3rd energy meter which shall be used to calculate max. power consumption for power limitation",
         "de": "Name des States des 3. Energy-Meters, das für die Berechnung des Gesamtverbrauchs für die Leistungsbegrenzung einbezogen wird.",
         "ru": "Название государства для 3-го счетчика энергии, который будет использоваться для расчета макс. потребляемая мощность для ограничения мощности",
         "pt": "Nome do estado do terceiro medidor de energia que deve ser usado para calcular o máx. consumo de energia para limitação de energia",
@@ -493,7 +493,7 @@ systemDictionary = {
         "zh-cn": "用于计算最大功率的第三个电度表的状态名称。功耗以限制功率"
     },
     "tooltip_wallboxNotIncluded": {
-        "en": "Check if none of the listed energy meters also cover power consumption of wallbox",
+        "en": "check if none of the listed energy meters also cover power consumption of wallbox",
         "de": "Die Option ist zu markieren, wenn der Verbrauch der Wallbox nicht in der Leistung der Energy-Meter enthalten ist.",
         "ru": "Убедитесь, что ни один из перечисленных счетчиков энергии также не покрывает потребляемую мощность настенной коробки",
         "pt": "Verifique se nenhum dos medidores de energia listados também cobre o consumo de energia da caixa de embutir",

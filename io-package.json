@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "news": {
+      "1.2.3": {
+        "en": "fix wrong P20/P30 detection",
+        "de": "Bugfix: P20/P30-Unterscheidung war fehlerhaft"
+      },
       "1.2.2": {
         "en": "limit max. charging current dynamically, support P20 and BMW charging staion (Keba OEM), optimized power calculation for Deutschland edition",
         "de": "Möglichkeit, die Ladestärke per State dynamisch zu begrenzen, Unterstützung der P20 und BMW-Wallbox (Keba OEM), optimierte Berechnung Ladeleistung bei Deutschland edition"

@@ -1076,11 +1076,6 @@ function getWallboxType() {
     const type = getStateInternal(stateProduct);
     switch (getWallboxModel()) {
         case MODEL_P20: 
-        case MODEL_P30:
-            if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
-                sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
-                return TYPE_D_EDITION;
-            } 
             switch (type.substr(13,1)) {
                 case "0": return TYPE_E_SERIES;
                 case "1":
@@ -1095,6 +1090,11 @@ function getWallboxType() {
                     return TYPE_X_SERIES;
             }
             break;
+        case MODEL_P30:
+            if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
+                sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
+                return TYPE_D_EDITION;
+            } 
         case MODEL_BMW:
             switch (type.substr(13,1)) {
                 case "0": return TYPE_E_SERIES;

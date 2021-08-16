@@ -50,50 +50,6 @@
       "1.0.0": {
         "en": "change settings layout to material design, first official version",
         "de": "Umstellung Einstallungsdialog auf Material-Design, erste offizielle Version"
-      },
-      "0.3.2": {
-        "en": "in PV automatics mode wallbox will be disabled as long as no vehicle is plugged",
-        "de": "bei PV-Automatik bleibt Wallbox gesperrt solange kein Fahrzeug angeschlossen ist"
-      },
-      "0.3.1": {
-        "en": "fix: when vehicle is plugged, it was always charged for minimum charging time even if PV was low",
-        "de": "Fix: Auto wurde zumindest immer für Mindestladedauer geladen, auch wenn PV-Leistung nicht ausreicht"
-      },
-      "0.3.0": {
-        "en": "regulate wallbox by PV automatics independant from state curr user",
-        "de": "Regeln der Ladeleistung bei PV-optimiertem Laden unabhängig von curr user"
-      },
-      "0.2.6": {
-        "en": "retry: set current by 'currtime' command instead of 'curr'",
-        "de": "2. Versuch Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
-      },
-      "0.2.5": {
-        "en": "bugfix",
-        "de": "Bugfix"
-      },
-      "0.2.4": {
-        "en": "new option for passive mode, set current by 'currtime' command instead of 'curr'",
-        "de": "Neue Option zum passiven Betrieb der Wallbox, Leistung mit 'currtime'-Kommando anstelle 'curr' regeln"
-      },
-      "0.2.3": {
-        "en": "fix call to display PV automatics after vehicle is plugged, fix object in energy meter states",
-        "de": "Anzeige der Lade-Automatik bei Anstecken des Fahrzeugs gefixt, Objekte in EnergyMeter-State korrigiert"
-      },
-      "0.2.2": {
-        "en": "display information about photovoltaics automatic also at begin of charging and delayed display when vehicle is plugged (8 sec)",
-        "de": "Anzeige ob Lade-Automatik aktiv ist bei jedem Ladestart und nun erst verzögert (8 Sek.), wenn Fahrzeug angesteckt wird"
-      },
-      "0.2.1": {
-        "en": "handle values of undefined in getStates, better recognition of max power function",
-        "de": "undefined-Werte in getStates abfangen, bessere Erkennung, ob Leistungsbegrenzng gesetzt"
-      },
-      "0.2.0": {
-        "en": "added automatic regulation by output photovoltaics unit, limitation of overall power consumption",
-        "de": "Steuerung in Abhängigkeit der Leistung einer PV-Anlage möglich, Begrezung Ladestrom auf max. Gesamtverbrauch eines Anschlusses"
-      },
-      "0.1.0": {
-        "en": "First official version",
-        "de": "Erste offizielle Version"
       }
     },
     "title": "KEBA KeContact Wallbox",

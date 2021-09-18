@@ -388,8 +388,7 @@ async function main() {
     rxSocketBroadcast.on('message', handleWallboxBroadcast);
     rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
     
-	// Mark that connection is established, acknowledge by incomming data
-    await adapter.setStateAsync('info.connection', true, false);
+    await adapter.setStateAsync('info.connection', true, true);
 
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
     	if (err) {

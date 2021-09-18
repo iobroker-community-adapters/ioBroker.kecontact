@@ -153,6 +153,19 @@
             "native": {}
         },
 		{
+		    "_id": "connection",
+		    "type": "state",
+		    "common": {
+				"name": "is wallbox connected?",
+				"type": "booelan",
+				"role": "indicator.connected",
+				"read": true,
+				"write": false,
+				"def": false
+		    },
+		    "native": {}
+		},
+		{
 		    "_id": "product",
 		    "type": "state",
 		    "common": {

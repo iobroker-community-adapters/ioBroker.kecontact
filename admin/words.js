@@ -1,4 +1,6 @@
-﻿// Dictionary (systemDictionary is global variable from adapter-settings.js)
+/*global systemDictionary:true */
+'use strict';
+
 systemDictionary = {
     "KEBA KeContact adapter settings": {
         "en": "KEBA KeContact adapter settings",
@@ -12,7 +14,7 @@ systemDictionary = {
         "pl": "Ustawienia adaptera KEBA KeContact",
         "zh-cn": "KEBA KeContact适配器设置"
     },
-    "KeContact IP address": {
+    "host": {
         "en": "wallbox IP address", 
         "de": "IP-Adresse der Wallbox", 
         "ru": "IP-адрес Wallbox",
@@ -24,7 +26,7 @@ systemDictionary = {
         "pl": "Adres IP stacji Wallbox",
         "zh-cn": "Wallbox IP地址"
     },
-    "passive mode": {
+    "passiveMode": {
         "en": "passive mode",
         "de": "passiver Modus",
         "ru": "пассивный режим",
@@ -36,7 +38,7 @@ systemDictionary = {
         "pl": "tryb pasywny",
         "zh-cn": "被动模式"
     },
-    "refresh interval": {
+    "pollInterval": {
         "en": "refresh interval (for passive mode)",
         "de": "Aktualisierungsintervall (für passiven Modus)",
         "ru": "Интервал обновления (для пассивного режима)",
@@ -132,7 +134,7 @@ systemDictionary = {
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
     },
-    "use X1 switch": {
+    "useX1forAutomatic": {
         "en": "use X1 switch for photovoltaic automatic",
         "de": "X1-Schalter für PV-Automatik nutzen",
         "ru": "используйте переключатель X1 для фотоэлектрической автоматической",
@@ -240,7 +242,7 @@ systemDictionary = {
         "pl": "Nadwyżka maksymalnego poboru mocy",
         "zh-cn": "最大耗电量盈余"
     },
-    "energyMeter1":   {
+    "stateEnergyMeter1":   {
         "en": "name of state for 1st energy meter",
         "de": "Name des States für 1. Energy-Meter",
         "ru": "Название государства для 1-го счетчика электроэнергии",
@@ -252,7 +254,7 @@ systemDictionary = {
         "pl": "Nazwa stanu dla 1. licznika energii",
         "zh-cn": "第一个电表的状态名称"
     },
-    "energyMeter2":   {
+    "stateEnergyMeter2":   {
         "en": "name of state for 2nd energy meter",
         "de": "Name des States für 2. Energy-Meter",
         "ru": "Название состояния для 2-го счетчика электроэнергии",
@@ -264,7 +266,7 @@ systemDictionary = {
         "pl": "Nazwa stanu dla 2. licznika energii",
         "zh-cn": "第二电表的状态名称"
     },
-    "energyMeter3":   {
+    "stateEnergyMeter3":   {
         "en": "name of state for 3rd energy meter",
         "de": "Name des States für 3. Energy-Meter",
         "ru": "Название государства для 3-го счетчика электроэнергии",

@@ -153,11 +153,11 @@
             "native": {}
         },
 		{
-		    "_id": "connection",
+		    "_id": "info.connection",
 		    "type": "state",
 		    "common": {
 				"name": "is wallbox connected?",
-				"type": "booelan",
+				"type": "boolean",
 				"role": "indicator.connected",
 				"read": true,
 				"write": false,

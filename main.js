@@ -291,7 +291,7 @@ function onAdapterStateChange (id, state) {
 async function main() {
 
     // Reset the connection indicator during startup
-    await adapter.setStateAsync('info.connection', false, true);
+    //await adapter.setStateAsync('info.connection', false, true);
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
@@ -389,7 +389,7 @@ async function main() {
     rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
     
 	// Mark that connection is established, acknowledge by incomming data
-    await adapter.setStateAsync('info.connection', true, false);
+    //await adapter.setStateAsync('info.connection', true, false);
 
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
     	if (err) {
@@ -607,7 +607,7 @@ function addForeignState(id) {
 function handleWallboxMessage(message, remote) {
     adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
 	// Mark that connection is established by incomming data
-    adapter.setState('info.connection', true, true);
+    //adapter.setState('info.connection', true, true);
     var jsonMsg = null;
     try {
         var msg = message.toString().trim();
@@ -646,7 +646,7 @@ function handleWallboxMessage(message, remote) {
 function handleWallboxBroadcast(message, remote) {
     adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
 	// Mark that connection is established by incomming data
-    adapter.setState('info.connection', true, true);
+    //adapter.setState('info.connection', true, true);
     try {
         var msg = message.toString().trim();
         handleMessage(JSON.parse(msg));

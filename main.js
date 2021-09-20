@@ -1211,6 +1211,8 @@ function getWallboxModel() {
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
     switch (getWallboxModel()) {
+        case undefined:
+            return 0;
         case MODEL_P20: 
             switch (type.substr(13,1)) {
                 case "0": return TYPE_E_SERIES;

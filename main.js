@@ -367,12 +367,7 @@ async function main() {
     
     rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
     rxSocketReports.on('error', (err) => {
-        if (err.message.includes('EADDRINUSE')) {
-            adapter.log.error('No receive port available: if subsequent wallbox, please mark in options! Otherwise this instance of adapter will not start');
-            adapter.log.info('RxSocketReports error: ' + err.message);
-        } else {
-            adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
-        }
+        adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
         rxSocketReports.close();
     });
     rxSocketReports.on('listening', function () {
@@ -386,12 +381,7 @@ async function main() {
         // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
         rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         rxSocketBroadcast.on('error', (err) => {
-            if (err.message.includes('EADDRINUSE')) {
-                adapter.log.error('No broadcast available: if subsequent wallbox, please mark in options! Otherwise this instance of adapter will not start');
-                adapter.log.info('RxSocketBroadcast error: ' + err.message);
-            } else {
-                adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
-            }
+            adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
             rxSocketBroadcast.close();
         });
         rxSocketBroadcast.on('listening', function () {
@@ -401,6 +391,7 @@ async function main() {
             adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
         });
         rxSocketBroadcast.on('message', handleWallboxBroadcast);
+        rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
     }
 
     //await adapter.setStateAsync('info.connection', true, true);  // too ealry to acknowledge ...

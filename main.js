@@ -363,11 +363,16 @@ async function main() {
     // adapter.checkGroup('admin', 'admin', (res) => {
         // adapter.log.info('check group user admin group admin: ' + res);
     // });
-	    txSocket = dgram.createSocket('udp4');
+    txSocket = dgram.createSocket('udp4');
     
     rxSocketReports = dgram.createSocket('udp4');
     rxSocketReports.on('error', (err) => {
-        adapter.log.error(`RxSocketReports Error:\n${err.stack}`);
+        if (err.message.includes('EADDRINUSE')) {
+            adapter.log.error('No receive port available: if subsequent wallbox, please mark in options! Adapter will not start');
+            adapter.log.info('RxSocketReports error: ' + err.message);
+        } else {
+            adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
+        }
         rxSocketReports.close();
     });
     rxSocketReports.on('listening', function () {
@@ -380,32 +385,22 @@ async function main() {
     if (adapter.config.subsequentWallbox == false) {
         // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
         rxSocketBroadcast = dgram.createSocket('udp4');
-        adapter.log.info("Step 1");
         rxSocketBroadcast.on('error', (err) => {
-            adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
+            if (err.message.includes('EADDRINUSE')) {
+                adapter.log.error('No broadcast available: if subsequent wallbox, please mark in options! Adapter will not start');
+                adapter.log.info('RxSocketBroadcast error: ' + err.message);
+            } else {
+                adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
+            }
             rxSocketBroadcast.close();
         });
-        adapter.log.info("Step 2");
         rxSocketBroadcast.on('listening', function () {
-            adapter.log.info("Step 7");
             rxSocketBroadcast.setBroadcast(true);
-            adapter.log.info("Step 8");
             rxSocketBroadcast.setMulticastLoopback(true);
-            adapter.log.info("Step 9");
             var address = rxSocketBroadcast.address();
             adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
         });
-        adapter.log.info("Step 3");
         rxSocketBroadcast.on('message', handleWallboxBroadcast);
-        adapter.log.info("Step 4");
-        try {
-            adapter.log.info("Step 5");
-            rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
-            adapter.log.info("Step 6");
-        } catch (e) {
-            adapter.log.error("No broadcast available: if subsequent wallbox, please mark in options! Adapter will not start");
-            return;
-        }
     }
 
     await adapter.setStateAsync('info.connection', true, true);

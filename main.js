@@ -22,8 +22,8 @@ const DEFAULT_UDP_PORT = 7090;
 const BROADCAST_UDP_PORT = 7092;
 
 var txSocket;
-var rxSocketReports;
-var rxSocketBroadcast;
+var rxSocketReports = null;
+var rxSocketBroadcast = null;
 var sendDelayTimer = null;
 var states = {};          // contains all actual state values
 var stateChangeListeners = {};
@@ -297,6 +297,7 @@ async function main() {
     // adapter.config:
     adapter.log.info('config host: ' + adapter.config.host);
     adapter.log.info('config passiveMode: ' + adapter.config.passiveMode);
+    adapter.log.info('config subsequentWallbox: ' + adapter.config.subsequentWallbox);
     adapter.log.info('config pollInterval: ' + adapter.config.pollInterval);
     adapter.log.info('config loadChargingSessions: ' + adapter.config.loadChargingSessions);
     adapter.log.info('config useX1forAutomatic: ' + adapter.config.useX1forAutomatic);
@@ -374,20 +375,28 @@ async function main() {
     rxSocketReports.on('message', handleWallboxMessage);
     rxSocketReports.bind(DEFAULT_UDP_PORT);
     
-    rxSocketBroadcast = dgram.createSocket('udp4');
-    rxSocketBroadcast.on('error', (err) => {
-        adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
-        rxSocketBroadcast.close();
-    });
-    rxSocketBroadcast.on('listening', function () {
-        rxSocketBroadcast.setBroadcast(true);
-        rxSocketBroadcast.setMulticastLoopback(true);
-        var address = rxSocketBroadcast.address();
-        adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
-    });
-    rxSocketBroadcast.on('message', handleWallboxBroadcast);
-    rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
-    
+    if (adapter.config.subsequentWallbox == false) {
+        // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
+        rxSocketBroadcast = dgram.createSocket('udp4');
+        rxSocketBroadcast.on('error', (err) => {
+            adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
+            rxSocketBroadcast.close();
+        });
+        rxSocketBroadcast.on('listening', function () {
+            rxSocketBroadcast.setBroadcast(true);
+            rxSocketBroadcast.setMulticastLoopback(true);
+            var address = rxSocketBroadcast.address();
+            adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
+        });
+        rxSocketBroadcast.on('message', handleWallboxBroadcast);
+        try {
+            rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
+        } catch (e) {
+            adapter.log.error("No broadcast available: if subsequent wallbox, please mark in options! Adapter will not start");
+            return;
+        }
+    }
+
     await adapter.setStateAsync('info.connection', true, true);
 
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
@@ -504,6 +513,12 @@ function checkConfig() {
     if (adapter.config.passiveMode) {
     	isPassive = true;
     	adapter.log.info('starting charging station in passive mode');
+    }
+    if (adapter.config.subsequentWallbox) {
+        isPassive = true;
+        adapter.log.info('subsequent wallbox, starting in passive mode');
+    }
+    if (isPassive) {
         if (adapter.config.pollInterval > 0) {
             intervalPassiveUpdate = getNumber(adapter.config.pollInterval) * 1000;
         }
@@ -644,14 +659,18 @@ function handleWallboxMessage(message, remote) {
 // handle incomming broadcast message from wallbox
 function handleWallboxBroadcast(message, remote) {
     adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-	// Mark that connection is established by incomming data
-    adapter.setState('info.connection', true, true);
-    try {
-        var msg = message.toString().trim();
-        handleMessage(JSON.parse(msg));
-    } catch (e) {
-        adapter.log.warn('Error handling broadcast: ' + e);
-    }
+    if (remote.address == adapter.config.host) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
+        // Mark that connection is established by incomming data
+        adapter.setState('info.connection', true, true);
+        try {
+            var msg = message.toString().trim();
+            handleMessage(JSON.parse(msg));
+        } catch (e) {
+            adapter.log.warn('Error handling broadcast: ' + e);
+        }
+        adapter.log.info("was own broadcast from " + remote.address);
+    } else
+    adapter.log.info("was vom other wallbox: " + remote.address);
 }
 
 function handleMessage(message) {

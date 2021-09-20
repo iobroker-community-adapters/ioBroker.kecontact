@@ -182,11 +182,13 @@ function onAdapterUnload(callback) {
         }
         
         if (rxSocketReports) {
-            rxSocketReports.close();
+            if (rxSocketBroadcast.active)
+                rxSocketReports.close();
         }
         
         if (rxSocketBroadcast) {
-            rxSocketBroadcast.close();
+            if (rxSocketBroadcast.active)
+                rxSocketBroadcast.close();
         }
         
         if (adapter.config.stateRegard)
@@ -378,19 +380,28 @@ async function main() {
     if (adapter.config.subsequentWallbox == false) {
         // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
         rxSocketBroadcast = dgram.createSocket('udp4');
+        adapter.log.info("Step 1");
         rxSocketBroadcast.on('error', (err) => {
             adapter.log.error(`RxSocketBroadcast Error:\n${err.stack}`);
             rxSocketBroadcast.close();
         });
+        adapter.log.info("Step 2");
         rxSocketBroadcast.on('listening', function () {
+            adapter.log.info("Step 7");
             rxSocketBroadcast.setBroadcast(true);
+            adapter.log.info("Step 8");
             rxSocketBroadcast.setMulticastLoopback(true);
+            adapter.log.info("Step 9");
             var address = rxSocketBroadcast.address();
             adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
         });
+        adapter.log.info("Step 3");
         rxSocketBroadcast.on('message', handleWallboxBroadcast);
+        adapter.log.info("Step 4");
         try {
+            adapter.log.info("Step 5");
             rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
+            adapter.log.info("Step 6");
         } catch (e) {
             adapter.log.error("No broadcast available: if subsequent wallbox, please mark in options! Adapter will not start");
             return;
@@ -512,11 +523,15 @@ function checkConfig() {
     }
     if (adapter.config.passiveMode) {
     	isPassive = true;
-    	adapter.log.info('starting charging station in passive mode');
+        if (everythingFine) {
+    	    adapter.log.info('starting charging station in passive mode');
+        }
     }
     if (adapter.config.subsequentWallbox) {
         isPassive = true;
-        adapter.log.info('subsequent wallbox, starting in passive mode');
+        if (everythingFine) {
+            adapter.log.info('subsequent wallbox, starting in passive mode');
+        }
     }
     if (isPassive) {
         if (adapter.config.pollInterval > 0) {
@@ -524,7 +539,9 @@ function checkConfig() {
         }
     } else {
     	isPassive = false;
-    	adapter.log.info('starting charging station in active mode');
+        if (everythingFine) {
+            adapter.log.info('starting charging station in active mode');
+        }
     	if (isForeignStateSpecified(adapter.config.stateRegard)) {
     		photovoltaicsActive = true;
     		everythingFine = addForeignStateFromConfig(adapter.config.stateRegard) && everythingFine;

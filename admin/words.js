@@ -326,7 +326,7 @@ systemDictionary = {
         "pl": "Wallbox KEBA KeContact zachowuje pasywność (brak regulacji mocy)",
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
     },
-    "tooltip_tooltip_subsequentWallbox": {
+    "tooltip_subsequentWallbox": {
         "en": "Check this option if this isn't the only/first wallbox to be controlled. In this case the wallbox will be running in passive mode and will not receice broadcast messages due to limitations of iobroker system.", 
         "de": "Aktivieren Sie diese Option, wenn dies nicht die einzige/erste zu steuernde Wallbox ist. In diesem Fall läuft die Wallbox im passiven Modus und empfängt aufgrund von Einschränkungen des iobroker-Systems keine Broadcast-Nachrichten.",
         "ru": "Отметьте эту опцию, если это не единственный / первый настенный бокс, которым нужно управлять. В этом случае wallbox будет работать в пассивном режиме и не будет принимать широковещательные сообщения из-за ограничений системы iobroker.",

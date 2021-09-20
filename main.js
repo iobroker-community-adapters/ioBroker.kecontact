@@ -365,10 +365,10 @@ async function main() {
     // });
     txSocket = dgram.createSocket('udp4');
     
-    rxSocketReports = dgram.createSocket('udp4');
+    rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
     rxSocketReports.on('error', (err) => {
         if (err.message.includes('EADDRINUSE')) {
-            adapter.log.error('No receive port available: if subsequent wallbox, please mark in options! Adapter will not start');
+            adapter.log.error('No receive port available: if subsequent wallbox, please mark in options! Otherwise this instance of adapter will not start');
             adapter.log.info('RxSocketReports error: ' + err.message);
         } else {
             adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
@@ -380,14 +380,18 @@ async function main() {
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
     rxSocketReports.on('message', handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT);
+    rxSocketReports.bind({
+        address: adapter.config.host,
+        port: DEFAULT_UDP_PORT,
+        exclusive: false
+      });
     
     if (adapter.config.subsequentWallbox == false) {
         // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
-        rxSocketBroadcast = dgram.createSocket('udp4');
+        rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         rxSocketBroadcast.on('error', (err) => {
             if (err.message.includes('EADDRINUSE')) {
-                adapter.log.error('No broadcast available: if subsequent wallbox, please mark in options! Adapter will not start');
+                adapter.log.error('No broadcast available: if subsequent wallbox, please mark in options! Otherwise this instance of adapter will not start');
                 adapter.log.info('RxSocketBroadcast error: ' + err.message);
             } else {
                 adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
@@ -403,7 +407,7 @@ async function main() {
         rxSocketBroadcast.on('message', handleWallboxBroadcast);
     }
 
-    await adapter.setStateAsync('info.connection', true, true);
+    //await adapter.setStateAsync('info.connection', true, true);  // too ealry to acknowledge ...
 
     adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
     	if (err) {

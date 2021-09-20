@@ -625,40 +625,42 @@ function addForeignState(id) {
 // handle incomming message from wallbox
 function handleWallboxMessage(message, remote) {
     adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
-	// Mark that connection is established by incomming data
-    adapter.setState('info.connection', true, true);
-    var jsonMsg = null;
-    try {
-        var msg = message.toString().trim();
-        if (msg.length === 0) {
+    if (remote.address == adapter.config.host) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
+        // Mark that connection is established by incomming data
+        adapter.setState('info.connection', true, true);
+        var jsonMsg = null;
+        try {
+            var msg = message.toString().trim();
+            if (msg.length === 0) {
+                return;
+            }
+
+            if (msg == "i") {
+                adapter.log.debug('Received: ' + message);
+                return;
+            }
+            
+            if (msg.startsWith('TCH-OK')) {
+                adapter.log.debug('Received ' + message);
+                return;
+            }
+
+            if (msg.startsWith('TCH-ERR')) {
+                adapter.log.error('Error received from wallbox: ' + message);
+                return;
+            }
+
+            if (msg[0] == '"') {
+                msg = '{ ' + msg + ' }';
+            }
+
+            jsonMsg = JSON.parse(msg);
+        } catch (e) {
+            adapter.log.warn('Error handling message: ' + e + ' (' + msg + ')');
             return;
         }
-
-        if (msg == "i") {
-            adapter.log.debug('Received: ' + message);
-            return;
-        }
-        
-        if (msg.startsWith('TCH-OK')) {
-            adapter.log.debug('Received ' + message);
-            return;
-        }
-
-        if (msg.startsWith('TCH-ERR')) {
-            adapter.log.error('Error received from wallbox: ' + message);
-            return;
-        }
-
-        if (msg[0] == '"') {
-            msg = '{ ' + msg + ' }';
-        }
-
-        jsonMsg = JSON.parse(msg);
-    } catch (e) {
-        adapter.log.warn('Error handling message: ' + e + ' (' + msg + ')');
-        return;
+        handleMessage(jsonMsg);
     }
-    handleMessage(jsonMsg);
 }
 
 // handle incomming broadcast message from wallbox
@@ -673,9 +675,7 @@ function handleWallboxBroadcast(message, remote) {
         } catch (e) {
             adapter.log.warn('Error handling broadcast: ' + e);
         }
-        adapter.log.info("was own broadcast from " + remote.address);
-    } else
-    adapter.log.info("was vom other wallbox: " + remote.address);
+    }
 }
 
 function handleMessage(message) {

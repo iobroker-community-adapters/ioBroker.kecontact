@@ -380,11 +380,7 @@ async function main() {
         adapter.log.debug('UDP server listening on ' + address.address + ":" + address.port);
     });
     rxSocketReports.on('message', handleWallboxMessage);
-    rxSocketReports.bind({
-        address: adapter.config.host,
-        port: DEFAULT_UDP_PORT,
-        exclusive: false
-      });
+    rxSocketReports.bind(DEFAULT_UDP_PORT);
     
     if (adapter.config.subsequentWallbox == false) {
         // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages

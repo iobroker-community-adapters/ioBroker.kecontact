@@ -748,7 +748,7 @@ function stopCharging(isMaxPowerCalculation) {
 function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
 	var oldValue = 0;
 	if (getStateDefaultFalse(stateWallboxEnabled))
-		oldValue = getStateInternal(stateWallboxCurrent);
+		oldValue = getStateDefault0(stateWallboxCurrent);
 
 	if (milliAmpere != oldValue) {
         if (milliAmpere == 0) {
@@ -1194,7 +1194,7 @@ function sendWallboxWarning(message) {
 function getWallboxModel() {
     const type = getStateInternal(stateProduct);
     if (typeof type !== "string") {
-        return 0;
+        return -1;
     }
     if (type.startsWith("KC-P20")) {
         return MODEL_P20;
@@ -1211,7 +1211,7 @@ function getWallboxModel() {
 function getWallboxType() {
     const type = getStateInternal(stateProduct);
     switch (getWallboxModel()) {
-        case undefined:
+        case -1:
             return 0;
         case MODEL_P20: 
             switch (type.substr(13,1)) {
@@ -1272,6 +1272,8 @@ function sendSentryMessage(msg) {
 
 function getFirmwareRegEx() {
     switch (getWallboxModel()) {
+        case -1:
+            return 0;
         case MODEL_P30 :
             switch (getWallboxType()) {
                 case TYPE_C_SERIES :

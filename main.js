@@ -478,6 +478,7 @@ function start() {
     };
     
     //sendUdpDatagram('i');   only needed for discovery
+    requestReports();
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);
 }
 
@@ -513,6 +514,7 @@ function checkConfig() {
     	    adapter.log.info('starting charging station in passive mode');
         }
     }
+    isPassive = false;
     if (adapter.config.subsequentWallbox) {
         isPassive = true;
         if (everythingFine) {
@@ -1033,7 +1035,7 @@ function enableChargingTimer(time) {
 }
 
 function forceUpdateOfCalculation() {
-    // disabled time of last calculation to do it with next interval
+    // disable time of last calculation to do it with next interval
     lastCalculating = null;
     requestReports();
 }

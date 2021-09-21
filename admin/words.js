@@ -38,18 +38,6 @@ systemDictionary = {
         "pl": "tryb pasywny",
         "zh-cn": "被动模式"
     },
-    "subsequentWallbox": {
-        "en": "subsequent wallbox",
-        "de": "nachfolgende Wallbox",
-        "ru": "последующий настенный бокс",
-        "pt": "caixa de embutir subsequente",
-        "nl": "volgende wallbox",
-        "fr": "Wallbox suivante",
-        "it": "successivo wallbox",
-        "es": "Wallbox posterior",
-        "pl": "kolejny wallbox",
-        "zh-cn": "后续墙盒"
-    },
     "pollInterval": {
         "en": "refresh interval (for passive mode)",
         "de": "Aktualisierungsintervall (für passiven Modus)",
@@ -325,18 +313,6 @@ systemDictionary = {
         "es": "La caja de empotrar KEBA KeContact se mantiene pasiva (sin regulación de potencia)",
         "pl": "Wallbox KEBA KeContact zachowuje pasywność (brak regulacji mocy)",
         "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
-    },
-    "tooltip_subsequentWallbox": {
-        "en": "Check this option if this isn't the only/first wallbox to be controlled. In this case the wallbox will be running in passive mode and will not receice broadcast messages due to limitations of iobroker system.", 
-        "de": "Aktivieren Sie diese Option, wenn dies nicht die einzige/erste zu steuernde Wallbox ist. In diesem Fall läuft die Wallbox im passiven Modus und empfängt aufgrund von Einschränkungen des iobroker-Systems keine Broadcast-Nachrichten.",
-        "ru": "Отметьте эту опцию, если это не единственный / первый настенный бокс, которым нужно управлять. В этом случае wallbox будет работать в пассивном режиме и не будет принимать широковещательные сообщения из-за ограничений системы iobroker.",
-        "pt": "Marque esta opção se esta não for a única / primeira caixa de embutir a ser controlada. Neste caso, a caixa de parede estará funcionando no modo passivo e não receberá mensagens de transmissão devido às limitações do sistema iobroker.",
-        "nl": "Vink deze optie aan als dit niet de enige/eerste wallbox is die moet worden bediend. In dit geval zal de wallbox in passieve modus werken en geen broadcastberichten ontvangen vanwege beperkingen van het iobroker-systeem.",
-        "fr": "Cochez cette option si ce n'est pas la seule/première wallbox à être contrôlée. Dans ce cas, la wallbox fonctionnera en mode passif et ne recevra pas de messages diffusés en raison des limitations du système iobroker.",
-        "it": "Selezionare questa opzione se questa non è l'unica/prima wallbox da controllare. In questo caso la wallbox funzionerà in modalità passiva e non riceverà messaggi broadcast a causa delle limitazioni del sistema iobroker.",
-        "es": "Marque esta opción si esta no es la única / primera caja de empotrar a controlar. En este caso, el wallbox se ejecutará en modo pasivo y no recibirá mensajes de difusión debido a las limitaciones del sistema iobroker.",
-        "pl": "Zaznacz tę opcję, jeśli nie jest to jedyna/pierwsza kontrolowana skrzynka ścienna. W takim przypadku wallbox będzie działał w trybie pasywnym i nie będzie odbierać wiadomości rozgłoszeniowych ze względu na ograniczenia systemu iobroker.",
-        "zh-cn": "如果这不是唯一/第一个要控制的墙盒，请选中此选项。在这种情况下，墙盒将在被动模式下运行，并且由于 iobroker 系统的限制而不会接收广播消息。"
     },
    "tooltip_pollInterval": {
         "en": "interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 

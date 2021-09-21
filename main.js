@@ -299,7 +299,6 @@ async function main() {
     // adapter.config:
     adapter.log.info('config host: ' + adapter.config.host);
     adapter.log.info('config passiveMode: ' + adapter.config.passiveMode);
-    adapter.log.info('config subsequentWallbox: ' + adapter.config.subsequentWallbox);
     adapter.log.info('config pollInterval: ' + adapter.config.pollInterval);
     adapter.log.info('config loadChargingSessions: ' + adapter.config.loadChargingSessions);
     adapter.log.info('config useX1forAutomatic: ' + adapter.config.useX1forAutomatic);
@@ -377,22 +376,19 @@ async function main() {
     rxSocketReports.on('message', handleWallboxMessage);
     rxSocketReports.bind(DEFAULT_UDP_PORT);
     
-    if (adapter.config.subsequentWallbox == false) {
-        // A port can only be used once for listening. Therefore only one adapter instance can handle broadcast messages
-        rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
-        rxSocketBroadcast.on('error', (err) => {
-            adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
-            rxSocketBroadcast.close();
-        });
-        rxSocketBroadcast.on('listening', function () {
-            rxSocketBroadcast.setBroadcast(true);
-            rxSocketBroadcast.setMulticastLoopback(true);
-            var address = rxSocketBroadcast.address();
-            adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
-        });
-        rxSocketBroadcast.on('message', handleWallboxBroadcast);
-        rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
-    }
+    rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+    rxSocketBroadcast.on('error', (err) => {
+        adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
+        rxSocketBroadcast.close();
+    });
+    rxSocketBroadcast.on('listening', function () {
+        rxSocketBroadcast.setBroadcast(true);
+        rxSocketBroadcast.setMulticastLoopback(true);
+        var address = rxSocketBroadcast.address();
+        adapter.log.debug('UDP broadcast server listening on ' + address.address + ":" + address.port);
+    });
+    rxSocketBroadcast.on('message', handleWallboxBroadcast);
+    rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
 
     //await adapter.setStateAsync('info.connection', true, true);  // too ealry to acknowledge ...
 
@@ -508,17 +504,11 @@ function checkConfig() {
     if (adapter.config.loadChargingSessions == true) {
         loadChargingSessions = true;
     }
+    isPassive = false;
     if (adapter.config.passiveMode) {
     	isPassive = true;
         if (everythingFine) {
     	    adapter.log.info('starting charging station in passive mode');
-        }
-    }
-    isPassive = false;
-    if (adapter.config.subsequentWallbox) {
-        isPassive = true;
-        if (everythingFine) {
-            adapter.log.info('subsequent wallbox, starting in passive mode');
         }
     }
     if (isPassive) {
@@ -735,8 +725,8 @@ function resetChargingSessionData() {
 }
 
 function saveChargingSessionData() {
-    setStateAck(stateLastChargeStart, getStateAsDate(statePlugTimestamp));
-    setStateAck(stateLastChargeFinish, new Date());
+    setStateAck(stateLastChargeStart, getStateAsDate(statePlugTimestamp).toString());
+    setStateAck(stateLastChargeFinish, (new Date()).toString());
     setStateAck(stateLastChargeAmount, getStateInternal(stateWallboxChargeAmount) / 1000);
 }
 
@@ -764,7 +754,7 @@ function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
 
 function initChargingSession() {
     resetChargingSessionData();
-    setStateAck(statePlugTimestamp, new Date());
+    setStateAck(statePlugTimestamp, new Date().toString());
     displayChargeMode();
 }
 
@@ -988,7 +978,7 @@ function checkWallboxPower() {
                         var aktDate = new Date();
                         var regardDate = getStateAsDate(stateRegardTimestamp);
                         if (regardDate == null) {
-                            setStateAck(stateRegardTimestamp, aktDate);
+                            setStateAck(stateRegardTimestamp, aktDate.toString());
                             regardDate = aktDate;
                         }
                         if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
@@ -1012,7 +1002,7 @@ function checkWallboxPower() {
     } else {
     	if (chargingToBeStarted) {
     		adapter.log.info("vehicle (re)starts to charge");
-    		setStateAck(stateChargeTimestamp, new Date());
+    		setStateAck(stateChargeTimestamp, new Date().toString());
     	}
         if (curr > tempMax) {
             curr = tempMax;

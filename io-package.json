@@ -125,7 +125,6 @@
     "native": {
         "host": "0.0.0.0",
         "passiveMode": true,
-		"subsequentWallbox": false,
         "pollInterval": 30,
         "loadChargingSessions": false,
         "useX1forAutomatic": false,

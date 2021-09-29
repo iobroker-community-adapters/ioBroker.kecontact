@@ -369,7 +369,7 @@ async function main() {
         rxSocketReports.close();
     });
     rxSocketReports.on("listening", function () {
-        rxSocketBroadcast.setBroadcast(true);
+        rxSocketReports.setBroadcast(true);
         const address = rxSocketReports.address();
         adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
     });

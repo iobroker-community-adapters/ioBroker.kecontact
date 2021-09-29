@@ -369,11 +369,12 @@ async function main() {
         rxSocketReports.close();
     });
     rxSocketReports.on("listening", function () {
+        rxSocketBroadcast.setBroadcast(true);
         const address = rxSocketReports.address();
         adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
     });
     rxSocketReports.on("message", handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT);
+    rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
 
     rxSocketBroadcast = dgram.createSocket({ type: "udp4", reuseAddr: true });
     rxSocketBroadcast.on("error", (err) => {

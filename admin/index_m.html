@@ -1,5 +1,7 @@
 <html>
+
 <head>
+
     <!-- Load ioBroker scripts and styles-->
     <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
@@ -12,36 +14,36 @@
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
     <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
     <script type="text/javascript">
-        var bridges = [];
-
-        function setValue(id, value, onChange) {
-            // example: select elements with id=key and class=value and insert value
-            if ($('#' + id + '.value').attr('type') === 'checkbox') {
-                $('#' + id + '.value').prop('checked', value).change(function() {
-                    onChange();
-                });
-            } else {
-                $('#' + id + '.value').val(value).change(function() {
-                    onChange();
-                }).keyup(function() {
-                    $(this).trigger('change');
-                });
-            }
-        }
-
-        // the function loadSettings has to exist ...
+        // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
-            for (var key in settings) {
-                setValue(key, settings[key], onChange);
-            }
+            // example: select elements with id=key and class=value and insert value
+            if (!settings) return;
+            $('.value').each(function () {
+                var $key = $(this);
+                var id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.prop('checked', settings[id])
+                        .on('change', () => onChange())
+                        ;
+                } else {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.val(settings[id])
+                        .on('change', () => onChange())
+                        .on('keyup', () => onChange())
+                        ;
+                }
+            });
             onChange(false);
+            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+            if (M) M.updateTextFields();
         }
 
-        // ... and the function save has to exist.
-        // you have to make sure the callback is called with the settings object as first param!
+        // This will be called by the admin adapter when the user presses the save button
         function save(callback) {
             // example: select elements with class=value and build settings object
             var obj = {};
@@ -49,31 +51,36 @@
                 var $this = $(this);
                 if ($this.attr('type') === 'checkbox') {
                     obj[$this.attr('id')] = $this.prop('checked');
+                } else if ($this.attr('type') === 'number') {
+                    obj[$this.attr('id')] = parseFloat($this.val());
                 } else {
                     obj[$this.attr('id')] = $this.val();
                 }
             });
-            $('.check').each(function () {
-                var $this = $(this);
-                obj[$this.attr('id')] = $this.is('checked');
-            });
             callback(obj);
         }
     </script>
-</head>     
+
+</head>
+
 <body>
+
     <div class="m adapter-container">
 
         <div class="row">
             <div class="col s12 m4 l2">
-                <img src="charger.png" width="64" height="64">
+                <img src="kecontact.png" class="logo">
             </div>
         </div>
 
+        <!-- Put your content here -->
+		<!-- word.js uses "for=" value to identify texts to translate -->
+		
+        <!-- For example columns with settings: -->
         <div class="row">
             <div class="col s6 input-field">
                 <input type="text" id="host" class="value" />
-                <label for="host" class="translate">KeContact IP address</label>
+                <label for="host" class="translate">host</label>
                 <span class="helper-text future-tooltip translate">tooltip_host</span>
             </div>
         </div>
@@ -81,12 +88,12 @@
         <div class="row">
             <div class="col s3 input-field">
                 <input type="checkbox" id="passiveMode" class="value" />
-                <label for="passiveMode" class="translate">passive mode</label>
+                <label for="passiveMode" class="translate">passiveMode</label>
                 <span class="helper-text future-tooltip translate">tooltip_passiveMode</span>
             </div>
             <div class="col s3 input-field">
                 <input type="number" id="pollInterval" class="value" />
-                <label for="pollInterval" class="translate">refresh interval</label>
+                <label for="pollInterval" class="translate">pollInterval</label>
                 <span class="helper-text translate">secs</span>
                 <span class="helper-text future-tooltip translate">tooltip_pollInterval</span>
             </div>
@@ -116,7 +123,7 @@
             </div>
             <div class="col s4 input-field">
                 <input type="checkbox" id="useX1forAutomatic" class="value" />
-                <label for="useX1forAutomatic" class="translate">use X1 switch</label>
+                <label for="useX1forAutomatic" class="translate">useX1forAutomatic</label>
                 <span class="helper-text future-tooltip translate">tooltip_useX1</span>
             </div>
         </div>
@@ -169,7 +176,7 @@
         </div>
 
         <div class="row">
-            <div class="col s6 input-field">
+            <div class="col s4 input-field">
                 <input type="number" id="maxPower" class="value" />
                 <label for="maxPower" class="translate">maxPower</label>
                 <span class="helper-text translate">watts</span>
@@ -178,31 +185,25 @@
         </div>
 
         <div class="row">
-            <div class="col s6 input-field">
+            <div class="col s4 input-field">
                 <input type="text" size="50" id="stateEnergyMeter1" class="value" />
-                <label for="stateEnergyMeter1" class="translate">energyMeter1</label>
+                <label for="stateEnergyMeter1" class="translate">stateEnergyMeter1</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter1</span>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col s6 input-field">
+            <div class="col s4 input-field">
                 <input type="text" size="50" id="stateEnergyMeter2" class="value" />
-                <label for="stateEnergyMeter2" class="translate">energyMeter2</label>
+                <label for="stateEnergyMeter2" class="translate">stateEnergyMeter2</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter2</span>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col s6 input-field">
+            <div class="col s4 input-field">
                 <input type="text" size="50" id="stateEnergyMeter3" class="value" />
-                <label for="stateEnergyMeter3" class="translate">energyMeter3</label>
+                <label for="stateEnergyMeter3" class="translate">stateEnergyMeter3</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter3</span>
             </div>
         </div>
 
         <div class="row">
-            <div class="col s6 input-field">
+            <div class="col s4 input-field">
                 <input type="checkbox" id="wallboxNotIncluded" class="value" />
                 <label for="wallboxNotIncluded" class="translate">wallboxNotIncluded</label>
                 <span class="helper-text future-tooltip translate">tooltip_wallboxNotIncluded</span>
@@ -210,5 +211,7 @@
         </div>
 
     </div>
+
 </body>
-</html> 
+
+</html>

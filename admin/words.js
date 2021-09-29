@@ -1,4 +1,7 @@
-﻿// Dictionary (systemDictionary is global variable from adapter-settings.js)
+/*global systemDictionary:true */
+/* exported systemDictionary */
+"use strict";
+
 systemDictionary = {
     "KEBA KeContact adapter settings": {
         "en": "KEBA KeContact adapter settings",
@@ -12,9 +15,9 @@ systemDictionary = {
         "pl": "Ustawienia adaptera KEBA KeContact",
         "zh-cn": "KEBA KeContact适配器设置"
     },
-    "KeContact IP address": {
-        "en": "wallbox IP address", 
-        "de": "IP-Adresse der Wallbox", 
+    "host": {
+        "en": "wallbox IP address",
+        "de": "IP-Adresse der Wallbox",
         "ru": "IP-адрес Wallbox",
         "pt": "Endereço IP da Wallbox",
         "nl": "Wallbox IP-adres",
@@ -24,7 +27,7 @@ systemDictionary = {
         "pl": "Adres IP stacji Wallbox",
         "zh-cn": "Wallbox IP地址"
     },
-    "passive mode": {
+    "passiveMode": {
         "en": "passive mode",
         "de": "passiver Modus",
         "ru": "пассивный режим",
@@ -36,7 +39,7 @@ systemDictionary = {
         "pl": "tryb pasywny",
         "zh-cn": "被动模式"
     },
-    "refresh interval": {
+    "pollInterval": {
         "en": "refresh interval (for passive mode)",
         "de": "Aktualisierungsintervall (für passiven Modus)",
         "ru": "Интервал обновления (для пассивного режима)",
@@ -132,7 +135,7 @@ systemDictionary = {
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
     },
-    "use X1 switch": {
+    "useX1forAutomatic": {
         "en": "use X1 switch for photovoltaic automatic",
         "de": "X1-Schalter für PV-Automatik nutzen",
         "ru": "используйте переключатель X1 для фотоэлектрической автоматической",
@@ -240,7 +243,7 @@ systemDictionary = {
         "pl": "Nadwyżka maksymalnego poboru mocy",
         "zh-cn": "最大耗电量盈余"
     },
-    "energyMeter1":   {
+    "stateEnergyMeter1":   {
         "en": "name of state for 1st energy meter",
         "de": "Name des States für 1. Energy-Meter",
         "ru": "Название государства для 1-го счетчика электроэнергии",
@@ -252,7 +255,7 @@ systemDictionary = {
         "pl": "Nazwa stanu dla 1. licznika energii",
         "zh-cn": "第一个电表的状态名称"
     },
-    "energyMeter2":   {
+    "stateEnergyMeter2":   {
         "en": "name of state for 2nd energy meter",
         "de": "Name des States für 2. Energy-Meter",
         "ru": "Название состояния для 2-го счетчика электроэнергии",
@@ -264,7 +267,7 @@ systemDictionary = {
         "pl": "Nazwa stanu dla 2. licznika energii",
         "zh-cn": "第二电表的状态名称"
     },
-    "energyMeter3":   {
+    "stateEnergyMeter3":   {
         "en": "name of state for 3rd energy meter",
         "de": "Name des States für 3. Energy-Meter",
         "ru": "Название государства для 3-го счетчика электроэнергии",
@@ -289,7 +292,7 @@ systemDictionary = {
         "zh-cn": "电表的功率不包括在电表中"
     },
     "tooltip_host": {
-        "en": "IP address of KEBA KeContact wallbox", 
+        "en": "IP address of KEBA KeContact wallbox",
         "de": "IP-Adresse der KEBA KeContact-Wallbox",
         "ru": "IP-адрес настенного бокса KEBA KeContact",
         "pt": "Endereço IP da caixa de embutir KEBA KeContact",
@@ -301,19 +304,19 @@ systemDictionary = {
         "zh-cn": "KEBA KeContact墙盒的IP地址"
     },
     "tooltip_passiveMode": {
-        "en": "KEBA KeContact wallbox keeps passive (no power regulation)", 
-        "de": "KEBA KeContact-Wallbox bleibt passiv (keine Leistungsregelung)",
-        "ru": "Настенная коробка KEBA KeContact остается пассивной (без регулирования мощности)",
-        "pt": "A caixa de embutir KEBA KeContact permanece passiva (sem regulação de energia)",
-        "nl": "KEBA KeContact wallbox blijft passief (geen vermogensregeling)",
-        "fr": "La wallbox KEBA KeContact reste passive (pas de régulation de puissance)",
-        "it": "La wallbox KEBA KeContact rimane passiva (nessuna regolazione della potenza)",
-        "es": "La caja de empotrar KEBA KeContact se mantiene pasiva (sin regulación de potencia)",
-        "pl": "Wallbox KEBA KeContact zachowuje pasywność (brak regulacji mocy)",
-        "zh-cn": "KEBA KeContact墙盒保持被动（无功率调节）"
+        "en": "KEBA KeContact wallbox keeps passive (no power regulation), if using multiple wallboxes all but one should run in passive mode",
+        "de": "KEBA KeContact Wallbox bleibt passiv (keine Leistungsregelung), bei Verwendung mehrerer Wallboxen sollen alle bis auf eine im Passivmodus laufen",
+        "ru": "KEBA KeContact wallbox остается пассивным (без регулирования мощности), при использовании нескольких настенных боксов все, кроме одного, должны работать в пассивном режиме",
+        "pt": "A caixa de embutir KEBA KeContact mantém-se passiva (sem regulação de energia), se usar várias caixas de embutir, todas, exceto uma, devem funcionar no modo passivo",
+        "nl": "KEBA KeContact wallbox blijft passief (geen stroomregeling), bij gebruik van meerdere wallboxen zouden op één na allemaal in passieve modus moeten werken",
+        "fr": "La wallbox KEBA KeContact reste passive (pas de régulation de puissance), si vous utilisez plusieurs wallbox, toutes sauf une doivent fonctionner en mode passif",
+        "it": "KEBA KeContact wallbox rimane passivo (nessuna regolazione della potenza), se si utilizzano più wallbox tutti tranne uno dovrebbero funzionare in modalità passiva",
+        "es": "La caja de empotrar KEBA KeContact se mantiene pasiva (sin regulación de potencia), si se utilizan varias cajas de empotrar, todas menos una deben funcionar en modo pasivo",
+        "pl": "KEBA KeContact Wallbox pozostaje pasywny (brak regulacji mocy), jeśli używasz wielu wallboxów, wszystkie oprócz jednej powinny działać w trybie pasywnym",
+        "zh-cn": "KEBA KeContact 墙盒保持被动（无功率调节），如果使用多个墙盒，除一个外，所有墙盒都应在被动模式下运行"
     },
     "tooltip_pollInterval": {
-        "en": "interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)", 
+        "en": "interval in seconds in passive mode how often the wallbox should be queried for new values (0 = default value of 10 minutes)",
         "de": "Intervall in Sekunden im passiven Modus, wie oft die Wallbox nach neuen Werten abgefragt werden soll (0 = Standardwert von 10 Minuten)",
         "ru": "Интервал в секундах в пассивном режиме, как часто настенный ящик должен запрашивать новые значения (0 = значение по умолчанию 10 минут)",
         "pt": "Intervalo em segundos no modo passivo com que frequência a caixa de parede deve ser consultada para novos valores (0 = valor padrão de 10 minutos)",
@@ -323,9 +326,9 @@ systemDictionary = {
         "es": "Intervalo en segundos en modo pasivo con qué frecuencia se debe consultar el wallbox para obtener nuevos valores (0 = valor predeterminado de 10 minutos)",
         "pl": "Odstęp w sekundach w trybie pasywnym, jak często należy pytać Wallbox o nowe wartości (0 = domyślna wartość 10 minut)",
         "zh-cn": "被动模式下的时间间隔（以秒为单位），应多久查询壁盒以获取新值（0 = 10分钟的默认值）"
-  },
+    },
     "tooltip_loadChargingSessions": {
-        "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker", 
+        "en": "check, if charging sessions saved in wallbox should be loaded as states in iobroker",
         "de": "mit dieser Option können die letzten Ladesitzungen aus der Wallbox als States in ioBroker geladen werden",
         "ru": "проверьте, должны ли сеансы зарядки, сохраненные в wallbox, загружаться как состояния в iobroker",
         "pt": "verifique se as sessões de cobrança salvas na caixa de parede devem ser carregadas como estados no iobroker",
@@ -337,7 +340,7 @@ systemDictionary = {
         "zh-cn": "检查是否应将保存在wallbox中的充电会话作为iobroker中的状态加载"
     },
     "tooltip_stateRegard": {
-        "en": "name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.", 
+        "en": "name of state which holds regard value of energy meter. If both regard and surplus are contained in one state, fill in state here only if regard is a positive value and surplus is negative.",
         "de": "Name des States für den Netzbezug des EnergyMeters. Werden Bezug und Einspeisung im selben State gespeichert und der Netzbezug ist positiv und die Einspeisung negativ, dann ist er hier nur anzugeben.",
         "ru": "Название государства, в котором учитывается значение счетчика энергии. Если и учет, и излишек содержатся в одном состоянии, укажите здесь состояние только в том случае, если отношение является положительным значением, а излишек - отрицательным.",
         "pt": "Nome do estado que mantém o valor do medidor de energia. Se a consideração e o excedente estiverem contidos em um estado, preencha o estado aqui apenas se a consideração for um valor positivo e o excedente for negativo.",
@@ -361,7 +364,7 @@ systemDictionary = {
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
     },
     "tooltip_useX1": {
-        "en": "activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.", 
+        "en": "activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.",
         "de": "Checkbox aktivieren, wenn der Eingang X1 der Wallbox verwendet werden soll, um die PV-Automatik beim Schließen zu deaktivieren. So kann über einen physikalischen Schalter die PV-Automatik (de)aktiviert werden.",
         "ru": "Установите флажок, если вход X1 зарядной станции должен использоваться для автоматического отключения фотоэлектрических элементов при закрытии. Таким образом, можно использовать физический выключатель для автоматического включения (отключения) фотоэлектрической энергии.",
         "pt": "Ative a caixa de seleção se a entrada X1 da estação de carregamento deve ser usada para desativar a energia fotovoltaica automática quando fechada. Assim, um interruptor físico pode ser usado para (des) ativar a fotovoltaica automática.",

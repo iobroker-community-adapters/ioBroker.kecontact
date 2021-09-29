@@ -1,27 +1,7 @@
 {
   "name": "iobroker.kecontact",
-  "version": "1.2.3",
-  "description": "Adapter for ioBroker that communicates with a KeContact wallbox",
-  "main": "kecontact.js",
-  "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iobroker-community-adapters/ioBroker.kecontact.git"
-  },
-  "keywords": [
-    "KeContact",
-    "P30",
-    "P20",
-    "BMW",
-    "KEBA",
-    "wallbox",
-    "emobility",
-    "e-mobility",
-    "ioBroker",
-    "adapter"
-  ],
+  "version": "1.3.0",
+  "description": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
   "author": {
     "name": "UncleSamSwiss",
     "email": "samuel.weibel@gmail.com"
@@ -36,25 +16,63 @@
       "email": "git@sengler.de"
     }
   ],
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.kecontact",
   "license": "Apache-2.0",
+  "keywords": [
+    "KeContact",
+    "P30",
+    "P20",
+    "BMW",
+    "KEBA",
+    "wallbox",
+    "emobility",
+    "e-mobility",
+    "ioBroker",
+    "adapter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.kecontact"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^2.5.1",
+    "dgram": "^1.0.1",
+    "os": "^0.1.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@iobroker/testing": "^2.4.4",
+    "@types/chai": "^4.2.21",
+    "@types/chai-as-promised": "^7.1.4",
+    "@types/gulp": "^4.0.9",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^14.17.9",
+    "@types/proxyquire": "^1.3.28",
+    "@types/sinon": "^10.0.2",
+    "@types/sinon-chai": "^3.2.5",
+    "axios": "^0.21.1",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^7.32.0",
+    "gulp": "^4.0.2",
+    "mocha": "^9.1.1",
+    "proxyquire": "^2.1.3",
+    "sinon": "^11.1.2",
+    "sinon-chai": "^3.7.0",
+    "typescript": "^4.3.5"
+  },
+  "main": "main.js",
+  "scripts": {
+    "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit",
+    "test": "npm run test:js && npm run test:package",
+    "check": "tsc --noEmit -p tsconfig.check.json",
+    "lint": "eslint"
+  },
   "bugs": {
     "url": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues"
   },
-  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.kecontact",
-  "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
-  "dependencies": {
-    "dgram": "^1.0.1",
-    "os": "^0.1.1",
-    "request": "^2.88.2",
-    "@iobroker/adapter-core": "^2.4.0"
-  },
-  "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-replace": "^2.0.2",
-    "grunt-contrib-jshint": "^3.0.0",
-    "grunt-jscs": "^3.0.1",
-    "grunt-http": "^2.2.0",
-    "mocha": "^9.0.1",
-    "chai": "^4.1.2"
-  }
+  "readmeFilename": "README.md"
 }

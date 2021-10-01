@@ -362,6 +362,10 @@ async function main() {
     //     adapter.log.info("check group user admin group admin: " + res);
     // });
     txSocket = dgram.createSocket("udp4");
+    txSocket.on("message", function (message, remote) {
+        adapter.log.debug("UDP datagram xxx from " + remote.address + ":" + remote.port + ": '" + message + "'");
+    });
+    txSocket.connect(DEFAULT_UDP_PORT, adapter.config.host);
 
     rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
     rxSocketReports.on("error", (err) => {

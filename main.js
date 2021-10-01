@@ -362,23 +362,19 @@ async function main() {
     //     adapter.log.info("check group user admin group admin: " + res);
     // });
     txSocket = dgram.createSocket("udp4");
-    txSocket.on("message", function (message, remote) {
-        adapter.log.debug("UDP datagram xxx from " + remote.address + ":" + remote.port + ": '" + message + "'");
-    });
-    txSocket.connect(DEFAULT_UDP_PORT, adapter.config.host);
 
-    // rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
-    // rxSocketReports.on("error", (err) => {
-    //     adapter.log.error("RxSocketReports error: " + err.message + "\n" + err.stack);
-    //     rxSocketReports.close();
-    // });
-    // rxSocketReports.on("listening", function () {
-    //     rxSocketReports.setBroadcast(true);
-    //     const address = rxSocketReports.address();
-    //     adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
-    // });
-    // rxSocketReports.on("message", handleWallboxMessage);
-    // rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
+    rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
+    rxSocketReports.on("error", (err) => {
+        adapter.log.error("RxSocketReports error: " + err.message + "\n" + err.stack);
+        rxSocketReports.close();
+    });
+    rxSocketReports.on("listening", function () {
+        rxSocketReports.setBroadcast(true);
+        const address = rxSocketReports.address();
+        adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
+    });
+    rxSocketReports.on("message", handleWallboxMessage);
+    rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
 
     rxSocketBroadcast = dgram.createSocket({ type: "udp4", reuseAddr: true });
     rxSocketBroadcast.on("error", (err) => {
@@ -1098,8 +1094,7 @@ function sendNextQueueDatagram() {
     }
     const message = sendQueue.shift();
     if (txSocket) {
-        txSocket.send(message, 0, message.length, function (err) {
-            //txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
+        txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
             // 2nd parameter "bytes" not needed, therefore only "err" coded
             if (err) {
                 adapter.log.warn("UDP send error for " + adapter.config.host + ":" + DEFAULT_UDP_PORT + ": " + err);

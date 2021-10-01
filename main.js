@@ -1098,7 +1098,8 @@ function sendNextQueueDatagram() {
     }
     const message = sendQueue.shift();
     if (txSocket) {
-        txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
+        txSocket.send(message, 0, message.length, function (err) {
+            //txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
             // 2nd parameter "bytes" not needed, therefore only "err" coded
             if (err) {
                 adapter.log.warn("UDP send error for " + adapter.config.host + ":" + DEFAULT_UDP_PORT + ": " + err);

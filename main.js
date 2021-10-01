@@ -367,18 +367,18 @@ async function main() {
     });
     txSocket.connect(DEFAULT_UDP_PORT, adapter.config.host);
 
-    rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
-    rxSocketReports.on("error", (err) => {
-        adapter.log.error("RxSocketReports error: " + err.message + "\n" + err.stack);
-        rxSocketReports.close();
-    });
-    rxSocketReports.on("listening", function () {
-        rxSocketReports.setBroadcast(true);
-        const address = rxSocketReports.address();
-        adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
-    });
-    rxSocketReports.on("message", handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
+    // rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
+    // rxSocketReports.on("error", (err) => {
+    //     adapter.log.error("RxSocketReports error: " + err.message + "\n" + err.stack);
+    //     rxSocketReports.close();
+    // });
+    // rxSocketReports.on("listening", function () {
+    //     rxSocketReports.setBroadcast(true);
+    //     const address = rxSocketReports.address();
+    //     adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
+    // });
+    // rxSocketReports.on("message", handleWallboxMessage);
+    // rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
 
     rxSocketBroadcast = dgram.createSocket({ type: "udp4", reuseAddr: true });
     rxSocketBroadcast.on("error", (err) => {

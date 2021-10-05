@@ -1013,7 +1013,7 @@
 			  "type": "string",
 			  "role": "text",
 			  "read": true,
-			  "write": false,
+			  "write": true,
 			  "def": null,
 			  "desc": "messages received from other instances for this wallbox"
 			},

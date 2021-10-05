@@ -665,7 +665,7 @@ function handleWallboxMessage(message, remote) {
             if (objects) {
                 for (const item in objects) {
                     if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
-                        const namespace = item.slice(prefix.length, - suffix.length)
+                        const namespace = item.slice(prefix.length, - suffix.length);
                         adapter.getForeignObject(prefix + namespace, function(err, object) {
                             if (err) {
                                 adapter.log.error("Error while fetching other instances: " + err);
@@ -675,7 +675,7 @@ function handleWallboxMessage(message, remote) {
                                 if (Object.prototype.hasOwnProperty.call(object, "native")) {
                                     if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
                                         if (object.native.host == remote.address) {
-                                            adapter.setState(namespace + ".messageFromOtherInstance", message);
+                                            adapter.setForeignState(namespace + ".messageFromOtherInstance", message);
                                             adapter.log.info("Message from " + remote.address + " send to " + namespace);
                                         }
                                     }

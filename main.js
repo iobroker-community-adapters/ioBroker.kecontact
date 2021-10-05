@@ -652,6 +652,20 @@ function handleWallboxMessage(message, remote) {
             return;
         }
         handleMessage(jsonMsg);
+    } else {
+        // save message for other instances by setting value into state
+        adapter.getForeignObjects("system." + adapter.name + ".*", function(err, objects) {
+            if (err) {
+                adapter.log.error("Error while fetching other instances: " + err);
+                return;
+            }
+            if (objects) {
+                adapter.log.info(JSON.stringify(objects));
+            }
+            // && (adapterInstances.native.host == remote.address)) {
+            //adapter.setState(adapterInstances.namespace + ".messageFromOtherInstance", message);
+            //}
+        });
     }
 }
 

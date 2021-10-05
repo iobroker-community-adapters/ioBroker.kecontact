@@ -679,7 +679,7 @@ function handleWallboxMessage(message, remote) {
                                 if (Object.prototype.hasOwnProperty.call(object, "native")) {
                                     if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
                                         if (object.native.host == remote.address) {
-                                            adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message);
+                                            adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message.toString().trim());
                                             adapter.log.debug("Message from " + remote.address + " send to " + namespace);
                                         }
                                     }

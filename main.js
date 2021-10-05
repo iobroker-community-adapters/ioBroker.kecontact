@@ -654,22 +654,36 @@ function handleWallboxMessage(message, remote) {
         handleMessage(jsonMsg);
     } else {
         // save message for other instances by setting value into state
-        adapter.getForeignObjects("system.adapter." + adapter.name + ".*.uptime", function(err, objects) {
+        const prefix = "system.";
+        const adapterpart = "adapter." + adapter.name + ".";
+        const suffix = ".uptime";
+        adapter.getForeignObjects(prefix + adapterpart + "*" + suffix, function(err, objects) {
             if (err) {
                 adapter.log.error("Error while fetching other instances: " + err);
                 return;
             }
             if (objects) {
-                adapter.log.info(JSON.stringify(objects));
-                adapter.getForeignObject("system.adapter." + adapter.name + ".0", function(err, object) {
-                    if (err) {
-                        adapter.log.error("Error while fetching other instances: " + err);
-                        return;
+                for (const item in objects) {
+                    if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
+                        const namespace = item.slice(prefix.length, - suffix.length)
+                        adapter.getForeignObject(prefix + namespace, function(err, object) {
+                            if (err) {
+                                adapter.log.error("Error while fetching other instances: " + err);
+                                return;
+                            }
+                            if (object) {
+                                if (Object.prototype.hasOwnProperty.call(object, "native")) {
+                                    if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
+                                        if (object.native.host == remote.address) {
+                                            adapter.setState(namespace + ".messageFromOtherInstance", message);
+                                            adapter.log.info("Message from " + remote.address + " send to " + namespace);
+                                        }
+                                    }
+                                }
+                            }
+                        });
                     }
-                    if (object) {
-                        adapter.log.info(JSON.stringify(object));
-                    }
-                });
+                }
             }
             // && (adapterInstances.native.host == remote.address)) {
             //adapter.setState(adapterInstances.namespace + ".messageFromOtherInstance", message);

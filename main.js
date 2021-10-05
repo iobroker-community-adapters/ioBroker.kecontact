@@ -654,7 +654,7 @@ function handleWallboxMessage(message, remote) {
         handleMessage(jsonMsg);
     } else {
         // save message for other instances by setting value into state
-        adapter.getForeignObjects("system." + adapter.name + ".*", function(err, objects) {
+        adapter.getForeignObjects("system.adapter." + adapter.name + ".*", function(err, objects) {
             if (err) {
                 adapter.log.error("Error while fetching other instances: " + err);
                 return;

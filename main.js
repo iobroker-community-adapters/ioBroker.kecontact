@@ -658,8 +658,8 @@ function handleWallboxMessage(message, remote) {
         handleMessage(jsonMsg);
     } else {
         // save message for other instances by setting value into state
-        const prefix = "system.";
-        const adapterpart = "adapter." + adapter.name + ".";
+        const prefix = "system.adapter.";
+        const adapterpart = adapter.name + ".";
         const suffix = ".uptime";
         adapter.getForeignObjects(prefix + adapterpart + "*" + suffix, function(err, objects) {
             if (err) {

@@ -661,6 +661,15 @@ function handleWallboxMessage(message, remote) {
             }
             if (objects) {
                 adapter.log.info(JSON.stringify(objects));
+                adapter.getForeignObject("system.adapter.0", function(err, object) {
+                    if (err) {
+                        adapter.log.error("Error while fetching other instances: " + err);
+                        return;
+                    }
+                    if (object) {
+                        adapter.log.info(JSON.stringify(object));
+                    }
+                });
             }
             // && (adapterInstances.native.host == remote.address)) {
             //adapter.setState(adapterInstances.namespace + ".messageFromOtherInstance", message);

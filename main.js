@@ -103,6 +103,7 @@ const stateManualPhases        = "automatic.calcPhases";        /*count of phase
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
+const stateMsgFromOtherwallbox = "internal.message";            /*Message passed on from other instance*/
 
 /**
  * Starts the adapter instance
@@ -473,6 +474,9 @@ function start() {
     stateChangeListeners[adapter.namespace + "." + stateLimitCurrent] = function () {
         // no real action to do
     };
+    stateChangeListeners[adapter.namespace + "." + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
+        handleWallboxExchange(newValue);
+    };
 
     //sendUdpDatagram("i");   only needed for discovery
     requestReports();
@@ -675,8 +679,8 @@ function handleWallboxMessage(message, remote) {
                                 if (Object.prototype.hasOwnProperty.call(object, "native")) {
                                     if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
                                         if (object.native.host == remote.address) {
-                                            adapter.setForeignState(namespace + ".messageFromOtherInstance", message);
-                                            adapter.log.info("Message from " + remote.address + " send to " + namespace);
+                                            adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message);
+                                            adapter.log.debug("Message from " + remote.address + " send to " + namespace);
                                         }
                                     }
                                 }
@@ -685,9 +689,6 @@ function handleWallboxMessage(message, remote) {
                     }
                 }
             }
-            // && (adapterInstances.native.host == remote.address)) {
-            //adapter.setState(adapterInstances.namespace + ".messageFromOtherInstance", message);
-            //}
         });
     }
 }
@@ -704,6 +705,19 @@ function handleWallboxBroadcast(message, remote) {
         } catch (e) {
             adapter.log.warn("Error handling broadcast: " + e);
         }
+    }
+}
+
+// handle incomming message from other instance for this wallbox
+function handleWallboxExchange(message) {
+    adapter.log.debug("datagram from other instance: '" + message + "'");
+    // Mark that connection is established by incomming data
+    adapter.setState("info.connection", true, true);
+    try {
+        const msg = message.toString().trim();
+        handleMessage(JSON.parse(msg));
+    } catch (e) {
+        adapter.log.warn("Error handling incoming message: " + e);
     }
 }
 

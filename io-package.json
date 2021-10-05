@@ -996,6 +996,29 @@
 			"desc": "Power consumption of the last loading session in Wh."
 		  },
 		  "native": {}
+		},
+		{
+			"_id": "internal",
+			"type": "channel",
+			"common": {
+			  "name": "internal data for communication between instances"
+			},
+			"native": {}
+		},
+		{
+			"_id": "internal.message",
+			"type": "state",
+			"common": {
+			  "name": "wallbox message exchange",
+			  "type": "string",
+			  "role": "text",
+			  "read": true,
+			  "write": false,
+			  "def": null,
+			  "desc": "messages received from other instances for this wallbox"
+			},
+			"native": {}
 		}
-  ]
+	]
+  
 }

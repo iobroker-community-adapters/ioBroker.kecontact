@@ -778,9 +778,14 @@ function resetChargingSessionData() {
 }
 
 function saveChargingSessionData() {
-    setStateAck(stateLastChargeStart, getStateAsDate(statePlugTimestamp).toString());
+    const plugTimestamp = getStateAsDate(statePlugTimestamp);
+    if (plugTimestamp == null) {
+        setStateAck(stateLastChargeStart, null);
+    } else {
+        setStateAck(stateLastChargeStart, plugTimestamp.toString());
+    }
     setStateAck(stateLastChargeFinish, (new Date()).toString());
-    setStateAck(stateLastChargeAmount, getStateInternal(stateWallboxChargeAmount) / 1000);
+    setStateAck(stateLastChargeAmount, getStateDefault0(stateWallboxChargeAmount) / 1000);
 }
 
 function stopCharging(isMaxPowerCalculation) {

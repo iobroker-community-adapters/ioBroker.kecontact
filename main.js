@@ -802,7 +802,7 @@ function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
         if (milliAmpere == 0) {
             adapter.log.info("stop charging");
         } else if (oldValue == 0) {
-            adapter.log.info("(re)start to charging");
+            adapter.log.info("(re)start charging");
         } else {
             adapter.log.info("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA" + ((isMaxPowerCalculation) ? " (maxPower)" : ""));
         }
@@ -1200,6 +1200,7 @@ function getBoolean(value) {
     }
     return value;
 }
+
 function getStateDefaultFalse(id) {
     if (id == null)
         return false;

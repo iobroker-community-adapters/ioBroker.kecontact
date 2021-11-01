@@ -1583,8 +1583,8 @@ function createHistory() {
                 "type": "state",
                 "common": {
                     "name":  "Time Sync Quality",
-                    "type":  "string",
-                    "role":  "text",
+                    "type":  "number",
+                    "role":  "value",
                     "read":  true,
                     "write": false,
                     "desc":  "Time Synchronisation Mode",

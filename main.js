@@ -50,6 +50,8 @@ let wallboxUnknownSent   = false;  // Warning wallbox not recognized
 let isPassive            = true;   // no automatic power regulation?
 let lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
+let lastFirmwareCheck    = null;   // time of last firmware check
+const intervalFirmwareCheck = 30 * 60 * 1000;  // check firmware at most every 30 minutes (only to avoid double check from "i" and "report 1" meessage)
 let intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information every 10 minutes
 let timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
@@ -270,7 +272,11 @@ function onAdapterStateChange (id, state) {
     }
 
     if (id == adapter.namespace + "." + stateFirmware) {
-        checkFirmware();
+        const newDate = new Date();
+        if (lastFirmwareCheck == null || newDate.getTime() - lastFirmwareCheck.getTime() >= intervalFirmwareCheck) {
+            checkFirmware();
+            lastFirmwareCheck = newDate;
+        }
     }
 
     if (state.ack) {

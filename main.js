@@ -617,111 +617,109 @@ function addForeignState(id) {
     return true;
 }
 
-// handle incomming message from wallbox
-function handleWallboxMessage(message, remote) {
-    adapter.log.debug("UDP datagram from " + remote.address + ":" + remote.port + ": '" + message + "'");
-    if (remote.address == adapter.config.host) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
-        // Mark that connection is established by incomming data
-        adapter.setState("info.connection", true, true);
-        let jsonMsg = null;
-        let msg = "";
-        try {
-            msg = message.toString().trim();
-            if (msg.length === 0) {
-                return;
-            }
+function isMessageFromWallboxOfThisInstance(remote) {
+    return (remote.address == adapter.config.host);
+}
 
-            if (msg == "i") {
-                adapter.log.debug("Received: " + message);
-                return;
-            }
-
-            if (msg.startsWith("TCH-OK")) {
-                adapter.log.debug("Received " + message);
-                return;
-            }
-
-            if (msg.startsWith("TCH-ERR")) {
-                adapter.log.error("Error received from wallbox: " + message);
-                return;
-            }
-
-            if (msg[0] == '"') {
-                msg = "{ " + msg + " }";
-            }
-
-            jsonMsg = JSON.parse(msg);
-        } catch (e) {
-            adapter.log.warn("Error handling message: " + e + " (" + msg + ")");
+function sendMessageToOtherInstance(message, remote) {
+    // save message for other instances by setting value into state
+    const prefix = "system.adapter.";
+    const adapterpart = adapter.name + ".";
+    const suffix = ".uptime";
+    adapter.getForeignObjects(prefix + adapterpart + "*" + suffix, function(err, objects) {
+        if (err) {
+            adapter.log.error("Error while fetching other instances: " + err);
             return;
         }
-        handleMessage(jsonMsg);
-    } else {
-        // save message for other instances by setting value into state
-        const prefix = "system.adapter.";
-        const adapterpart = adapter.name + ".";
-        const suffix = ".uptime";
-        adapter.getForeignObjects(prefix + adapterpart + "*" + suffix, function(err, objects) {
-            if (err) {
-                adapter.log.error("Error while fetching other instances: " + err);
-                return;
-            }
-            if (objects) {
-                for (const item in objects) {
-                    if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
-                        const namespace = item.slice(prefix.length, - suffix.length);
-                        adapter.getForeignObject(prefix + namespace, function(err, object) {
-                            if (err) {
-                                adapter.log.error("Error while fetching other instances: " + err);
-                                return;
-                            }
-                            if (object) {
-                                if (Object.prototype.hasOwnProperty.call(object, "native")) {
-                                    if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
-                                        if (object.native.host == remote.address) {
-                                            adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message.toString().trim());
-                                            adapter.log.debug("Message from " + remote.address + " send to " + namespace);
-                                        }
+        if (objects) {
+            for (const item in objects) {
+                if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
+                    const namespace = item.slice(prefix.length, - suffix.length);
+                    adapter.getForeignObject(prefix + namespace, function(err, object) {
+                        if (err) {
+                            adapter.log.error("Error while fetching other instances: " + err);
+                            return;
+                        }
+                        if (object) {
+                            if (Object.prototype.hasOwnProperty.call(object, "native")) {
+                                if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
+                                    if (object.native.host == remote.address) {
+                                        adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message.toString().trim());
+                                        adapter.log.debug("Message from " + remote.address + " send to " + namespace);
                                     }
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
-        });
+        }
+    });
+}
+
+// handle incomming message from wallbox
+function handleWallboxMessage(message, remote) {
+    adapter.log.debug("UDP datagram from " + remote.address + ":" + remote.port + ": '" + message + "'");
+    if (isMessageFromWallboxOfThisInstance(remote)) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
+        // Mark that connection is established by incomming data
+        handleMessage(message, "received");
+    } else {
+        sendMessageToOtherInstance(message, remote);
     }
 }
 
 // handle incomming broadcast message from wallbox
 function handleWallboxBroadcast(message, remote) {
     adapter.log.debug("UDP broadcast datagram from " + remote.address + ":" + remote.port + ": '" + message + "'");
-    if (remote.address == adapter.config.host) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
-        // Mark that connection is established by incomming data
-        adapter.setState("info.connection", true, true);
-        try {
-            const msg = message.toString().trim();
-            handleMessage(JSON.parse(msg));
-        } catch (e) {
-            adapter.log.warn("Error handling broadcast: " + e);
-        }
+    if (isMessageFromWallboxOfThisInstance(remote)) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
+        handleMessage(message, "broadcast");
     }
 }
 
 // handle incomming message from other instance for this wallbox
 function handleWallboxExchange(message) {
     adapter.log.debug("datagram from other instance: '" + message + "'");
-    // Mark that connection is established by incomming data
-    adapter.setState("info.connection", true, true);
-    try {
-        const msg = message.toString().trim();
-        handleMessage(JSON.parse(msg));
-    } catch (e) {
-        adapter.log.warn("Error handling incoming message: " + e);
-    }
+    handleMessage(message, "instance");
 }
 
-function handleMessage(message) {
+function handleMessage(message, origin) {
+    // Mark that connection is established by incomming data
+    adapter.setState("info.connection", true, true);
+    let msg = "";
+    try {
+        msg = message.toString().trim();
+        if (msg.length === 0) {
+            return;
+        }
+
+        if (msg == "i") {
+            adapter.log.debug("Received: " + message);
+            return;
+        }
+
+        if (msg.startsWith("TCH-OK")) {
+            adapter.log.debug("Received " + message);
+            return;
+        }
+
+        if (msg.startsWith("TCH-ERR")) {
+            adapter.log.error("Error received from wallbox: " + message);
+            return;
+        }
+
+        if (msg[0] == '"') {
+            msg = "{ " + msg + " }";
+        }
+
+        handleJsonMessage(JSON.parse(msg));
+    } catch (e) {
+        adapter.log.warn("Error handling " + origin + " message: " + e + " (" + msg + ")");
+        return;
+    }
+
+}
+
+function handleJsonMessage(message) {
     // message auf ID Kennung für Session History prüfen
     if (message.ID >= 100 && message.ID <= 130) {
         adapter.log.debug("History ID received: " + message.ID.substr(1));
@@ -1096,6 +1094,7 @@ function requestReports() {
 function requestDeviceDataReport() {
     const newDate = new Date();
     if (lastDeviceData == null || newDate.getTime() - lastDeviceData.getTime() >= intervalDeviceDataUpdate) {
+        sendUdpDatagram("i");   // i message for getting software version from x-series
         sendUdpDatagram("report 1");
         loadChargingSessionsFromWallbox();
         lastDeviceData = newDate;

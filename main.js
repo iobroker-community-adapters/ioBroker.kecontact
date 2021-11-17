@@ -50,8 +50,6 @@ let wallboxUnknownSent   = false;  // Warning wallbox not recognized
 let isPassive            = true;   // no automatic power regulation?
 let lastDeviceData       = null;   // time of last check for device information
 const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
-let lastFirmwareCheck    = null;   // time of last firmware check
-const intervalFirmwareCheck = 30 * 60 * 1000;  // check firmware at most every 30 minutes (only to avoid double check from "i" and "report 1" meessage)
 let intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information every 10 minutes
 let timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
@@ -70,7 +68,7 @@ let minRegardSeconds     = 0;      // maximum time to accept regard when chargin
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/de/emobility/service-support/downloads/downloads";
 const regexP30cSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<H3/gi;
-const regexP30xSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<H3/gi;
+//const regexP30xSeries    = /<h3 class="headline tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<H3/gi;
 const regexFirmware      = /<div class="mt-3">Firmware-Update\s+((?:.)*?)<\/div>/gi;
 const regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
 
@@ -272,11 +270,7 @@ function onAdapterStateChange (id, state) {
     }
 
     if (id == adapter.namespace + "." + stateFirmware) {
-        const newDate = new Date();
-        if (lastFirmwareCheck == null || newDate.getTime() - lastFirmwareCheck.getTime() >= intervalFirmwareCheck) {
-            checkFirmware();
-            lastFirmwareCheck = newDate;
-        }
+        checkFirmware();
     }
 
     if (state.ack) {
@@ -1100,7 +1094,6 @@ function requestReports() {
 function requestDeviceDataReport() {
     const newDate = new Date();
     if (lastDeviceData == null || newDate.getTime() - lastDeviceData.getTime() >= intervalDeviceDataUpdate) {
-        sendUdpDatagram("i");   // i message for getting software version from x-series
         sendUdpDatagram("report 1");
         loadChargingSessionsFromWallbox();
         lastDeviceData = newDate;
@@ -1234,7 +1227,9 @@ function setStateAck(id, value) {
 }
 
 function checkFirmware() {
-    request.get(firmwareUrl, processFirmwarePage);
+    if (getWallboxModel() == MODEL_P30) {
+        request.get(firmwareUrl, processFirmwarePage);
+    }
     return;
 }
 
@@ -1336,7 +1331,7 @@ function getFirmwareRegEx() {
                 case TYPE_D_EDITION :
                     return regexP30cSeries;
                 case TYPE_X_SERIES :
-                    return regexP30xSeries;
+                    return null;  // regexP30xSeries; x-Series no longer supported for firmware check
                 default:
                     return null;
             }

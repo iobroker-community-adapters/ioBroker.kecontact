@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kecontact",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
   "author": {
     "name": "UncleSamSwiss",

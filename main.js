@@ -453,7 +453,9 @@ function start() {
         sendUdpDatagram("output " + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + "." + stateWallboxDisplay] = function (oldValue, newValue) {
-        sendUdpDatagram("display 0 0 0 0 " + newValue.replace(/ /g, "$"), true);
+        if (newValue && newValue !== null) {
+            sendUdpDatagram("display 0 0 0 0 " + newValue.replace(/ /g, "$"), true);
+        }
     };
     stateChangeListeners[adapter.namespace + "." + stateWallboxDisabled] = function () {
         // parameters (oldValue, newValue) can be ommited if not needed
@@ -833,9 +835,10 @@ function getWallboxPowerInWatts() {
 }
 
 function getSurplusWithoutWallbox() {
-    return getStateDefault0(adapter.config.stateSurplus)
-         - getStateDefault0(adapter.config.stateRegard)
-         + getWallboxPowerInWatts();
+    let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard);
+    if (adapter.config.statesIncludeWallbox)
+        power += getWallboxPowerInWatts();
+    return power;
 }
 
 function getTotalPower() {

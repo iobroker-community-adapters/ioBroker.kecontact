@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "kecontact",
-        "version": "1.3.2",
+        "version": "1.3.3",
         "news": {
+			"1.3.3": {
+				"en": "fix error when message to display is empty (sentry IOBROKER-KECONTACT-Q, new option whether power of wallbox is included in surplus/regard)",
+				"de": "Fehler behoben, der bei leerer anzuzeigender Meldung ausgelöst wurde (sentry IOBROKER-KECONTACT-Q), neue Option ob die Leistung der Wallbox im Überschuss/Netzbezug enthalten ist"
+			},
             "1.3.2": {
                 "en": "firmware check for x-series no longer supported due to changes on website of Keba",
                 "de": "Firmware-Check für x-Series nicht mehr unterstützt wegen Änderungen an Keba-Homepage"
@@ -138,6 +142,7 @@
         "useX1forAutomatic": false,
         "stateRegard": "",
         "stateSurplus": "",
+		"statesIncludeWallbox": true,
         "minAmperage": 0,
         "addPower": 0,
         "delta": 0,

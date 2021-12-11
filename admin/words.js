@@ -135,6 +135,18 @@ systemDictionary = {
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
     },
+    "statesIncludeWallbox": {
+        "en": "states include power of wallbox",
+        "de": "States beinhalten die Leistung der Wallbox",
+        "ru": "состояния включают мощность настенной коробки",
+        "pt": "estados incluem poder da caixa de embutir",
+        "nl": "staten omvatten power of wallbox",
+        "fr": "les états incluent la puissance de la wallbox",
+        "it": "gli stati includono la potenza della wallbox",
+        "es": "los estados incluyen el poder de wallbox",
+        "pl": "stany obejmują moc wallboxa",
+        "zh-cn": "状态包括 wallbox 的力量"
+    },
     "useX1forAutomatic": {
         "en": "use X1 switch for photovoltaic automatic",
         "de": "X1-Schalter für PV-Automatik nutzen",
@@ -362,6 +374,18 @@ systemDictionary = {
         "es": "Nombre del estado que tiene la plusvalía del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si el excedente es un valor positivo y la consideración es negativa.",
         "pl": "Nazwa państwa, w którym znajduje się wartość dodatkowa licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy nadwyżka jest wartością dodatnią, a szacunek jest ujemna.",
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
+    },
+    "tooltip_statesIncludeWallbox": {
+        "en": "check this if power comsumption of wallbox is include in \"stateRegard\" and \"stateSurplus\" (default)",
+        "de": "Aktivieren Sie diese Option, wenn der Stromverbrauch der Wallbox in \"stateRegard\" und \"stateSurplus\" enthalten ist (Standard)",
+        "ru": "отметьте эту опцию, если энергопотребление настенного бокса включено в \"stateRegard\" и \"stateSurplus\" (по умолчанию)",
+        "pt": "marque esta opção se o consumo de energia da caixa de parede estiver incluído em \"stateRegard\" e \"stateSurplus\" (padrão)",
+        "nl": "vink deze optie aan als het stroomverbruik van de wallbox is opgenomen in \"stateRegard\" en \"stateSurplus\" (standaard)",
+        "fr": "cochez cette option si la consommation électrique de la wallbox est incluse dans \"stateRegard\" et \"stateSurplus\" (par défaut)",
+        "it": "spunta questa opzione se il consumo energetico della wallbox è incluso in \"stateRegard\" e \"stateSurplus\" (predefinito)",
+        "es": "marque esta opción si el consumo de energía de la caja de empotrar se incluye en \"stateRegard\" y \"stateSurplus\" (predeterminado)",
+        "pl": "zaznacz tę opcję, jeśli pobór mocy Wallbox jest uwzględniany w \"stateRegard\" i \"stateSurplus\" (domyślnie)",
+        "zh-cn": "如果wallbox 的功耗包含在“stateRegard”和“stateSurplus”（默认）中，请选中此选项"
     },
     "tooltip_useX1": {
         "en": "activate checkbox if X1 input of charging station should be used to deactivate photovoltaics automatic when closed. Thus, a physical switch can be used to (de)activate photovoltaics automatic.",

@@ -304,6 +304,7 @@ async function main() {
     adapter.log.info("config useX1forAutomatic: " + adapter.config.useX1forAutomatic);
     adapter.log.info("config stateRegard: " + adapter.config.stateRegard);
     adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
+    adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
     adapter.log.info("config addPower: " + adapter.config.addPower);
     adapter.log.info("config delta: " + adapter.config.delta);

@@ -55,6 +55,7 @@ let timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
 let lastCalculating      = null;   // time of last check for charging information
 const intervalCalculating = 25 * 1000;  // calculate charging poser every 25(-30) seconds
+let chargingToBeStarted = false;   // tried to start charging session last time?
 let loadChargingSessions = false;
 let photovoltaicsActive  = false;  // is photovoltaics automatic active?
 let useX1switchForAutomatic = true;
@@ -454,8 +455,12 @@ function start() {
         sendUdpDatagram("output " + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + "." + stateWallboxDisplay] = function (oldValue, newValue) {
-        if (newValue && newValue !== null) {
-            sendUdpDatagram("display 0 0 0 0 " + newValue.replace(/ /g, "$"), true);
+        if (newValue !== null) {
+            if (typeof newValue == "string") {
+                sendUdpDatagram("display 0 0 0 0 " + newValue.replace(/ /g, "$"), true);
+            } else {
+                adapter.log.error("invalid data to send to display: " + newValue);
+            }
         }
     };
     stateChangeListeners[adapter.namespace + "." + stateWallboxDisabled] = function () {
@@ -959,20 +964,19 @@ function getAmperage(power, phases) {
 }
 
 function checkWallboxPower() {
-    if (isPassive)
-        return;
-
-    const newDate = new Date();
-    if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
-        return;
+    // update charging state also in between two calculations to recognize charging session
+    // before a new calculation will stop it again (as long as charingTimestamp) was not yet set
+    // it can be stopped immediatelly with no respect to minimim charging time...
+    if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging() && (chargingToBeStarted || isPassive)) {
+        adapter.log.info("vehicle (re)starts to charge");
+        setStateAck(stateChargeTimestamp, new Date().toString());
     }
-    lastCalculating = newDate;
 
     let curr    = 0;      // in mA
     let tempMax = getMaxCurrent();
     const phases  = getChargingPhaseCount();
     let isMaxPowerCalculation = false;
-    let chargingToBeStarted = false;
+    chargingToBeStarted = false;
 
     // first of all check maximum power allowed
     if (maxPowerActive) {
@@ -986,18 +990,29 @@ function checkWallboxPower() {
         }
     }
 
+    const available = getSurplusWithoutWallbox();
+    setStateAck(stateSurplus, Math.round(available));
+
+    if (isPassive) {
+        if (getStateAsDate(stateChargeTimestamp) !== null && ! isVehicleCharging()) {
+            resetChargingSessionData();
+        }
+        return;
+    }
+
+    const newDate = new Date();
+    if (lastCalculating !== null && newDate.getTime() - lastCalculating.getTime() < intervalCalculating) {
+        return;
+    }
+    lastCalculating = newDate;
+
     // lock wallbox if requested or available amperage below minimum
     if (getStateDefaultFalse(stateWallboxDisabled) || tempMax < getMinCurrent() ||
         (isPvAutomaticsActive() && ! isVehiclePlugged())) {
         curr = 0;
     } else {
         // if vehicle is currently charging and was not before, then save timestamp
-        if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging()) {
-            chargingToBeStarted = true;
-        }
         if (isVehiclePlugged() && isPvAutomaticsActive()) {
-            const available = getSurplusWithoutWallbox();
-            setStateAck(stateSurplus, Math.round(available));
             adapter.log.debug("Available surplus: " + available);
             curr = getAmperage(available, phases);
             if (curr > tempMax) {
@@ -1060,15 +1075,12 @@ function checkWallboxPower() {
         adapter.log.debug("not enough power for charging ...");
         stopCharging(isMaxPowerCalculation);
     } else {
-        if (chargingToBeStarted) {
-            adapter.log.info("vehicle (re)starts to charge");
-            setStateAck(stateChargeTimestamp, new Date().toString());
-        }
         if (curr > tempMax) {
             curr = tempMax;
         }
         adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
         regulateWallbox(curr, isMaxPowerCalculation);
+        chargingToBeStarted = true;
     }
 }
 

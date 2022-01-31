@@ -96,6 +96,9 @@ const stateChargingPhases      = "statistics.chargingPhases";   /*number of phas
 const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
 const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
 const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when charging session was continued with regard */
+const stateSessionId           = "statistics.sessionId";        /*id of current charging session */
+const stateRfidTag             = "statistics.rfid_tag";         /*rfid tag of current charging session */
+const stateRfidClass           = "statistics.rfid_class";       /*rfid class of current charging session */
 const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
 const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
 const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
@@ -732,11 +735,23 @@ function handleJsonMessage(message) {
     if (message.ID >= 100 && message.ID <= 130) {
         adapter.log.debug("History ID received: " + message.ID.substr(1));
         const sessionid = message.ID.substr(1);
-        updateState(states[sessionid + "_json"], JSON.stringify([message]));
+        if (loadChargingSessions) {
+            updateState(states[sessionid + "_json"], JSON.stringify([message]));
+        }
         for (const key in message){
             if (states[sessionid + "_" + key]) {
                 try {
-                    updateState(states[sessionid + "_" + key], message[key]);
+                    if (message.ID == 0) {
+                        // process some values of current charging session
+                        switch (key) {
+                            case "seesionid": updateState(stateSessionId, message[key]); break;
+                            case "rfid_tag": updateState(stateRfidTag, message[key]); break;
+                            case "rfid_class": updateState(stateRfidClass, message[key]); break;
+                        }
+                    }
+                    if (loadChargingSessions) {
+                        updateState(states[sessionid + "_" + key], message[key]);
+                    }
                 } catch (e) {
                     adapter.log.warn("Couldn't update state " + "Session_" + sessionid + "." + key + ": " + e);
                 }
@@ -1119,11 +1134,12 @@ function requestDeviceDataReport() {
 function requestChargingDataReport() {
     sendUdpDatagram("report 2");
     sendUdpDatagram("report 3");
+    sendUdpDatagram("report 100");
 }
 
 function loadChargingSessionsFromWallbox() {
     if (loadChargingSessions) {
-        for (let i = 100; i <= 130; i++) {
+        for (let i = 101; i <= 130; i++) {
             sendUdpDatagram("report " + i);
         }
     }

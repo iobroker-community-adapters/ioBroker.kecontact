@@ -741,7 +741,7 @@ function handleJsonMessage(message) {
         for (const key in message){
             if (states[sessionid + "_" + key]) {
                 try {
-                    if (message.ID == 0) {
+                    if (message.ID == 100) {
                         // process some values of current charging session
                         switch (key) {
                             case "Session ID": setStateAck(stateSessionId, message[key]); break;

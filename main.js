@@ -533,68 +533,68 @@ function checkConfig() {
         if (everythingFine) {
             adapter.log.info("starting charging station in active mode");
         }
-        if (isForeignStateSpecified(adapter.config.stateRegard)) {
-            photovoltaicsActive = true;
-            everythingFine = addForeignStateFromConfig(adapter.config.stateRegard) && everythingFine;
+    }
+    if (isForeignStateSpecified(adapter.config.stateRegard)) {
+        photovoltaicsActive = true;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateRegard) && everythingFine;
+    }
+    if (isForeignStateSpecified(adapter.config.stateSurplus)) {
+        photovoltaicsActive = true;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) && everythingFine;
+    }
+    if (photovoltaicsActive) {
+        if (adapter.config.useX1forAutomatic) {
+            useX1switchForAutomatic = true;
+        } else {
+            useX1switchForAutomatic = false;
         }
-        if (isForeignStateSpecified(adapter.config.stateSurplus)) {
-            photovoltaicsActive = true;
-            everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) && everythingFine;
+        if (! adapter.config.delta || adapter.config.delta <= 50) {
+            adapter.log.info("amperage delta not speficied or too low, using default value of " + amperageDelta);
+        } else {
+            amperageDelta = getNumber(adapter.config.delta);
         }
-        if (photovoltaicsActive) {
-            if (adapter.config.useX1forAutomatic) {
-                useX1switchForAutomatic = true;
-            } else {
-                useX1switchForAutomatic = false;
-            }
-            if (! adapter.config.delta || adapter.config.delta <= 50) {
-                adapter.log.info("amperage delta not speficied or too low, using default value of " + amperageDelta);
-            } else {
-                amperageDelta = getNumber(adapter.config.delta);
-            }
-            if (! adapter.config.minAmperage || adapter.config.minAmperage < 6000) {
-                adapter.log.info("minimum amperage not speficied or too low, using default value of " + minAmperage);
-            } else {
-                minAmperage = getNumber(adapter.config.minAmperage);
-            }
-            if (adapter.config.addPower !== 0) {
-                setStateAck(stateAddPower, getNumber(adapter.config.addPower));
-            }
-            if (adapter.config.underusage !== 0) {
-                underusage = getNumber(adapter.config.underusage);
-            }
-            if (! adapter.config.minTime || adapter.config.minTime < 0) {
-                adapter.log.info("minimum charge time not speficied or too low, using default value of " + minChargeSeconds);
-            } else {
-                minChargeSeconds = getNumber(adapter.config.minTime);
-            }
-            if (! adapter.config.regardTime || adapter.config.regardTime < 0) {
-                adapter.log.info("minimum regard time not speficied or too low, using default value of " + minRegardSeconds);
-            } else {
-                minRegardSeconds = getNumber(adapter.config.regardTime);
-            }
+        if (! adapter.config.minAmperage || adapter.config.minAmperage < 6000) {
+            adapter.log.info("minimum amperage not speficied or too low, using default value of " + minAmperage);
+        } else {
+            minAmperage = getNumber(adapter.config.minAmperage);
         }
-        if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
-            maxPowerActive = true;
-            if (adapter.config.maxPower <= 0) {
-                adapter.log.warn("max. power negative or zero - power limitation deactivated");
+        if (adapter.config.addPower !== 0) {
+            setStateAck(stateAddPower, getNumber(adapter.config.addPower));
+        }
+        if (adapter.config.underusage !== 0) {
+            underusage = getNumber(adapter.config.underusage);
+        }
+        if (! adapter.config.minTime || adapter.config.minTime < 0) {
+            adapter.log.info("minimum charge time not speficied or too low, using default value of " + minChargeSeconds);
+        } else {
+            minChargeSeconds = getNumber(adapter.config.minTime);
+        }
+        if (! adapter.config.regardTime || adapter.config.regardTime < 0) {
+            adapter.log.info("minimum regard time not speficied or too low, using default value of " + minRegardSeconds);
+        } else {
+            minRegardSeconds = getNumber(adapter.config.regardTime);
+        }
+    }
+    if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
+        maxPowerActive = true;
+        if (adapter.config.maxPower <= 0) {
+            adapter.log.warn("max. power negative or zero - power limitation deactivated");
+            maxPowerActive = false;
+        }
+    }
+    if (maxPowerActive) {
+        everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter1) && everythingFine;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter2) && everythingFine;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter3) && everythingFine;
+        if (adapter.config.wallboxNotIncluded) {
+            wallboxIncluded = false;
+        } else {
+            wallboxIncluded = true;
+        }
+        if (everythingFine) {
+            if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
+                adapter.log.error("no energy meters defined - power limitation deactivated");
                 maxPowerActive = false;
-            }
-        }
-        if (maxPowerActive) {
-            everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter1) && everythingFine;
-            everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter2) && everythingFine;
-            everythingFine = addForeignStateFromConfig(adapter.config.stateEnergyMeter3) && everythingFine;
-            if (adapter.config.wallboxNotIncluded) {
-                wallboxIncluded = false;
-            } else {
-                wallboxIncluded = true;
-            }
-            if (everythingFine) {
-                if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
-                    adapter.log.error("no energy meters defined - power limitation deactivated");
-                    maxPowerActive = false;
-                }
             }
         }
     }

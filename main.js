@@ -992,6 +992,7 @@ function checkWallboxPower() {
 
     const available = getSurplusWithoutWallbox();
     setStateAck(stateSurplus, Math.round(available));
+    adapter.log.debug("Available surplus: " + available);
 
     if (isPassive) {
         if (getStateAsDate(stateChargeTimestamp) !== null && ! isVehicleCharging()) {
@@ -1013,7 +1014,6 @@ function checkWallboxPower() {
     } else {
         // if vehicle is currently charging and was not before, then save timestamp
         if (isVehiclePlugged() && isPvAutomaticsActive()) {
-            adapter.log.debug("Available surplus: " + available);
             curr = getAmperage(available, phases);
             if (curr > tempMax) {
                 curr = tempMax;

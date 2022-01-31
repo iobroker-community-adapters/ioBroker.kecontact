@@ -834,6 +834,9 @@ function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
 function initChargingSession() {
     resetChargingSessionData();
     setStateAck(statePlugTimestamp, new Date().toString());
+    setStateAck(stateSessionId, null);
+    setStateAck(stateRfidTag, null);
+    setStateAck(stateRfidClass, null);
     displayChargeMode();
 }
 

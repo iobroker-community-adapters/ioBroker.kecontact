@@ -744,9 +744,9 @@ function handleJsonMessage(message) {
                     if (message.ID == 0) {
                         // process some values of current charging session
                         switch (key) {
-                            case "seesionid": setStateAck(stateSessionId, message[key]); break;
-                            case "rfid_tag": setStateAck(stateRfidTag, message[key]); break;
-                            case "rfid_class": setStateAck(stateRfidClass, message[key]); break;
+                            case "Session ID": setStateAck(stateSessionId, message[key]); break;
+                            case "RFID tag": setStateAck(stateRfidTag, message[key]); break;
+                            case "RFID class": setStateAck(stateRfidClass, message[key]); break;
                         }
                     }
                     if (loadChargingSessions) {

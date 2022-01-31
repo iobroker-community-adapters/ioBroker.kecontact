@@ -4,8 +4,8 @@
         "version": "1.3.4",
         "news": {
 			"1.3.4": {
-				"en": "fix invalid assignment to message (sentry IOBROKER-KECONTACT-S), update charging timestamp more often to prevent toogling, update more information even in passive mode",
-				"de": "Falsche Datentypen für Meldung abfangen (sentry IOBROKER-KECONTACT-S), Ladestart-Zeitstempel öfters aktualisieren um an/aus-Situation zu vermeiden, mehr Infos auch im passiven Modus aktualisieren"
+				"en": "fix invalid assignment to message (sentry IOBROKER-KECONTACT-S), update charging timestamp more often to prevent toogling, update more information even in passive mode, provide RFID and sessionId for currect session",
+				"de": "Falsche Datentypen für Meldung abfangen (sentry IOBROKER-KECONTACT-S), Ladestart-Zeitstempel öfters aktualisieren um an/aus-Situation zu vermeiden, mehr Infos auch im passiven Modus aktualisieren, RFID- und Session-ID-Daten für aktuelle Ladesitzung bereitstellen"
 			},
 			"1.3.3": {
 				"en": "fix error when message to display is empty (sentry IOBROKER-KECONTACT-Q, new option whether power of wallbox is included in surplus/regard)",
@@ -1013,6 +1013,48 @@
 			"desc": "Power consumption of the last loading session in Wh."
 		  },
 		  "native": {}
+		},
+		{
+		  "_id": "statistics.sessionId",
+		  "type": "state",
+		  "common": {
+			"name": "session ID of current charging session",
+			"type": "number",
+			"role": "value",
+			"read": true,
+			"write": false,
+			"def": null,
+			"desc": "unique session ID"
+		  },
+		  "native": {}
+		},
+		{
+			"_id": "statistics.rfid_tag",
+			"type": "state",
+			"common": {
+			  "name": "RFID tag of current charging session",
+			  "type": "string",
+			  "role": "text",
+			  "read": true,
+			  "write": false,
+			  "def": null,
+			  "desc": "RFID token used for charging session"
+			},
+			"native": {}
+		},
+		{
+			"_id": "statistics.rfid_class",
+			"type": "state",
+			"common": {
+			  "name": "RFID class of current charging session",
+			  "type": "string",
+			  "role": "text",
+			  "read": true,
+			  "write": false,
+			  "def": null,
+			  "desc": "RFID class used for charging session"
+			},
+			"native": {}
 		},
 		{
 			"_id": "internal",

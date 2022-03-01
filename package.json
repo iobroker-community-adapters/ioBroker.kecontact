@@ -35,7 +35,7 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.kecontact"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.0",
     "dgram": "^1.0.1",
     "os": "^0.1.1",
     "request": "^2.88.2"

@@ -60,12 +60,10 @@
             if (M) M.updateTextFields();
 
             $('#OID_stateRegard').on('click', function () {
-                console.log("Button fpr select state pressed");
                 initSelectId(function (sid) {
-                    console.log("selected: " + sid)
-                    sid.selectId('show', $('#OID_stateRegard').val(), function (newId) {
+                    sid.selectId('show', $('#stateRegard').val(), function (newId) {
                         if (newId) {
-                            $('#OID_stateRegard').val(newId).trigger('change');
+                            $('#stateRegard').val(newId).trigger('change');
                         }
                     });
                 });
@@ -120,7 +118,7 @@
                         unselectAll: _('Deselect all'),
                         invertSelection: _('Invert selection')
                     },
-                    columns: ['image', 'name', 'role', 'room']
+                    columns: ['image', 'name', 'role', 'room', 'value']
                 });
                 callback(selectId);
             });

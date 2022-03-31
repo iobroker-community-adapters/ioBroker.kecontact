@@ -22,6 +22,18 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
 
+    <style>
+        #dialog-select-member {
+            max-height: 95% !important;
+            max-width: 85% !important;
+            width: 80% !important;
+            height: 90% !important;
+            overflow: visible !important;
+            top: 10px !important;
+        }
+    </style>
+
+
     <script type="text/javascript">
         // This will be called by the admin adapter when the settings page loads
         function load(settings, onChange) {
@@ -48,7 +60,9 @@
             if (M) M.updateTextFields();
 
             $('#OID_stateRegard').on('click', function () {
+                console.log("Button fpr select state pressed");
                 initSelectId(function (sid) {
+                    console.log("selected: " + sid)
                     sid.selectId('show', $('#OID_stateRegard').val(), function (newId) {
                         if (newId) {
                             $('#OID_stateRegard').val(newId).trigger('change');
@@ -271,6 +285,24 @@
                 <input type="checkbox" id="wallboxNotIncluded" class="value" />
                 <label for="wallboxNotIncluded" class="translate">wallboxNotIncluded</label>
                 <span class="helper-text future-tooltip translate">tooltip_wallboxNotIncluded</span>
+            </div>
+        </div>
+
+        <div class="m material-dialogs">
+            <div id="dialog-select-member" class="modal modal-fixed-footer">
+                <div class="modal-content">
+                    <div class="row">
+                        <div class="col s12 title"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 dialog-content">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn btn-set"><i class="large material-icons left">check</i><span class="translate">Select</span></a>
+                    <a class="modal-action modal-close waves-effect waves-green btn btn-close"><i class="large material-icons left ">close</i><span class="translate">Cancel</span></a>
+                </div>
             </div>
         </div>
 

@@ -531,4 +531,72 @@ systemDictionary = {
         "pl": "Sprawdź, czy żaden z wymienionych liczników energii nie obejmuje również poboru mocy przez Wallbox",
         "zh-cn": "检查列出的电表是否也不能涵盖墙盒的功耗"
     },
+    "Cancel": {
+        "de": "Abbrechen",
+        "en": "Cancel"
+    },
+    "Select": {
+        "de": "Auswählen",
+        "en": "Select"
+    },
+    "All": {
+        "de": "Alle",
+        "en": "All"
+    },
+    "ID": {
+        "de": "ID",
+        "en": "ID"
+    },
+    "Name": {
+        "de": "Name",
+        "en": "Name"
+    },
+    "Role": {
+        "de": "Rolle",
+        "en": "Role"
+    },
+    "Room": {
+        "de": "Raum",
+        "en": "Room"
+    },
+    "Value": {
+        "de": "Wert",
+        "en": "Value"
+    },
+    "Select ID": {
+        "de": "ID auswählen",
+        "en": "Select ID"
+    },
+    "From": {
+        "de": "Geändert von",
+        "en": "From"
+    },
+    "Last changed": {
+        "de": "Letzte Änderung",
+        "en": "Last changed"
+    },
+    "Time stamp": {
+        "de": "Zeitstempel",
+        "en": "Time stamp"
+    },
+    "Processing...": {
+        "de": "Verarbeite...",
+        "en": "Processing..."
+    },
+    "Acknowledged": {
+        "de": "Bestätigt",
+        "en": "Acknowledged"
+    },
+    "Select all": {
+        "de": "Alles auswählen",
+        "en": "Select all"
+    },
+    "Deselect all": {
+        "de": "Alles abwählen",
+        "en": "Deselect all"
+    },
+    "Invert selection": {
+        "de": "Auswahl umkehren",
+        "en": "Invert selection"
+    },
 };

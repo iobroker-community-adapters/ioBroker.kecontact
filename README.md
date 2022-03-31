@@ -86,6 +86,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ## Changelog
 
+### 1.3.5 (2022-03-31)
+* (Sneak-L8) add state selector in settings dialog
+
 ### 1.3.4 (2022-01-30)
 * (Sneak-L8) fix invalid assignment to message (sentry IOBROKER-KECONTACT-S) 
 * (Sneak-L8) update charging timestamp more often to prevent toogling

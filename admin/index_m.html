@@ -79,6 +79,16 @@
                 });
             });
         
+            $('#OID_stateBatteryCharging').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateBatteryCharging').val(), function (newId) {
+                        if (newId) {
+                            $('#stateBatteryCharging').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+        
             $('#OID_stateEnergyMeter1').on('click', function () {
                 initSelectId(function (sid) {
                     sid.selectId('show', $('#stateEnergyMeter1').val(), function (newId) {
@@ -240,6 +250,14 @@
         </div>
 
         <div class="row">
+            <div class="col s4 input-field">
+                <input type="text" size="50" id="stateBatteryCharging" class="value" />
+                <label for="stateBatteryCharging" class="translate">surplus</label>
+                <span class="helper-text future-tooltip translate">tooltip_stateBatteryCharging</span>
+            </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateBatteryCharging" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+            </div>
             <div class="col s4 input-field">
                 <input type="checkbox" id="useX1forAutomatic" class="value" />
                 <label for="useX1forAutomatic" class="translate">useX1forAutomatic</label>

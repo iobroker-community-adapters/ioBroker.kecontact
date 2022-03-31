@@ -1,11 +1,11 @@
 {
     "common": {
         "name": "kecontact",
-        "version": "1.3.5",
+        "version": "1.4.0",
         "news": {
-			"1.3.5": {
-				"en": "add state selector in settings dialog",
-				"de": "in Einstellungen über extra Dialog States auswählen"
+			"1.4.0": {
+				"en": "support for battery storage in photovoltaics automatics, add state selector in settings dialog",
+				"de": "Unterstützung für einen Batteriespeicher in der Lade-Automatik, in Einstellungen über extra Dialog States auswählen"
 			},
 			"1.3.4": {
 				"en": "fix invalid assignment to message (sentry IOBROKER-KECONTACT-S), update charging timestamp more often to prevent toogling, update more information even in passive mode, provide RFID and sessionId for currect session",
@@ -150,6 +150,7 @@
         "useX1forAutomatic": false,
         "stateRegard": "",
         "stateSurplus": "",
+		"stateBatteryCharging": "",
 		"statesIncludeWallbox": true,
         "minAmperage": 0,
         "addPower": 0,

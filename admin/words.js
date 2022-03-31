@@ -111,7 +111,7 @@ systemDictionary = {
         "pl": "Poniższe wartości są potrzebne tylko wtedy, gdy wallbox ma być regulowany przez moduł fotowoltaiczny",
         "zh-cn": "仅当要通过光伏装置调节壁箱时才需要以下值"
     },
-    "regard": {
+    "stateRegard": {
         "en": "name of regard state",
         "de": "Name des States für Netzbezug",
         "ru": "Название состояния рассмотрения",
@@ -123,7 +123,7 @@ systemDictionary = {
         "pl": "Nazwa stanu szacunku",
         "zh-cn": "注意状态的名称"
     },
-    "surplus": {
+    "stateSurplus": {
         "en": "name of surplus state",
         "de": "Name des States für Netzeinspeisung",
         "ru": "Название избыточного состояния",
@@ -134,6 +134,18 @@ systemDictionary = {
         "es": "Nombre del estado excedente",
         "pl": "Nazwa stanu nadwyżkowego",
         "zh-cn": "剩余状态名称"
+    },
+    "stateBatteryCharging": {
+        "en": "name of state of power comsumption of battery storage",
+        "de": "Name des States für aktuelle Leistungsaufnahme des Batterieseichers",
+        "ru": "наименование состояния энергопотребления аккумуляторной батареи",
+        "pt": "nome do estado do consumo de energia do armazenamento da bateria",
+        "nl": "naam van de staat van het stroomverbruik van de batterijopslag",
+        "fr": "nom de l'état de la consommation d'énergie de la batterie de stockage",
+        "it": "nome dello stato di consumo di energia della batteria di accumulo",
+        "es": "nombre del estado de consumo de energía del almacenamiento de la batería",
+        "pl": "nazwa stanu poboru mocy przez magazynowanie baterii",
+        "zh-cn": "蓄电池用电量状态名称"
     },
     "statesIncludeWallbox": {
         "en": "states include power of wallbox",
@@ -374,6 +386,18 @@ systemDictionary = {
         "es": "Nombre del estado que tiene la plusvalía del contador de energía. Si tanto la consideración como el excedente están contenidos en un estado, complete el estado aquí solo si el excedente es un valor positivo y la consideración es negativa.",
         "pl": "Nazwa państwa, w którym znajduje się wartość dodatkowa licznika energii. Jeśli zarówno szacunek, jak i nadwyżka zawarte są w jednym stanie, proszę wpisać stan tutaj tylko wtedy, gdy nadwyżka jest wartością dodatnią, a szacunek jest ujemna.",
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
+    },
+    "tooltip_stateBatteryCharging": {
+        "en": "name of state which holds power with which the battery storage is currently charging. This power is also available for charging the vehicle.",
+        "de": "Name des States der angibt, mit welcher Leistung der Batteriespeicher gerade lädt. Diese Leistung steht auch fürs Laden des Fahrzeugs zur Verfügung.",
+        "ru": "имя состояния, в котором хранится мощность, которой в данный момент заряжается аккумуляторная батарея. Эта мощность также доступна для зарядки автомобиля.",
+        "pt": "nome do estado que mantém a energia com a qual o armazenamento da bateria está sendo carregado no momento. Esta energia também está disponível para carregar o veículo.",
+        "nl": "naam van de staat die het vermogen heeft waarmee de batterijopslag momenteel wordt opgeladen. Dit vermogen is ook beschikbaar voor het opladen van het voertuig.",
+        "fr": "nom de l'état qui contient l'énergie avec laquelle la batterie de stockage est en train de se charger. Cette puissance est également disponible pour recharger le véhicule.",
+        "it": "nome dello stato che detiene l'alimentazione con cui l'accumulo della batteria è attualmente in carica. Questa potenza è disponibile anche per la ricarica del veicolo.",
+        "es": "nombre del estado que tiene la energía con la que se está cargando actualmente el almacenamiento de la batería. Esta potencia también está disponible para cargar el vehículo.",
+        "pl": "nazwa stanu, w którym znajduje się moc, z jaką aktualnie ładuje się akumulator. Ta moc jest również dostępna do ładowania pojazdu.",
+        "zh-cn": "拥有电池存储当前正在充电的电量的状态名称。该电源也可用于为车辆充电。"
     },
     "tooltip_statesIncludeWallbox": {
         "en": "check this if power comsumption of wallbox is include in \"stateRegard\" and \"stateSurplus\" (default)",

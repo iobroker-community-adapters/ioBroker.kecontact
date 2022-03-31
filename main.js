@@ -199,6 +199,8 @@ function onAdapterUnload(callback) {
             adapter.unsubscribeForeignStates(adapter.config.stateRegard);
         if (adapter.config.stateSurplus)
             adapter.unsubscribeForeignStates(adapter.config.stateSurplus);
+        if (adapter.config.stateBatteryCharging)
+            adapter.unsubscribeForeignStates(adapter.config.stateBatteryCharging);
         if (adapter.config.stateEnergyMeter1)
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter1);
         if (adapter.config.stateEnergyMeter2)
@@ -308,6 +310,7 @@ async function main() {
     adapter.log.info("config useX1forAutomatic: " + adapter.config.useX1forAutomatic);
     adapter.log.info("config stateRegard: " + adapter.config.stateRegard);
     adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
+    adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
     adapter.log.info("config addPower: " + adapter.config.addPower);
@@ -546,6 +549,7 @@ function checkConfig() {
         everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) && everythingFine;
     }
     if (photovoltaicsActive) {
+        everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         if (adapter.config.useX1forAutomatic) {
             useX1switchForAutomatic = true;
         } else {
@@ -859,7 +863,7 @@ function getWallboxPowerInWatts() {
 }
 
 function getSurplusWithoutWallbox() {
-    let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard);
+    let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard) + getStateDefault0(adapter.config.stateBatteryCharging);
     if (adapter.config.statesIncludeWallbox)
         power += getWallboxPowerInWatts();
     return power;

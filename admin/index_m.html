@@ -68,7 +68,47 @@
                     });
                 });
             });
-        }
+
+            $('#OID_stateSurplus').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateSurplus').val(), function (newId) {
+                        if (newId) {
+                            $('#stateSurplus').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+        
+            $('#OID_stateEnergyMeter1').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateEnergyMeter1').val(), function (newId) {
+                        if (newId) {
+                            $('#stateEnergyMeter1').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+        
+            $('#OID_stateEnergyMeter2').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateEnergyMeter2').val(), function (newId) {
+                        if (newId) {
+                            $('#stateEnergyMeter2').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+        
+            $('#OID_stateEnergyMeter3').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateEnergyMeter3').val(), function (newId) {
+                        if (newId) {
+                            $('#stateEnergyMeter3').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+}
 
         // This will be called by the admin adapter when the user presses the save button
         function save(callback) {
@@ -189,6 +229,9 @@
                 <label for="stateSurplus" class="translate">surplus</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateSurplus</span>
             </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateSurplus" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+            </div>
             <div class="col s4 input-field">
                 <input type="checkbox" id="statesIncludeWallbox" class="value" />
                 <label for="statesIncludeWallbox" class="translate">statesIncludeWallbox</label>
@@ -266,15 +309,24 @@
                 <label for="stateEnergyMeter1" class="translate">stateEnergyMeter1</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter1</span>
             </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateEnergyMeter1" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+            </div>
             <div class="col s4 input-field">
                 <input type="text" size="50" id="stateEnergyMeter2" class="value" />
                 <label for="stateEnergyMeter2" class="translate">stateEnergyMeter2</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter2</span>
             </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateEnergyMeter2" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+            </div>
             <div class="col s4 input-field">
                 <input type="text" size="50" id="stateEnergyMeter3" class="value" />
                 <label for="stateEnergyMeter3" class="translate">stateEnergyMeter3</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateEnergyMeter3</span>
+            </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateEnergyMeter3" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
             </div>
         </div>
 

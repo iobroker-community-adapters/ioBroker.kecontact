@@ -41,6 +41,15 @@
             onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
             if (M) M.updateTextFields();
+            $('#OID_regardState').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#OID_regardState').val(), function (newId) {
+                        if (newId) {
+                            $('#OID_regardState').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
         }
 
         // This will be called by the admin adapter when the user presses the save button
@@ -59,6 +68,44 @@
             });
             callback(obj);
         }
+
+        var selectId;
+        function initSelectId(callback) {
+            if (selectId) {
+                return callback(selectId);
+            }
+            socket.emit('getObjects', function (err, objs) {
+                selectId = $('#dialog-select-member').selectId('init', {
+                    noMultiselect: true,
+                    objects: objs,
+                    imgPath: '../../lib/css/fancytree/',
+                    filter: { type: 'state' },
+                    name: 'scenes-select-state',
+                    texts: {
+                        select: _('Select'),
+                        cancel: _('Cancel'),
+                        all: _('All'),
+                        id: _('ID'),
+                        name: _('Name'),
+                        role: _('Role'),
+                        room: _('Room'),
+                        value: _('Value'),
+                        selectid: _('Select ID'),
+                        from: _('From'),
+                        lc: _('Last changed'),
+                        ts: _('Time stamp'),
+                        wait: _('Processing...'),
+                        ack: _('Acknowledged'),
+                        selectAll: _('Select all'),
+                        unselectAll: _('Deselect all'),
+                        invertSelection: _('Invert selection')
+                    },
+                    columns: ['image', 'name', 'role', 'room']
+                });
+                callback(selectId);
+            });
+        }
+        
     </script>
 
 </head>
@@ -115,6 +162,9 @@
                 <input type="text" size="50" id="stateRegard" class="value" />
                 <label for="stateRegard" class="translate">regard</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateRegard</span>
+            </div>
+            <div class="col s1 m2 l1">
+                <a id="OID_stateRegard" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
             </div>
             <div class="col s4 input-field">
                 <input type="text" size="50" id="stateSurplus" class="value" />

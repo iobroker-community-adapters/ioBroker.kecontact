@@ -147,6 +147,18 @@ systemDictionary = {
         "pl": "nazwa stanu poboru mocy przez magazynowanie baterii",
         "zh-cn": "蓄电池用电量状态名称"
     },
+    "stateBatteryDischarging": {
+        "en": "name of state of power delivery of battery storage",
+        "de": "Name des Zustands der Leistungsabgabe des Batteriespeichers",
+        "ru": "наименование состояния энергоснабжения аккумуляторной батареи",
+        "pt": "nome do estado de fornecimento de energia do armazenamento da bateria",
+        "nl": "naam van de stroomvoorziening van de batterijopslag",
+        "fr": "nom de l'état d'alimentation de la batterie de stockage",
+        "it": "nome dello stato di erogazione dell'energia di accumulo della batteria",
+        "es": "nombre del estado de suministro de energía del almacenamiento de la batería",
+        "pl": "nazwa stanu zasilania zasobnika baterii",
+        "zh-cn": "蓄电池供电状态名称"
+    },
     "statesIncludeWallbox": {
         "en": "states include power of wallbox",
         "de": "States beinhalten die Leistung der Wallbox",
@@ -388,16 +400,28 @@ systemDictionary = {
         "zh-cn": "持有电度表剩余价值的国家名称。如果关注和剩余都包含在一个状态中，则仅当剩余为正值且关注为负时，才在此处填写状态。"
     },
     "tooltip_stateBatteryCharging": {
-        "en": "name of state which holds power with which the battery storage is currently charging. This power is also available for charging the vehicle.",
-        "de": "Name des States der angibt, mit welcher Leistung der Batteriespeicher gerade lädt. Diese Leistung steht auch fürs Laden des Fahrzeugs zur Verfügung.",
-        "ru": "имя состояния, в котором хранится мощность, которой в данный момент заряжается аккумуляторная батарея. Эта мощность также доступна для зарядки автомобиля.",
-        "pt": "nome do estado que mantém a energia com a qual o armazenamento da bateria está sendo carregado no momento. Esta energia também está disponível para carregar o veículo.",
-        "nl": "naam van de staat die het vermogen heeft waarmee de batterijopslag momenteel wordt opgeladen. Dit vermogen is ook beschikbaar voor het opladen van het voertuig.",
-        "fr": "nom de l'état qui contient l'énergie avec laquelle la batterie de stockage est en train de se charger. Cette puissance est également disponible pour recharger le véhicule.",
-        "it": "nome dello stato che detiene l'alimentazione con cui l'accumulo della batteria è attualmente in carica. Questa potenza è disponibile anche per la ricarica del veicolo.",
-        "es": "nombre del estado que tiene la energía con la que se está cargando actualmente el almacenamiento de la batería. Esta potencia también está disponible para cargar el vehículo.",
-        "pl": "nazwa stanu, w którym znajduje się moc, z jaką aktualnie ładuje się akumulator. Ta moc jest również dostępna do ładowania pojazdu.",
-        "zh-cn": "拥有电池存储当前正在充电的电量的状态名称。该电源也可用于为车辆充电。"
+        "en": "name of state which holds power with which the battery storage is currently charging. Negative values mean battery is discharging. This power is also available for charging the vehicle.",
+        "de": "Name des States, der über Strom verfügt, mit dem der Batteriespeicher gerade geladen wird. Negative Werte bedeuten, dass die Batterie entladen wird. Diese Leistung steht auch zum Laden des Fahrzeugs zur Verfügung.",
+        "ru": "имя состояния, в котором хранится мощность, которой в данный момент заряжается аккумуляторная батарея. Отрицательные значения означают, что батарея разряжается. Эта мощность также доступна для зарядки автомобиля.",
+        "pt": "nome do estado que mantém a energia com a qual o armazenamento da bateria está sendo carregado no momento. Valores negativos significam que a bateria está descarregando. Esta energia também está disponível para carregar o veículo.",
+        "nl": "naam van de staat die het vermogen heeft waarmee de batterijopslag momenteel wordt opgeladen. Negatieve waarden betekenen dat de batterij aan het ontladen is. Dit vermogen is ook beschikbaar voor het opladen van het voertuig.",
+        "fr": "nom de l'état qui contient l'énergie avec laquelle la batterie de stockage est en train de se charger. Des valeurs négatives signifient que la batterie se décharge. Cette puissance est également disponible pour recharger le véhicule.",
+        "it": "nome dello stato che detiene l'alimentazione con cui l'accumulo della batteria è attualmente in carica. Valori negativi indicano che la batteria si sta scaricando. Questa potenza è disponibile anche per la ricarica del veicolo.",
+        "es": "nombre del estado que tiene la energía con la que se está cargando actualmente el almacenamiento de la batería. Los valores negativos significan que la batería se está descargando. Esta potencia también está disponible para cargar el vehículo.",
+        "pl": "nazwa stanu, w którym znajduje się moc, z jaką aktualnie ładuje się akumulator. Wartości ujemne oznaczają rozładowywanie się akumulatora. Ta moc jest również dostępna do ładowania pojazdu.",
+        "zh-cn": "拥有电池存储当前正在充电的电量的状态名称。负值表示电池正在放电。该电源也可用于为车辆充电。"
+    },
+    "tooltip_stateBatteryDischarging": {
+        "en": "name of state which holds power with which the battery storage is currently discharging. Negative values mean battery is charging.",
+        "de": "Name des Staates, der über Strom verfügt, mit dem sich der Batteriespeicher gerade entlädt. Negative Werte bedeuten, dass der Akku geladen wird.",
+        "ru": "имя состояния, в котором хранится мощность, с которой в настоящее время разряжается аккумуляторная батарея. Отрицательные значения означают, что аккумулятор заряжается.",
+        "pt": "nome do estado que mantém a energia com a qual o armazenamento da bateria está descarregando no momento. Valores negativos significam que a bateria está carregando.",
+        "nl": "naam van de staat die de stroom bevat waarmee de batterijopslag momenteel ontlaadt. Negatieve waarden betekenen dat de batterij wordt opgeladen.",
+        "fr": "nom de l'état qui détient la puissance avec laquelle la batterie de stockage se décharge actuellement. Des valeurs négatives signifient que la batterie est en charge.",
+        "it": "nome dello stato che detiene la potenza con cui l'accumulo della batteria si sta attualmente scaricando. Valori negativi indicano che la batteria è in carica.",
+        "es": "nombre del estado que tiene energía con la que el almacenamiento de la batería se está descargando actualmente. Los valores negativos significan que la batería se está cargando.",
+        "pl": "nazwa stanu, w którym znajduje się moc, z jaką aktualnie rozładowuje się akumulator. Wartości ujemne oznaczają ładowanie akumulatora.",
+        "zh-cn": "拥有电池存储当前正在放电的电量的状态名称。负值表示电池正在充电。"
     },
     "tooltip_statesIncludeWallbox": {
         "en": "check this if power comsumption of wallbox is include in \"stateRegard\" and \"stateSurplus\" (default)",

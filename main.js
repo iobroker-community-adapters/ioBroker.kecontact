@@ -86,6 +86,11 @@ const stateWallboxChargeAmount = "ePres";                       /*ePres - amount
 const stateWallboxDisplay      = "display";
 const stateWallboxOutput       = "output";
 const stateSetEnergy           = "setenergy";
+const stateReport              = "report";
+const stateStart               = "start";
+const stateStop                = "stop";
+const stateSetDateTime         = "setdatetime";
+const stateUnlock              = "unlock";
 const stateProduct             = "product";
 const stateX1input             = "input";
 const stateFirmware            = "firmware";                    /*current running version of firmware*/
@@ -201,6 +206,8 @@ function onAdapterUnload(callback) {
             adapter.unsubscribeForeignStates(adapter.config.stateSurplus);
         if (adapter.config.stateBatteryCharging)
             adapter.unsubscribeForeignStates(adapter.config.stateBatteryCharging);
+        if (adapter.config.stateBatteryDischarging)
+            adapter.unsubscribeForeignStates(adapter.config.stateBatteryDischarging);
         if (adapter.config.stateEnergyMeter1)
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter1);
         if (adapter.config.stateEnergyMeter2)
@@ -311,6 +318,7 @@ async function main() {
     adapter.log.info("config stateRegard: " + adapter.config.stateRegard);
     adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
     adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
+    adapter.log.info("config stateBatteryDischarging: " + adapter.config.stateBatteryDischarging);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
     adapter.log.info("config addPower: " + adapter.config.addPower);
@@ -479,6 +487,21 @@ function start() {
     stateChangeListeners[adapter.namespace + "." + stateSetEnergy] = function (oldValue, newValue) {
         sendUdpDatagram("setenergy " + parseInt(newValue) * 10, true);
     };
+    stateChangeListeners[adapter.namespace + "." + stateReport] = function (oldValue, newValue) {
+        sendUdpDatagram("report " + newValue, true);
+    };
+    stateChangeListeners[adapter.namespace + "." + stateStart] = function (oldValue, newValue) {
+        sendUdpDatagram("start " + newValue, true);
+    };
+    stateChangeListeners[adapter.namespace + "." + stateStop] = function (oldValue, newValue) {
+        sendUdpDatagram("stop " + newValue, true);
+    };
+    stateChangeListeners[adapter.namespace + "." + stateSetDateTime] = function (oldValue, newValue) {
+        sendUdpDatagram("setdatetime " + newValue, true);
+    };
+    stateChangeListeners[adapter.namespace + "." + stateUnlock] = function () {
+        sendUdpDatagram("unlock", true);
+    };
     stateChangeListeners[adapter.namespace + "." + stateAddPower] = function () {
         // no real action to do
     };
@@ -550,6 +573,7 @@ function checkConfig() {
     }
     if (photovoltaicsActive) {
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
         if (adapter.config.useX1forAutomatic) {
             useX1switchForAutomatic = true;
         } else {
@@ -863,7 +887,11 @@ function getWallboxPowerInWatts() {
 }
 
 function getSurplusWithoutWallbox() {
-    let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard) + getStateDefault0(adapter.config.stateBatteryCharging);
+    let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard);
+    const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
+    if (batteryPower > 0) {
+        power += batteryPower;
+    }
     if (adapter.config.statesIncludeWallbox)
         power += getWallboxPowerInWatts();
     return power;

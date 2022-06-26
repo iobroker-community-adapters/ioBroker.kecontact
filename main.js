@@ -200,19 +200,19 @@ function onAdapterUnload(callback) {
                 rxSocketBroadcast.close();
         }
 
-        if (adapter.config.stateRegard)
+        if (isForeignStateSpecified(adapter.config.stateRegard))
             adapter.unsubscribeForeignStates(adapter.config.stateRegard);
-        if (adapter.config.stateSurplus)
+        if (isForeignStateSpecified(adapter.config.stateSurplus))
             adapter.unsubscribeForeignStates(adapter.config.stateSurplus);
-        if (adapter.config.stateBatteryCharging)
+        if (isForeignStateSpecified(adapter.config.stateBatteryCharging))
             adapter.unsubscribeForeignStates(adapter.config.stateBatteryCharging);
-        if (adapter.config.stateBatteryDischarging)
+        if (isForeignStateSpecified(adapter.config.stateBatteryDischarging))
             adapter.unsubscribeForeignStates(adapter.config.stateBatteryDischarging);
-        if (adapter.config.stateEnergyMeter1)
+        if (isForeignStateSpecified(adapter.config.stateEnergyMeter1))
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter1);
-        if (adapter.config.stateEnergyMeter2)
+        if (isForeignStateSpecified(adapter.config.stateEnergyMeter2))
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter2);
-        if (adapter.config.stateEnergyMeter3)
+        if (isForeignStateSpecified(adapter.config.stateEnergyMeter3))
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter3);
 
     } catch (e) {

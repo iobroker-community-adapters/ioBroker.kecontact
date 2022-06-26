@@ -4,8 +4,8 @@
     "version": "1.4.1",
     "news": {
       "1.4.1": {
-        "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time",
-        "de": "getrennte States für Lade-/Entladewerte eines Batteriespeichers, zusätzliche States um sich an der Wallbox zu (de)authorosieren, entsperren und Datum/Zeit zu setzen"
+        "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time, fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)",
+        "de": "getrennte States für Lade-/Entladewerte eines Batteriespeichers, zusätzliche States um sich an der Wallbox zu (de)authorosieren, entsperren und Datum/Zeit zu setzen, Fix für unsubscribe foreign state (sentry IOBROKER-KECONTACT-10)"
       },
       "1.4.0": {
         "en": "support for battery storage in photovoltaics automatics, add state selector in settings dialog",

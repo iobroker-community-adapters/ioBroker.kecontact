@@ -80,7 +80,6 @@
         "de": "Umstellung Einstallungsdialog auf Material-Design, erste offizielle Version"
       }
     },
-    "title": "KEBA KeContact Wallbox",
     "titleLang": {
       "en": "Control Keba KeContact P20 or P30 or BMW i wallbox",
       "de": "Keba KeContact P20 oder P30 oder BMW i Wallbox steuern",
@@ -117,9 +116,7 @@
       "KEBA",
       "wallbox",
       "emobility",
-      "e-mobility",
-      "ioBroker",
-      "adapter"
+      "e-mobility"
     ],
     "license": "Apache-2.0",
     "platform": "Javascript/Node.js",
@@ -134,7 +131,7 @@
     "connectionType": "local",
     "dataSource": "poll",
     "materialize": true,
-    "supportCustoms": true,
+    "supportCustoms": false,
     "dependencies": [
       {
         "js-controller": ">=2.0.0"

@@ -87,8 +87,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ## Changelog
 
-### WORK IN PROGRESS ###
-
 ### 1.4.1 (2022-05-30)
 * (Sneak-L8) separate states for charging and discharging battery storage
 * (Sneak-L8) additional states to (de)authorize or unlock charging station and set date/time

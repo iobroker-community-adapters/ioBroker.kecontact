@@ -87,6 +87,11 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ## Changelog
 
+<!--
+  Placeholder for the next version (at the beginning of the line):
+  ### **WORK IN PROGRESS**
+-->
+
 ### **WORK IN PROGRESS**
 * (Sneak-L8) minor fixes from adapter check
 

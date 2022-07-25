@@ -41,6 +41,7 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "@alcalzone/release-script": "^3.5.9",
     "@iobroker/testing": "^3.0.2",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",
@@ -69,7 +70,8 @@
     "test:integration": "mocha test/integration --exit",
     "test": "npm run test:js && npm run test:package",
     "check": "tsc --noEmit -p tsconfig.check.json",
-    "lint": "eslint"
+    "lint": "eslint",
+    "release": "release-script"
   },
   "bugs": {
     "url": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues"

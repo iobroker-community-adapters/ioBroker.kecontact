@@ -792,6 +792,11 @@ function handleJsonMessage(message) {
             if (states[key]) {
                 try {
                     updateState(states[key], message[key]);
+                    // immediately update power value to prevent that value is not yet updated by setState()
+                    // when doing calculation after processing report 3
+                    if (key == "P" || key == "p") {
+                        setStateInternal(stateWallboxPower, message[key]);
+                    }
                 } catch (e) {
                     adapter.log.warn("Couldn't update state " + key + ": " + e);
                 }

@@ -94,6 +94,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ### **WORK IN PROGRESS**
 * (Sneak-L8) minor fixes from adapter check
+* (Sneak-L8) using Weblate for translations
+* (Sneak-L8) switch to React JS config page
+* (Sneak-L8) update power value immediately for better calculation
 
 ### 1.4.1 (2022-05-30)
 * (Sneak-L8) separate states for charging and discharging battery storage

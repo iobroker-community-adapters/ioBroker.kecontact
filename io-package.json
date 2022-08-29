@@ -918,7 +918,7 @@
             "_id": "authreq",
             "type": "state",
             "common": {
-                "name": "State of Authorization via RFID",
+                "name": "Authorization via RFID required",
                 "type": "boolean",
                 "role": "indicator",
                 "read": true,

@@ -96,7 +96,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) minor fixes from adapter check
 * (Sneak-L8) using Weblate for translations
 * (Sneak-L8) switch to React JS config page
-* (Sneak-L8) update power value immediately for better calculation
+* (Sneak-L8) update power and amperage value immediately for better calculation
 * (Sneak-L8) fix description of authreq state
 
 ### 1.4.1 (2022-05-30)

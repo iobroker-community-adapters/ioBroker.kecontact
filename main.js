@@ -792,11 +792,6 @@ function handleJsonMessage(message) {
             if (states[key]) {
                 try {
                     updateState(states[key], message[key]);
-                    // immediately update power value to prevent that value is not yet updated by setState()
-                    // when doing calculation after processing report 3
-                    if (key == "P" || key == "p") {
-                        setStateInternal(stateWallboxPower, message[key]);
-                    }
                 } catch (e) {
                     adapter.log.warn("Couldn't update state " + key + ": " + e);
                 }
@@ -1029,7 +1024,7 @@ function checkWallboxPower() {
 
     let curr    = 0;      // in mA
     let tempMax = getMaxCurrent();
-    const phases  = getChargingPhaseCount();
+    const phases = getChargingPhaseCount();
     let isMaxPowerCalculation = false;
     chargingToBeStarted = false;
 
@@ -1196,6 +1191,14 @@ function updateState(stateData, value) {
         }
     } else if (stateData.common.type == "boolean") {
         value = parseInt(value) !== 0;
+    }
+    // immediately update power and amperage values to prevent that value is not yet updated by setState()
+    // when doing calculation after processing report 3
+    if (stateData._id == adapter.namespace + "." + stateWallboxPower ||
+        stateData._id == adapter.namespace + "." + stateWallboxPhase1 ||
+        stateData._id == adapter.namespace + "." + stateWallboxPhase2 ||
+        stateData._id == adapter.namespace + "." + stateWallboxPhase3) {
+        setStateInternal(stateData._id, value);
     }
     setStateAck(stateData._id, value);
 }

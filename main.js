@@ -731,6 +731,11 @@ function handleMessage(message, origin) {
             return;
         }
 
+        if (msg == "started ...") {
+            adapter.log.info("Wallbox startup complete");
+            return;
+        }
+
         if (msg == "i") {
             adapter.log.debug("Received: " + message);
             return;

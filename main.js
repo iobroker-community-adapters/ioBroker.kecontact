@@ -1228,14 +1228,19 @@ function sendNextQueueDatagram() {
     }
     const message = sendQueue.shift();
     if (txSocket) {
-        txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
-            // 2nd parameter "bytes" not needed, therefore only "err" coded
-            if (err) {
-                adapter.log.warn("UDP send error for " + adapter.config.host + ":" + DEFAULT_UDP_PORT + ": " + err);
-                return;
-            }
-            adapter.log.debug("Sent '" + message + "' to " + adapter.config.host + ":" + DEFAULT_UDP_PORT);
-        });
+        try {
+            txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
+                // 2nd parameter "bytes" not needed, therefore only "err" coded
+                if (err) {
+                    adapter.log.warn("UDP send error for " + adapter.config.host + ":" + DEFAULT_UDP_PORT + ": " + err);
+                    return;
+                }
+                adapter.log.debug("Sent '" + message + "' to " + adapter.config.host + ":" + DEFAULT_UDP_PORT);
+            });
+        } catch (e) {
+            if (adapter.log)
+                adapter.log.error("Error sending message '" + message + "': " + e);
+        }
     }
 }
 

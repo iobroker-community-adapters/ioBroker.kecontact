@@ -98,6 +98,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) update power and amperage value immediately for better calculation
 * (Sneak-L8) fix description of authreq state
 * (Sneak-L8) handle message at wallbox startup
+* (Sneak-L8) catch error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C)
 
 ### 1.4.1 (2022-05-30)
 * (Sneak-L8) separate states for charging and discharging battery storage

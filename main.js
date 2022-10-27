@@ -174,7 +174,6 @@ function onAdapterReady() {
         //History Datenpunkte anlegen
         createHistory();
     }
-    adapter.log.info("start of adapter xxx");
     main();
 }
 
@@ -1432,8 +1431,9 @@ function processFirmwarePage(err, stat, body) {
     const prefix = "Keba firmware check: ";
     if (err) {
         adapter.log.warn(prefix + err);
-    }
-    else if (body) {
+    } else if (stat.statusCode != 200) {
+        adapter.log.warn("Firmware page could not be loaded (" + stat.statusCode + ")");
+    } else if (body) {
         const regexPattern = getFirmwareRegEx();
         if (! regexPattern || (regexPattern == null)) {
             return;

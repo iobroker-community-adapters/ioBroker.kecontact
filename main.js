@@ -174,6 +174,7 @@ function onAdapterReady() {
         //History Datenpunkte anlegen
         createHistory();
     }
+    adapter.log.info("start of adapter xxx");
     main();
 }
 

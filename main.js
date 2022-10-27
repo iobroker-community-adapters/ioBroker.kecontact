@@ -67,7 +67,7 @@ let minAmperage          = 6000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
 const voltage            = 230;    // calculate with european standard voltage of 230V
-const firmwareUrl        = "https://www.keba.com/de/emobility/service-support/downloads/Downloads";
+const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
 //const regexP30xSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<h3/gi;
 const regexFirmware      = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;

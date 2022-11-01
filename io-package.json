@@ -3,6 +3,19 @@
         "name": "kecontact",
         "version": "1.5.0",
         "news": {
+            "1.5.0": {
+                "en": "update power values immediately, catch the message at wallbox startup, catch the error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C), update url and regex to Keba firmware, using Weblate for translations",
+                "de": "aktualisieren Sie die Leistungswerte sofort, fangen Sie die Nachricht bei wallbox Start, fangen Sie den Fehler, wenn UDP-Verbindung verloren gegangen ist (sentry IOBROKER-KECONTACT-1C,) aktualisieren Sie url und regex auf Keba firmware, mit Weblate für Übersetzungen",
+                "ru": "обновить значения мощности немедленно, поймать сообщение на запуске настенного ящика, поймать ошибку, когда соединение UDP потеряло (sentry IOBROKER-KECONTACT-1C,) обновить URL и regex в прошивку Keba, используя Weblate для переводов",
+                "pt": "atualizar os valores de energia imediatamente, pegar a mensagem na inicialização da wallbox, pegar o erro quando a conexão UDP foi perdida (sente IOBROKER-KECONTACT-1C,) atualizar url e regex para firmware Keba, usando Weblate para traduções",
+                "nl": "vertaling:",
+                "fr": "mettre à jour les valeurs de puissance immédiatement, capturer le message lors du démarrage de la boîte murale, attraper l'erreur lorsque la connexion UDP s'est perdue (entrée IOBROKER-KECONTACT-1C,) mettre à jour l'url et le regex au firmware Keba, en utilisant Weblate pour les traductions",
+                "it": "aggiornare i valori di potenza immediatamente, catturare il messaggio all'avvio della casella di parete, catturare l'errore quando la connessione UDP si è persa (sentazione IOBROKER-KECONTACT-1C,) aggiornare url e regex al firmware Keba, utilizzando Weblate per le traduzioni",
+                "es": "actualizar los valores de potencia inmediatamente, coger el mensaje en el inicio de Wallbox, coger el error cuando la conexión UDP se perdió (sentry IOBROKER-KECONTACT-1C,) actualizar url y regex a Keba firmware, utilizando Weblate para traducciones",
+                "pl": "zaktualizowane wartości mocy natychmiast przechwytują wiadomość na początku skrzynki, przechwytując błędy, gdy UDP straciło (wjazd IOBROKER-KECONTACT-1C), aktualizując url i regex to Keba firmware, używając Weblate dla tłumaczeń",
+                "uk": "оновлюйте значення живлення відразу, зловіть повідомлення при запуску стінових скриньок, зловіть помилку, коли UDP з'явився втрачений (сентри IOBROKER-KECONTACT-1C,) оновлення ви URL та regex до прошивки Keba, використовуючи Weblate для перекладів",
+                "zh-cn": "立即更新电力价值,在墙壁开端上传递信息,在联发处丢失时(圣赫勒拿公司IPOKER-KECONTACT-1C),用电网更新Surl和Cregex对Keba公司的认识。"
+            },
             "1.4.1": {
                 "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time, fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)",
                 "de": "getrennte States für Lade-/Entladewerte eines Batteriespeichers, zusätzliche States um sich an der Wallbox zu (de)authorosieren, entsperren und Datum/Zeit zu setzen, Fix für unsubscribe foreign state (sentry IOBROKER-KECONTACT-10)",

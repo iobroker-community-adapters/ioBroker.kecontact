@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "kecontact",
-        "version": "1.4.1",
+        "version": "1.5.0",
         "news": {
             "1.4.1": {
                 "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time, fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)",

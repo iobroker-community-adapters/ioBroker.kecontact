@@ -137,8 +137,8 @@ jobs:
                 export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
                 export SENTRY_URL=https://sentry.iobroker.net
                 export SENTRY_ORG=iobroker
-                export SENTRY_PROJECT=iobroker-yamaha
-                export SENTRY_VERSION=iobroker.yamaha@${{ steps.extract_release.outputs.VERSION }}
+                export SENTRY_PROJECT=iobroker-kecontact
+                export SENTRY_VERSION=iobroker-kecontact@${{ steps.extract_release.outputs.VERSION }}
                 sentry-cli releases new $SENTRY_VERSION
                 sentry-cli releases set-commits $SENTRY_VERSION --auto
                 sentry-cli releases finalize $SENTRY_VERSION

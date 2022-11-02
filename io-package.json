@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "news": {
+      "1.5.2": {
+        "en": "fix error in release script",
+        "de": "fehler im release-skript beheben",
+        "ru": "исправить ошибку в скрипте релиза",
+        "pt": "corrigir erro no script de lançamento",
+        "nl": "vertaling:",
+        "fr": "corriger l'erreur dans le script de sortie",
+        "it": "errore di correzione nello script di rilascio",
+        "es": "corregir error en script de liberación",
+        "pl": "naprawić błąd w wydaniu scriptu",
+        "uk": "виправлено помилку в скрипті релізу",
+        "zh-cn": "f 释放说明的错误"
+      },
       "1.5.1": {
         "en": "update release script to v3",
         "de": "update release script to v3",
@@ -76,18 +89,6 @@
         "es": "corrige el error cuando el mensaje a mostrar está vacío (entrada IOBROKER-KECONTACT-Q, nueva opción si la energía de la caja de pared está incluida en el excedente/respecto)",
         "pl": "naprawiono błąd, gdy wiadomość do wyświetlenia jest pusta (wpis IOBROKER-KECONTACT-Q, nowa opcja czy moc Wallbox jest uwzględniona w nadmiarze/uwzględnieniu)",
         "zh-cn": "修复要显示的消息为空时的错误（哨兵 IOBROKER-KECONTACT-Q，是否将墙盒的电源包含在剩余/关注中的新选项）"
-      },
-      "1.3.2": {
-        "en": "firmware check for x-series no longer supported due to changes on website of Keba",
-        "de": "Firmware-Check für x-Series nicht mehr unterstützt wegen Änderungen an Keba-Homepage",
-        "ru": "проверка прошивки для серии x больше не поддерживается из-за изменений на сайте Keba",
-        "pt": "verificação de firmware para a série x não é mais suportada devido a alterações no site da Keba",
-        "nl": "firmware check voor x-serie wordt niet meer ondersteund door wijzigingen op website van Keba",
-        "fr": "la vérification du micrologiciel pour la série x n'est plus prise en charge en raison de modifications sur le site Web de Keba",
-        "it": "il controllo del firmware per la serie x non è più supportato a causa di modifiche sul sito Web di Keba",
-        "es": "la verificación de firmware para la serie x ya no es compatible debido a cambios en el sitio web de Keba",
-        "pl": "sprawdzenie oprogramowania dla serii x nie jest już obsługiwane z powodu zmian na stronie internetowej Keba",
-        "zh-cn": "由于 Keba 网站上的更改，不再支持 x 系列的固件检查"
       }
     },
     "titleLang": {

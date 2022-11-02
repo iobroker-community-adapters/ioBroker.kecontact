@@ -91,7 +91,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.5.1 (2022-11-02)
 * (Sneak-L8) update release script to v3
 
 ### 1.5.0 (2022-11-01)
@@ -116,10 +116,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) fix invalid assignment to message (sentry IOBROKER-KECONTACT-S) 
 * (Sneak-L8) update charging timestamp more often to prevent toogling
 * (Sneak-L8) update more information even in passive mode
-
-### 1.3.3 (2021-12-11)
-* (Sneak-L8) fix error when message to display is empty (sentry IOBROKER-KECONTACT-Q) 
-* (Sneak-L8) new option whether power of wallbox is included in surplus/regard
 
 ## Legal
 

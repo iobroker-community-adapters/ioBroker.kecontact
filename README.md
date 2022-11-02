@@ -92,6 +92,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (Sneak-L8) update release script to v3
 
 ### 1.5.0 (2022-11-01)
 * (Sneak-L8) minor fixes from adapter check

@@ -63,9 +63,12 @@ let maxPowerActive       = false;  // is limiter für maximum power active?
 let wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 let amperageDelta        = 500;    // default for step of amperage
 let underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
-let minAmperage          = 6000;   // minimum amperage to start charging session
+let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
+let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
+let valueFor3PCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
+let stateFor1p3pCharging = null;   // state for switching installation contactor
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
@@ -572,6 +575,24 @@ function checkConfig() {
         everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) && everythingFine;
     }
     if (photovoltaicsActive) {
+        const stateNameFor1p3p = adapter.config.state1p3pSwitch;
+        if (isForeignStateSpecified(stateNameFor1p3p)) {
+            everythingFine = addForeignStateFromConfig(adapter.config.state1p3pSwitch) && everythingFine;
+            if (everythingFine) {
+                adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
+                    if (err) {
+                        adapter.log.error("error eading state " + stateNameFor1p3p + ": " + err);
+                    } else {
+                        if (obj) {
+                            // do something
+                        }
+                        else {
+                            adapter.log.error("state " + stateNameFor1p3p + " not found!");
+                        }
+                    }
+                });
+            }
+        }
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
         if (adapter.config.useX1forAutomatic) {
@@ -584,7 +605,7 @@ function checkConfig() {
         } else {
             amperageDelta = getNumber(adapter.config.delta);
         }
-        if (! adapter.config.minAmperage || adapter.config.minAmperage < 6000) {
+        if (! adapter.config.minAmperage || adapter.config.minAmperage < minAmperage) {
             adapter.log.info("minimum amperage not speficied or too low, using default value of " + minAmperage);
         } else {
             minAmperage = getNumber(adapter.config.minAmperage);
@@ -763,7 +784,7 @@ function handleMessage(message, origin) {
 
 }
 
-function handleJsonMessage(message) {
+async function handleJsonMessage(message) {
     // message auf ID Kennung für Session History prüfen
     if (message.ID >= 100 && message.ID <= 130) {
         adapter.log.debug("History ID received: " + message.ID.substr(1));
@@ -796,7 +817,7 @@ function handleJsonMessage(message) {
         for (const key in message) {
             if (states[key]) {
                 try {
-                    updateState(states[key], message[key]);
+                    await updateState(states[key], message[key]);
                 } catch (e) {
                     adapter.log.warn("Couldn't update state " + key + ": " + e);
                 }
@@ -1185,7 +1206,7 @@ function loadChargingSessionsFromWallbox() {
     }
 }
 
-function updateState(stateData, value) {
+async function updateState(stateData, value) {
     if (stateData.common.type == "number") {
         value = parseFloat(value);
         if (stateData.native.udpMultiplier) {
@@ -1199,13 +1220,14 @@ function updateState(stateData, value) {
     }
     // immediately update power and amperage values to prevent that value is not yet updated by setState()
     // when doing calculation after processing report 3
-    if (stateData._id == adapter.namespace + "." + stateWallboxPower ||
-        stateData._id == adapter.namespace + "." + stateWallboxPhase1 ||
-        stateData._id == adapter.namespace + "." + stateWallboxPhase2 ||
-        stateData._id == adapter.namespace + "." + stateWallboxPhase3) {
-        setStateInternal(stateData._id, value);
-    }
-    setStateAck(stateData._id, value);
+    // no longer needed when using await
+    //if (stateData._id == adapter.namespace + "." + stateWallboxPower ||
+    //    stateData._id == adapter.namespace + "." + stateWallboxPhase1 ||
+    //    stateData._id == adapter.namespace + "." + stateWallboxPhase2 ||
+    //    stateData._id == adapter.namespace + "." + stateWallboxPhase3) {
+    //    setStateInternal(stateData._id, value);
+    //}
+    await setStateAckSync(stateData._id, value);
 }
 
 function sendUdpDatagram(message, highPriority) {
@@ -1309,6 +1331,15 @@ function setStateAck(id, value) {
     // von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
     //setStateInternal(id, value);
     adapter.setState(id, {val: value, ack: true});
+}
+
+async function setStateAckSync(id, value) {
+    // Do synchronous setState
+    // State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
+    // von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
+    //setStateInternal(id, value);
+    const promisedSetState = (id, value) => new Promise(resolve => adapter.setState(id, {val: value, ack: true}, resolve));
+    await promisedSetState(id, value);
 }
 
 function checkFirmware() {

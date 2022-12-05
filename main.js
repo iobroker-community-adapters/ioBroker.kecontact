@@ -68,6 +68,7 @@ let minChargeSeconds     = 0;      // minimum of charge time even when surplus i
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
 let valueFor3PCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
+let valueFor1P3PReady    = null;   // value that will be assigned to 1p/3p state when vehicle is plugged but not yet charging
 let stateFor1p3pCharging = null;   // state for switching installation contactor
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
@@ -575,24 +576,7 @@ function checkConfig() {
         everythingFine = addForeignStateFromConfig(adapter.config.stateSurplus) && everythingFine;
     }
     if (photovoltaicsActive) {
-        const stateNameFor1p3p = adapter.config.state1p3pSwitch;
-        if (isForeignStateSpecified(stateNameFor1p3p)) {
-            everythingFine = addForeignStateFromConfig(adapter.config.state1p3pSwitch) && everythingFine;
-            if (everythingFine) {
-                adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
-                    if (err) {
-                        adapter.log.error("error eading state " + stateNameFor1p3p + ": " + err);
-                    } else {
-                        if (obj) {
-                            // do something
-                        }
-                        else {
-                            adapter.log.error("state " + stateNameFor1p3p + " not found!");
-                        }
-                    }
-                });
-            }
-        }
+        everythingFine = init1p3pSwitching(adapter.config.state1p3pSwitch) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
         if (adapter.config.useX1forAutomatic) {
@@ -651,6 +635,51 @@ function checkConfig() {
         }
     }
     return everythingFine;
+}
+
+function init1p3pSwitching(stateNameFor1p3p) {
+    if (isForeignStateSpecified(stateNameFor1p3p)) {
+        if (! addForeignStateFromConfig(adapter.config.state1p3pSwitch)) {
+            return false;
+        }
+        adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
+            if (err) {
+                adapter.log.error("error eading state " + stateNameFor1p3p + ": " + err);
+                return false;
+            } else {
+                if (obj) {
+                    stateFor1p3pCharging = obj;
+                    let valueOn;
+                    let valueOff;
+                    if (typeof obj.val == "boolean") {
+                        valueOn = true;
+                        valueOff = false;
+                    } else if (typeof obj.val == "number") {
+                        valueOn = 1;
+                        valueOff = 0;
+                    } else {
+                        adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
+                        return false;
+                    }
+                    if (adapter.config["1p3pSwitchIsNO"]) {
+                        valueFor1pCharging = valueOff;
+                        valueFor3PCharging = valueOn;
+                        valueFor1P3PReady  = valueOff;
+                    } else {
+                        valueFor1pCharging = valueOff;
+                        valueFor3PCharging = valueOn;
+                        valueFor1P3PReady  = valueOff;
+                    }
+                }
+                else {
+                    adapter.log.error("state " + stateNameFor1p3p + " not found!");
+                    return false;
+                }
+            }
+        });
+    }
+    adapter.log.info("state is " + stateFor1p3pCharging + " 1p = " + valueFor1pCharging + ", 3p = " + valueFor3PCharging + ", idle = " + valueFor1P3PReady);
+    return true;
 }
 
 // subscribe a foreign state to save values in "currentStateValues"
@@ -1344,7 +1373,11 @@ async function setStateAckSync(id, value) {
 
 function checkFirmware() {
     if (getWallboxModel() == MODEL_P30) {
-        request.get(firmwareUrl, processFirmwarePage);
+        try {
+            request.get(firmwareUrl, processFirmwarePage);
+        } catch (e) {
+            adapter.log.warn("Error requesting firmware url " + firmwareUrl + "e: " + e);
+        }
     }
     return;
 }

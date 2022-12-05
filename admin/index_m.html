@@ -79,6 +79,16 @@
                 });
             });
         
+            $('#OID_state1p3pSwitch').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#state1p3pSwitch').val(), function (newId) {
+                        if (newId) {
+                            $('#state1p3pSwitch').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+        
             $('#OID_stateBatteryCharging').on('click', function () {
                 initSelectId(function (sid) {
                     sid.selectId('show', $('#stateBatteryCharging').val(), function (newId) {
@@ -99,7 +109,7 @@
                 });
             });
         
-$('#OID_stateEnergyMeter1').on('click', function () {
+            $('#OID_stateEnergyMeter1').on('click', function () {
                 initSelectId(function (sid) {
                     sid.selectId('show', $('#stateEnergyMeter1').val(), function (newId) {
                         if (newId) {

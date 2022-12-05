@@ -100,6 +100,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 ### **WORK IN PROGRESS**
 * (Sneak-L8) support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available)
 * (Sneak-L8) minimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value
+* (Sneak-L8) catch error when requesting firmware page (sentry IOBROKER-KECONTACT-1H)
 
 ### 1.5.2 (2022-11-02)
 * (Sneak-L8) fix error in release script

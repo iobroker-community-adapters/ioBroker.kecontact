@@ -645,7 +645,7 @@ function init1p3pSwitching(stateNameFor1p3p) {
         adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
             if (err) {
                 adapter.log.error("error eading state " + stateNameFor1p3p + ": " + err);
-                return false;
+                return;
             } else {
                 if (obj) {
                     stateFor1p3pCharging = obj;
@@ -669,16 +669,15 @@ function init1p3pSwitching(stateNameFor1p3p) {
                         valueFor1pCharging = valueOff;
                         valueFor3PCharging = valueOn;
                         valueFor1P3PReady  = valueOff;
+                        adapter.log.info("state is " + stateFor1p3pCharging + " 1p = " + valueFor1pCharging + ", 3p = " + valueFor3PCharging + ", idle = " + valueFor1P3PReady);
                     }
                 }
                 else {
                     adapter.log.error("state " + stateNameFor1p3p + " not found!");
-                    return false;
                 }
             }
         });
     }
-    adapter.log.info("state is " + stateFor1p3pCharging + " 1p = " + valueFor1pCharging + ", 3p = " + valueFor3PCharging + ", idle = " + valueFor1P3PReady);
     return true;
 }
 

@@ -10,7 +10,6 @@ const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
 const dgram = require("dgram");
-const { reverse } = require("dns");
 const request = require("request");
 
 /**
@@ -67,12 +66,14 @@ let underusage           = 0;      // maximum regard use to reach minimal charge
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
+let isMaxPowerCalculation = false; // switch to show if max power calculation is active
+let valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
 let valueFor3PCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
 let valueFor1P3PReady    = null;   // value that will be assigned to 1p/3p state when vehicle is plugged but not yet charging
 let stateFor1p3pCharging = null;   // state for switching installation contactor
 let stateFor1p3pAck      = false;  // Is state acknowledged?
-let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = restart charging
+let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
 const voltage            = 230;    // calculate with european standard voltage of 230V
@@ -251,11 +252,15 @@ function onAdapterStateChange (id, state) {
         const isNowVehiclePlugged = isVehiclePlugged(newValue);
         if (isNowVehiclePlugged && ! wasVehiclePlugged) {
             adapter.log.info("vehicle plugged to wallbox");
+            if (! isPvAutomaticsActive()) {
+                set1p3pSwitching(valueFor1P3PReady);
+            }
             initChargingSession();
             forceUpdateOfCalculation();
         } else if (! isNowVehiclePlugged && wasVehiclePlugged) {
             adapter.log.info("vehicle unplugged from wallbox");
             finishChargingSession();
+            set1p3pSwitching(valueFor1p3pOff);
         }
     }
 
@@ -670,7 +675,8 @@ function init1p3pSwitching(stateNameFor1p3p) {
                         adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
                         return false;
                     }
-                    if (adapter.config["1p3pSwitchIsNO"]) {
+                    valueFor1p3pOff = valueOff;
+                    if (adapter.config["1p3pSwitchIsNO"] === true) {
                         valueFor1pCharging = valueOff;
                         valueFor3PCharging = valueOn;
                         valueFor1P3PReady  = valueOff;
@@ -900,12 +906,12 @@ function saveChargingSessionData() {
     setStateAck(stateLastChargeAmount, getStateDefault0(stateWallboxChargeAmount) / 1000);
 }
 
-function stopCharging(isMaxPowerCalculation) {
-    regulateWallbox(0, isMaxPowerCalculation);
+function stopCharging() {
+    regulateWallbox(0);
     resetChargingSessionData();
 }
 
-function regulateWallbox(milliAmpere, isMaxPowerCalculation) {
+function regulateWallbox(milliAmpere) {
     let oldValue = 0;
     if (getStateDefaultFalse(stateWallboxEnabled))
         oldValue = getStateDefault0(stateWallboxCurrent);
@@ -976,6 +982,87 @@ function getTotalPowerAvailable() {
         return adapter.config.maxPower - getTotalPower();
     }
     return 999999;  // return default maximum
+}
+
+/**
+ * resets values for 1p/3p switching
+ */
+function reset1p3pSwitching() {
+    stepFor1p3pSwitching = 0;
+    retries1p3pSwitching = 0;
+}
+
+/**
+ * Advances variables to next step of 1p/3p switching
+ */
+function doNextStepOf1p3pSwitching() {
+    stepFor1p3pSwitching ++;
+    retries1p3pSwitching = 0;
+}
+
+/**
+ * set a new value for 1p/3p switching. Ignored, if not active.
+ * @param {*} newValue new value for 1p/3p switch
+ * @returns true, if switching is in progress, false when nothing to do
+ */
+function set1p3pSwitching(newValue) {
+    if (! has1P3PAutomatic()) {
+        return false;
+    }
+    if (newValue !== null) {
+        if (newValue !== getStateInternal(stateFor1p3pCharging)) {
+            stepFor1p3pSwitching = 1;
+            valueFor1p3pSwitching = newValue;
+        }
+    }
+    return check1p3pSwitching();
+}
+
+/**
+ * Checks whether it's ok to proceed or processing should stop to wait for 1p/3p switching.
+ * @returns true, if switching is in progress, false when nothing to do
+ */
+function check1p3pSwitching() {
+    if (! has1P3PAutomatic() || stepFor1p3pSwitching <= 0) {
+        reset1p3pSwitching();
+        return false;
+    }
+    switch (stepFor1p3pSwitching) {
+        case 1:
+            if (isVehicleCharging() || getStateDefault0(stateWallboxCurrent) > 0) {
+                if (retries1p3pSwitching == 0) {
+                    adapter.log.debug("stop charging for switch of phases ...");
+                    stopCharging();
+                } else {
+                    checkRetries();
+                }
+                return true;
+            }
+            doNextStepOf1p3pSwitching();
+            // falls through
+        case 2:
+            if (valueFor1p3pSwitching !== getStateInternal(stateFor1p3pCharging)) {
+                stateFor1p3pAck = false;
+                adapter.setForeignState(stateFor1p3pCharging, valueFor1p3pSwitching);
+                doNextStepOf1p3pSwitching();
+                return true;
+            }
+            doNextStepOf1p3pSwitching();
+            // falls through
+        case 3:
+            if (! stateFor1p3pAck) {
+                checkRetries();
+                return true;
+            }
+            reset1p3pSwitching();
+            adapter.log.info("switch 1p/3p successfully completed.");
+            break;
+        default:
+            adapter.log.error("unknown step for 1p/3p switching: " + stepFor1p3pSwitching);
+            reset1p3pSwitching();
+
+    }
+    return false;
 }
 
 function has1P3PAutomatic() {
@@ -1131,7 +1218,7 @@ function checkWallboxPower() {
     let curr    = 0;      // in mA
     let tempMax = getMaxCurrent();
     let phases = get1p3pPhases();
-    let isMaxPowerCalculation = false;
+    isMaxPowerCalculation = false;
     chargingToBeStarted = false;
 
     // first of all check maximum power allowed
@@ -1162,33 +1249,11 @@ function checkWallboxPower() {
         return;
     }
 
-    if (stepFor1p3pSwitching > 0) {
-        switch (stepFor1p3pSwitching) {
-            case 1:
-                if (! isVehicleCharging()) {
-                    checkRetries();
-                    return;
-                }
-                stepFor1p3pSwitching ++;
-                retries1p3pSwitching = 0;
-                adapter.setForeignState(stateFor1p3pCharging, valueFor1p3pSwitching);
-                return;
-            case 2:
-                if (! stateFor1p3pAck) {
-                    checkRetries();
-                    return;
-                }
-                stepFor1p3pSwitching = 0;
-                retries1p3pSwitching = 0;
-                adapter.log.info("switch 1p/3p successfully completed.");
-                break;
-            default:
-                adapter.log.error("unknown step for 1p/3p switching: " + stepFor1p3pSwitching);
-        }
+    if (check1p3pSwitching()) {
+        return;
     }
-    valueFor1p3pSwitching = null;
-    stepFor1p3pSwitching = 0;
     lastCalculating = newDate;
+    let newValueFor1p3pSwitching = null;
 
     // lock wallbox if requested or available amperage below minimum
     if (getStateDefaultFalse(stateWallboxDisabled) || getMinCurrent() > tempMax ||
@@ -1206,13 +1271,13 @@ function checkWallboxPower() {
                 if (curr != currWith1p) {
                     if (curr < getMinCurrent()) {
                         if (! isReducedChargingBecause1p3p()) {
-                            valueFor1p3pSwitching = valueFor1pCharging;
+                            newValueFor1p3pSwitching = valueFor1pCharging;
                         }
                         phases = 1;
                         curr = currWith1p;
                     } else {
                         if (curr >= getMinCurrent() && isReducedChargingBecause1p3p()) {
-                            valueFor1p3pSwitching = valueFor3PCharging;
+                            newValueFor1p3pSwitching = valueFor3PCharging;
                         }
                     }
                 }
@@ -1270,22 +1335,22 @@ function checkWallboxPower() {
         }
     }
 
-    if (valueFor1p3pSwitching !== null) {
-        adapter.log.debug("stop charging for switch of phases ...");
-        stopCharging(isMaxPowerCalculation);
-        stepFor1p3pSwitching = 1;
-    } else {
-        if (curr < getMinCurrent()) {
-            adapter.log.debug("not enough power for charging ...");
-            stopCharging(isMaxPowerCalculation);
-        } else {
-            if (curr > tempMax) {
-                curr = tempMax;
-            }
-            adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
-            regulateWallbox(curr, isMaxPowerCalculation);
-            chargingToBeStarted = true;
+    if (newValueFor1p3pSwitching !== null) {
+        if (set1p3pSwitching(newValueFor1p3pSwitching)) {
+            return;
         }
+    } 
+    if (curr < getMinCurrent()) {
+        adapter.log.debug("not enough power for charging ...");
+        stopCharging();
+        set1p3pSwitching(valueFor1p3pOff);
+    } else {
+        if (curr > tempMax) {
+            curr = tempMax;
+        }
+        adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
+        regulateWallbox(curr);
+        chargingToBeStarted = true;
     }
 }
 

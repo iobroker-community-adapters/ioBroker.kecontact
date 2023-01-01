@@ -1065,10 +1065,26 @@ function check1p3pSwitching() {
     return false;
 }
 
+/**
+ * Return the current for 1 phase to switch to 3 phases charging (lower when only 2 phases in effect for charging)
+ * @returns current from which to switch to 3p in mA
+ */
+function getCurrentForSwitchTo3p() {
+    return getMinCurrent() * get1p3pPhases() * 1.20;
+}
+
+/**
+ * Is adapter configured to be able to switch between 1 and 3 phases charging
+ * @returns true, if it is possible to switch 1p/3p
+ */
 function has1P3PAutomatic() {
     return stateFor1p3pCharging !== null;
 }
 
+/**
+ * returns whether charging was switched to 1p and more than 1 phase is available for charging
+ * @returns true, if charging was switched to 1p and more than 1 phase is available for charging
+ */
 function isReducedChargingBecause1p3p() {
     if (! has1P3PAutomatic()) {
         return false;
@@ -1084,6 +1100,10 @@ function isReducedChargingBecause1p3p() {
     return false;
 }
 
+/**
+ * Return the number of phases currently possible if no switch to 1p would be in progress
+ * @returns number of phases for charging of 3p would be in effect
+ */
 function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {
         getStateDefault0(stateManualPhases);
@@ -1277,7 +1297,9 @@ function checkWallboxPower() {
                         curr = currWith1p;
                     } else {
                         if (curr >= getMinCurrent() && isReducedChargingBecause1p3p()) {
-                            newValueFor1p3pSwitching = valueFor3PCharging;
+                            if (currWith1p >= getCurrentForSwitchTo3p()) {
+                                newValueFor1p3pSwitching = valueFor3PCharging;
+                            }
                         }
                     }
                 }
@@ -1339,7 +1361,7 @@ function checkWallboxPower() {
         if (set1p3pSwitching(newValueFor1p3pSwitching)) {
             return;
         }
-    } 
+    }
     if (curr < getMinCurrent()) {
         adapter.log.debug("not enough power for charging ...");
         stopCharging();

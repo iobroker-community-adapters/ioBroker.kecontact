@@ -63,14 +63,14 @@ let maxPowerActive       = false;  // is limiter für maximum power active?
 let wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
 let amperageDelta        = 500;    // default for step of amperage
 let underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
+const minAmperageDefault = 6000;   // default minimum amperage to start charging session
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
 let isMaxPowerCalculation = false; // switch to show if max power calculation is active
 let valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
-let valueFor3PCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
-let valueFor1P3PReady    = null;   // value that will be assigned to 1p/3p state when vehicle is plugged but not yet charging
+let valueFor3pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
 let stateFor1p3pCharging = null;   // state for switching installation contactor
 let stateFor1p3pAck      = false;  // Is state acknowledged?
 let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching
@@ -253,7 +253,7 @@ function onAdapterStateChange (id, state) {
         if (isNowVehiclePlugged && ! wasVehiclePlugged) {
             adapter.log.info("vehicle plugged to wallbox");
             if (! isPvAutomaticsActive()) {
-                set1p3pSwitching(valueFor1P3PReady);
+                set1p3pSwitching(valueFor3pCharging);
             }
             initChargingSession();
             forceUpdateOfCalculation();
@@ -338,6 +338,9 @@ async function main() {
     adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
     adapter.log.info("config stateBatteryDischarging: " + adapter.config.stateBatteryDischarging);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
+    adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
+    adapter.log.info("config.1p3pSwitchIsNO: " + adapter.config["1p3pSwitchIsNO"] +
+        ", 1p = " + valueFor1pCharging + ", 3p = " + valueFor3pCharging + ", off = " + valueFor1p3pOff);
     adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
     adapter.log.info("config addPower: " + adapter.config.addPower);
     adapter.log.info("config delta: " + adapter.config.delta);
@@ -539,7 +542,7 @@ function start() {
 }
 
 function isForeignStateSpecified(stateValue) {
-    return stateValue && stateValue !== null && typeof stateValue == "string" && stateValue != "" && stateValue != "[object Object]";
+    return stateValue && stateValue !== null && typeof stateValue == "string" && stateValue !== "" && stateValue !== "[object Object]";
 }
 
 function addForeignStateFromConfig(stateValue) {
@@ -603,7 +606,10 @@ function checkConfig() {
         } else {
             amperageDelta = getNumber(adapter.config.delta);
         }
-        if (! adapter.config.minAmperage || adapter.config.minAmperage < minAmperage) {
+        if (! adapter.config.minAmperage || adapter.config.minAmperage == 0) {
+            adapter.log.info("using default minimum amperage of " + minAmperageDefault);
+            minAmperage = minAmperageDefault;
+        } else if (adapter.config.minAmperage < minAmperage) {
             adapter.log.info("minimum amperage not speficied or too low, using default value of " + minAmperage);
         } else {
             minAmperage = getNumber(adapter.config.minAmperage);
@@ -652,53 +658,51 @@ function checkConfig() {
 }
 
 function init1p3pSwitching(stateNameFor1p3p) {
-    if (isForeignStateSpecified(stateNameFor1p3p)) {
-        if (! addForeignStateFromConfig(adapter.config.state1p3pSwitch)) {
-            return false;
-        }
-        adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
-            if (err) {
-                adapter.log.error("error reading state " + stateNameFor1p3p + ": " + err);
-                return;
-            } else {
-                if (obj) {
-                    stateFor1p3pCharging = stateNameFor1p3p;
-                    let valueOn;
-                    let valueOff;
-                    if (typeof obj.val == "boolean") {
-                        valueOn = true;
-                        valueOff = false;
-                    } else if (typeof obj.val == "number") {
-                        valueOn = 1;
-                        valueOff = 0;
-                    } else {
-                        adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
-                        return false;
-                    }
-                    valueFor1p3pOff = valueOff;
-                    if (adapter.config["1p3pSwitchIsNO"] === true) {
-                        valueFor1pCharging = valueOff;
-                        valueFor3PCharging = valueOn;
-                        valueFor1P3PReady  = valueOff;
-                    } else {
-                        valueFor1pCharging = valueOff;
-                        valueFor3PCharging = valueOn;
-                        valueFor1P3PReady  = valueOff;
-                        adapter.log.info("state is " + stateNameFor1p3p + " 1p = " + valueFor1pCharging + ", 3p = " + valueFor3PCharging + ", idle = " + valueFor1P3PReady);
-                    }
+    if (! isForeignStateSpecified(stateNameFor1p3p)) {
+        return true;
+    }
+    if (! addForeignStateFromConfig(stateNameFor1p3p)) {
+        return false;
+    }
+    adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
+        if (err) {
+            adapter.log.error("error reading state " + stateNameFor1p3p + ": " + err);
+            return;
+        } else {
+            if (obj) {
+                stateFor1p3pCharging = stateNameFor1p3p;
+                let valueOn;
+                let valueOff;
+                if (typeof obj.val == "boolean") {
+                    valueOn = true;
+                    valueOff = false;
+                } else if (typeof obj.val == "number") {
+                    valueOn = 1;
+                    valueOff = 0;
+                } else {
+                    adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
+                    return;
                 }
-                else {
-                    adapter.log.error("state " + stateNameFor1p3p + " not found!");
+                valueFor1p3pOff = valueOff;
+                if (adapter.config["1p3pSwitchIsNO"] === true) {
+                    valueFor1pCharging = valueOff;
+                    valueFor3pCharging = valueOn;
+                } else {
+                    valueFor1pCharging = valueOn;
+                    valueFor3pCharging = valueOff;
                 }
             }
-        });
-    }
+            else {
+                adapter.log.error("state " + stateNameFor1p3p + " not found!");
+            }
+        }
+    });
     return true;
 }
 
 // subscribe a foreign state to save values in "currentStateValues"
 function addForeignState(id) {
-    if (typeof id != "string")
+    if (typeof id !== "string")
         return false;
     if (id == "" || id == " ")
         return false;
@@ -1093,7 +1097,7 @@ function isReducedChargingBecause1p3p() {
     if (currentSwitch === valueFor1pCharging) {
         return true;
     }
-    if (currentSwitch === valueFor3PCharging) {
+    if (currentSwitch === valueFor3pCharging) {
         return false;
     }
     adapter.log.warn("Invalid value für 1p3p switch: " + currentSwitch + " (type " + typeof currentSwitch + ")");
@@ -1298,7 +1302,7 @@ function checkWallboxPower() {
                     } else {
                         if (curr >= getMinCurrent() && isReducedChargingBecause1p3p()) {
                             if (currWith1p >= getCurrentForSwitchTo3p()) {
-                                newValueFor1p3pSwitching = valueFor3PCharging;
+                                newValueFor1p3pSwitching = valueFor3pCharging;
                             }
                         }
                     }

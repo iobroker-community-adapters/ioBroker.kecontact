@@ -1015,8 +1015,10 @@ function set1p3pSwitching(newValue) {
     }
     if (newValue !== null) {
         if (newValue !== getStateInternal(stateFor1p3pCharging)) {
-            stepFor1p3pSwitching = 1;
-            valueFor1p3pSwitching = newValue;
+            if (newValue !== valueFor1p3pSwitching) {
+                stepFor1p3pSwitching = 1;
+                valueFor1p3pSwitching = newValue;
+            }
         }
     }
     return check1p3pSwitching();
@@ -1038,7 +1040,7 @@ function check1p3pSwitching() {
                     adapter.log.info("stop charging for switch of phases ...");
                     stopCharging();
                 } else {
-                    checkRetries();
+                    check1p3pSwitchingRetries();
                 }
                 return true;
             }
@@ -1056,7 +1058,7 @@ function check1p3pSwitching() {
             // falls through
         case 3:
             if (! stateFor1p3pAck) {
-                checkRetries();
+                check1p3pSwitchingRetries();
                 return true;
             }
             reset1p3pSwitching();
@@ -1065,7 +1067,6 @@ function check1p3pSwitching() {
         default:
             adapter.log.error("unknown step for 1p/3p switching: " + stepFor1p3pSwitching);
             reset1p3pSwitching();
-
     }
     return false;
 }
@@ -1220,10 +1221,10 @@ function getAmperage(power, phases) {
     return curr;
 }
 
-function checkRetries() {
+function check1p3pSwitchingRetries() {
     if (retries1p3pSwitching > 3) {
         adapter.log.error("switching not possible in step " + stepFor1p3pSwitching);
-        stepFor1p3pSwitching = 0;
+        reset1p3pSwitching();
         return true;
     }
     adapter.log.info("still waiting for 1p/3p step " + stepFor1p3pSwitching + " to complete...");
@@ -1281,7 +1282,7 @@ function checkWallboxPower() {
     let newValueFor1p3pSwitching = null;
 
     // lock wallbox if requested or available amperage below minimum
-    if (getStateDefaultFalse(stateWallboxDisabled) || getMinCurrent() > tempMax ||
+    if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() ||
         (isPvAutomaticsActive() && ! isVehiclePlugged())) {
         curr = 0;
     } else {
@@ -1362,16 +1363,16 @@ function checkWallboxPower() {
         }
     }
 
-    if (newValueFor1p3pSwitching !== null) {
-        if (set1p3pSwitching(newValueFor1p3pSwitching)) {
-            return;
-        }
-    }
     if (curr < getMinCurrent()) {
         adapter.log.debug("not enough power for charging ...");
         stopCharging();
         set1p3pSwitching(valueFor1p3pOff);
     } else {
+        if (newValueFor1p3pSwitching !== null) {
+            if (set1p3pSwitching(newValueFor1p3pSwitching)) {
+                return;
+            }
+        }
         if (curr > tempMax) {
             curr = tempMax;
         }

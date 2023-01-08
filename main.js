@@ -1033,7 +1033,7 @@ function check1p3pSwitching() {
     }
     switch (stepFor1p3pSwitching) {
         case 1:
-            if (isVehicleCharging() || getStateDefault0(stateWallboxCurrent) > 0) {
+            if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 && getStateDefaultFalse(stateWallboxEnabled) == true)) {
                 if (retries1p3pSwitching == 0) {
                     adapter.log.info("stop charging for switch of phases ...");
                     stopCharging();

@@ -1035,7 +1035,7 @@ function check1p3pSwitching() {
         case 1:
             if (isVehicleCharging() || getStateDefault0(stateWallboxCurrent) > 0) {
                 if (retries1p3pSwitching == 0) {
-                    adapter.log.debug("stop charging for switch of phases ...");
+                    adapter.log.info("stop charging for switch of phases ...");
                     stopCharging();
                 } else {
                     checkRetries();
@@ -1047,6 +1047,7 @@ function check1p3pSwitching() {
         case 2:
             if (valueFor1p3pSwitching !== getStateInternal(stateFor1p3pCharging)) {
                 stateFor1p3pAck = false;
+                adapter.log.info("switching 1p3p to " + valueFor1p3pSwitching + " ...");
                 adapter.setForeignState(stateFor1p3pCharging, valueFor1p3pSwitching);
                 doNextStepOf1p3pSwitching();
                 return true;

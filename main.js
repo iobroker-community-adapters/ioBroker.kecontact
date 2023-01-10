@@ -252,6 +252,9 @@ function onAdapterStateChange (id, state) {
         const isNowVehiclePlugged = isVehiclePlugged(newValue);
         if (isNowVehiclePlugged && ! wasVehiclePlugged) {
             adapter.log.info("vehicle plugged to wallbox");
+            if (stepFor1p3pSwitching < 0) {
+                reset1p3pSwitching();
+            }
             if (! isPvAutomaticsActive()) {
                 set1p3pSwitching(valueFor3pCharging);
             }
@@ -261,6 +264,9 @@ function onAdapterStateChange (id, state) {
             adapter.log.info("vehicle unplugged from wallbox");
             finishChargingSession();
             set1p3pSwitching(valueFor1p3pOff);
+            if (stepFor1p3pSwitching < 0) {
+                reset1p3pSwitching();
+            }
         }
     }
 
@@ -683,6 +689,7 @@ function init1p3pSwitching(stateNameFor1p3p) {
                     adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
                     return;
                 }
+                stateFor1p3pAck = obj.ack;
                 valueFor1p3pOff = valueOff;
                 if (adapter.config["1p3pSwitchIsNO"] === true) {
                     valueFor1pCharging = valueOff;
@@ -1010,7 +1017,7 @@ function doNextStepOf1p3pSwitching() {
  * @returns true, if switching is in progress, false when nothing to do
  */
 function set1p3pSwitching(newValue) {
-    if (! has1P3PAutomatic()) {
+    if (! has1P3PAutomatic() || stepFor1p3pSwitching < 0) {
         return false;
     }
     if (newValue !== null) {
@@ -1225,6 +1232,7 @@ function check1p3pSwitchingRetries() {
     if (retries1p3pSwitching > 3) {
         adapter.log.error("switching not possible in step " + stepFor1p3pSwitching);
         reset1p3pSwitching();
+        stepFor1p3pSwitching = -1;
         return true;
     }
     adapter.log.info("still waiting for 1p/3p step " + stepFor1p3pSwitching + " to complete...");
@@ -1284,6 +1292,7 @@ function checkWallboxPower() {
     // lock wallbox if requested or available amperage below minimum
     if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() ||
         (isPvAutomaticsActive() && ! isVehiclePlugged())) {
+        set1p3pSwitching(valueFor1p3pOff);
         curr = 0;
     } else {
         // if vehicle is currently charging and was not before, then save timestamp

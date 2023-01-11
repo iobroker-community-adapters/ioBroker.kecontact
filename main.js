@@ -1230,7 +1230,7 @@ function getAmperage(power, phases) {
 
 function check1p3pSwitchingRetries() {
     if (retries1p3pSwitching > 3) {
-        adapter.log.error("switching not possible in step " + stepFor1p3pSwitching);
+        adapter.log.error("switching not possible in step " + stepFor1p3pSwitching + ", disabling 1p/3p switch for this charging session");
         reset1p3pSwitching();
         stepFor1p3pSwitching = -1;
         return true;

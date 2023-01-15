@@ -1036,8 +1036,11 @@ function set1p3pSwitching(newValue) {
  * @returns true, if switching is in progress, false when nothing to do
  */
 function check1p3pSwitching() {
-    if (! has1P3PAutomatic() || stepFor1p3pSwitching <= 0) {
+    if (! has1P3PAutomatic()) {
         reset1p3pSwitching();
+        return false;
+    }
+    if (stepFor1p3pSwitching <= 0) {
         return false;
     }
     switch (stepFor1p3pSwitching) {
@@ -1099,7 +1102,7 @@ function has1P3PAutomatic() {
  * @returns true, if charging was switched to 1p and more than 1 phase is available for charging
  */
 function isReducedChargingBecause1p3p() {
-    if (! has1P3PAutomatic()) {
+    if (! has1P3PAutomatic() || stepFor1p3pSwitching < 0) {
         return false;
     }
     const currentSwitch = getStateInternal(stateFor1p3pCharging);
@@ -1229,7 +1232,7 @@ function getAmperage(power, phases) {
 }
 
 function check1p3pSwitchingRetries() {
-    if (retries1p3pSwitching > 3) {
+    if (retries1p3pSwitching >= 3) {
         adapter.log.error("switching not possible in step " + stepFor1p3pSwitching + ", disabling 1p/3p switch for this charging session");
         reset1p3pSwitching();
         stepFor1p3pSwitching = -1;

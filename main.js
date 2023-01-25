@@ -1243,9 +1243,42 @@ function check1p3pSwitchingRetries() {
     return false;
 }
 
+/**
+ * Checks whether charging should continue because minimum charging time was not yet reached
+ * @returns true if minimum charging time was not yet reached
+ */
+function isContinueDueToMinChargingTime(aktDate, chargeTimestamp) {
+    if (minChargeSeconds <= 0) {
+        return false;
+    }
+    if ((aktDate.getTime() - chargeTimestamp.getTime()) / 1000 < minChargeSeconds) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Checks whether charging should continue because minimum time for charging even with regard was not yet reached
+ * @returns true if minimum charging time was not yet reached
+ */
+function isContinueDueToMinRegardTime(aktDate) {
+    if (minRegardSeconds <= 0) {
+        return false;
+    }
+    let regardDate = getStateAsDate(stateRegardTimestamp);
+    if (regardDate == null) {
+        setStateAck(stateRegardTimestamp, aktDate.toString());
+        regardDate = aktDate;
+    }
+    if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
+        return true;
+    }
+    return false;
+}
+
 function checkWallboxPower() {
     // update charging state also between two calculations to recognize charging session
-    // before a new calculation will stop it again (as long as charingTimestamp was not yet set)
+    // before a new calculation will stop it again (as long as charigngTimestamp was not yet set)
     // it can be stopped immediatelly with no respect to minimim charging time...
     if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging() && (chargingToBeStarted || isPassive)) {
         adapter.log.info("vehicle (re)starts to charge");
@@ -1304,17 +1337,23 @@ function checkWallboxPower() {
             if (curr > tempMax) {
                 curr = tempMax;
             }
+            const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
             if (has1P3PAutomatic()) {
                 const currWith1p = getAmperage(available, 1);
                 if (curr != currWith1p) {
                     if (curr < getMinCurrent()) {
-                        if (! isReducedChargingBecause1p3p()) {
-                            newValueFor1p3pSwitching = valueFor1pCharging;
+                        if (isReducedChargingBecause1p3p()) {
+                            phases = 1;
+                            curr = currWith1p;
+                        } else {
+                            if (!isContinueDueToMinChargingTime(newDate, chargeTimestamp) &&  !isContinueDueToMinRegardTime(newDate)) {
+                                newValueFor1p3pSwitching = valueFor1pCharging;
+                                phases = 1;
+                                curr = currWith1p;
+                            }
                         }
-                        phases = 1;
-                        curr = currWith1p;
                     } else {
-                        if (curr >= getMinCurrent() && isReducedChargingBecause1p3p()) {
+                        if (curr >= getMinCurrent() && isReducedChargingBecause1p3p() && !isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                             if (currWith1p >= getCurrentForSwitchTo3p()) {
                                 newValueFor1p3pSwitching = valueFor3pCharging;
                             }
@@ -1331,7 +1370,6 @@ function checkWallboxPower() {
                     curr = getMinCurrent();
                 }
             }
-            const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
             if (chargeTimestamp !== null) {
                 if (curr < getMinCurrent()) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
@@ -1341,29 +1379,24 @@ function checkWallboxPower() {
                         if (curr >= getMinCurrent()) {
                             adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                             curr = getMinCurrent();
+                            if (newValueFor1p3pSwitching == valueFor3pCharging) {
+                                newValueFor1p3pSwitching = null;  // than also stop possible 1p to 3p switching
+                            }
                         }
                     }
                 }
                 if (curr < getMinCurrent()) {
-                    if (minChargeSeconds > 0) {
-                        if (((new Date()).getTime() - chargeTimestamp.getTime()) / 1000 < minChargeSeconds) {
-                            adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
-                            curr = getMinCurrent();
-                        }
+                    if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
+                        adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
+                        curr = getMinCurrent();
+                        newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }
                 }
                 if (curr < getMinCurrent()) {
-                    if (minRegardSeconds > 0) {
-                        const aktDate = new Date();
-                        let regardDate = getStateAsDate(stateRegardTimestamp);
-                        if (regardDate == null) {
-                            setStateAck(stateRegardTimestamp, aktDate.toString());
-                            regardDate = aktDate;
-                        }
-                        if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
-                            adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
-                            curr = getMinCurrent();
-                        }
+                    if (isContinueDueToMinRegardTime(newDate)) {
+                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
+                        curr = getMinCurrent();
+                        newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }
                 } else {
                     setStateAck(stateRegardTimestamp, null);

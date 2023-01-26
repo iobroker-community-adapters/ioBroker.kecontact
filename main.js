@@ -1248,7 +1248,7 @@ function check1p3pSwitchingRetries() {
  * @returns true if minimum charging time was not yet reached
  */
 function isContinueDueToMinChargingTime(aktDate, chargeTimestamp) {
-    if (minChargeSeconds <= 0) {
+    if (minChargeSeconds <= 0 || chargeTimestamp == null) {
         return false;
     }
     if ((aktDate.getTime() - chargeTimestamp.getTime()) / 1000 < minChargeSeconds) {
@@ -1278,7 +1278,7 @@ function isContinueDueToMinRegardTime(aktDate) {
 
 function checkWallboxPower() {
     // update charging state also between two calculations to recognize charging session
-    // before a new calculation will stop it again (as long as charigngTimestamp was not yet set)
+    // before a new calculation will stop it again (as long as chargingTimestamp was not yet set)
     // it can be stopped immediatelly with no respect to minimim charging time...
     if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging() && (chargingToBeStarted || isPassive)) {
         adapter.log.info("vehicle (re)starts to charge");

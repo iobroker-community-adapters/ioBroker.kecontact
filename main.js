@@ -1160,7 +1160,7 @@ function getChargingPhaseCount() {
         if (tempCount > 0) {
             // save phase count and write info message if changed
             if (retVal != tempCount)
-                adapter.log.info("wallbox is charging with " + tempCount + " phases");
+                adapter.log.debug("wallbox is charging with " + tempCount + " phases");
             if (! isReducedChargingBecause1p3p()) {
                 setStateAck(stateChargingPhases, tempCount);
             }
@@ -1307,6 +1307,10 @@ function checkWallboxPower() {
     setStateAck(stateSurplus, Math.round(available));
     adapter.log.debug("Available surplus: " + available);
 
+    if (check1p3pSwitching()) {
+        return;
+    }
+
     if (isPassive) {
         if (getStateAsDate(stateChargeTimestamp) !== null && ! isVehicleCharging()) {
             resetChargingSessionData();
@@ -1319,9 +1323,6 @@ function checkWallboxPower() {
         return;
     }
 
-    if (check1p3pSwitching()) {
-        return;
-    }
     lastCalculating = newDate;
     let newValueFor1p3pSwitching = null;
 

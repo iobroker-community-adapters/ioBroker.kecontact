@@ -239,7 +239,7 @@ function onAdapterStateChange (id, state) {
     if (!id || !state) {
         return;
     }
-    //adapter.log.debug("stateChange " + id + " " + JSON.stringify(state));
+    //adapter.log.silly("stateChange " + id + " " + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
 
     const oldValue = getStateInternal(id);
@@ -1347,7 +1347,11 @@ function checkWallboxPower() {
                             phases = 1;
                             curr = currWith1p;
                         } else {
-                            if (!isContinueDueToMinChargingTime(newDate, chargeTimestamp) &&  !isContinueDueToMinRegardTime(newDate)) {
+                            if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
+                                adapter.log.debug("no switching to 1 phase because of minimum charging time " + chargeTimestamp);
+                            } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+                                adapter.log.debug("no switching to 1 phase because of minimum regard time");
+                            } else {
                                 newValueFor1p3pSwitching = valueFor1pCharging;
                                 phases = 1;
                                 curr = currWith1p;
@@ -1590,7 +1594,7 @@ function setStateInternal(id, value) {
     let obj = id;
     if (! obj.startsWith(adapter.namespace + "."))
         obj = adapter.namespace + "." + id;
-    adapter.log.debug("update state " + obj + " with value:" + value);
+    adapter.log.silly("update state " + obj + " with value:" + value);
     currentStateValues[obj] = value;
 }
 

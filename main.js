@@ -1122,7 +1122,7 @@ function isReducedChargingBecause1p3p() {
  */
 function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {
-        getStateDefault0(stateChargingPhases);
+        return getStateDefault0(stateChargingPhases);
     }
     return getChargingPhaseCount();
 }

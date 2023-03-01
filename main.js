@@ -876,7 +876,7 @@ async function handleJsonMessage(message) {
                     adapter.log.warn("Couldn't update state " + key + ": " + e);
                 }
             } else if (key != "ID") {
-                adapter.log.debug("Unknown value received: " + key + "=" + message[key]);
+                adapter.log.warn("Unknown value received: " + key + "=" + message[key]);
             }
         }
         if (message.ID == 3) {
@@ -1362,7 +1362,9 @@ function checkWallboxPower() {
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 adapter.log.debug("no switching to " + phases + " phases because of minimum charging time " + chargeTimestamp);
                             } else {
-                                if (currWith1p >= getCurrentForSwitchTo3p()) {
+                                if (currWith1p < getCurrentForSwitchTo3p()) {
+                                    adapter.log.debug("no switching to " + phases + " phases because amperage " + currWith1p + " < " + getCurrentForSwitchTo3p());
+                                } else {
                                     newValueFor1p3pSwitching = valueFor3pCharging;
                                 }
                             }

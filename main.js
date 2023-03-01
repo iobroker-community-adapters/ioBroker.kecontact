@@ -1359,6 +1359,7 @@ function checkWallboxPower() {
                         }
                     } else {
                         if (isReducedChargingBecause1p3p()) {
+                            let isSwitchFrom1pTo3P = false;
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 adapter.log.debug("no switching to " + phases + " phases because of minimum charging time " + chargeTimestamp);
                             } else {
@@ -1366,7 +1367,12 @@ function checkWallboxPower() {
                                     adapter.log.debug("no switching to " + phases + " phases because amperage " + currWith1p + " < " + getCurrentForSwitchTo3p());
                                 } else {
                                     newValueFor1p3pSwitching = valueFor3pCharging;
+                                    isSwitchFrom1pTo3P = true;
                                 }
+                            }
+                            if (isSwitchFrom1pTo3P == false) {
+                                phases = 1;
+                                curr = currWith1p;
                             }
                         }
                     }

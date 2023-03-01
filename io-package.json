@@ -238,6 +238,34 @@
             }
         },
         {
+            "_id": "x2phaseSource",
+            "type": "state",
+            "common": {
+                "name": "X2 phaseSwitch source",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "X2 phaseSwitch source"
+            }
+        },
+        {
+            "_id": "x2phaseSwitch",
+            "type": "state",
+            "common": {
+                "name": "X2 phaseSwitch",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "X2 phaseSwitch"
+            }
+        },
+        {
             "_id": "firmware",
             "type": "state",
             "common": {

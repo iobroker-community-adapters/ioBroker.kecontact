@@ -1122,7 +1122,7 @@ function isReducedChargingBecause1p3p() {
  */
 function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {
-        getStateDefault0(stateManualPhases);
+        getStateDefault0(stateChargingPhases);
     }
     return getChargingPhaseCount();
 }
@@ -1160,7 +1160,7 @@ function getChargingPhaseCount() {
         if (tempCount > 0) {
             // save phase count and write info message if changed
             if (retVal != tempCount)
-                adapter.log.debug("wallbox is charging with " + tempCount + " phases");
+                adapter.log.debug("wallbox is charging with " + tempCount + " " + ((tempCount == 1) ? "phase" : "phases"));
             if (! isReducedChargingBecause1p3p()) {
                 setStateAck(stateChargingPhases, tempCount);
             }
@@ -1358,9 +1358,13 @@ function checkWallboxPower() {
                             }
                         }
                     } else {
-                        if (curr >= getMinCurrent() && isReducedChargingBecause1p3p() && !isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                            if (currWith1p >= getCurrentForSwitchTo3p()) {
-                                newValueFor1p3pSwitching = valueFor3pCharging;
+                        if (isReducedChargingBecause1p3p()) {
+                            if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
+                                adapter.log.debug("no switching to " + phases + " phases because of minimum charging time " + chargeTimestamp);
+                            } else {
+                                if (currWith1p >= getCurrentForSwitchTo3p()) {
+                                    newValueFor1p3pSwitching = valueFor3pCharging;
+                                }
                             }
                         }
                     }

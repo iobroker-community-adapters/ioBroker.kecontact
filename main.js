@@ -76,6 +76,7 @@ let stateFor1p3pAck      = false;  // Is state acknowledged?
 let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
+let limitBatteryStorage  = false;  // limit power of battery storage to mininum power to continue charging
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
@@ -343,6 +344,7 @@ async function main() {
     adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
     adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
     adapter.log.info("config stateBatteryDischarging: " + adapter.config.stateBatteryDischarging);
+    adapter.log.info("config limitBatteryStoragePower: " + adapter.config.limitBatteryStoragePower);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
     adapter.log.info("config.1p3pSwitchIsNO: " + adapter.config["1p3pSwitchIsNO"] +
@@ -602,6 +604,13 @@ function checkConfig() {
         everythingFine = init1p3pSwitching(adapter.config.state1p3pSwitch) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
+        if ((isForeignStateSpecified(adapter.config.stateBatteryCharging) ||
+            isForeignStateSpecified(adapter.config.stateBatteryDischarging)) &&
+            adapter.config.limitBatteryStoragePower == true) {
+            limitBatteryStorage = true;
+        } else {
+            limitBatteryStorage = false;
+        }
         if (adapter.config.useX1forAutomatic) {
             useX1switchForAutomatic = true;
         } else {
@@ -966,11 +975,16 @@ function getWallboxPowerInWatts() {
     }
 }
 
-function getSurplusWithoutWallbox() {
+function getSurplusWithoutWallbox(omitBatteryStorage) {
+    if (omitBatteryStorage == undefined) {
+        omitBatteryStorage = false;
+    }
     let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard);
-    const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
-    if (batteryPower > 0) {
-        power += batteryPower;
+    if (! omitBatteryStorage) {
+        const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
+        if (batteryPower > 0) {
+            power += batteryPower;
+        }
     }
     if (adapter.config.statesIncludeWallbox)
         power += getWallboxPowerInWatts();
@@ -1337,6 +1351,11 @@ function checkWallboxPower() {
             curr = getAmperage(available, phases);
             if (curr > tempMax) {
                 curr = tempMax;
+            }
+            if (limitBatteryStorage == true) {
+                if (getSurplusWithoutWallbox(true) < minAmperage) {
+                    curr = minAmperage;
+                }
             }
             const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
             if (has1P3PAutomatic()) {

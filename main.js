@@ -219,6 +219,8 @@ function onAdapterUnload(callback) {
             adapter.unsubscribeForeignStates(adapter.config.stateBatteryCharging);
         if (isForeignStateSpecified(adapter.config.stateBatteryDischarging))
             adapter.unsubscribeForeignStates(adapter.config.stateBatteryDischarging);
+        if (isForeignStateSpecified(adapter.config.stateBatteryAvailable))
+            adapter.unsubscribeForeignStates(adapter.config.stateBatteryAvailable);
         if (isForeignStateSpecified(adapter.config.stateEnergyMeter1))
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter1);
         if (isForeignStateSpecified(adapter.config.stateEnergyMeter2))
@@ -344,6 +346,7 @@ async function main() {
     adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
     adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
     adapter.log.info("config stateBatteryDischarging: " + adapter.config.stateBatteryDischarging);
+    adapter.log.info("config stateBatteryAvailable: " + adapter.config.stateBatteryAvailable);
     adapter.log.info("config limitBatteryStoragePower: " + adapter.config.limitBatteryStoragePower);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
@@ -604,8 +607,10 @@ function checkConfig() {
         everythingFine = init1p3pSwitching(adapter.config.state1p3pSwitch) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
+        everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryAvailable) && everythingFine;
         if ((isForeignStateSpecified(adapter.config.stateBatteryCharging) ||
-            isForeignStateSpecified(adapter.config.stateBatteryDischarging)) &&
+            isForeignStateSpecified(adapter.config.stateBatteryDischarging) ||
+            isForeignStateSpecified(adapter.config.stateBatteryAvailable)) &&
             adapter.config.limitBatteryStoragePower == true) {
             limitBatteryStorage = true;
         } else {
@@ -980,12 +985,11 @@ function getSurplusWithoutWallbox(omitBatteryStorage) {
         omitBatteryStorage = false;
     }
     let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard);
-    if (! omitBatteryStorage) {
-        const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
-        if (batteryPower > 0) {
-            power += batteryPower;
-        }
+    const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
+    if (limitBatteryStorage == false || omitBatteryStorage == true) {
+        power += getStateDefault0(adapter.config.stateBatteryAvailable);
     }
+    power += batteryPower;
     if (adapter.config.statesIncludeWallbox)
         power += getWallboxPowerInWatts();
     return power;

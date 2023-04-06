@@ -1372,7 +1372,7 @@ function checkWallboxPower() {
                 curr = tempMax;
             }
             if (limitBatteryStorage == true) {
-                if (curr > minAmperage && getSurplusWithoutWallbox(true) > minAmperage  && isVehicleCharging()) {
+                if (curr < minAmperage && isVehicleCharging() && getSurplusWithoutWallbox(true) > minAmperage ) {
                     curr = minAmperage;
                 }
             }

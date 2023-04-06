@@ -109,11 +109,11 @@
                 });
             });
                 
-            $('#OID_stateBatteryAvailable').on('click', function () {
+            $('#OID_stateBatterySoC').on('click', function () {
                 initSelectId(function (sid) {
-                    sid.selectId('show', $('#stateBatteryAvailable').val(), function (newId) {
+                    sid.selectId('show', $('#stateBatterySoC').val(), function (newId) {
                         if (newId) {
-                            $('#stateBatteryAvailable').val(newId).trigger('change');
+                            $('#stateBatterySoC').val(newId).trigger('change');
                         }
                     });
                 });
@@ -306,7 +306,7 @@
             </div>
             <div class="col s4 input-field">
                 <input type="text" size="50" id="stateBatteryDischarging" class="value" />
-                <label for="stateBatteryCharging" class="translate">stateBatteryDischarging</label>
+                <label for="stateBatteryDischarging" class="translate">stateBatteryDischarging</label>
                 <span class="helper-text future-tooltip translate">tooltip_stateBatteryDischarging</span>
             </div>
             <div class="col s1 m2 l1">
@@ -315,12 +315,18 @@
         </div>
         <div class="row">
             <div class="col s4 input-field">
-                <input type="text" size="50" id="stateBatteryAvailable" class="value" />
-                <label for="stateBatteryAvailable" class="translate">stateBatteryAvailable</label>
-                <span class="helper-text future-tooltip translate">tooltip_stateBatteryAvailable</span>
+                <input type="number" id="batteryPower" class="value" />
+                <label for="batteryPower" class="translate">batteryPower</label>
+                <span class="helper-text translate">watts</span>
+                <span class="helper-text future-tooltip translate">tooltip_batteryPower</span>
+            </div>
+            <div class="col s4 input-field">
+                <input type="text" size="50" id="stateBatterySoC" class="value" />
+                <label for="stateBatterySoC" class="translate">stateBatterySoC</label>
+                <span class="helper-text future-tooltip translate">tooltip_stateBatterySoC</span>
             </div>
             <div class="col s1 m2 l1">
-                <a id="OID_stateBatteryAvailable" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
+                <a id="OID_stateBatterySoC" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a>
             </div>
             <div class="col s4 input-field">
                 <input type="checkbox" id="limitBatteryStoragePower" class="value" />

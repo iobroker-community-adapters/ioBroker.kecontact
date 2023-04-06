@@ -47,7 +47,7 @@
     "statesIncludeWallbox": "Zustände beinhalten die Leistung der Wallbox",
     "tooltip_1p3pSwitchIsNO": "gibt an, ob es sich um einen Schließer-Installationsschütz (NO) handelt, der aktiviert wird um mit drei Phasen zu laden, sonst wird ein Öffner-Schütz (NC) angenommen, d.h. bei Aktvierung wird nur mit einer Phase geladen",
     "tooltip_addPower": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten",
-    "tooltip_batteryPower": "Leistung, die der Batteriespeicher maximal bereitstellen kann",
+    "tooltip_batteryPower": "Leistung, die der Batteriespeicher maximal bereitstellen kann. Leer (0) lassen, wenn der Batteriespeicher nicht zum Laden des Fahrzeugs genutzt wernden soll.",
     "tooltip_delta": "Regelung der Wallbox erfolgt in den angegebenen Schritten",
     "tooltip_host": "IP-Adresse der KEBA KeContact-Wallbox",
     "tooltip_limitBatteryStoragePower": "Begrenzen Sie die Leistung des Batteriespeichers, um den Ladevorgang nur mit minimaler Leistung aufrechtzuerhalten",

@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Configurações para mudança de fase",
     "1p3pSwitchIsNO": "O contator de instalação 1p/3p é NA, caso contrário, NC",
+    "1p3pViaX2": "interruptor de fases usando a saída X2 da estação de carregamento",
     "Acknowledged": "Reconhecido",
     "All": "Tudo",
     "Cancel": "Cancelar",
@@ -21,6 +23,7 @@
     "addPower": "valor de consideração adicional",
     "batteryMinSoC": "SoC mínimo de armazenamento de bateria",
     "batteryPower": "potência máxima da bateria",
+    "batteryStorageSettingsSection": "Configurações ao usar um armazenamento de bateria",
     "delta": "Tamanho do passo",
     "host": "Endereço IP da Wallbox",
     "limitBatteryStoragePower": "limitar o poder de armazenamento da bateria",
@@ -47,6 +50,7 @@
     "stateSurplus": "Nome do estado excedente",
     "statesIncludeWallbox": "estados incluem poder da caixa de embutir",
     "tooltip_1p3pSwitchIsNO": "especifica se este é um contator de instalação NO (normalmente aberto) e é ativado para carregar com três fases, caso contrário é um NF (normalmente fechado) e é ativado para carregar com apenas uma fase",
+    "tooltip_1p3pViaX2": "marque esta opção se estiver usando um dispositivo de comutação de fase KeContact S10 ou se estiver comutando um contator de instalação via contato de saída X2 da estação de carregamento",
     "tooltip_addPower": "Poder de consideração adicional que pode ser usado permanentemente para executar a sessão de carregamento",
     "tooltip_batteryMinSoC": "SoC (estado de carga) que interrompe o fornecimento de energia do armazenamento da bateria.",
     "tooltip_batteryPower": "energia que o armazenamento da bateria é capaz de fornecer no máximo",

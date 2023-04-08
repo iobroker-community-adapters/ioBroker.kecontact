@@ -169,6 +169,7 @@
         "stateRegard": "",
         "stateSurplus": "",
         "statesIncludeWallbox": true,
+        "1p3pViaX2": false,
         "state1p3pSwitch": "",
         "1p3pSwitchIsNO": true,
         "stateBatteryCharging": "",
@@ -249,7 +250,7 @@
                 "type": "number",
                 "role": "value",
                 "read": true,
-                "write": false
+                "write": true
             },
             "native": {
                 "udpKey": "X2 phaseSwitch source"
@@ -263,7 +264,7 @@
                 "type": "number",
                 "role": "value",
                 "read": true,
-                "write": false
+                "write": true
             },
             "native": {
                 "udpKey": "X2 phaseSwitch"

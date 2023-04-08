@@ -124,6 +124,8 @@ const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
 const stateMsgFromOtherwallbox = "internal.message";            /*Message passed on from other instance*/
+const stateX2Source            = "x2phaseSource";               /*X2 switch source */
+const stateX2Switch            = "x2phaseSwitch";               /*X2 switch */
 
 /**
  * Starts the adapter instance
@@ -352,6 +354,7 @@ async function main() {
     adapter.log.info("config limitBatteryStoragePower: " + adapter.config.limitBatteryStoragePower);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
+    adapter.log.info("config.1p3pViax2: " + adapter.config["1p3pViaX2"]);
     adapter.log.info("config.1p3pSwitchIsNO: " + adapter.config["1p3pSwitchIsNO"] +
         ", 1p = " + valueFor1pCharging + ", 3p = " + valueFor3pCharging + ", off = " + valueFor1p3pOff);
     adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
@@ -536,6 +539,12 @@ function start() {
     stateChangeListeners[adapter.namespace + "." + stateUnlock] = function () {
         sendUdpDatagram("unlock", true);
     };
+    stateChangeListeners[adapter.namespace + "." + stateX2Source] = function (oldValue, newValue) {
+        sendUdpDatagram("x2src " + newValue, true);
+    };
+    stateChangeListeners[adapter.namespace + "." + stateX2Switch] = function (oldValue, newValue) {
+        sendUdpDatagram("x2 " + newValue, true);
+    };
     stateChangeListeners[adapter.namespace + "." + stateAddPower] = function () {
         // no real action to do
     };
@@ -607,6 +616,23 @@ function checkConfig() {
     }
     if (photovoltaicsActive) {
         everythingFine = init1p3pSwitching(adapter.config.state1p3pSwitch) && everythingFine;
+        if (isX2PhaseSwitch()) {
+            if (isForeignStateSpecified(adapter.config.state1p3pSwitch)) {
+                everythingFine = false;
+                adapter.log.error("both, state for 1p/3p switch and switching via X2, must not be specified together");
+            }
+            const valueOn = 1;
+            const valueOff = 0;
+            valueFor1p3pOff = valueOff;
+            if (adapter.config["1p3pSwitchIsNO"] === true) {
+                valueFor1pCharging = valueOff;
+                valueFor3pCharging = valueOn;
+            } else {
+                valueFor1pCharging = valueOn;
+                valueFor3pCharging = valueOff;
+            }
+        }
+
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatterySoC) && everythingFine;
@@ -888,6 +914,12 @@ async function handleJsonMessage(message) {
             if (states[key]) {
                 try {
                     await updateState(states[key], message[key]);
+                    if (key == "X2 phaseSwitch source" && adapter.config.state1p3pSwitch) {
+                        if (getStateDefault0(states[key]) !== 4) {
+                            adapter.log.info("activating X2 source from " + getStateDefault0(states[key]) + " to 4 for phase switching");
+                            sendUdpDatagram("x2src 4", true);
+                        }
+                    }
                 } catch (e) {
                     adapter.log.warn("Couldn't update state " + key + ": " + e);
                 }
@@ -1045,6 +1077,15 @@ function doNextStepOf1p3pSwitching() {
 }
 
 /**
+ * Returns whether phase switching is done via X2 of charging station
+ * @returns true, if switch is done via X2
+ *
+ */
+function isX2PhaseSwitch() {
+    return adapter.config["1p3pViaX2"] == true;
+}
+
+/**
  * set a new value for 1p/3p switching. Ignored, if not active.
  * @param {*} newValue new value for 1p/3p switch
  * @returns true, if switching is in progress, false when nothing to do
@@ -1054,10 +1095,17 @@ function set1p3pSwitching(newValue) {
         return false;
     }
     if (newValue !== null) {
-        if (newValue !== getStateInternal(stateFor1p3pCharging)) {
-            if (newValue !== valueFor1p3pSwitching) {
-                stepFor1p3pSwitching = 1;
-                valueFor1p3pSwitching = newValue;
+        if (isX2PhaseSwitch()) {
+            if (newValue != getStateDefault0(stateX2Switch)) {
+                adapter.log.info("updating X2 for switch of phases from " + getStateDefault0(stateX2Switch) + " to " + newValue + "...");
+                sendUdpDatagram("x2 " + newValue, true);
+            }
+        } else {
+            if (newValue !== getStateInternal(stateFor1p3pCharging)) {
+                if (newValue !== valueFor1p3pSwitching) {
+                    stepFor1p3pSwitching = 1;
+                    valueFor1p3pSwitching = newValue;
+                }
             }
         }
     }
@@ -1069,7 +1117,7 @@ function set1p3pSwitching(newValue) {
  * @returns true, if switching is in progress, false when nothing to do
  */
 function check1p3pSwitching() {
-    if (! has1P3PAutomatic()) {
+    if (! has1P3PAutomatic() || isX2PhaseSwitch()) {
         reset1p3pSwitching();
         return false;
     }

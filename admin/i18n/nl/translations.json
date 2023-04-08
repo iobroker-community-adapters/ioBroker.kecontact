@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Instellingen voor faseschakelaar",
     "1p3pSwitchIsNO": "1p/3p installatiemagneetschakelaar is NO, anders NC",
+    "1p3pViaX2": "fasen schakelen met behulp van X2-uitgang van het laadstation",
     "Acknowledged": "Erkend",
     "All": "Allemaal",
     "Cancel": "Annuleren",
@@ -21,6 +23,7 @@
     "addPower": "extra aanzien waarde",
     "batteryMinSoC": "minimale SoC van batterijopslag",
     "batteryPower": "maximaal vermogen van de batterij",
+    "batteryStorageSettingsSection": "Instellingen bij gebruik van een batterijopslag",
     "delta": "Stapgrootte",
     "host": "Wallbox IP-adres",
     "limitBatteryStoragePower": "beperk het vermogen van de batterijopslag",
@@ -47,6 +50,7 @@
     "stateSurplus": "Naam van de overtollige staat",
     "statesIncludeWallbox": "staten omvatten power of wallbox",
     "tooltip_1p3pSwitchIsNO": "geeft aan of dit een NO (normaal open) installatiemagneetschakelaar is en geactiveerd is om met drie fasen te laden, anders is het een NC (normaal gesloten) en geactiveerd om slechts één fase te laden",
+    "tooltip_1p3pViaX2": "vink deze optie aan als u een KeContact S10 faseschakelapparaat gebruikt of als u een installatiemagneetschakelaar schakelt via X2-uitgangscontact van het laadstation",
     "tooltip_addPower": "Bijkomend vermogen dat permanent kan worden gebruikt voor het uitvoeren van een oplaadsessie",
     "tooltip_batteryMinSoC": "SoC (State of Charge) die de stroomafgifte van de batterijopslag stopt.",
     "tooltip_batteryPower": "vermogen dat de batterijopslag maximaal kan leveren",

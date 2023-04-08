@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Ustawienia przełącznika fazy",
     "1p3pSwitchIsNO": "Stycznik instalacyjny 1p/3p jest NO, w przeciwnym razie NC",
+    "1p3pViaX2": "przełączanie faz za pomocą wyjścia X2 stacji ładującej",
     "Acknowledged": "Potwierdzony",
     "All": "Wszystko",
     "Cancel": "Anulować",
@@ -21,6 +23,7 @@
     "addPower": "Dodatkowa wartość szacunku",
     "batteryMinSoC": "minimalny SoC przechowywania baterii",
     "batteryPower": "maksymalna moc baterii",
+    "batteryStorageSettingsSection": "Ustawienia podczas korzystania z magazynu baterii",
     "delta": "Rozmiar kroku",
     "host": "Adres IP stacji Wallbox",
     "limitBatteryStoragePower": "ograniczyć moc przechowywania baterii",
@@ -47,6 +50,7 @@
     "stateSurplus": "Nazwa stanu nadwyżkowego",
     "statesIncludeWallbox": "stany obejmują moc wallboxa",
     "tooltip_1p3pSwitchIsNO": "określa, czy jest to stycznik instalacji NO (normalnie otwarty) i jest aktywowany do ładowania trzema fazami, w przeciwnym razie jest to stycznik NC (normalnie zamknięty) i jest aktywowany do ładowania tylko jedną fazą",
+    "tooltip_1p3pViaX2": "zaznacz tę opcję, jeśli używasz urządzenia przełączającego fazy KeContact S10 lub jeśli przełączasz stycznik instalacyjny przez styk wyjściowy X2 stacji ładującej",
     "tooltip_addPower": "Dodatkowo należy zwrócić uwagę na moc, która może być wykorzystana na stałe podczas sesji ładowania",
     "tooltip_batteryMinSoC": "SoC (stan naładowania), który zatrzymuje dostarczanie energii do przechowywania baterii.",
     "tooltip_batteryPower": "maksymalną moc, jaką akumulator jest w stanie zapewnić",

@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Impostazioni per l'interruttore di fase",
     "1p3pSwitchIsNO": "Il contattore di installazione 1p/3p è NO altrimenti NC",
+    "1p3pViaX2": "commutazione delle fasi utilizzando l'uscita X2 della stazione di ricarica",
     "Acknowledged": "Riconosciuto",
     "All": "Tutto",
     "Cancel": "Annulla",
@@ -21,6 +23,7 @@
     "addPower": "valore di considerazione aggiuntivo",
     "batteryMinSoC": "minimo SoC di stoccaggio della batteria",
     "batteryPower": "potenza massima della batteria",
+    "batteryStorageSettingsSection": "Impostazioni quando si utilizza una memoria della batteria",
     "delta": "Dimensione del passo",
     "host": "Indirizzo IP Wallbox",
     "limitBatteryStoragePower": "limitare la potenza di accumulo della batteria",
@@ -47,6 +50,7 @@
     "stateSurplus": "Nome dello stato in eccedenza",
     "statesIncludeWallbox": "gli stati includono la potenza della wallbox",
     "tooltip_1p3pSwitchIsNO": "specifica se si tratta di un teleruttore di impianto NA (normalmente aperto) e si attiva per caricare con tre fasi, altrimenti è un NC (normalmente chiuso) e si attiva per caricare con una sola fase",
+    "tooltip_1p3pViaX2": "seleziona questa opzione se stai utilizzando un dispositivo di commutazione di fase KeContact S10 o se stai commutando un contattore di installazione tramite il contatto di uscita X2 della stazione di ricarica",
     "tooltip_addPower": "Potenza aggiuntiva che può essere utilizzata in modo permanente per l'esecuzione della sessione di ricarica",
     "tooltip_batteryMinSoC": "SoC (stato di carica) che interrompe l'erogazione di energia della batteria.",
     "tooltip_batteryPower": "potenza che l'accumulatore è in grado di fornire al massimo",

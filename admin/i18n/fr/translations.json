@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Réglages pour le commutateur de phase",
     "1p3pSwitchIsNO": "Le contacteur d'installation 1p/3p est NO sinon NC",
+    "1p3pViaX2": "commutation de phases à l'aide de la sortie X2 de la borne de recharge",
     "Acknowledged": "Reconnu",
     "All": "Tout",
     "Cancel": "Annuler",
@@ -21,6 +23,7 @@
     "addPower": "valeur de regard supplémentaire",
     "batteryMinSoC": "SoC minimum de stockage de la batterie",
     "batteryPower": "puissance max de la batterie",
+    "batteryStorageSettingsSection": "Paramètres lors de l'utilisation d'un stockage sur batterie",
     "delta": "Taille de pas",
     "host": "Adresse IP de la Wallbox",
     "limitBatteryStoragePower": "limiter la puissance du stockage sur batterie",
@@ -47,6 +50,7 @@
     "stateSurplus": "Nom de l'état excédentaire",
     "statesIncludeWallbox": "les états incluent la puissance de la wallbox",
     "tooltip_1p3pSwitchIsNO": "indique s'il s'agit d'un contacteur d'installation NO (normalement ouvert) et activé pour charger avec trois phases, sinon c'est un contacteur NF (normalement fermé) et activé pour charger avec une seule phase",
+    "tooltip_1p3pViaX2": "cochez cette option si vous utilisez un dispositif de commutation de phase KeContact S10 ou si vous commutez un contacteur d'installation via le contact de sortie X2 de la borne de recharge",
     "tooltip_addPower": "Puissance de regard supplémentaire pouvant être utilisée en permanence pour exécuter la session de charge",
     "tooltip_batteryMinSoC": "SoC (état de charge) qui arrête l'alimentation de la batterie de stockage.",
     "tooltip_batteryPower": "puissance que le stockage sur batterie est capable de fournir au maximum",

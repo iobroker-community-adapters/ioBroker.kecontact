@@ -1,5 +1,7 @@
 {
+    "1p3pSettingsSection": "Einstellungen für Phasenschalter",
     "1p3pSwitchIsNO": "1p/3p Installationsschütz ist Schließer (NO) sonst Öffner (NC)",
+    "1p3pViaX2": "Phasenumschaltung über Ausgang X2 der Ladestation",
     "Acknowledged": "Bestätigt",
     "All": "Alle",
     "Cancel": "Abbrechen",
@@ -21,6 +23,7 @@
     "addPower": "dauerhaft zulässiger Netzbezug",
     "batteryMinSoC": "minimaler SoC des Batteriespeichers",
     "batteryPower": "maximale Leistung der Batterie",
+    "batteryStorageSettingsSection": "Einstellungen bei Verwendung eines Batteriespeichers",
     "delta": "Schrittweite",
     "host": "IP-Adresse der Wallbox",
     "limitBatteryStoragePower": "Leistung des Batteriespeichers begrenzen",
@@ -47,6 +50,7 @@
     "stateSurplus": "Name des Zustands für Netzeinspeisung",
     "statesIncludeWallbox": "Zustände beinhalten die Leistung der Wallbox",
     "tooltip_1p3pSwitchIsNO": "gibt an, ob es sich um einen Schließer-Installationsschütz (NO) handelt, der aktiviert wird um mit drei Phasen zu laden, sonst wird ein Öffner-Schütz (NC) angenommen, d.h. bei Aktvierung wird nur mit einer Phase geladen",
+    "tooltip_1p3pViaX2": "Aktivieren Sie diese Option, wenn Sie einen Phasenumschalter KeContact S10 verwenden oder ein Installationsschütz über den Ausgangskontakt X2 der Ladestation schalten",
     "tooltip_addPower": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten",
     "tooltip_batteryMinSoC": "SoC (State of Charge), der die Stromversorgung des Batteriespeichers stoppt.",
     "tooltip_batteryPower": "Leistung, die der Batteriespeicher maximal bereitstellen kann. Leer (0) lassen, wenn der Batteriespeicher nicht zum Laden des Fahrzeugs genutzt wernden soll.",

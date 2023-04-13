@@ -1508,6 +1508,7 @@ function checkWallboxPower() {
         } else {
             curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
             isMaxPowerCalculation = true;
+            newValueFor1p3pSwitching = valueFor3pCharging;
         }
     }
 

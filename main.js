@@ -915,6 +915,7 @@ async function handleJsonMessage(message) {
                 try {
                     await updateState(states[key], message[key]);
                     if (key == "X2 phaseSwitch source" && isX2PhaseSwitch()) {
+                        adapter.log.info("State ist: " + states[key]);
                         if (getStateDefault0(states[key]) !== 4) {
                             adapter.log.info("activating X2 source from " + getStateDefault0(states[key]) + " to 4 for phase switching");
                             sendUdpDatagram("x2src 4", true);

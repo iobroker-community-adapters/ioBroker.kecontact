@@ -1187,14 +1187,19 @@ function isReducedChargingBecause1p3p() {
     if (! has1P3PAutomatic() || stepFor1p3pSwitching < 0) {
         return false;
     }
-    const currentSwitch = getStateInternal(stateFor1p3pCharging);
+    let currentSwitch;
+    if (isX2PhaseSwitch()) {
+        currentSwitch = getStateDefault0(stateX2Switch);
+    } else {
+        currentSwitch = getStateInternal(stateFor1p3pCharging);
+    }
     if (currentSwitch === valueFor1pCharging) {
         return true;
     }
     if (currentSwitch === valueFor3pCharging) {
         return false;
     }
-    adapter.log.warn("Invalid value für 1p3p switch: " + currentSwitch + " (type " + typeof currentSwitch + ")");
+    adapter.log.warn("Invalid value for 1p3p switch: " + currentSwitch + " (type " + typeof currentSwitch + ")");
     return false;
 }
 

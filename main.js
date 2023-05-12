@@ -1176,7 +1176,7 @@ function getCurrentForSwitchTo3p() {
  * @returns true, if it is possible to switch 1p/3p
  */
 function has1P3PAutomatic() {
-    return stateFor1p3pCharging !== null;
+    return stateFor1p3pCharging !== null || isX2PhaseSwitch();
 }
 
 /**

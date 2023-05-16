@@ -1768,7 +1768,9 @@ function getWallboxType() {
                     return TYPE_B_SERIES;
                 case "2":  // c-series
                 case "3":  // c-series + PLC (only P20)
-                case "A": return TYPE_C_SERIES;  // c-series + WLAN
+                case "A":  // c-series + WLAN
+                case "K":  // Dienstwagen-Wallbox / Company Car Wall Box MID / Art.no. 126 389
+                    return TYPE_C_SERIES;
                 case "B":  // x-series
                 case "C":  // x-series + GSM
                 case "D":  // x-series + GSM + PLC

@@ -73,7 +73,7 @@ let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state
 let valueFor3pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 3 phase charging
 let stateFor1p3pCharging = null;   // state for switching installation contactor
 let stateFor1p3pAck      = false;  // Is state acknowledged?
-let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching
+let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching, -1 = temporarily disabled
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
 let limitBatteryStorage  = false;  // limit power of battery storage to mininum power to continue charging
@@ -1119,7 +1119,9 @@ function set1p3pSwitching(newValue) {
  */
 function check1p3pSwitching() {
     if (! has1P3PAutomatic() || isX2PhaseSwitch()) {
-        reset1p3pSwitching();
+        if (stepFor1p3pSwitching >= 0) {
+            reset1p3pSwitching();  // don't reset -1 value
+        }
         return false;
     }
     if (stepFor1p3pSwitching <= 0) {

@@ -1170,7 +1170,7 @@ function check1p3pSwitching() {
  * @returns current from which to switch to 3p in mA
  */
 function getCurrentForSwitchTo3p() {
-    return getMinCurrent() * get1p3pPhases() * 1.20;
+    return getMinCurrent() * get1p3pPhases() * 1.10;
 }
 
 /**

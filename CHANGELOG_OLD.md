@@ -1,4 +1,8 @@
 # Older changes
+## 1.4.0 (2022-03-31)
+* (Sneak-L8) support for battery storage in photovoltaics automatics
+* (Sneak-L8) add state selector in settings dialog
+
 ## 1.3.4 (2022-01-30)
 * (Sneak-L8) fix invalid assignment to message (sentry IOBROKER-KECONTACT-S) 
 * (Sneak-L8) update charging timestamp more often to prevent toogling

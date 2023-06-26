@@ -99,8 +99,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.0.0 (2023-06-26)
 * (Sneak-L8) support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available) including Keba KeContact S10
 * (Sneak-L8) minimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value
 * (Sneak-L8) new switch to limit battery storage support only to hold minimum charging power
@@ -127,10 +126,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) separate states for charging and discharging battery storage
 * (Sneak-L8) additional states to (de)authorize or unlock charging station and set date/time
 * (Sneak-L8) fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)
-
-### 1.4.0 (2022-03-31)
-* (Sneak-L8) support for battery storage in photovoltaics automatics
-* (Sneak-L8) add state selector in settings dialog
 
 ## Legal
 

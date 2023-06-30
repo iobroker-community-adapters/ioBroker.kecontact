@@ -1793,11 +1793,13 @@ function getWallboxType() {
             // fall through
         case MODEL_BMW:
             switch (type.substr(13,1)) {
-                case "0": return TYPE_E_SERIES;
+                case "0":
+                    return TYPE_E_SERIES;
                 case "1":
                     sendWallboxWarning("KeContact P30 b-series will not be supported!");
                     return TYPE_B_SERIES;
-                case "2": return TYPE_C_SERIES;
+                case "2":
+                    return TYPE_C_SERIES;
                 case "3":
                     sendWallboxWarning("KeContact P30 a-series will not be supported!");
                     return TYPE_A_SERIES;
@@ -1806,6 +1808,7 @@ function getWallboxType() {
                 case "E":  // x-series WLAN + 4G
                 case "G":  // x-series 3G
                 case "H":  // x-series 4G
+                case "U":  // KC-P30-EC2204U2-M0R-CC (Company Car Wall Box MID - GREEN EDITION), KC-P30-EC2204U2-E00-PV (Photovoltaic Wallbox Cable - PV-Edition)
                     return TYPE_X_SERIES;
             }
             break;

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+        "de": "unterstützung für Company Car Wall Box MID - GREEN EDITION (Sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) und PV-Edition (Sentry IOBROKER-KECONTACT-1M)",
+        "ru": "поддержка компании Car Wall Box MID - GREEN EDITION (центр IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) и PV-Edition (центр IOBROKER-KECONTACT-1M)",
+        "pt": "suporte para a caixa de parede de carro da empresa MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+        "nl": "quality over Quantity (QoQ) Releases Vertaling:",
+        "fr": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+        "it": "supporto per l'azienda Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+        "es": "soporte para la empresa caja de la pared MID - EDICIÓN GREEN (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) y la edición PV (sentry IOBROKER-KECONTACT-1M)",
+        "pl": "wsparcie dla spółki Car Wall Box MID – GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) i PV-Edition (wejście IOBROKER-KECONTACT-1M)",
+        "uk": "підтримка для компанії Car Wall Box MID - ЗЕЛЕНИЙ EDITION (серія IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) та PV-редагування (серія IOBROKER-KECONTACT-1M)",
+        "zh-cn": "b. 支持Car隔离墙箱MID - GREEN EDI(化学公司IPOKER-KECONTACT-1K & IPOKER-KECONTACT-1N)和聚乙烯-Edition(工业公司IPOKER-KECONTACT-1M)"
+      },
       "2.0.0": {
         "en": "support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available) including Keba KeContact S10\nminimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value\nnew switch to limit battery storage support only to hold minimum charging power\ncatch error when requesting firmware page (sentry IOBROKER-KECONTACT-1H)\nRFID tag and class where not updated in channel \"statitics\" when no charging sessions were obtained\nadded new Keba model Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
         "de": "unterstützung für 1p/3p-Ladung (Startladung mit 1 Phase und Schalter auf 3 Phasen, wenn genügend Überschuss vorhanden) einschließlich Keba KeContact S10\nmindestleistung erlaubt 5A, weil einige Fahrzeuge und KeContact (unbesetzt) diesen Wert zulassen\nneuer schalter zur begrenzung der batteriespeicherunterstützung nur für minimale ladeleistung\nfehler beim Anfordern der Firmware-Seite (Einträge IOBROKER-KECONTACT-1H)\nRFID-Tag und Klasse, in der die Kanal-Stertitik nicht aktualisiert wurde, wenn keine Ladesitzungen erhalten wurden\nneue Keba Modell Company Car Wall Box MID (Sentry IOBROKER-KECONTACT-1K)",
@@ -80,19 +93,6 @@
         "pl": "obsługa magazynowania baterii w automatyce fotowoltaiki, dodanie selektora stanu w oknie ustawień",
         "zh-cn": "支持光伏自动化中的电池存储，在设置对话框中添加状态选择器",
         "uk": "підтримка зберігання акумулятора в автоматиці фотоелектричної системи, додайте селектор стану в діалоговому вікні налаштувань"
-      },
-      "1.3.4": {
-        "en": "fix invalid assignment to message (sentry IOBROKER-KECONTACT-S), update charging timestamp more often to prevent toogling, update more information even in passive mode, provide RFID and sessionId for currect session",
-        "de": "Falsche Datentypen für Meldung abfangen (sentry IOBROKER-KECONTACT-S), Ladestart-Zeitstempel öfters aktualisieren um an/aus-Situation zu vermeiden, mehr Infos auch im passiven Modus aktualisieren, RFID- und Session-ID-Daten für aktuelle Ladesitzung bereitstellen",
-        "ru": "исправить неверное назначение сообщения (сентри IOBROKER-KECONTACT-S), чаще обновлять метку времени зарядки, чтобы предотвратить переключение, обновлять больше информации даже в пассивном режиме, предоставлять RFID и идентификатор сеанса для текущего сеанса",
-        "pt": "corrija a atribuição inválida à mensagem (sentinela IOBROKER-KECONTACT-S), atualize o carimbo de data/hora de carregamento com mais frequência para evitar o uso de ferramentas, atualize mais informações mesmo no modo passivo, forneça RFID e sessionId para a sessão atual",
-        "nl": "herstel ongeldige toewijzing aan bericht (sentry IOBROKER-KECONTACT-S), update laadtijdstempel vaker om toogling te voorkomen, update meer informatie, zelfs in passieve modus, verstrek RFID en sessionId voor huidige sessie",
-        "fr": "correction d'une affectation invalide au message (sentry IOBROKER-KECONTACT-S), mise à jour plus fréquente de l'horodatage de charge pour éviter les toogling, mise à jour de plus d'informations même en mode passif, fourniture du RFID et de l'ID de session pour la session en cours",
-        "it": "correggere l'assegnazione non valida al messaggio (voce IOBROKER-KECONTACT-S), aggiornare il timestamp di ricarica più spesso per prevenire la manipolazione, aggiornare più informazioni anche in modalità passiva, fornire RFID e sessionId per la sessione corrente",
-        "es": "corrija la asignación no válida al mensaje (centinela IOBROKER-KECONTACT-S), actualice la marca de tiempo de carga con más frecuencia para evitar cambios, actualice más información incluso en modo pasivo, proporcione RFID y sessionId para la sesión actual",
-        "pl": "naprawić nieprawidłowe przypisanie do wiadomości (sentry IOBROKER-KECONTACT-S), częściej aktualizować znacznik czasu ładowania, aby zapobiec przełączaniu, aktualizować więcej informacji nawet w trybie pasywnym, podawać identyfikator RFID i identyfikator sesji dla bieżącej sesji",
-        "zh-cn": "修复对消息的无效分配（sentry IOBROKER-KECONTACT-S），更频繁地更新计费时间戳以防止切换，即使在被动模式下也更新更多信息，为当前会话提供 RFID 和 sessionId",
-        "uk": "виправити недійсне призначення повідомлення (сторожовий IOBROKER-KECONTACT-S), частіше оновлювати позначку часу стягнення плати, щоб запобігти переключенню, оновлювати більше інформації навіть у пасивному режимі, надавати RFID та sessionId для поточного сеансу"
       }
     },
     "titleLang": {

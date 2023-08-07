@@ -1211,11 +1211,20 @@ function isReducedChargingBecause1p3p() {
  */
 function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {
-        const phases = getStateDefault0(stateChargingPhases);
+        let phases = getStateDefault0(stateChargingPhases);
         if (isVehicleCharging() && phases > 1 && getChargingPhaseCount() > 1) {
             adapter.log.error("Charging with " + phases + " but reduced (1p) expected, disabling 1p/3p switch for this charging session");
             reset1p3pSwitching();
             stepFor1p3pSwitching = -1;
+        }
+        if (phases <= 0) {
+            phases = getStateDefault0(stateManualPhases);
+        }
+        if (phases <= 0) {
+            return 1;
+        }
+        if (phases > 3) {
+            return 3;
         }
         return phases;
     }

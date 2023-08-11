@@ -1092,6 +1092,20 @@
       "native": {}
     },
     {
+      "_id": "statistics.1p3pSwTimestamp",
+      "type": "state",
+      "common": {
+        "name": "Timestamp when 1p3pSw was changed",
+        "type": "string",
+        "role": "datetime",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when last phase switch occured"
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics.lastChargeStart",
       "type": "state",
       "common": {

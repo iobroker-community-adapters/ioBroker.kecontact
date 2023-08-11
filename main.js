@@ -1493,7 +1493,7 @@ function checkWallboxPower() {
                                 adapter.log.debug("no switching to 1 phase because of minimum charging time " + chargeTimestamp);
                             } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum regard time");
-                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum time between switching");
                             } else {
                                 newValueFor1p3pSwitching = valueFor1pCharging;
@@ -1506,7 +1506,7 @@ function checkWallboxPower() {
                             let isSwitchFrom1pTo3P = false;
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 adapter.log.debug("no switching to " + phases + " phases because of minimum charging time " + chargeTimestamp);
-                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
                                 adapter.log.debug("no switching to " + phases + " phase because of minimum time between switching" + Sw1p3pTimestamp);
                             } else {
                                 if (currWith1p < getCurrentForSwitchTo3p()) {
@@ -1577,7 +1577,7 @@ function checkWallboxPower() {
         stopCharging();
 
         const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
-        if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+        if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
             adapter.log.debug("no switching to default phases because of minimum time between switching");
         }else {
             set1p3pSwitching(valueFor1p3pOff);

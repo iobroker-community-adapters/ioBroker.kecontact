@@ -184,7 +184,7 @@
     "underusage": 500,
     "minTime": 300,
     "regardTime": 0,
-    "min1p3pSwSec": 0,
+    "min1p3pSwSTime": 0,
     "maxPower": 0,
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",

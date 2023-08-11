@@ -81,5 +81,7 @@
     "underusage": "Niewystarczające zużycie energii",
     "useX1forAutomatic": "Użyj przełącznika X1 do automatycznego fotowoltaicznego;",
     "wallboxNotIncluded": "Moc Wallbox NIE jest uwzględniona w licznikach energii",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Minimalny czas do rozważenia między przełączaniem między fazami",
+    "tooltip_min1p3pSwTime": "określa czas, który należy uwzględnić między fazami przełączania. KEBA DE Edition potrzebuje około 300 sekund między wysłaniem nowego polecenia zmiany kontaktu instalacyjnego. Oznacza to, że czas między przełączeniami może zostać wydłużony o tę wartość"
 }

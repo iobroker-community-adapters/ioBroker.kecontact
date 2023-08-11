@@ -81,5 +81,7 @@
     "underusage": "Ricarica sotto utilizzo",
     "useX1forAutomatic": "utilizzare l'interruttore X1 per il fotovoltaico automatico",
     "wallboxNotIncluded": "Potenza della wallbox NON inclusa nei contatori di energia",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Tempo minimo da considerare tra la commutazione tra le fasi",
+    "tooltip_min1p3pSwTime": "definisce il tempo che deve essere considerato tra le fasi di commutazione. L'edizione KEBA DE richiede circa 300 secondi tra l'invio di un nuovo comando per modificare il contatto di installazione. Ciò significa che il tempo tra la commutazione può essere prolungato di questo valore"
 }

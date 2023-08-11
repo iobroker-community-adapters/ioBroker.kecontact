@@ -81,5 +81,7 @@
     "underusage": "Charge de sous-utilisation",
     "useX1forAutomatic": "utiliser le commutateur X1 pour le photovoltaïque automatique",
     "wallboxNotIncluded": "Puissance de la wallbox NON incluse dans les compteurs d'énergie",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Temps minimum à considérer entre les commutations entre phases",
+    "tooltip_min1p3pSwTime": "définit le temps à prendre en compte entre les phases de commutation. L'édition KEBA DE nécessite environ 300 secondes entre l'envoi d'une nouvelle commande pour changer le contact d'installation. Cela signifie que le temps entre les commutations peut être prolongé de cette valeur"
 }

@@ -81,5 +81,7 @@
     "underusage": "Carga insuficiente",
     "useX1forAutomatic": "utilizar interruptor X1 para fotovoltaica automática",
     "wallboxNotIncluded": "Potencia de wallbox NO incluida en los contadores de energía",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Tiempo mínimo a considerar entre cambios de fase",
+    "tooltip_min1p3pSwTime": "define el tiempo que debe tenerse en cuenta entre las fases de conmutación. La edición KEBA DE requiere alrededor de 300 s entre el envío de un nuevo comando para cambiar el contacto de instalación. Esto significa que el tiempo entre cambios puede extenderse por este valor"
 }

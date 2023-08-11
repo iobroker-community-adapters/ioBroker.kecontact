@@ -81,5 +81,7 @@
     "underusage": "Opladen onder gebruik",
     "useX1forAutomatic": "gebruik X1-schakelaar voor fotovoltaïsche automaat",
     "wallboxNotIncluded": "Vermogen van wallbox NIET inbegrepen in energiemeters",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Minimale tijd die in acht moet worden genomen tussen het schakelen tussen fasen",
+    "tooltip_min1p3pSwTime": "definieert de tijd die in acht moet worden genomen tussen de schakelfasen. De KEBA DE Edition heeft ongeveer 300 seconden nodig tussen het verzenden van een nieuwe opdracht om het installatiecontact te wijzigen. Dit betekent dat de tijd tussen schakelen met deze waarde kan worden verlengd"
 }

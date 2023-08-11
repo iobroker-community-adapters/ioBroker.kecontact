@@ -81,5 +81,7 @@
     "underusage": "充电不足使用",
     "useX1forAutomatic": "使用X1开关进行光伏自动",
     "wallboxNotIncluded": "电表的功率不包括在电表中",
-    "watts": "瓦特"
+    "watts": "瓦特",
+    "min1p3pSwTime": "相间切换应考虑的最短时间",
+    "tooltip_min1p3pSwTime": "定义了切换阶段之间需要考虑的时间。 KEBA DE 版本在发送新命令以更改安装联系人之间需要大约 300 秒。这意味着切换之间的时间可能会延长此值"
 }

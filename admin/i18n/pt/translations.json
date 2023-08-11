@@ -81,5 +81,7 @@
     "underusage": "Carregamento subutilizado",
     "useX1forAutomatic": "use o interruptor X1 para fotovoltaico automático",
     "wallboxNotIncluded": "Potência da caixa de embutir NÃO incluída nos medidores de energia",
-    "watts": "W"
+    "watts": "W",
+    "min1p3pSwTime": "Tempo mínimo a ser considerado entre comutações entre fases",
+    "tooltip_min1p3pSwTime": "define o tempo que precisa ser considerado entre as fases de comutação. O KEBA DE Edition requer cerca de 300s entre o envio de um novo comando para alterar o contato de instalação. Isso significa que o tempo entre a comutação pode ser estendido por esse valor"
 }

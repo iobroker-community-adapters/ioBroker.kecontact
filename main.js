@@ -1075,7 +1075,6 @@ function getTotalPowerAvailable() {
 function reset1p3pSwitching() {
     stepFor1p3pSwitching = 0;
     retries1p3pSwitching = 0;
-    setStateAck(state1p3pSwTimestamp, null);
 }
 
 /**
@@ -1107,7 +1106,7 @@ function set1p3pSwitching(newValue) {
     if (newValue !== null) {
         if (isX2PhaseSwitch()) {
             if (newValue != getStateDefault0(stateX2Switch)) {
-
+                setStateAck(state1p3pSwTimestamp, new Date().toString());
                 adapter.log.info("updating X2 for switch of phases from " + getStateDefault0(stateX2Switch) + " to " + newValue + "...");
                 sendUdpDatagram("x2 " + newValue, true);
             }

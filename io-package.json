@@ -1095,7 +1095,7 @@
       "_id": "statistics.1p3pSwTimestamp",
       "type": "state",
       "common": {
-        "name": "Timestamp when 1p3pSw was changed",
+        "name": "timestamp when 1p3pSw was changed",
         "type": "string",
         "role": "datetime",
         "read": true,

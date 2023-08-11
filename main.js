@@ -365,7 +365,7 @@ async function main() {
     adapter.log.info("config underusage: " + adapter.config.underusage);
     adapter.log.info("config minTime: " + adapter.config.minTime);
     adapter.log.info("config regardTime: " + adapter.config.regardTime);
-    adapter.log.infor("config min1p3pSwTime:" + adapter.config.min1p3pSwTime);
+    adapter.log.info("config min1p3pSwTime:" + adapter.config.min1p3pSwTime);
     adapter.log.info("config maxPower: " + adapter.config.maxPower);
     adapter.log.info("config stateEnergyMeter1: " + adapter.config.stateEnergyMeter1);
     adapter.log.info("config stateEnergyMeter2: " + adapter.config.stateEnergyMeter2);

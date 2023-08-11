@@ -67,6 +67,7 @@ const minAmperageDefault = 6000;   // default minimum amperage to start charging
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
+let min1p3pSwSec         = 0;      // minimum time betwenn phase switching 
 let isMaxPowerCalculation = false; // switch to show if max power calculation is active
 let valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
@@ -112,6 +113,7 @@ const stateChargingPhases      = "statistics.chargingPhases";   /*number of phas
 const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
 const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
 const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when charging session was continued with regard */
+const state1p3pSwTimeStamp     = "statistics.1p3pSwTimestamp";  /*Timestamp when 1p3pSw was changed */
 const stateSessionId           = "statistics.sessionId";        /*id of current charging session */
 const stateRfidTag             = "statistics.rfid_tag";         /*rfid tag of current charging session */
 const stateRfidClass           = "statistics.rfid_class";       /*rfid class of current charging session */
@@ -363,6 +365,7 @@ async function main() {
     adapter.log.info("config underusage: " + adapter.config.underusage);
     adapter.log.info("config minTime: " + adapter.config.minTime);
     adapter.log.info("config regardTime: " + adapter.config.regardTime);
+    adapter.log.infor("config min1p3pSwTime:" + adapter.config.min1p3pSwTime);
     adapter.log.info("config maxPower: " + adapter.config.maxPower);
     adapter.log.info("config stateEnergyMeter1: " + adapter.config.stateEnergyMeter1);
     adapter.log.info("config stateEnergyMeter2: " + adapter.config.stateEnergyMeter2);
@@ -677,6 +680,11 @@ function checkConfig() {
             adapter.log.info("minimum regard time not speficied or too low, using default value of " + minRegardSeconds);
         } else {
             minRegardSeconds = getNumber(adapter.config.regardTime);
+        }
+        if (! adapter.config.min1p3pSwTime || adapter.config.min1p3pSwTime < 0) {
+            adapter.log.info("minimum switch time not speficied or too low, using default value of " + min1p3pSwSec);
+        } else {
+            min1p3pSwSec = getNumber(adapter.config.min1p3pSwTime);
         }
     }
     if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
@@ -1067,6 +1075,7 @@ function getTotalPowerAvailable() {
 function reset1p3pSwitching() {
     stepFor1p3pSwitching = 0;
     retries1p3pSwitching = 0;
+    setStateAck(state1p3pSwTimeStamp, null);
 }
 
 /**
@@ -1098,6 +1107,7 @@ function set1p3pSwitching(newValue) {
     if (newValue !== null) {
         if (isX2PhaseSwitch()) {
             if (newValue != getStateDefault0(stateX2Switch)) {
+
                 adapter.log.info("updating X2 for switch of phases from " + getStateDefault0(stateX2Switch) + " to " + newValue + "...");
                 sendUdpDatagram("x2 " + newValue, true);
             }
@@ -1380,6 +1390,29 @@ function isContinueDueToMinRegardTime(aktDate) {
     return false;
 }
 
+/**
+ * Checks whether switching between phases can not be performed since time has between switching is not yet reached.
+ * @returns true if minimum time between switching phased was not yet reached
+ */
+function isContinueDueToMin1p3pSwTime(aktDate) {
+    if (min1p3pSwSec <= 0) {
+        return false;
+    }
+    let Sw1p3pDate = getStateAsDate(state1p3pSwTimeStamp);
+    if (Sw1p3pDate == null) {
+        setStateAck(state1p3pSwTimeStamp, aktDate.toString());
+        Sw1p3pDate = aktDate;
+    }
+    if ((aktDate.getTime() - Sw1p3pDate.getTime()) / 1000 < min1p3pSwSec) {
+        return true;
+    }
+    return false;
+}
+
+
+
+
+
 function checkWallboxPower() {
     // update charging state also between two calculations to recognize charging session
     // before a new calculation will stop it again (as long as chargingTimestamp was not yet set)
@@ -1433,7 +1466,6 @@ function checkWallboxPower() {
     // lock wallbox if requested or available amperage below minimum
     if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() ||
         (isPvAutomaticsActive() && ! isVehiclePlugged())) {
-        set1p3pSwitching(valueFor1p3pOff);
         curr = 0;
     } else {
         // if vehicle is currently charging and was not before, then save timestamp
@@ -1448,6 +1480,8 @@ function checkWallboxPower() {
                 }
             }
             const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
+            const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimeStamp);
+            
             if (has1P3PAutomatic()) {
                 const currWith1p = getAmperage(available, 1);
                 if (curr != currWith1p) {
@@ -1460,6 +1494,8 @@ function checkWallboxPower() {
                                 adapter.log.debug("no switching to 1 phase because of minimum charging time " + chargeTimestamp);
                             } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum regard time");
+                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+                                adapter.log.debug("no switching to 1 phase because of minimum time between switching");
                             } else {
                                 newValueFor1p3pSwitching = valueFor1pCharging;
                                 phases = 1;
@@ -1471,6 +1507,8 @@ function checkWallboxPower() {
                             let isSwitchFrom1pTo3P = false;
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 adapter.log.debug("no switching to " + phases + " phases because of minimum charging time " + chargeTimestamp);
+                            } else if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+                                adapter.log.debug("no switching to " + phases + " phase because of minimum time between switching" + Sw1p3pTimestamp);
                             } else {
                                 if (currWith1p < getCurrentForSwitchTo3p()) {
                                     adapter.log.debug("no switching to " + phases + " phases because amperage " + currWith1p + " < " + getCurrentForSwitchTo3p());
@@ -1538,7 +1576,14 @@ function checkWallboxPower() {
     if (curr < getMinCurrent()) {
         adapter.log.debug("not enough power for charging ...");
         stopCharging();
-        set1p3pSwitching(valueFor1p3pOff);
+
+        const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimeStamp);
+        if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
+            adapter.log.debug("no switching to default phases because of minimum time between switching");
+        }else {
+            set1p3pSwitching(valueFor1p3pOff);
+        }
+
     } else {
         if (newValueFor1p3pSwitching !== null) {
             if (set1p3pSwitching(newValueFor1p3pSwitching)) {

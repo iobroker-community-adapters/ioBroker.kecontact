@@ -1,6 +1,7 @@
 {
     "1p3pSettingsSection": "Einstellungen für Phasenschalter",
     "1p3pSwitchIsNO": "1p/3p Installationsschütz ist Schließer (NO) sonst Öffner (NC)",
+    "min1p3pSwTime": "Mindestzeit zwischen dem Umschalten zwischen Phasen",
     "1p3pViaX2": "Phasenumschaltung über Ausgang X2 der Ladestation",
     "Acknowledged": "Bestätigt",
     "All": "Alle",
@@ -50,6 +51,7 @@
     "stateSurplus": "Name des Zustands für Netzeinspeisung",
     "statesIncludeWallbox": "Zustände beinhalten die Leistung der Wallbox",
     "tooltip_1p3pSwitchIsNO": "gibt an, ob es sich um einen Schließer-Installationsschütz (NO) handelt, der aktiviert wird um mit drei Phasen zu laden, sonst wird ein Öffner-Schütz (NC) angenommen, d.h. bei Aktvierung wird nur mit einer Phase geladen",
+    "tooltip_min1p3pSwTime": "Definiert die Zeit welche mindestens zwischen den Umschaltvorgängen zwischen Phasen liegen muss. Die KEBA Deutschland Edition benötigt hier z.b. ca. 300s. Dh. das Umschalten wird wenn nötig um diesen Wert verzögert.",
     "tooltip_1p3pViaX2": "Aktivieren Sie diese Option, wenn Sie einen Phasenumschalter KeContact S10 verwenden oder ein Installationsschütz über den Ausgangskontakt X2 der Ladestation schalten",
     "tooltip_addPower": "Dauerhaft zulässiger Netzbezug, um Ladevorgang aufrecht zu erhalten",
     "tooltip_batteryMinSoC": "SoC (State of Charge), der die Stromversorgung des Batteriespeichers stoppt.",

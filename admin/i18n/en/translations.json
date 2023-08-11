@@ -1,6 +1,7 @@
 {
     "1p3pSettingsSection": "Settings for phase switch",
     "1p3pSwitchIsNO": "1p/3p installation contactor is NO otherwise NC",
+    "min1p3pSwTime": "Minium time to be considered between switching between phases",
     "1p3pViaX2": "phases switch using X2 output of charging station",
     "Acknowledged": "Acknowledged",
     "All": "All",
@@ -50,6 +51,7 @@
     "stateSurplus": "name of surplus state",
     "statesIncludeWallbox": "states include power of wallbox",
     "tooltip_1p3pSwitchIsNO": "specifies whether this is a NO (normally open) installation contactor and is activated to charge with three phases, otherwise it is an NC (normally closed) and is activated to charge with only one phase, for Keba S10 device check this option always",
+    "tooltip_min1p3pSwTime": "defines the time which needs to be considered between switching phases. The KEBA DE Edition requires about 300s between sending a new command to change the installation contact. This means the time between switching may be extended by this value",
     "tooltip_1p3pViaX2": "check this option, if you're using a KeContact S10 Phase Switching Device or if you're switching a installation contactor via X2 output contact of charging station",
     "tooltip_addPower": "additional regard power that may be permanently used for running charging session",
     "tooltip_batteryMinSoC": "SoC (state of charge) that stops power delivery of battery storage.",

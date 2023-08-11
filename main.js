@@ -113,7 +113,7 @@ const stateChargingPhases      = "statistics.chargingPhases";   /*number of phas
 const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
 const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
 const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when charging session was continued with regard */
-const state1p3pSwTimeStamp     = "statistics.1p3pSwTimestamp";  /*Timestamp when 1p3pSw was changed */
+const state1p3pSwTimestamp     = "statistics.1p3pSwTimestamp";  /*Timestamp when 1p3pSw was changed */
 const stateSessionId           = "statistics.sessionId";        /*id of current charging session */
 const stateRfidTag             = "statistics.rfid_tag";         /*rfid tag of current charging session */
 const stateRfidClass           = "statistics.rfid_class";       /*rfid class of current charging session */
@@ -1075,7 +1075,7 @@ function getTotalPowerAvailable() {
 function reset1p3pSwitching() {
     stepFor1p3pSwitching = 0;
     retries1p3pSwitching = 0;
-    setStateAck(state1p3pSwTimeStamp, null);
+    setStateAck(state1p3pSwTimestamp, null);
 }
 
 /**
@@ -1398,9 +1398,9 @@ function isContinueDueToMin1p3pSwTime(aktDate) {
     if (min1p3pSwSec <= 0) {
         return false;
     }
-    let Sw1p3pDate = getStateAsDate(state1p3pSwTimeStamp);
+    let Sw1p3pDate = getStateAsDate(state1p3pSwTimestamp);
     if (Sw1p3pDate == null) {
-        setStateAck(state1p3pSwTimeStamp, aktDate.toString());
+        setStateAck(state1p3pSwTimestamp, aktDate.toString());
         Sw1p3pDate = aktDate;
     }
     if ((aktDate.getTime() - Sw1p3pDate.getTime()) / 1000 < min1p3pSwSec) {
@@ -1480,7 +1480,7 @@ function checkWallboxPower() {
                 }
             }
             const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
-            const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimeStamp);
+            const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
             
             if (has1P3PAutomatic()) {
                 const currWith1p = getAmperage(available, 1);
@@ -1577,7 +1577,7 @@ function checkWallboxPower() {
         adapter.log.debug("not enough power for charging ...");
         stopCharging();
 
-        const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimeStamp);
+        const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
         if (Sw1p3pTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
             adapter.log.debug("no switching to default phases because of minimum time between switching");
         }else {

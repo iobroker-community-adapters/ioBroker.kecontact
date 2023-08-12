@@ -547,6 +547,7 @@ function start() {
     };
     stateChangeListeners[adapter.namespace + "." + stateX2Switch] = function (oldValue, newValue) {
         sendUdpDatagram("x2 " + newValue, true);
+        setStateAck(state1p3pSwTimestamp, new Date().toString());
     };
     stateChangeListeners[adapter.namespace + "." + stateAddPower] = function () {
         // no real action to do
@@ -1282,7 +1283,7 @@ function getChargingPhaseCount() {
             adapter.log.warn("wallbox is charging but no phases where recognized");
         }
     }
-    // if no phaes where detected then calculate with one phase
+    // if no phases where detected then calculate with one phase
     if (retVal <= 0) {
         adapter.log.debug("Setting phase count to 1");
         retVal = 1;
@@ -1494,7 +1495,7 @@ function checkWallboxPower() {
                             } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum regard time");
                             } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
-                                adapter.log.debug("no switching to 1 phase because of minimum time between switching");
+                                adapter.log.debug("no switching to 1 phase because of minimum time between switching" + Sw1p3pTimestamp);
                             } else {
                                 newValueFor1p3pSwitching = valueFor1pCharging;
                                 phases = 1;
@@ -1577,9 +1578,9 @@ function checkWallboxPower() {
         stopCharging();
 
         const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
-        if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
-            adapter.log.debug("no switching to default phases because of minimum time between switching");
-        }else {
+        if ((Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) && (valueFor1p3pOff !== getStateInternal(stateFor1p3pCharging))){
+            adapter.log.debug("no switching to default phases because of minimum time between switching" +  Sw1p3pTimestamp);
+        }else if (valueFor1p3pOff !== getStateInternal(stateFor1p3pCharging)){
             set1p3pSwitching(valueFor1p3pOff);
         }
 

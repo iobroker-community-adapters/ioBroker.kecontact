@@ -964,7 +964,7 @@
                 "read": true,
                 "write": true,
                 "def": 0,
-                "desc": "amount of watts to be used as regard to start charging session"
+                "desc": "The amount of dynamic charing current will be limited to this value (0 = no limitation)"
             },
             "native": {}
         },

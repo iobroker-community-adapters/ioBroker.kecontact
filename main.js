@@ -1316,6 +1316,7 @@ function getChargingPhaseCount() {
         adapter.log.debug("Setting phase count to 1");
         retVal = 1;
     }
+    adapter.log.silly("Currently charging with " + retVal + "phases");
     return retVal;
 }
 
@@ -1324,6 +1325,7 @@ function getChargingPhaseCount() {
  * @returns true if the vehicle is charing based on getWallboxPowerInWatts
  */
 function isVehicleCharging() {
+    adapter.log.silly("Currently charging with" + getWallboxPowerInWatts() + "W");
     return getWallboxPowerInWatts() > 1000 ;
 }
 

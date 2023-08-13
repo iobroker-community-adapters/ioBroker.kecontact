@@ -944,12 +944,19 @@ async function handleJsonMessage(message) {
     }
 }
 
-// get minimum current for wallbox
+
+/**
+ * Get the minimum current for wallbox
+ * @returns the  minimum amperage to start charging session 
+ */
 function getMinCurrent() {
     return minAmperage;
 }
 
-// get maximum current for wallbox (hardware defined by dip switch)
+/**
+ * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent an stateLimitCurrent
+ * @returns the  maxium allowed charging current 
+ */
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
     const limit = getStateDefault0(stateLimitCurrent);
@@ -1012,6 +1019,10 @@ function finishChargingSession() {
     resetChargingSessionData();
 }
 
+/**
+ * Return the amount of watts used for charging. Values is calculated for TYPE_D_EDITION wallbox and returned by the b9ox itself for others.
+ * @returns the power in watts, with which the wallbox is currently charging.
+ */
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
         if (isVehiclePlugged() && getStateDefaultFalse(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
@@ -1041,6 +1052,12 @@ function getBatteryStoragePower(isFullPowerRequested) {
     return batteryPower;
 }
 
+/**
+ * The available surplus is calculated and returned not considering the used power for charging. If configured the availabe storage power is added.
+ *
+ * @param {boolean} isFullBatteryStoragePowerRequested if checked then maximum available power of the battery is added
+ * @returns the available surplus without considering the wallbox power currently used for charging.
+ */
 function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested) {
     if (isFullBatteryStoragePowerRequested == undefined) {
         isFullBatteryStoragePowerRequested = false;
@@ -1062,6 +1079,12 @@ function getTotalPower() {
     return result;
 }
 
+
+/**
+ * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit. 
+ *
+ * @returns the total power available 
+ */
 function getTotalPowerAvailable() {
     // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
     if (maxPowerActive && (adapter.config.maxPower > 0)) {
@@ -1241,6 +1264,11 @@ function get1p3pPhases() {
     return getChargingPhaseCount();
 }
 
+
+/**
+ * Return the number of phases currently used for charging
+ * @returns number of phases recognized for charging.
+ */
 function getChargingPhaseCount() {
     let retVal = getStateDefault0(stateChargingPhases);
     if ((getWallboxType() == TYPE_D_EDITION) || (retVal == 0)) {
@@ -1291,10 +1319,18 @@ function getChargingPhaseCount() {
     return retVal;
 }
 
+/**
+ * Returns the status true if the WallboxPowerinWatts is bigger then 1000W
+ * @returns true if the vehicle is charing based on getWallboxPowerInWatts
+ */
 function isVehicleCharging() {
     return getWallboxPowerInWatts() > 1000 ;
 }
 
+/**
+ * Check if the vehicle is plugged. Valus is base on internal state stateWallboxPlug which is >= if vehicle is plugged.
+ * @returns true if the vehicle is plugged
+ */
 function isVehiclePlugged(myValue) {
     let value;
     if (myValue) {
@@ -1312,6 +1348,11 @@ function isVehiclePlugged(myValue) {
     return value >= 5;
 }
 
+
+/**
+ * Check if the PV Automatic is currently active or not
+ * @returns true if PV automatic is active
+ */
 function isPvAutomaticsActive() {
     if (isPassive || ! photovoltaicsActive) {
         return false;
@@ -1339,6 +1380,12 @@ function displayChargeMode() {
     adapter.setState(stateWallboxDisplay, text);
 }
 
+/**
+ * Returns the rounded value for charging amperage possible based on the defined power and phases given to the function.
+ * @param {*} power power in Watts used for calculation
+ * @param {*} phases number of phases to be used for calculation
+ * @returns the values for the amperage based on amperageDelta and parameters.
+ */
 function getAmperage(power, phases) {
     const curr = Math.round(power / voltage * 1000 / amperageDelta / phases) * amperageDelta;
     adapter.log.debug("power: " + power + " / voltage: " + voltage + " * 1000 / delta: " + amperageDelta + " / phases: " + phases + " * delta = " + curr);
@@ -1513,6 +1560,7 @@ function checkWallboxPower() {
                                 if (currWith1p < getCurrentForSwitchTo3p()) {
                                     adapter.log.debug("no switching to " + phases + " phases because amperage " + currWith1p + " < " + getCurrentForSwitchTo3p());
                                 } else {
+                                    adapter.log.debug("switching to " + phases + " phases because amperage " + currWith1p + " >= " + getCurrentForSwitchTo3p());
                                     newValueFor1p3pSwitching = valueFor3pCharging;
                                     isSwitchFrom1pTo3P = true;
                                 }
@@ -1525,6 +1573,7 @@ function checkWallboxPower() {
                     }
                 }
             }
+            
             const addPower = getStateDefault0(stateAddPower);
             if (curr < getMinCurrent() && addPower > 0) {
                 // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen

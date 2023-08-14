@@ -1025,8 +1025,10 @@ function finishChargingSession() {
  */
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
-        adapter.log.silly("isVehiclePlugged:" +isVehiclePlugged() + ";  getStateDefaultFalse(stateWallboxEnabled): " + getStateDefaultFalse(stateWallboxEnabled) + "; (getStateDefault0(stateWallboxState) == 3): " + (getStateDefault0(stateWallboxState) == 3));
-        if (isVehiclePlugged() && getStateDefaultFalse(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
+        //adapter.log.silly("isVehiclePlugged:" +isVehiclePlugged() + ";  getStateDefaultFalse(stateWallboxEnabled): " + getStateDefaultFalse(stateWallboxEnabled) + "; (getStateDefault0(stateWallboxState) == 3): " + (getStateDefault0(stateWallboxState) == 3));
+        //if (isVehiclePlugged() && getStateDefaultFalse(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
+        if (isVehiclePlugged() && (getStateDefault0(stateWallboxState) == 3)) {
+
             return getStateDefault0(stateWallboxCurrent) * voltage * getChargingPhaseCount() / 1000;
         } else {
             return 0;

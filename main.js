@@ -989,9 +989,11 @@ function stopCharging() {
 
 function regulateWallbox(milliAmpere) {
     let oldValue = 0;
-    if (getStateDefaultFalse(stateWallboxEnabled))
+    //if (getStateDefaultFalse(stateWallboxEnabled))
+    if (getStateDefault0(stateWallboxState) == 3){
         oldValue = getStateDefault0(stateWallboxCurrent);
-
+    }
+    
     if (milliAmpere != oldValue) {
         if (milliAmpere == 0) {
             adapter.log.info("stop charging");
@@ -1020,7 +1022,7 @@ function finishChargingSession() {
 }
 
 /**
- * Return the amount of watts used for charging. Values is calculated for TYPE_D_EDITION wallbox and returned by the b9ox itself for others.
+ * Return the amount of watts used for charging. Values is calculated for TYPE_D_EDITION wallbox and returned by the box itself for others.
  * @returns the power in watts, with which the wallbox is currently charging.
  */
 function getWallboxPowerInWatts() {
@@ -1165,7 +1167,8 @@ function check1p3pSwitching() {
     }
     switch (stepFor1p3pSwitching) {
         case 1:
-            if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 && getStateDefaultFalse(stateWallboxEnabled) == true)) {
+            //if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 && getStateDefaultFalse(stateWallboxEnabled) == true)) {
+            if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 )) {
                 if (retries1p3pSwitching == 0) {
                     adapter.log.info("stop charging for switch of phases ...");
                     stopCharging();

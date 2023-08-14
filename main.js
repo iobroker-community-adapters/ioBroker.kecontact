@@ -1259,10 +1259,10 @@ function get1p3pPhases() {
         if (phases > 3) {
             phases = 3;
         }
-        adapter.log.silly("number of phases for charging of 3p would be in effect 1:" + phases + "phases");
+        adapter.log.silly("number of phases for charging of 3p would be in effect 1: " + phases + " phases");
         return phases;
     }
-    adapter.log.silly("number of phases for charging of 3p would be in effect 2:" + phases + "phases");
+    adapter.log.silly("number of phases for charging of 3p would be in effect 2: " + getChargingPhaseCount() + " phases");
     return getChargingPhaseCount();
 }
 
@@ -1318,7 +1318,7 @@ function getChargingPhaseCount() {
         adapter.log.debug("Setting phase count to 1");
         retVal = 1;
     }
-    adapter.log.silly("Currently charging with " + retVal + "phases");
+    adapter.log.silly("Currently charging with " + retVal + " phases");
     return retVal;
 }
 
@@ -1327,7 +1327,7 @@ function getChargingPhaseCount() {
  * @returns true if the vehicle is charing based on getWallboxPowerInWatts
  */
 function isVehicleCharging() {
-    adapter.log.silly("Currently charging with" + getWallboxPowerInWatts() + "W");
+    adapter.log.silly("Currently charging with " + getWallboxPowerInWatts() + "W");
     return getWallboxPowerInWatts() > 1000 ;
 }
 

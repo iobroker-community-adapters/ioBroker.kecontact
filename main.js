@@ -1627,15 +1627,18 @@ function checkWallboxPower() {
     }
 
     if (curr < getMinCurrent()) {
-        adapter.log.debug("not enough power for charging ...");
-        stopCharging();
+
 
         const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
         if ((Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) && (valueFor1p3pOff !== getStateInternal(stateFor1p3pCharging))){
             adapter.log.debug("no switching to default phases because of minimum time between switching" +  Sw1p3pTimestamp);
         }else if (valueFor1p3pOff !== getStateInternal(stateFor1p3pCharging)){
+            adapter.log.debug("switching phases to default as charging is stopped")
             set1p3pSwitching(valueFor1p3pOff);
+            adapter.log.debug("stop charging again, as it starts automatically after change of switch")
         }
+        adapter.log.debug("not enough power for charging ...");
+        stopCharging();
 
     } else {
         if (newValueFor1p3pSwitching !== null) {

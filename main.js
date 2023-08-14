@@ -1254,10 +1254,10 @@ function get1p3pPhases() {
             phases = getStateDefault0(stateManualPhases);
         }
         if (phases <= 0) {
-            phases 1;
+            phases = 1;
         }
         if (phases > 3) {
-            phases 3;
+            phases = 3;
         }
         adapter.log.silly("number of phases for charging of 3p would be in effect 1:" + phases + "phases");
         return phases;

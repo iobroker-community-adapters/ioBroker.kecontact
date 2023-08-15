@@ -1640,9 +1640,11 @@ function checkWallboxPower() {
         else if ((Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate))){
             adapter.log.debug("no switching to default phases because of minimum time between switching (stopCharging): " +  Sw1p3pTimestamp);
         }else {
+            adapter.log.debug("getStateInternal(stateFor1p3pCharging): " + getStateInternal(stateFor1p3pCharging) + "; valueFor1p3pOff: " + valueFor1p3pOff)
             adapter.log.debug("switching phases to default as charging is stopped")
             set1p3pSwitching(valueFor1p3pOff);
             adapter.log.debug("stop charging again, as it starts automatically after change of switch")
+
         }
         adapter.log.debug("not enough power for charging ...");
         stopCharging();

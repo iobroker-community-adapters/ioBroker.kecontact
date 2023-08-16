@@ -1436,12 +1436,12 @@ function isContinueDueToMinRegardTime(aktDate) {
     if (minRegardSeconds <= 0) {
         return false;
     }
-    let regardDate = getStateAsDate(stateRegardTimestamp);
-    if (regardDate == null) {
+    let regardTimestamp = getStateAsDate(stateRegardTimestamp);
+    if (regardTimestamp == null) {
         setStateAck(stateRegardTimestamp, aktDate.toString());
-        regardDate = aktDate;
+        regardTimestamp = aktDate;
     }
-    if ((aktDate.getTime() - regardDate.getTime()) / 1000 < minRegardSeconds) {
+    if ((aktDate.getTime() - regardTimestamp.getTime()) / 1000 < minRegardSeconds) {
         return true;
     }
     return false;
@@ -1538,6 +1538,7 @@ function checkWallboxPower() {
             }
             const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
             const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
+            const regardTimestamp = getStateAsDate(stateRegardTimestamp);
             
             if (has1P3PAutomatic()) {
                 const currWith1p = getAmperage(available, 1);
@@ -1550,7 +1551,7 @@ function checkWallboxPower() {
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum charging time: " + chargeTimestamp);
                             } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
-                                adapter.log.debug("no switching to 1 phase because of minimum regard time");
+                                adapter.log.debug("no switching to 1 phase because of minimum regard time: " + regardTimestamp);
                             } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
                                 adapter.log.debug("no switching to 1 phase because of minimum time between switching: " + Sw1p3pTimestamp);
                             } else {
@@ -1610,14 +1611,14 @@ function checkWallboxPower() {
                 }
                 if (curr < getMinCurrent()) {
                     if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                        adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session");
+                        adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session. " + chargeTimestamp);
                         curr = getMinCurrent();
                         newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }
                 }
                 if (curr < getMinCurrent()) {
                     if (isContinueDueToMinRegardTime(newDate)) {
-                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session");
+                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session. RegardTimestamp: " + regardTimestamp);
                         curr = getMinCurrent();
                         newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }

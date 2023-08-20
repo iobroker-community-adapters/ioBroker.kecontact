@@ -334,6 +334,11 @@ function onAdapterStateChange (id, state) {
     setStateAck(id, newValue);
 }
 
+
+/**
+ * Function is called at the end of the function onAdapterReady
+ * It shows the full configuration of the adapter on the config window at start and created the upd socket.
+ */
 async function main() {
 
     // Reset the connection indicator during startup
@@ -495,6 +500,11 @@ async function main() {
     });
 }
 
+
+/**
+ * Function is called at the end of main function and will add the subscribed functions
+ * of all the states of the dapter.
+ */
 function start() {
     adapter.subscribeStates("*");
 
@@ -567,10 +577,22 @@ function start() {
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);
 }
 
+/**
+ * Function which checks weahter the state given by the parameter is defined in the adapter.config page.
+ * @param {string} stateValue is a string with the value of the state.
+ * @returns {*} true if the tate is specified.
+ */
 function isForeignStateSpecified(stateValue) {
     return stateValue && stateValue !== null && typeof stateValue == "string" && stateValue !== "" && stateValue !== "[object Object]";
 }
 
+
+/**
+ * Function calls addForeignState which subscribes a foreign state to save values 
+ * in "currentStateValues"
+ * @param {string} stateValue is a string with the value of the state.
+ * @returns {boolean} returns true if the function addForeingnState was executed successful
+ */
 function addForeignStateFromConfig(stateValue) {
     if (isForeignStateSpecified(stateValue)) {
         if (addForeignState(stateValue)) {
@@ -947,7 +969,7 @@ async function handleJsonMessage(message) {
 
 /**
  * Get the minimum current for wallbox
- * @returns the  minimum amperage to start charging session 
+ * @returns {number} the  minimum amperage to start charging session 
  */
 function getMinCurrent() {
     return minAmperage;
@@ -955,7 +977,7 @@ function getMinCurrent() {
 
 /**
  * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent an stateLimitCurrent
- * @returns the  maxium allowed charging current 
+ * @returns {number} the  maxium allowed charging current 
  */
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
@@ -1023,7 +1045,7 @@ function finishChargingSession() {
 
 /**
  * Return the amount of watts used for charging. Values is calculated for TYPE_D_EDITION wallbox and returned by the box itself for others.
- * @returns the power in watts, with which the wallbox is currently charging.
+ * @returns {number} the power in watts, with which the wallbox is currently charging.
  */
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
@@ -1045,7 +1067,7 @@ function getWallboxPowerInWatts() {
  * of battery storage.
  *
  * @param {boolean} isFullPowerRequested if checked then maximum available power of battery storage will be returned
- * @returns delta to be added to surplus for available power for charging vehicle.
+ * @returns {number} delta to be added to surplus for available power for charging vehicle.
  */
 function getBatteryStoragePower(isFullPowerRequested) {
     const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
@@ -1061,7 +1083,7 @@ function getBatteryStoragePower(isFullPowerRequested) {
  * The available surplus is calculated and returned not considering the used power for charging. If configured the availabe storage power is added.
  *
  * @param {boolean} isFullBatteryStoragePowerRequested if checked then maximum available power of the battery is added
- * @returns the available surplus without considering the wallbox power currently used for charging.
+ * @returns {number} the available surplus without considering the wallbox power currently used for charging.
  */
 function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested) {
     if (isFullBatteryStoragePowerRequested == undefined) {
@@ -1074,6 +1096,10 @@ function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested) {
     return power;
 }
 
+/**
+ * The available totoal power is calculated base on EnergyMeters without wallbox power.
+ * @returns {number} the available power in watts not including the wallbox power itself.
+ */
 function getTotalPower() {
     let result = getStateDefault0(adapter.config.stateEnergyMeter1)
                + getStateDefault0(adapter.config.stateEnergyMeter2)
@@ -1087,7 +1113,6 @@ function getTotalPower() {
 
 /**
  * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit. 
- *
  * @returns the total power available 
  */
 function getTotalPowerAvailable() {
@@ -1126,7 +1151,7 @@ function isX2PhaseSwitch() {
 /**
  * set a new value for 1p/3p switching. Ignored, if not active.
  * @param {*} newValue new value for 1p/3p switch
- * @returns true, if switching is in progress, false when nothing to do
+ * @returns {boolean} true, if switching is in progress, false when nothing to do
  */
 function set1p3pSwitching(newValue) {
     if (! has1P3PAutomatic() || stepFor1p3pSwitching < 0) {
@@ -1153,7 +1178,7 @@ function set1p3pSwitching(newValue) {
 
 /**
  * Checks whether it's ok to proceed or processing should stop to wait for 1p/3p switching.
- * @returns true, if switching is in progress, false when nothing to do
+ * @returns {boolean} true, if switching is in progress, false when nothing to do
  */
 function check1p3pSwitching() {
     if (! has1P3PAutomatic() || isX2PhaseSwitch()) {
@@ -1206,7 +1231,7 @@ function check1p3pSwitching() {
 
 /**
  * Return the current for 1 phase to switch to 3 phases charging (lower when only 2 phases in effect for charging)
- * @returns current from which to switch to 3p in mA
+ * @returns {number} current from which to switch to 3p in mA
  */
 function getCurrentForSwitchTo3p() {
     return getMinCurrent() * get1p3pPhases() * 1.10;
@@ -1214,7 +1239,7 @@ function getCurrentForSwitchTo3p() {
 
 /**
  * Is adapter configured to be able to switch between 1 and 3 phases charging
- * @returns true, if it is possible to switch 1p/3p
+ * @returns {boolean} true, if it is possible to switch 1p/3p
  */
 function has1P3PAutomatic() {
     return stepFor1p3pSwitching >= 0 && (stateFor1p3pCharging !== null || isX2PhaseSwitch());
@@ -1222,7 +1247,7 @@ function has1P3PAutomatic() {
 
 /**
  * returns whether charging was switched to 1p and more than 1 phase is available for charging
- * @returns true, if charging was switched to 1p and more than 1 phase is available for charging
+ * @returns {boolean} true, if charging was switched to 1p and more than 1 phase is available for charging
  */
 function isReducedChargingBecause1p3p() {
     if (! has1P3PAutomatic() || stepFor1p3pSwitching < 0) {
@@ -1246,7 +1271,7 @@ function isReducedChargingBecause1p3p() {
 
 /**
  * Return the number of phases currently possible if no switch to 1p would be in progress
- * @returns number of phases for charging of 3p would be in effect
+ * @returns {number} number of phases for charging of 3p would be in effect
  */
 function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {

@@ -179,7 +179,9 @@ function startAdapter(options) {
     }));
 }
 
-// startup
+/**
+ * Function is called after the startup of the Adapter if its ready. It's the first function which is called.
+ */
 function onAdapterReady() {
     if (! checkConfig()) {
         adapter.log.error("start of adapter not possible due to config errors");
@@ -192,7 +194,9 @@ function onAdapterReady() {
     main();
 }
 
-//unloading
+/**
+ * Function is called if the adapter is unloaded.
+ */
 function onAdapterUnload(callback) {
     try {
         if (sendDelayTimer) {
@@ -239,8 +243,11 @@ function onAdapterUnload(callback) {
 
     callback();
 }
-
-// is called if a subscribed state changes
+/**
+ * Function is called if a subscribed state changes
+ * @param {string} id is the id of the state which changed
+ * @param {string} state is the new value of the state which is changed
+ */
 function onAdapterStateChange (id, state) {
     // Warning: state can be null if it was deleted!
     if (!id || !state) {
@@ -277,6 +284,7 @@ function onAdapterStateChange (id, state) {
         }
     }
 
+    // if the Wallbox have been disabled or enabled.
     if (id == adapter.namespace + "." + stateWallboxDisabled) {
         if (oldValue != newValue) {
             adapter.log.info("change pause status of wallbox from " + oldValue + " to " + newValue);
@@ -285,6 +293,7 @@ function onAdapterStateChange (id, state) {
         }
     }
 
+    // if PV Automatic has been disable or enabled.
     if (id == adapter.namespace + "." + statePvAutomatic) {
         if (oldValue != newValue) {
             adapter.log.info("change of photovoltaics automatic from " + oldValue + " to " + newValue);
@@ -294,6 +303,7 @@ function onAdapterStateChange (id, state) {
         }
     }
 
+    // if the state of the X1 Input has chaned.
     if (id == adapter.namespace + "." + stateX1input) {
         if (useX1switchForAutomatic) {
             if (oldValue != newValue) {
@@ -304,6 +314,7 @@ function onAdapterStateChange (id, state) {
         }
     }
 
+    // if the value for AddPower  was changes.
     if (id == adapter.namespace + "." + stateAddPower) {
         if (oldValue != newValue)
             adapter.log.info("change additional power from regard from " + oldValue + " to " + newValue);
@@ -588,7 +599,7 @@ function isForeignStateSpecified(stateValue) {
 
 
 /**
- * Function calls addForeignState which subscribes a foreign state to save values 
+ * Function calls addForeignState which subscribes a foreign state to write values 
  * in "currentStateValues"
  * @param {string} stateValue is a string with the value of the state.
  * @returns {boolean} returns true if the function addForeingnState was executed successful
@@ -605,7 +616,10 @@ function addForeignStateFromConfig(stateValue) {
     return true;
 }
 
-// check if config data is fine for adapter start
+/**
+ * Function is called by onAdapterReady. Check if config data is fine for adapter start
+ * @returns {boolean} returns true if everything is fine
+ */
 function checkConfig() {
     let everythingFine = true;
     if (adapter.config.host == "0.0.0.0" || adapter.config.host == "127.0.0.1") {

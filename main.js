@@ -381,7 +381,6 @@ async function main() {
     adapter.log.info("config underusage: " + adapter.config.underusage);
     adapter.log.info("config minTime: " + adapter.config.minTime);
     adapter.log.info("config regardTime: " + adapter.config.regardTime);
-    adapter.log.info("config min1p3pSwTime:" + adapter.config.min1p3pSwTime);
     adapter.log.info("config maxPower: " + adapter.config.maxPower);
     adapter.log.info("config stateEnergyMeter1: " + adapter.config.stateEnergyMeter1);
     adapter.log.info("config stateEnergyMeter2: " + adapter.config.stateEnergyMeter2);
@@ -671,6 +670,9 @@ function checkConfig() {
                 valueFor1pCharging = valueOn;
                 valueFor3pCharging = valueOff;
             }
+
+            min1p3pSwSec = 300;
+            adapter.log.info("Using min time between phase switching of: " +min1p3pSwSec);
         }
 
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
@@ -717,11 +719,6 @@ function checkConfig() {
             adapter.log.info("minimum regard time not speficied or too low, using default value of " + minRegardSeconds);
         } else {
             minRegardSeconds = getNumber(adapter.config.regardTime);
-        }
-        if (! adapter.config.min1p3pSwTime || adapter.config.min1p3pSwTime < 0) {
-            adapter.log.info("minimum switch time not speficied or too low, using default value of " + min1p3pSwSec);
-        } else {
-            min1p3pSwSec = getNumber(adapter.config.min1p3pSwTime);
         }
     }
     if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
@@ -1859,6 +1856,7 @@ function getStateDefaultFalse(id) {
         return false;
     return getBoolean(getStateInternal(id));
 }
+
 
 function getStateDefault0(id) {
     if (id == null)

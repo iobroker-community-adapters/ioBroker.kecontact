@@ -111,12 +111,6 @@
             "defaultValue": 0
         },
         {
-            "key": "min1p3pSwTime",
-            "label": "minimum time difference to switch between phases",
-            "inputType": "number",
-            "defaultValue": 0
-        },
-        {
             "key": "maxPower",
             "label": "maximum power consumption surplus",
             "inputType": "number",

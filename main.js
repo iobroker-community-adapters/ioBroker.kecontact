@@ -1022,7 +1022,6 @@ function stopCharging() {
 
 function regulateWallbox(milliAmpere) {
     let oldValue = 0;
-    //if (getStateDefaultFalse(stateWallboxEnabled))
     if (getStateDefault0(stateWallboxState) == 3){
         oldValue = getStateDefault0(stateWallboxCurrent);
     }
@@ -1055,13 +1054,11 @@ function finishChargingSession() {
 }
 
 /**
- * Return the amount of watts used for charging. Values is calculated for TYPE_D_EDITION wallbox and returned by the box itself for others.
+ * Return the amount of watts used for charging. Value is calculated for TYPE_D_EDITION wallbox and returned by the box itself for others.
  * @returns {number} the power in watts, with which the wallbox is currently charging.
  */
 function getWallboxPowerInWatts() {
     if (getWallboxType() == TYPE_D_EDITION) {
-        //adapter.log.silly("isVehiclePlugged:" +isVehiclePlugged() + ";  getStateDefaultFalse(stateWallboxEnabled): " + getStateDefaultFalse(stateWallboxEnabled) + "; (getStateDefault0(stateWallboxState) == 3): " + (getStateDefault0(stateWallboxState) == 3));
-        //if (isVehiclePlugged() && getStateDefaultFalse(stateWallboxEnabled) && (getStateDefault0(stateWallboxState) == 3)) {
         if (isVehiclePlugged() && (getStateDefault0(stateWallboxState) == 3)) {
 
             return getStateDefault0(stateWallboxCurrent) * voltage * getChargingPhaseCount() / 1000;
@@ -1203,7 +1200,6 @@ function check1p3pSwitching() {
     }
     switch (stepFor1p3pSwitching) {
         case 1:
-            //if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 && getStateDefaultFalse(stateWallboxEnabled) == true)) {
             if (isVehicleCharging() || (getStateDefault0(stateWallboxCurrent) > 0 )) {
                 if (retries1p3pSwitching == 0) {
                     adapter.log.info("stop charging for switch of phases ...");
@@ -1301,10 +1297,8 @@ function get1p3pPhases() {
         if (phases > 3) {
             phases = 3;
         }
-        adapter.log.silly("number of phases for charging of 3p would be in effect 1: " + phases + " phases");
         return phases;
     }
-    adapter.log.silly("number of phases for charging of 3p would be in effect 2: " + getChargingPhaseCount() + " phases");
     return getChargingPhaseCount();
 }
 
@@ -1369,7 +1363,6 @@ function getChargingPhaseCount() {
  * @returns true if the vehicle is charing based on getWallboxPowerInWatts
  */
 function isVehicleCharging() {
-    adapter.log.silly("currently charging with " + getWallboxPowerInWatts() + "W");
     return getWallboxPowerInWatts() > 1000 ;
 }
 
@@ -1491,12 +1484,11 @@ function isContinueDueToMin1p3pSwTime(aktDate) {
     if (min1p3pSwSec <= 0) {
         return false;
     }
-    let Sw1p3pDate = getStateAsDate(state1p3pSwTimestamp);
-    if (Sw1p3pDate == null) {
-        setStateAck(state1p3pSwTimestamp, aktDate.toString());
-        Sw1p3pDate = aktDate;
+    let sw1p3pDate = getStateAsDate(state1p3pSwTimestamp);
+    if (sw1p3pDate == null) {
+        return false;
     }
-    if ((aktDate.getTime() - Sw1p3pDate.getTime()) / 1000 < min1p3pSwSec) {
+    if ((aktDate.getTime() - sw1p3pDate.getTime()) / 1000 < min1p3pSwSec) {
         return true;
     }
     return false;

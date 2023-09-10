@@ -67,7 +67,7 @@ const minAmperageDefault = 6000;   // default minimum amperage to start charging
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
-let min1p3pSwSec         = 0;      // minimum time betwenn phase switching 
+let min1p3pSwSec         = 0;      // minimum time betwenn phase switching
 let isMaxPowerCalculation = false; // switch to show if max power calculation is active
 let valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
@@ -246,7 +246,7 @@ function onAdapterUnload(callback) {
 /**
  * Function is called if a subscribed state changes
  * @param {string} id is the id of the state which changed
- * @param {string} state is the new value of the state which is changed
+ * @param state is the new value of the state which is changed
  */
 function onAdapterStateChange (id, state) {
     // Warning: state can be null if it was deleted!
@@ -598,7 +598,7 @@ function isForeignStateSpecified(stateValue) {
 
 
 /**
- * Function calls addForeignState which subscribes a foreign state to write values 
+ * Function calls addForeignState which subscribes a foreign state to write values
  * in "currentStateValues"
  * @param {string} stateValue is a string with the value of the state.
  * @returns {boolean} returns true if the function addForeingnState was executed successful
@@ -980,7 +980,7 @@ async function handleJsonMessage(message) {
 
 /**
  * Get the minimum current for wallbox
- * @returns {number} the  minimum amperage to start charging session 
+ * @returns {number} the  minimum amperage to start charging session
  */
 function getMinCurrent() {
     return minAmperage;
@@ -988,7 +988,7 @@ function getMinCurrent() {
 
 /**
  * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent an stateLimitCurrent
- * @returns {number} the  maxium allowed charging current 
+ * @returns {number} the  maxium allowed charging current
  */
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
@@ -1025,7 +1025,7 @@ function regulateWallbox(milliAmpere) {
     if (getStateDefault0(stateWallboxState) == 3){
         oldValue = getStateDefault0(stateWallboxCurrent);
     }
-    
+
     if (milliAmpere != oldValue) {
         if (milliAmpere == 0) {
             adapter.log.info("stop charging");
@@ -1120,8 +1120,8 @@ function getTotalPower() {
 
 
 /**
- * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit. 
- * @returns the total power available 
+ * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit.
+ * @returns the total power available
  */
 function getTotalPowerAvailable() {
     // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
@@ -1484,7 +1484,7 @@ function isContinueDueToMin1p3pSwTime(aktDate) {
     if (min1p3pSwSec <= 0) {
         return false;
     }
-    let sw1p3pDate = getStateAsDate(state1p3pSwTimestamp);
+    const sw1p3pDate = getStateAsDate(state1p3pSwTimestamp);
     if (sw1p3pDate == null) {
         return false;
     }
@@ -1493,9 +1493,6 @@ function isContinueDueToMin1p3pSwTime(aktDate) {
     }
     return false;
 }
-
-
-
 
 
 function checkWallboxPower() {
@@ -1567,7 +1564,7 @@ function checkWallboxPower() {
             const chargeTimestamp = getStateAsDate(stateChargeTimestamp);
             const Sw1p3pTimestamp = getStateAsDate(state1p3pSwTimestamp);
             const regardTimestamp = getStateAsDate(stateRegardTimestamp);
-            
+
             if (has1P3PAutomatic()) {
                 const currWith1p = getAmperage(available, 1);
                 if (curr != currWith1p) {
@@ -1612,7 +1609,7 @@ function checkWallboxPower() {
                     }
                 }
             }
-            
+
             const addPower = getStateDefault0(stateAddPower);
             if (curr < getMinCurrent() && addPower > 0) {
                 // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
@@ -1672,12 +1669,11 @@ function checkWallboxPower() {
 
         if (currentSwitch === valueFor1p3pOff) {
             adapter.log.silly("switch is already in valueFor1p3pOff");
-        }        
+        }
         else if ((Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate))){
             adapter.log.debug("no switching to default phases because of minimum time between switching (stopCharging): " +  Sw1p3pTimestamp);
         }else {
-            adapter.log.debug("switching phases to default as charging is stopped")
-            set1p3pSwitching(valueFor1p3pOff);
+            adapter.log.debug("switching phases to default as charging is stopped");            set1p3pSwitching(valueFor1p3pOff);
         }
         adapter.log.debug("not enough power for charging ...");
         stopCharging();
@@ -2044,7 +2040,8 @@ function processFirmwarePage(err, stat, body) {
             adapter.log.debug(body);
         }
     } else {
-        adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
+        // disabled due to chenges on webpage of Keba
+        // adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
     }
     return true;
 }

@@ -1093,10 +1093,7 @@ function getBatteryStoragePower(isFullPowerRequested) {
  * @param {boolean} isFullBatteryStoragePowerRequested if checked then maximum available power of the battery is added
  * @returns {number} the available surplus without considering the wallbox power currently used for charging.
  */
-function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested) {
-    if (isFullBatteryStoragePowerRequested == undefined) {
-        isFullBatteryStoragePowerRequested = false;
-    }
+function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested = false) {
     let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard) + getBatteryStoragePower(isFullBatteryStoragePowerRequested);
     if (adapter.config.statesIncludeWallbox) {
         power += getWallboxPowerInWatts();
@@ -2036,12 +2033,12 @@ function processFirmwarePage(err, stat, body) {
                 adapter.log.warn(prefix + "no firmware found");
             }
         } else {
-            adapter.log.warn(prefix + "no section found");
-            adapter.log.debug(body);
+            // disabled due to chenges on webpage of Keba
+            //adapter.log.warn(prefix + "no section found");
+            //adapter.log.debug(body);
         }
     } else {
-        // disabled due to chenges on webpage of Keba
-        // adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
+        adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
     }
     return true;
 }

@@ -671,7 +671,7 @@ function checkConfig() {
                 valueFor3pCharging = valueOff;
             }
 
-            min1p3pSwSec = 300;
+            min1p3pSwSec = 305;
             adapter.log.info("Using min time between phase switching of: " +min1p3pSwSec);
         }
 

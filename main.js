@@ -1022,7 +1022,7 @@ function stopCharging() {
 
 function regulateWallbox(milliAmpere) {
     let oldValue = 0;
-    if (getStateDefaultFalse(stateWallboxEnabled)) {
+    if ((getStateDefaultFalse(stateWallboxEnabled))||(getStateDefault0(stateWallboxState) == 3)) {
         oldValue = getStateDefault0(stateWallboxCurrent);
     }
 

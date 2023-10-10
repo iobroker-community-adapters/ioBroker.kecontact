@@ -1,4 +1,13 @@
 # Older changes
+## 1.5.0 (2022-11-01)
+* (Sneak-L8) minor fixes from adapter check
+* (Sneak-L8) using Weblate for translations
+* (Sneak-L8) update power and amperage value immediately for better calculation
+* (Sneak-L8) fix description of authreq state
+* (Sneak-L8) handle message at wallbox startup
+* (Sneak-L8) catch error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C)
+* (Sneak-L8) update url and regex to Keba firmware
+
 ## 1.4.1 (2022-05-30)
 * (Sneak-L8) separate states for charging and discharging battery storage
 * (Sneak-L8) additional states to (de)authorize or unlock charging station and set date/time

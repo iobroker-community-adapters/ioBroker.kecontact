@@ -99,8 +99,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.0.2 (2023-10-10)
 * (Sneak-L8) default value for minimum regard time (180 seconds)
 * (Sneak-L8) fix calculation of phases for reduced charging
 * (chrisko) added minimum timer to switch between phases if 1p/3p charging is used.
@@ -123,15 +122,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ### 1.5.1 (2022-11-02)
 * (Sneak-L8) update release script to v3
-
-### 1.5.0 (2022-11-01)
-* (Sneak-L8) minor fixes from adapter check
-* (Sneak-L8) using Weblate for translations
-* (Sneak-L8) update power and amperage value immediately for better calculation
-* (Sneak-L8) fix description of authreq state
-* (Sneak-L8) handle message at wallbox startup
-* (Sneak-L8) catch error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C)
-* (Sneak-L8) update url and regex to Keba firmware
 
 ## Legal
 

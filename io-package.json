@@ -183,7 +183,7 @@
         "delta": 0,
         "underusage": 500,
         "minTime": 300,
-        "regardTime": 0,
+        "regardTime": 180,
         "min1p3pSwSTime": 0,
         "maxPower": 0,
         "stateEnergyMeter1": "",

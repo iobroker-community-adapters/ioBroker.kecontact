@@ -1,1216 +1,1217 @@
 {
-  "common": {
-    "name": "kecontact",
-    "version": "2.0.2",
-    "news": {
-      "2.0.2": {
-        "en": "default value for minimum regard time (180 seconds)\nfix calculation of phases for reduced charging\nadded minimum timer to switch between phases if 1p/3p charging is used.\ndisable firmware check for c-series due to changes on webpage of Keba\nsometimes 1p/3p switch was not working correctly (repeatedly \"stop charging fpr switch of phases...\")",
-        "de": "standardwert für minimale betrachtungszeit (180 sekunden)\nfestberechnung von phasen für reduziertes aufladen\nein minimaler timer hinzugefügt, um zwischen phasen zu wechseln, wenn 1p/3p geladen wird.\ndeaktivieren Sie Firmware-Check für c-series aufgrund von Änderungen auf der Webseite von Keba\nmanchmal funktionierte 1p/3p-schalter nicht korrekt (wiederholt \"stopp-lade-fpr-schalter von phasen\")",
-        "ru": "значение по умолчанию для минимального количества времени (180 секунд)\nисправить расчет фаз для снижения зарядки\nдобавлен минимальный таймер, чтобы переключаться между фазами, если используется зарядка 1p/3p.\nотключить проверку прошивки для c-серий из-за изменений на веб-странице Keba\nиногда 1p/3p переключатель не работал правильно (повторно \"стоп зарядки fpr переключатель фаз\")",
-        "pt": "valor padrão para o tempo mínimo de consideração (180 segundos)\nfixar cálculo de fases para carregamento reduzido\nadicionado temporizador mínimo para alternar entre fases se 1p/3p é usado.\ndesativar a verificação de firmware para a série c devido a alterações na página web de Keba\nàs vezes 1p/3p switch não estava funcionando corretamente (repetidamente \"parar de carregar fpr interruptor de fases\")",
-        "nl": "defecte waarde voor minimum betrekkingstijd (180 seconden)\nvermindering van fases voor verminderde aanklacht\ntoegevoegd minimum timer om te wisselen tussen fases als 1p/3p aanklacht wordt gebruikt.\naDRAAG firmaware check voor c-series vanwege de webpagina van Keba\nsoms werkte 1p/3p schakelaar niet goed",
-        "fr": "valeur par défaut pour le temps de regard minimal (180 secondes)\ncalcul des phases de charge réduite\nle minuteur minimum ajouté pour passer entre les phases si la charge 1p/3p est utilisée.\ndésactiver la vérification de firmware pour c-series en raison de modifications sur la page Web de Keba\nparfois, l'interrupteur 1p/3p ne fonctionnait pas correctement (repérément \"arrêt du commutateur fpr des phases\")",
-        "it": "valore predefinito per il tempo minimo di riferimento (180 secondi)\ncalcolo corretto delle fasi di ricarica ridotta\ntimer minimo aggiunto per passare tra le fasi se viene utilizzata la ricarica 1p/3p.\ndisabilitare il controllo firmware per le serie C a causa delle modifiche sulla pagina web di Keba\na volte l'interruttore 1p/3p non funziona correttamente (ripettivamente \"arresto di carica fpr interruttore di fasi\")",
-        "es": "valor predeterminado para el tiempo mínimo de consideración (180 segundos)\ncálculo de las fases de carga reducida\nañadido temporizador mínimo para cambiar entre fases si se utiliza la carga de 1p/3p.\ncomprobación de firmware deshabilitado para c-series debido a cambios en la página web de Keba\na veces el interruptor de 1p/3p no funcionaba correctamente (repetidamente \"stop load fpr switch of phases\")",
-        "pl": "domyślna wartość dla minimum czasu (180 sekund)\nobliczenia fazy zredukowania obciążenia\ndodano minimalny czas ładowania pomiędzy fazami, jeżeli stosuje się 1p/3p.\nzdyskwalifikowana kontrola oprogramowania dla seriali C ze względu na zmiany strony internetowej Keba\nczasami przełącznik 1p/3p nie pracował prawidłowo (odpowiednio \"przełączanie fpru\"",
-        "uk": "значення за замовчуванням для мінімального часу (180 секунд)\nфіксувати розрахунок фази для зменшення зарядки\nдодано мінімальний таймер для перемикання між фазами, якщо використовується зарядка 1p/3p.\nперевірити дискримінацію прошивки на c-series через зміни на веб-сторінці Кеба\nіноді 1p/3p перемикач не працює належним чином (повторно \"стояча зарядка fpr перемикач фази\")",
-        "zh-cn": "最低时间(180秒)的拖欠值\nf 固定计算减税阶段\n如果使用了1p/3p charing,则在各个阶段之间增加最低时间。.\n由于Keba网页上的变化,难以对面包进行系统检查\n有时候,1p/3p的转换没有正确地进行(反而“对阶段的投机”)。"
-      },
-      "2.0.1": {
-        "en": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "de": "unterstützung für Company Car Wall Box MID - GREEN EDITION (Sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) und PV-Edition (Sentry IOBROKER-KECONTACT-1M)",
-        "ru": "поддержка компании Car Wall Box MID - GREEN EDITION (центр IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) и PV-Edition (центр IOBROKER-KECONTACT-1M)",
-        "pt": "suporte para a caixa de parede de carro da empresa MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "nl": "quality over Quantity (QoQ) Releases Vertaling:",
-        "fr": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "it": "supporto per l'azienda Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "es": "soporte para la empresa caja de la pared MID - EDICIÓN GREEN (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) y la edición PV (sentry IOBROKER-KECONTACT-1M)",
-        "pl": "wsparcie dla spółki Car Wall Box MID – GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) i PV-Edition (wejście IOBROKER-KECONTACT-1M)",
-        "uk": "підтримка для компанії Car Wall Box MID - ЗЕЛЕНИЙ EDITION (серія IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) та PV-редагування (серія IOBROKER-KECONTACT-1M)",
-        "zh-cn": "b. 支持Car隔离墙箱MID - GREEN EDI(化学公司IPOKER-KECONTACT-1K & IPOKER-KECONTACT-1N)和聚乙烯-Edition(工业公司IPOKER-KECONTACT-1M)"
-      },
-      "2.0.0": {
-        "en": "support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available) including Keba KeContact S10\nminimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value\nnew switch to limit battery storage support only to hold minimum charging power\ncatch error when requesting firmware page (sentry IOBROKER-KECONTACT-1H)\nRFID tag and class where not updated in channel \"statitics\" when no charging sessions were obtained\nadded new Keba model Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
-        "de": "unterstützung für 1p/3p-Ladung (Startladung mit 1 Phase und Schalter auf 3 Phasen, wenn genügend Überschuss vorhanden) einschließlich Keba KeContact S10\nmindestleistung erlaubt 5A, weil einige Fahrzeuge und KeContact (unbesetzt) diesen Wert zulassen\nneuer schalter zur begrenzung der batteriespeicherunterstützung nur für minimale ladeleistung\nfehler beim Anfordern der Firmware-Seite (Einträge IOBROKER-KECONTACT-1H)\nRFID-Tag und Klasse, in der die Kanal-Stertitik nicht aktualisiert wurde, wenn keine Ladesitzungen erhalten wurden\nneue Keba Modell Company Car Wall Box MID (Sentry IOBROKER-KECONTACT-1K)",
-        "ru": "поддержка для 1p/3p-образования (начните зарядку с 1 фазой и переключите на 3 фазы, когда достаточно излишки доступны) включая Keba KeContact S10\nминимальная ампература, разрешенная 5A, потому что некоторые транспортные средства и KeContact (недокументированные) позволяют это значение\nновый переключатель для ограничения поддержки хранения батареи только для поддержания минимальной зарядки мощности\nпоймать ошибку при запросе страницы прошивки (sentry IOBROKER-KECONTACT-1H)\nRFID тег и класс, где не обновляется в статистике канала, когда не были получены зарядные сессии\nдобавлена новая модель Keba Компания Автомобильная настенная коробка MID (sentry IOBROKER-KECONTACT-1K)",
-        "pt": "suporte para 1p/3p-carga (recarga de início com 1 fase e mudar para 3 fases quando bastante excedente disponível) incluindo Keba KeContact S10\namperagem mínima permitida a 5A porque alguns veículos e KeContact (não documentado) permitem este valor\nnovo interruptor para limitar o suporte de armazenamento da bateria apenas para segurar o poder de carregamento mínimo\nerro de captura ao solicitar a página de firmware (sentido IOBROKER-KECONTACT-1H)\nTag RFID e classe onde não atualizado em estatísticas de canal quando nenhuma sessão de carregamento foi obtida\nadicionado novo modelo Keba Empresa Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
-        "nl": "quality over Quantity (QoQ) Releases Vertaling:\nminimale amperage toegestaan aan 5A omdat sommige voertuigen en KeContact (undocumented) toestaan dat deze waarde\nnieuwe schakel naar beperkte opslag ondersteuning, alleen om minimumlading te behouden\nvang fouten als je stevigware pagina vraagt\nRFID-tag en klasse waar niet geüpload werd in kanalen statistieken toen er geen aanklacht werd ingediend\nvoegde nieuwe Keba model toe Compagnie Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
-        "fr": "support pour 1p/3p-charge (démarrage avec 1 phase et passer à 3 phases lorsque le surplus est suffisant) y compris Keba KeContact S10\namperage minimum autorisé à 5A parce que certains véhicules et KeContact (sans papier) permettent cette valeur\nnouveau commutateur pour limiter le support de stockage de la batterie seulement pour maintenir la puissance de charge minimale\nerreur de capture lors de la demande de page de micrologiciel (entrée IOBROKER-KECONTACT-1H)\nTag RFID et classe où pas mis à jour dans les statitics de canal lorsque aucune séance de charge n'a été obtenue\nnouveau modèle Keba Cadran de la société MID (entrée IOBROKER-KECONTACT-1K)",
-        "it": "supporto per 1p/3p-charging (avviamento di carica con 1 fase e passaggio a 3 fasi quando abbastanza surplus disponibile) tra cui Keba KeContact S10\namperaggio minimo consentito a 5A perché alcuni veicoli e KeContact (non documentato) permettono questo valore\nnuovo interruttore per limitare il supporto di memorizzazione della batteria solo per mantenere la carica minima\nerrore di cattura quando si richiede la pagina del firmware (sentenza IOBROKER-KECONTACT-1H)\nRFID tag e classe in cui non è stato aggiornato nelle statistiche del canale quando non sono state ottenute sessioni di ricarica\nnuovo modello Keba Azienda Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
-        "es": "soporte para 1p/3p-charging (iniciar carga con 1 fase y cambiar a 3 fases cuando hay suficiente superávit disponible) incluyendo Keba KeContact S10\nmínimo amperaje permitido a 5A porque algunos vehículos y KeContact (indocumentados) permiten este valor\nnuevo interruptor para limitar el soporte de almacenamiento de batería sólo para mantener la potencia de carga mínima\nerror de captura al solicitar la página de firmware (sentry IOBROKER-KECONTACT-1H)\nEtiqueta RFID y clase donde no se actualizaron en los cálculos del canal cuando no se obtuvieron sesiones de carga\nnuevo modelo Keba Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
-        "pl": "poparcie dla ładowania 1p/3p (startowanie z 1 fazą i przełączanie się do 3 faz, w tym Keba KeContact S1010\nminimalne amperowanie pozwalało na 5A, ponieważ niektóre pojazdy i KeContact (nieudokumentowane) pozwalają ta wartość\nnowe przełączniki, aby ograniczyć składowanie baterii tylko do zatrzymania minimalnego ładowania mocy\nbłędne błędy, gdy żądanie strony oprogramowania (wjazdy IOBROKER-KECONTACT-1H)\nTag RFID i klasa, gdzie nie zaktualizowano w statystykach kanałowych, gdy nie uzyskano sesji ładowania\nnowy model Keba Car Wall Box MID (ang.)",
-        "uk": "підтримка 1p/3p-charging (зарядка запуску з 1 фазою і перемикачем на 3 фази, коли достатньо надлишку, доступні) включаючи Keba KeЗв'язатися з S10\nмінімальний ампераж до 5А, тому що деякі транспортні засоби та KeЗв'язатися з нами\nновий вимикач для обмеження підтримки зберігання акумулятора тільки для забезпечення мінімальної зарядки\nзловживання помилки при запиті на сторінку прошивки (серія IOBROKER-KECONTACT-1H)\nRFID теги і клас, де не оновлено в каналі ститетики, коли не було отримано зарядки\nдодано нову модель Keba Автомобільна автомобільна стінова коробка MID (серія IOBROKER-KECONTACT-1K)",
-        "zh-cn": "支助1p/3p-charing(在有足够盈余的情况下进行分期付款并转换至3阶段),包括Keba KeContact S1010\n由于某些车辆和KeContact(无证件)允许至少允许5A,这就具有这种价值。\n限制电池储存支助的新的转用只是持有最低电力\n当要求定本页(化学文摘社-KECONTACT-1H)时发现错误\n在没有获得慈善会议时,开发协会的特色和阶级没有更新信息。\n增加新的凯巴模式 卡里夫·米格尔·米纳(工业公司)"
-      },
-      "1.5.2": {
-        "en": "fix error in release script",
-        "de": "fehler im release-skript beheben",
-        "ru": "исправить ошибку в скрипте релиза",
-        "pt": "corrigir erro no script de lançamento",
-        "nl": "vertaling:",
-        "fr": "corriger l'erreur dans le script de sortie",
-        "it": "errore di correzione nello script di rilascio",
-        "es": "corregir error en script de liberación",
-        "pl": "naprawić błąd w wydaniu scriptu",
-        "uk": "виправлено помилку в скрипті релізу",
-        "zh-cn": "f 释放说明的错误"
-      },
-      "1.5.1": {
-        "en": "update release script to v3",
-        "de": "update release script to v3",
-        "ru": "обновление скрипт для v3",
-        "pt": "atualizar script de lançamento para v3",
-        "nl": "vertaling:",
-        "fr": "mettre à jour le script de version v3",
-        "it": "aggiornamento script di rilascio a v3",
-        "es": "script de actualización a v3",
-        "pl": "aktualizacja",
-        "uk": "скрипт релізу оновлення до v3",
-        "zh-cn": "最新资料"
-      },
-      "1.5.0": {
-        "en": "update power values immediately, catch the message at wallbox startup, catch the error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C), update url and regex to Keba firmware, using Weblate for translations",
-        "de": "aktualisieren Sie die Leistungswerte sofort, fangen Sie die Nachricht bei wallbox Start, fangen Sie den Fehler, wenn UDP-Verbindung verloren gegangen ist (sentry IOBROKER-KECONTACT-1C,) aktualisieren Sie url und regex auf Keba firmware, mit Weblate für Übersetzungen",
-        "ru": "обновить значения мощности немедленно, поймать сообщение на запуске настенного ящика, поймать ошибку, когда соединение UDP потеряло (sentry IOBROKER-KECONTACT-1C,) обновить URL и regex в прошивку Keba, используя Weblate для переводов",
-        "pt": "atualizar os valores de energia imediatamente, pegar a mensagem na inicialização da wallbox, pegar o erro quando a conexão UDP foi perdida (sente IOBROKER-KECONTACT-1C,) atualizar url e regex para firmware Keba, usando Weblate para traduções",
-        "nl": "vertaling:",
-        "fr": "mettre à jour les valeurs de puissance immédiatement, capturer le message lors du démarrage de la boîte murale, attraper l'erreur lorsque la connexion UDP s'est perdue (entrée IOBROKER-KECONTACT-1C,) mettre à jour l'url et le regex au firmware Keba, en utilisant Weblate pour les traductions",
-        "it": "aggiornare i valori di potenza immediatamente, catturare il messaggio all'avvio della casella di parete, catturare l'errore quando la connessione UDP si è persa (sentazione IOBROKER-KECONTACT-1C,) aggiornare url e regex al firmware Keba, utilizzando Weblate per le traduzioni",
-        "es": "actualizar los valores de potencia inmediatamente, coger el mensaje en el inicio de Wallbox, coger el error cuando la conexión UDP se perdió (sentry IOBROKER-KECONTACT-1C,) actualizar url y regex a Keba firmware, utilizando Weblate para traducciones",
-        "pl": "zaktualizowane wartości mocy natychmiast przechwytują wiadomość na początku skrzynki, przechwytując błędy, gdy UDP straciło (wjazd IOBROKER-KECONTACT-1C), aktualizując url i regex to Keba firmware, używając Weblate dla tłumaczeń",
-        "uk": "оновлюйте значення живлення відразу, зловіть повідомлення при запуску стінових скриньок, зловіть помилку, коли UDP з'явився втрачений (сентри IOBROKER-KECONTACT-1C,) оновлення ви URL та regex до прошивки Keba, використовуючи Weblate для перекладів",
-        "zh-cn": "立即更新电力价值,在墙壁开端上传递信息,在联发处丢失时(圣赫勒拿公司IPOKER-KECONTACT-1C),用电网更新Surl和Cregex对Keba公司的认识。"
-      },
-      "1.4.1": {
-        "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time, fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)",
-        "de": "getrennte States für Lade-/Entladewerte eines Batteriespeichers, zusätzliche States um sich an der Wallbox zu (de)authorosieren, entsperren und Datum/Zeit zu setzen, Fix für unsubscribe foreign state (sentry IOBROKER-KECONTACT-10)",
-        "ru": "отдельные состояния для зарядки и разрядки аккумулятора, дополнительные состояния для (де)авторизации или разблокировки зарядной станции и установки даты/времени, исправление отписки от посторонних состояний (сентри IOBROKER-KECONTACT-10)",
-        "pt": "estados separados para carregar e descarregar o armazenamento da bateria, estados adicionais para (des)autorizar ou desbloquear a estação de carregamento e definir data/hora, corrigir estados estrangeiros de cancelamento de assinatura (sentinela IOBROKER-KECONTACT-10)",
-        "nl": "aparte statussen voor opladen en ontladen batterijopslag, extra statussen om laadstation te (de)autoriseren of te ontgrendelen en datum/tijd in te stellen, afmelden buitenlandse staten te corrigeren (sentry IOBROKER-KECONTACT-10)",
-        "fr": "états séparés pour charger et décharger le stockage de la batterie, états supplémentaires pour (dés) autoriser ou déverrouiller la station de charge et régler la date/l'heure, corriger les états étrangers de désabonnement (sentry IOBROKER-KECONTACT-10)",
-        "it": "stati separati per caricare e scaricare la batteria di stoccaggio, stati aggiuntivi per (de)autorizzare o sbloccare la stazione di ricarica e impostare data/ora, correggere stati stranieri che annullano l'iscrizione (sentry IOBROKER-KECONTACT-10)",
-        "es": "estados separados para cargar y descargar el almacenamiento de la batería, estados adicionales para (des)autorizar o desbloquear la estación de carga y establecer la fecha/hora, corregir la cancelación de la suscripción de estados extranjeros (entrada IOBROKER-KECONTACT-10)",
-        "pl": "oddzielne stany ładowania i rozładowywania akumulatora, dodatkowe stany do (de)autoryzacji lub odblokowania stacji ładującej oraz ustawienia daty/godziny, naprawianie wypisywania stanów obcych (sentry IOBROKER-KECONTACT-10)",
-        "zh-cn": "用于充电和放电电池存储的单独状态，用于（取消）授权或解锁充电站并设置日期/时间的附加状态，修复取消订阅的外国状态（哨兵 IOBROKER-KECONTACT-10）",
-        "uk": "окремі стани для заряджання та розряджання акумулятора, додаткові стани для (де)авторизації або розблокування зарядної станції та встановлення дати/часу, виправлення скасування підписки за кордоном (сторожовий IOBROKER-KECONTACT-10)"
-      }
-    },
-    "titleLang": {
-      "en": "Control Keba KeContact P20 or P30 or BMW i wallbox",
-      "de": "Keba KeContact P20 oder P30 oder BMW i Wallbox steuern",
-      "ru": "Управление Keba KeContact P20 или P30 или настенный ящик BMW i",
-      "pt": "Controle Keba KeContact P20 ou P30 ou caixa de embutir BMW i",
-      "nl": "Bedien Keba KeContact P20 of P30 of BMW i wallbox",
-      "fr": "Commande Keba KeContact P20 ou P30 ou BMW i wallbox",
-      "it": "Controlla Keba KeContact P20 o P30 o BMW i wallbox",
-      "es": "Control Keba KeContact P20 o P30 o caja de empotrar BMW i",
-      "pl": "Sterowanie Keba KeContact P20 lub P30 lub BMW i wallbox",
-      "zh-cn": "控制 Keba KeContact P20 或 P30 或 BMW i wallbox",
-      "uk": "Керуйте Keba KeContact P20 або P30 або BMW i wallbox"
-    },
-    "desc": {
-      "en": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
-      "de": "Steuern Sie Ihre Ladestation und nutzen Sie die automatische Regelung z.B. ",
-      "ru": "Управляйте своей зарядной станцией и используйте автоматическое регулирование, например ",
-      "pt": "Controle sua estação de carregamento e use a regulação automática, por exemplo ",
-      "nl": "Bedien uw laadstation en gebruik automatische regeling, b.v. ",
-      "fr": "Contrôlez votre borne de recharge et utilisez la régulation automatique, par ex. ",
-      "it": "Controlla la tua stazione di ricarica e usa la regolazione automatica, ad es. ",
-      "es": "Controle su estación de carga y utilice la regulación automática, p. Ej. ",
-      "pl": "Kontroluj swoją stację ładowania i korzystaj z automatycznej regulacji m.in. ",
-      "zh-cn": "控制您的充电站并使用自动调节，例如",
-      "uk": "Керуйте своєю зарядною станцією та використовуйте автоматичне регулювання, напр. щоб зарядити свій автомобіль від надлишку фотоелектричної енергії"
-    },
-    "authors": [
-      "UncleSamSwiss <samuel.weibel@gmail.com>",
-      "Volker Sengler <git@sengler.de>"
-    ],
-    "keywords": [
-      "KeContact",
-      "P30",
-      "P20",
-      "BMW",
-      "KEBA",
-      "wallbox",
-      "emobility",
-      "e-mobility"
-    ],
-    "license": "Apache-2.0",
-    "platform": "Javascript/Node.js",
-    "icon": "kecontact.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.kecontact/master/admin/kecontact.png",
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "hardware",
-    "compact": true,
-    "connectionType": "local",
-    "dataSource": "poll",
-    "materialize": true,
-    "supportCustoms": false,
-    "dependencies": [
-      {
-        "js-controller": ">=2.0.0"
-      }
-    ],
-    "plugins": {
-      "sentry": {
-        "dsn": "https://01d409e4ecea470485101a0f53720ee5@sentry.iobroker.net/139"
-      }
-    }
-  },
-  "native": {
-    "host": "0.0.0.0",
-    "passiveMode": true,
-    "pollInterval": 30,
-    "loadChargingSessions": false,
-    "useX1forAutomatic": false,
-    "stateRegard": "",
-    "stateSurplus": "",
-    "statesIncludeWallbox": true,
-    "1p3pViaX2": false,
-    "state1p3pSwitch": "",
-    "1p3pSwitchIsNO": true,
-    "stateBatteryCharging": "",
-    "stateBatteryDischarging": "",
-    "stateBatterySoC": "",
-    "batteryPower": 0,
-    "batteryMinSoC": 10,
-    "limitBatteryStoragePower": true,
-    "minAmperage": 6000,
-    "addPower": 0,
-    "delta": 0,
-    "underusage": 500,
-    "minTime": 300,
-    "regardTime": 180,
-    "min1p3pSwSTime": 0,
-    "maxPower": 0,
-    "stateEnergyMeter1": "",
-    "stateEnergyMeter2": "",
-    "stateEnergyMeter3": "",
-    "wallboxNotIncluded": false
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "name": "is wallbox connected?",
-        "type": "boolean",
-        "role": "indicator.connected",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "product",
-      "type": "state",
-      "common": {
-        "name": "Product ID",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false,
-        "desc": "Model name (variant)"
-      },
-      "native": {
-        "udpKey": "Product"
-      }
-    },
-    {
-      "_id": "serial",
-      "type": "state",
-      "common": {
-        "name": "Serial Number",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "Serial"
-      }
-    },
-    {
-      "_id": "x2phaseSource",
-      "type": "state",
-      "common": {
-        "name": "X2 phaseSwitch source",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": true
-      },
-      "native": {
-        "udpKey": "X2 phaseSwitch source"
-      }
-    },
-    {
-      "_id": "x2phaseSwitch",
-      "type": "state",
-      "common": {
-        "name": "X2 phaseSwitch",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": true
-      },
-      "native": {
-        "udpKey": "X2 phaseSwitch"
-      }
-    },
-    {
-      "_id": "firmware",
-      "type": "state",
-      "common": {
-        "name": "Firmware Version",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "Firmware"
-      }
-    },
-    {
-      "_id": "COM-module",
-      "type": "state",
-      "common": {
-        "name": "COM-Module present",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "COM-module"
-      }
-    },
-    {
-      "_id": "backend",
-      "type": "state",
-      "common": {
-        "name": "Backend communication present",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "Backend"
-      }
-    },
-    {
-      "_id": "timeQ",
-      "type": "state",
-      "common": {
-        "name": "Time Sync Quality",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "timeQ"
-      }
-    },
-    {
-      "_id": "DIP-Sw1",
-      "type": "state",
-      "common": {
-        "name": "Hex Value of Dip Switch 1 Setting",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "DIP-Sw1"
-      }
-    },
-    {
-      "_id": "DIP-Sw2",
-      "type": "state",
-      "common": {
-        "name": "Hex Value of Dip Switch 2 Setting",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {
-        "udpKey": "DIP-Sw2"
-      }
-    },
-    {
-      "_id": "state",
-      "type": "state",
-      "common": {
-        "name": "State",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "desc": "Current state of the wallbox"
-      },
-      "native": {
-        "udpKey": "State"
-      }
-    },
-    {
-      "_id": "error1",
-      "type": "state",
-      "common": {
-        "name": "Error 1",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "desc": "Detail code for state 4; exceptions see FAQ on www.kecontact.com"
-      },
-      "native": {
-        "udpKey": "Error1"
-      }
-    },
-    {
-      "_id": "error2",
-      "type": "state",
-      "common": {
-        "name": "Error 2",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "desc": "Detail code for state 4 exception #6 see FAQ on www.kecontact.com"
-      },
-      "native": {
-        "udpKey": "Error2"
-      }
-    },
-    {
-      "_id": "plug",
-      "type": "state",
-      "common": {
-        "name": "Plug",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "desc": "Current condition of the loading connection"
-      },
-      "native": {
-        "udpKey": "Plug"
-      }
-    },
-    {
-      "_id": "enableSys",
-      "type": "state",
-      "common": {
-        "name": "Enable System",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false,
-        "desc": "Enable state for charging (contains Enable input, RFID, UDP,..)."
-      },
-      "native": {
-        "udpKey": "Enable sys"
-      }
-    },
-    {
-      "_id": "enableUser",
-      "type": "state",
-      "common": {
-        "name": "Enable User",
-        "type": "boolean",
-        "role": "switch",
-        "read": true,
-        "write": true,
-        "desc": "Enable condition via UDP."
-      },
-      "native": {
-        "udpKey": "Enable user"
-      }
-    },
-    {
-      "_id": "maxCurrent",
-      "type": "state",
-      "common": {
-        "name": "Maximum Current",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Current preset value via Control pilot in milliampere."
-      },
-      "native": {
-        "udpKey": "Max curr"
-      }
-    },
-    {
-      "_id": "maxCurrentPercent",
-      "type": "state",
-      "common": {
-        "name": "Maximum Current Percent",
-        "type": "number",
-        "role": "value",
-        "unit": "%",
-        "read": true,
-        "write": false,
-        "desc": "Current preset value via Control pilot in % of the PWM value."
-      },
-      "native": {
-        "udpKey": "Max curr %",
-        "udpMultiplier": 0.1
-      }
-    },
-    {
-      "_id": "currentHardware",
-      "type": "state",
-      "common": {
-        "name": "Maximum Current Hardware",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Highest possible charging current of the charging connection."
-      },
-      "native": {
-        "udpKey": "Curr HW"
-      }
-    },
-    {
-      "_id": "currentUser",
-      "type": "state",
-      "common": {
-        "name": "Current User",
-        "type": "number",
-        "role": "level",
-        "unit": "mA",
-        "read": true,
-        "write": true,
-        "desc": "Current preset value of the user via UDP; Default = 63000mA."
-      },
-      "native": {
-        "udpKey": "Curr user"
-      }
-    },
-    {
-      "_id": "currentTimer",
-      "type": "state",
-      "common": {
-        "name": "Current for Timer",
-        "type": "number",
-        "role": "level",
-        "unit": "mA",
-        "read": true,
-        "write": true,
-        "desc": "Current value in mA that will replace the setting in the “Curr user” field as soon as “Tmo CT” expires."
-      },
-      "native": {
-        "udpKey": "Curr timer"
-      }
-    },
-    {
-      "_id": "timeoutCurrentTimer",
-      "type": "state",
-      "common": {
-        "name": "timeout Current Timer",
-        "type": "number",
-        "role": "value.interval",
-        "unit": "sec",
-        "read": true,
-        "write": true,
-        "desc": "Timeout in seconds before the current setting defined by the last currtime command will be applied."
-      },
-      "native": {
-        "udpKey": "Tmo CT"
-      }
-    },
-    {
-      "_id": "currentFailsafe",
-      "type": "state",
-      "common": {
-        "name": "Current Failsafe",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Current preset value for the Failsafe function."
-      },
-      "native": {
-        "udpKey": "Curr FS"
-      }
-    },
-    {
-      "_id": "timeoutFailsafe",
-      "type": "state",
-      "common": {
-        "name": "Current Failsafe Timer",
-        "type": "number",
-        "role": "value.interval",
-        "unit": "sec",
-        "read": true,
-        "write": false,
-        "desc": "Communication timeout before triggering the Failsafe function."
-      },
-      "native": {
-        "udpKey": "Tmo FS"
-      }
-    },
-    {
-      "_id": "output",
-      "type": "state",
-      "common": {
-        "name": "Output",
-        "type": "boolean",
-        "role": "switch",
-        "read": true,
-        "write": true,
-        "desc": "State of the relay output X2."
-      },
-      "native": {
-        "udpKey": "Output"
-      }
-    },
-    {
-      "_id": "input",
-      "type": "state",
-      "common": {
-        "name": "Input",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false,
-        "desc": "State of the potential free Enable input X1."
-      },
-      "native": {
-        "udpKey": "Input"
-      }
-    },
-    {
-      "_id": "uptime",
-      "type": "state",
-      "common": {
-        "name": "Uptime",
-        "type": "number",
-        "role": "value.interval",
-        "unit": "sec",
-        "read": true,
-        "write": false,
-        "desc": "Current system clock since restart of the wallbox."
-      },
-      "native": {
-        "udpKey": "Sec"
-      }
-    },
-    {
-      "_id": "u1",
-      "type": "state",
-      "common": {
-        "name": "Voltage 1",
-        "type": "number",
-        "role": "value",
-        "unit": "V",
-        "read": true,
-        "write": false,
-        "desc": "Current voltage in V of phase 1."
-      },
-      "native": {
-        "udpKey": "U1"
-      }
-    },
-    {
-      "_id": "u2",
-      "type": "state",
-      "common": {
-        "name": "Voltage 2",
-        "type": "number",
-        "role": "value",
-        "unit": "V",
-        "read": true,
-        "write": false,
-        "desc": "Current voltage in V of phase 2."
-      },
-      "native": {
-        "udpKey": "U2"
-      }
-    },
-    {
-      "_id": "u3",
-      "type": "state",
-      "common": {
-        "name": "Voltage 3",
-        "type": "number",
-        "role": "value",
-        "unit": "V",
-        "read": true,
-        "write": false,
-        "desc": "Current voltage in V of phase 3."
-      },
-      "native": {
-        "udpKey": "U3"
-      }
-    },
-    {
-      "_id": "i1",
-      "type": "state",
-      "common": {
-        "name": "Current 1",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Current current value in mA of phase 1."
-      },
-      "native": {
-        "udpKey": "I1"
-      }
-    },
-    {
-      "_id": "i2",
-      "type": "state",
-      "common": {
-        "name": "Current 2",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Current current value in mA of phase 2."
-      },
-      "native": {
-        "udpKey": "I2"
-      }
-    },
-    {
-      "_id": "i3",
-      "type": "state",
-      "common": {
-        "name": "Current 3",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": false,
-        "desc": "Current current value in mA of phase 3."
-      },
-      "native": {
-        "udpKey": "I3"
-      }
-    },
-    {
-      "_id": "p",
-      "type": "state",
-      "common": {
-        "name": "Power",
-        "type": "number",
-        "role": "value",
-        "unit": "mW",
-        "read": true,
-        "write": false,
-        "desc": "Current power in mW (Real Power)."
-      },
-      "native": {
-        "udpKey": "P"
-      }
-    },
-    {
-      "_id": "pf",
-      "type": "state",
-      "common": {
-        "name": "Power Factor",
-        "type": "number",
-        "role": "value",
-        "unit": "%",
-        "read": true,
-        "write": false,
-        "desc": "Power factor in % (cosphi)"
-      },
-      "native": {
-        "udpKey": "PF",
-        "udpMultiplier": 0.1
-      }
-    },
-    {
-      "_id": "ePres",
-      "type": "state",
-      "common": {
-        "name": "Power Consumption",
-        "type": "number",
-        "role": "value",
-        "unit": "Wh",
-        "read": true,
-        "write": false,
-        "desc": "Power consumption of the current loading session in Wh."
-      },
-      "native": {
-        "udpKey": "E pres",
-        "udpMultiplier": 0.1
-      }
-    },
-    {
-      "_id": "eTotal",
-      "type": "state",
-      "common": {
-        "name": "Total Power Consumption",
-        "type": "number",
-        "role": "value",
-        "unit": "Wh",
-        "read": true,
-        "write": false,
-        "desc": "Total power consumption (persistent) without current loading session in Wh."
-      },
-      "native": {
-        "udpKey": "E total",
-        "udpMultiplier": 0.1
-      }
-    },
-    {
-      "_id": "setenergy",
-      "type": "state",
-      "common": {
-        "name": "Energy Value to Charge into Battery",
-        "type": "number",
-        "role": "level",
-        "unit": "Wh",
-        "read": true,
-        "write": true,
-        "desc": "Energy value in Wh defined by the last setenergy command. Max. value is 99999999 Wh (higher values will cause a counter overflow)."
-      },
-      "native": {
-        "udpKey": "Setenergy",
-        "udpMultiplier": 0.1
-      }
-    },
-    {
-      "_id": "authON",
-      "type": "state",
-      "common": {
-        "name": "Authorization Function active",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false,
-        "desc": "Indicates if the Authorization Function is activated"
-      },
-      "native": {
-        "udpKey": "AuthON"
-      }
-    },
-    {
-      "_id": "authreq",
-      "type": "state",
-      "common": {
-        "name": "Authorization via RFID required",
-        "type": "boolean",
-        "role": "indicator",
-        "read": true,
-        "write": false,
-        "desc": "Authorization is neccesary (box locked) or already done"
-      },
-      "native": {
-        "udpKey": "Authreq"
-      }
-    },
-    {
-      "_id": "display",
-      "type": "state",
-      "common": {
-        "name": "Text to display on wallbox",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": true,
-        "desc": "Message to display on wallbox for a certain (short) time (max. 23 characters)"
-      }
-    },
-    {
-      "_id": "report",
-      "type": "state",
-      "common": {
-        "name": "number of report to be obtained",
-        "type": "number",
-        "role": "value",
-        "read": false,
-        "write": true,
-        "desc": "Number of report (1-3, 1xx) to get from charging station"
-      }
-    },
-    {
-      "_id": "start",
-      "type": "state",
-      "common": {
-        "name": "authorize wallbox",
-        "type": "string",
-        "role": "text",
-        "read": false,
-        "write": true,
-        "desc": "enter 8 byte hex for RFID tag and 10 byte hex for RFID class to authorize for charging"
-      }
-    },
-    {
-      "_id": "stop",
-      "type": "state",
-      "common": {
-        "name": "deauthorize wallbox",
-        "type": "string",
-        "role": "text",
-        "read": false,
-        "write": true,
-        "desc": "enter 8 byte hex for RFID tag to deauthorize from charging"
-      }
-    },
-    {
-      "_id": "setdatetime",
-      "type": "state",
-      "common": {
-        "name": "manually set date and time of charging station",
-        "type": "string",
-        "role": "text",
-        "read": false,
-        "write": true,
-        "desc": "with internet connection time is set by NTP, it can also be set manually in seconds (unix epoch time)"
-      }
-    },
-    {
-      "_id": "unlock",
-      "type": "state",
-      "common": {
-        "name": "unlock socket of charging station",
-        "type": "boolean",
-        "role": "switch",
-        "read": false,
-        "write": true,
-        "desc": "The command unlock unlocks the socket of the device. The charging process has to be stopped first (e.g. via currtime 0 1 or ena 0)"
-      }
-    },
-    {
-      "_id": "automatic",
-      "type": "channel",
-      "common": {
-        "name": "miscellaneous automatics"
-      },
-      "native": {}
-    },
-    {
-      "_id": "automatic.pauseWallbox",
-      "type": "state",
-      "common": {
-        "name": "pause charging of vehicle",
-        "type": "boolean",
-        "role": "value",
-        "read": true,
-        "write": true,
-        "def": false,
-        "desc": "Switch to stop charging of vehicle. This switch has higher priority than photovoltaics and should be used to stop charging of vehicle"
-      },
-      "native": {}
-    },
-    {
-      "_id": "automatic.photovoltaics",
-      "type": "state",
-      "common": {
-        "name": "photovoltaics automatic enabled",
-        "type": "boolean",
-        "role": "value",
-        "read": true,
-        "write": true,
-        "def": true,
-        "desc": "Switch to load vehicle according to surplus of photovoltaics (true); otherwise load with maximum power (false)."
-      },
-      "native": {}
-    },
-    {
-      "_id": "automatic.addPower",
-      "type": "state",
-      "common": {
-        "name": "additional regard to run charging session",
-        "type": "number",
-        "role": "value",
-        "unit": "W",
-        "read": true,
-        "write": true,
-        "def": 0,
-        "desc": "amount of watts to be used as regard to start charging session"
-      },
-      "native": {}
-    },
-    {
-      "_id": "automatic.limitCurrent",
-      "type": "state",
-      "common": {
-        "name": "limit dynamic charging to this value of amperage (0 = no limitation)",
-        "type": "number",
-        "role": "value",
-        "unit": "mA",
-        "read": true,
-        "write": true,
-        "def": 0,
-        "desc": "The amount of dynamic charing current will be limited to this value (0 = no limitation)"
-      },
-      "native": {}
-    },
-    {
-      "_id": "automatic.calcPhases",
-      "type": "state",
-      "common": {
-        "name": "count of phases to calculate with for KeContact Deutschland-Edition",
-        "type": "number",
-        "role": "value",
-        "unit": "phases",
-        "read": true,
-        "write": true,
-        "def": 0,
-        "desc": "Keba charging station KeContact Deutschland-Edition has no energy meter. Therefore the adapter cannot measure power comsuptions of vehicle. The help estimation please enter number of phases here."
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics",
-      "type": "channel",
-      "common": {
-        "name": "additional statistic information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.availableFirmware",
-      "type": "state",
-      "common": {
-        "name": "current available firmware version on keba.com",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "current version of firmware found on keba.com website"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.surplus",
-      "type": "state",
-      "common": {
-        "name": "current surplus for PV automatics",
-        "type": "number",
-        "role": "value",
-        "unit": "W",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "Surplus used for last calculation of PV automatics"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.maxPower",
-      "type": "state",
-      "common": {
-        "name": "maximum power for wallbox",
-        "type": "number",
-        "role": "value",
-        "unit": "W",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "maximum amount of watts available for charging station in case of power limitation"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.chargingPhases",
-      "type": "state",
-      "common": {
-        "name": "number of current charging phases",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "number of phases with which vehicle is currently charging"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.plugTimestamp",
-      "type": "state",
-      "common": {
-        "name": "timestamp when vehicle was pluged to wallbox",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when car was last plugged to wallbox, null if unplugged"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.chargeTimestamp",
-      "type": "state",
-      "common": {
-        "name": "timestamp when vehicle started to charge",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.regardTimestamp",
-      "type": "state",
-      "common": {
-        "name": "timestamp when charging session was continued with regard",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when charging was continued even when there were no longer a surplus"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.1p3pSwTimestamp",
-      "type": "state",
-      "common": {
-        "name": "timestamp when 1p3pSw was changed",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when last phase switch occured"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.lastChargeStart",
-      "type": "state",
-      "common": {
-        "name": "timestamp when last charging process was started",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when car was plugged to wallbox for last charging process"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.lastChargeFinish",
-      "type": "state",
-      "common": {
-        "name": "timestamp when last charging process was finished",
-        "type": "string",
-        "role": "datetime",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "date and time when car was unplugged from wallbox for last charging process"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.lastChargeAmount",
-      "type": "state",
-      "common": {
-        "name": "charge amount of last charging process",
-        "type": "number",
-        "role": "value",
-        "unit": "kWh",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "Power consumption of the last loading session in Wh."
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.sessionId",
-      "type": "state",
-      "common": {
-        "name": "session ID of current charging session",
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "unique session ID"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.rfid_tag",
-      "type": "state",
-      "common": {
-        "name": "RFID tag of current charging session",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "RFID token used for charging session"
-      },
-      "native": {}
-    },
-    {
-      "_id": "statistics.rfid_class",
-      "type": "state",
-      "common": {
-        "name": "RFID class of current charging session",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false,
-        "def": null,
-        "desc": "RFID class used for charging session"
-      },
-      "native": {}
-    },
-    {
-      "_id": "internal",
-      "type": "channel",
-      "common": {
-        "name": "internal data for communication between instances"
-      },
-      "native": {}
-    },
-    {
-      "_id": "internal.message",
-      "type": "state",
-      "common": {
-        "name": "wallbox message exchange",
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": true,
-        "def": null,
-        "desc": "messages received from other instances for this wallbox"
-      },
-      "native": {}
-    }
-  ]
+    "common": {
+        "name": "kecontact",
+        "version": "2.0.2",
+        "news": {
+            "2.0.2": {
+                "en": "default value for minimum regard time (180 seconds)\nfix calculation of phases for reduced charging\nadded minimum timer to switch between phases if 1p/3p charging is used.\ndisable firmware check for c-series due to changes on webpage of Keba\nsometimes 1p/3p switch was not working correctly (repeatedly \"stop charging fpr switch of phases...\")",
+                "de": "standardwert für minimale betrachtungszeit (180 sekunden)\nfestberechnung von phasen für reduziertes aufladen\nein minimaler timer hinzugefügt, um zwischen phasen zu wechseln, wenn 1p/3p geladen wird.\ndeaktivieren Sie Firmware-Check für c-series aufgrund von Änderungen auf der Webseite von Keba\nmanchmal funktionierte 1p/3p-schalter nicht korrekt (wiederholt \"stopp-lade-fpr-schalter von phasen\")",
+                "ru": "значение по умолчанию для минимального количества времени (180 секунд)\nисправить расчет фаз для снижения зарядки\nдобавлен минимальный таймер, чтобы переключаться между фазами, если используется зарядка 1p/3p.\nотключить проверку прошивки для c-серий из-за изменений на веб-странице Keba\nиногда 1p/3p переключатель не работал правильно (повторно \"стоп зарядки fpr переключатель фаз\")",
+                "pt": "valor padrão para o tempo mínimo de consideração (180 segundos)\nfixar cálculo de fases para carregamento reduzido\nadicionado temporizador mínimo para alternar entre fases se 1p/3p é usado.\ndesativar a verificação de firmware para a série c devido a alterações na página web de Keba\nàs vezes 1p/3p switch não estava funcionando corretamente (repetidamente \"parar de carregar fpr interruptor de fases\")",
+                "nl": "defecte waarde voor minimum betrekkingstijd (180 seconden)\nvermindering van fases voor verminderde aanklacht\ntoegevoegd minimum timer om te wisselen tussen fases als 1p/3p aanklacht wordt gebruikt.\naDRAAG firmaware check voor c-series vanwege de webpagina van Keba\nsoms werkte 1p/3p schakelaar niet goed",
+                "fr": "valeur par défaut pour le temps de regard minimal (180 secondes)\ncalcul des phases de charge réduite\nle minuteur minimum ajouté pour passer entre les phases si la charge 1p/3p est utilisée.\ndésactiver la vérification de firmware pour c-series en raison de modifications sur la page Web de Keba\nparfois, l'interrupteur 1p/3p ne fonctionnait pas correctement (repérément \"arrêt du commutateur fpr des phases\")",
+                "it": "valore predefinito per il tempo minimo di riferimento (180 secondi)\ncalcolo corretto delle fasi di ricarica ridotta\ntimer minimo aggiunto per passare tra le fasi se viene utilizzata la ricarica 1p/3p.\ndisabilitare il controllo firmware per le serie C a causa delle modifiche sulla pagina web di Keba\na volte l'interruttore 1p/3p non funziona correttamente (ripettivamente \"arresto di carica fpr interruttore di fasi\")",
+                "es": "valor predeterminado para el tiempo mínimo de consideración (180 segundos)\ncálculo de las fases de carga reducida\nañadido temporizador mínimo para cambiar entre fases si se utiliza la carga de 1p/3p.\ncomprobación de firmware deshabilitado para c-series debido a cambios en la página web de Keba\na veces el interruptor de 1p/3p no funcionaba correctamente (repetidamente \"stop load fpr switch of phases\")",
+                "pl": "domyślna wartość dla minimum czasu (180 sekund)\nobliczenia fazy zredukowania obciążenia\ndodano minimalny czas ładowania pomiędzy fazami, jeżeli stosuje się 1p/3p.\nzdyskwalifikowana kontrola oprogramowania dla seriali C ze względu na zmiany strony internetowej Keba\nczasami przełącznik 1p/3p nie pracował prawidłowo (odpowiednio \"przełączanie fpru\"",
+                "uk": "значення за замовчуванням для мінімального часу (180 секунд)\nфіксувати розрахунок фази для зменшення зарядки\nдодано мінімальний таймер для перемикання між фазами, якщо використовується зарядка 1p/3p.\nперевірити дискримінацію прошивки на c-series через зміни на веб-сторінці Кеба\nіноді 1p/3p перемикач не працює належним чином (повторно \"стояча зарядка fpr перемикач фази\")",
+                "zh-cn": "最低时间(180秒)的拖欠值\nf 固定计算减税阶段\n如果使用了1p/3p charing,则在各个阶段之间增加最低时间。.\n由于Keba网页上的变化,难以对面包进行系统检查\n有时候,1p/3p的转换没有正确地进行(反而“对阶段的投机”)。"
+            },
+            "2.0.1": {
+                "en": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+                "de": "unterstützung für Company Car Wall Box MID - GREEN EDITION (Sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) und PV-Edition (Sentry IOBROKER-KECONTACT-1M)",
+                "ru": "поддержка компании Car Wall Box MID - GREEN EDITION (центр IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) и PV-Edition (центр IOBROKER-KECONTACT-1M)",
+                "pt": "suporte para a caixa de parede de carro da empresa MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+                "nl": "quality over Quantity (QoQ) Releases Vertaling:",
+                "fr": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+                "it": "supporto per l'azienda Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
+                "es": "soporte para la empresa caja de la pared MID - EDICIÓN GREEN (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) y la edición PV (sentry IOBROKER-KECONTACT-1M)",
+                "pl": "wsparcie dla spółki Car Wall Box MID – GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) i PV-Edition (wejście IOBROKER-KECONTACT-1M)",
+                "uk": "підтримка для компанії Car Wall Box MID - ЗЕЛЕНИЙ EDITION (серія IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) та PV-редагування (серія IOBROKER-KECONTACT-1M)",
+                "zh-cn": "b. 支持Car隔离墙箱MID - GREEN EDI(化学公司IPOKER-KECONTACT-1K & IPOKER-KECONTACT-1N)和聚乙烯-Edition(工业公司IPOKER-KECONTACT-1M)"
+            },
+            "2.0.0": {
+                "en": "support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available) including Keba KeContact S10\nminimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value\nnew switch to limit battery storage support only to hold minimum charging power\ncatch error when requesting firmware page (sentry IOBROKER-KECONTACT-1H)\nRFID tag and class where not updated in channel \"statitics\" when no charging sessions were obtained\nadded new Keba model Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
+                "de": "unterstützung für 1p/3p-Ladung (Startladung mit 1 Phase und Schalter auf 3 Phasen, wenn genügend Überschuss vorhanden) einschließlich Keba KeContact S10\nmindestleistung erlaubt 5A, weil einige Fahrzeuge und KeContact (unbesetzt) diesen Wert zulassen\nneuer schalter zur begrenzung der batteriespeicherunterstützung nur für minimale ladeleistung\nfehler beim Anfordern der Firmware-Seite (Einträge IOBROKER-KECONTACT-1H)\nRFID-Tag und Klasse, in der die Kanal-Stertitik nicht aktualisiert wurde, wenn keine Ladesitzungen erhalten wurden\nneue Keba Modell Company Car Wall Box MID (Sentry IOBROKER-KECONTACT-1K)",
+                "ru": "поддержка для 1p/3p-образования (начните зарядку с 1 фазой и переключите на 3 фазы, когда достаточно излишки доступны) включая Keba KeContact S10\nминимальная ампература, разрешенная 5A, потому что некоторые транспортные средства и KeContact (недокументированные) позволяют это значение\nновый переключатель для ограничения поддержки хранения батареи только для поддержания минимальной зарядки мощности\nпоймать ошибку при запросе страницы прошивки (sentry IOBROKER-KECONTACT-1H)\nRFID тег и класс, где не обновляется в статистике канала, когда не были получены зарядные сессии\nдобавлена новая модель Keba Компания Автомобильная настенная коробка MID (sentry IOBROKER-KECONTACT-1K)",
+                "pt": "suporte para 1p/3p-carga (recarga de início com 1 fase e mudar para 3 fases quando bastante excedente disponível) incluindo Keba KeContact S10\namperagem mínima permitida a 5A porque alguns veículos e KeContact (não documentado) permitem este valor\nnovo interruptor para limitar o suporte de armazenamento da bateria apenas para segurar o poder de carregamento mínimo\nerro de captura ao solicitar a página de firmware (sentido IOBROKER-KECONTACT-1H)\nTag RFID e classe onde não atualizado em estatísticas de canal quando nenhuma sessão de carregamento foi obtida\nadicionado novo modelo Keba Empresa Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
+                "nl": "quality over Quantity (QoQ) Releases Vertaling:\nminimale amperage toegestaan aan 5A omdat sommige voertuigen en KeContact (undocumented) toestaan dat deze waarde\nnieuwe schakel naar beperkte opslag ondersteuning, alleen om minimumlading te behouden\nvang fouten als je stevigware pagina vraagt\nRFID-tag en klasse waar niet geüpload werd in kanalen statistieken toen er geen aanklacht werd ingediend\nvoegde nieuwe Keba model toe Compagnie Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
+                "fr": "support pour 1p/3p-charge (démarrage avec 1 phase et passer à 3 phases lorsque le surplus est suffisant) y compris Keba KeContact S10\namperage minimum autorisé à 5A parce que certains véhicules et KeContact (sans papier) permettent cette valeur\nnouveau commutateur pour limiter le support de stockage de la batterie seulement pour maintenir la puissance de charge minimale\nerreur de capture lors de la demande de page de micrologiciel (entrée IOBROKER-KECONTACT-1H)\nTag RFID et classe où pas mis à jour dans les statitics de canal lorsque aucune séance de charge n'a été obtenue\nnouveau modèle Keba Cadran de la société MID (entrée IOBROKER-KECONTACT-1K)",
+                "it": "supporto per 1p/3p-charging (avviamento di carica con 1 fase e passaggio a 3 fasi quando abbastanza surplus disponibile) tra cui Keba KeContact S10\namperaggio minimo consentito a 5A perché alcuni veicoli e KeContact (non documentato) permettono questo valore\nnuovo interruttore per limitare il supporto di memorizzazione della batteria solo per mantenere la carica minima\nerrore di cattura quando si richiede la pagina del firmware (sentenza IOBROKER-KECONTACT-1H)\nRFID tag e classe in cui non è stato aggiornato nelle statistiche del canale quando non sono state ottenute sessioni di ricarica\nnuovo modello Keba Azienda Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
+                "es": "soporte para 1p/3p-charging (iniciar carga con 1 fase y cambiar a 3 fases cuando hay suficiente superávit disponible) incluyendo Keba KeContact S10\nmínimo amperaje permitido a 5A porque algunos vehículos y KeContact (indocumentados) permiten este valor\nnuevo interruptor para limitar el soporte de almacenamiento de batería sólo para mantener la potencia de carga mínima\nerror de captura al solicitar la página de firmware (sentry IOBROKER-KECONTACT-1H)\nEtiqueta RFID y clase donde no se actualizaron en los cálculos del canal cuando no se obtuvieron sesiones de carga\nnuevo modelo Keba Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)",
+                "pl": "poparcie dla ładowania 1p/3p (startowanie z 1 fazą i przełączanie się do 3 faz, w tym Keba KeContact S1010\nminimalne amperowanie pozwalało na 5A, ponieważ niektóre pojazdy i KeContact (nieudokumentowane) pozwalają ta wartość\nnowe przełączniki, aby ograniczyć składowanie baterii tylko do zatrzymania minimalnego ładowania mocy\nbłędne błędy, gdy żądanie strony oprogramowania (wjazdy IOBROKER-KECONTACT-1H)\nTag RFID i klasa, gdzie nie zaktualizowano w statystykach kanałowych, gdy nie uzyskano sesji ładowania\nnowy model Keba Car Wall Box MID (ang.)",
+                "uk": "підтримка 1p/3p-charging (зарядка запуску з 1 фазою і перемикачем на 3 фази, коли достатньо надлишку, доступні) включаючи Keba KeЗв'язатися з S10\nмінімальний ампераж до 5А, тому що деякі транспортні засоби та KeЗв'язатися з нами\nновий вимикач для обмеження підтримки зберігання акумулятора тільки для забезпечення мінімальної зарядки\nзловживання помилки при запиті на сторінку прошивки (серія IOBROKER-KECONTACT-1H)\nRFID теги і клас, де не оновлено в каналі ститетики, коли не було отримано зарядки\nдодано нову модель Keba Автомобільна автомобільна стінова коробка MID (серія IOBROKER-KECONTACT-1K)",
+                "zh-cn": "支助1p/3p-charing(在有足够盈余的情况下进行分期付款并转换至3阶段),包括Keba KeContact S1010\n由于某些车辆和KeContact(无证件)允许至少允许5A,这就具有这种价值。\n限制电池储存支助的新的转用只是持有最低电力\n当要求定本页(化学文摘社-KECONTACT-1H)时发现错误\n在没有获得慈善会议时,开发协会的特色和阶级没有更新信息。\n增加新的凯巴模式 卡里夫·米格尔·米纳(工业公司)"
+            },
+            "1.5.2": {
+                "en": "fix error in release script",
+                "de": "fehler im release-skript beheben",
+                "ru": "исправить ошибку в скрипте релиза",
+                "pt": "corrigir erro no script de lançamento",
+                "nl": "vertaling:",
+                "fr": "corriger l'erreur dans le script de sortie",
+                "it": "errore di correzione nello script di rilascio",
+                "es": "corregir error en script de liberación",
+                "pl": "naprawić błąd w wydaniu scriptu",
+                "uk": "виправлено помилку в скрипті релізу",
+                "zh-cn": "f 释放说明的错误"
+            },
+            "1.5.1": {
+                "en": "update release script to v3",
+                "de": "update release script to v3",
+                "ru": "обновление скрипт для v3",
+                "pt": "atualizar script de lançamento para v3",
+                "nl": "vertaling:",
+                "fr": "mettre à jour le script de version v3",
+                "it": "aggiornamento script di rilascio a v3",
+                "es": "script de actualización a v3",
+                "pl": "aktualizacja",
+                "uk": "скрипт релізу оновлення до v3",
+                "zh-cn": "最新资料"
+            },
+            "1.5.0": {
+                "en": "update power values immediately, catch the message at wallbox startup, catch the error when UDP connection got lost (sentry IOBROKER-KECONTACT-1C), update url and regex to Keba firmware, using Weblate for translations",
+                "de": "aktualisieren Sie die Leistungswerte sofort, fangen Sie die Nachricht bei wallbox Start, fangen Sie den Fehler, wenn UDP-Verbindung verloren gegangen ist (sentry IOBROKER-KECONTACT-1C,) aktualisieren Sie url und regex auf Keba firmware, mit Weblate für Übersetzungen",
+                "ru": "обновить значения мощности немедленно, поймать сообщение на запуске настенного ящика, поймать ошибку, когда соединение UDP потеряло (sentry IOBROKER-KECONTACT-1C,) обновить URL и regex в прошивку Keba, используя Weblate для переводов",
+                "pt": "atualizar os valores de energia imediatamente, pegar a mensagem na inicialização da wallbox, pegar o erro quando a conexão UDP foi perdida (sente IOBROKER-KECONTACT-1C,) atualizar url e regex para firmware Keba, usando Weblate para traduções",
+                "nl": "vertaling:",
+                "fr": "mettre à jour les valeurs de puissance immédiatement, capturer le message lors du démarrage de la boîte murale, attraper l'erreur lorsque la connexion UDP s'est perdue (entrée IOBROKER-KECONTACT-1C,) mettre à jour l'url et le regex au firmware Keba, en utilisant Weblate pour les traductions",
+                "it": "aggiornare i valori di potenza immediatamente, catturare il messaggio all'avvio della casella di parete, catturare l'errore quando la connessione UDP si è persa (sentazione IOBROKER-KECONTACT-1C,) aggiornare url e regex al firmware Keba, utilizzando Weblate per le traduzioni",
+                "es": "actualizar los valores de potencia inmediatamente, coger el mensaje en el inicio de Wallbox, coger el error cuando la conexión UDP se perdió (sentry IOBROKER-KECONTACT-1C,) actualizar url y regex a Keba firmware, utilizando Weblate para traducciones",
+                "pl": "zaktualizowane wartości mocy natychmiast przechwytują wiadomość na początku skrzynki, przechwytując błędy, gdy UDP straciło (wjazd IOBROKER-KECONTACT-1C), aktualizując url i regex to Keba firmware, używając Weblate dla tłumaczeń",
+                "uk": "оновлюйте значення живлення відразу, зловіть повідомлення при запуску стінових скриньок, зловіть помилку, коли UDP з'явився втрачений (сентри IOBROKER-KECONTACT-1C,) оновлення ви URL та regex до прошивки Keba, використовуючи Weblate для перекладів",
+                "zh-cn": "立即更新电力价值,在墙壁开端上传递信息,在联发处丢失时(圣赫勒拿公司IPOKER-KECONTACT-1C),用电网更新Surl和Cregex对Keba公司的认识。"
+            },
+            "1.4.1": {
+                "en": "separate states for charging and discharging battery storage, additional states to (de)authorize or unlock charging station and set date/time, fix unsubscribing foreign states (sentry IOBROKER-KECONTACT-10)",
+                "de": "getrennte States für Lade-/Entladewerte eines Batteriespeichers, zusätzliche States um sich an der Wallbox zu (de)authorosieren, entsperren und Datum/Zeit zu setzen, Fix für unsubscribe foreign state (sentry IOBROKER-KECONTACT-10)",
+                "ru": "отдельные состояния для зарядки и разрядки аккумулятора, дополнительные состояния для (де)авторизации или разблокировки зарядной станции и установки даты/времени, исправление отписки от посторонних состояний (сентри IOBROKER-KECONTACT-10)",
+                "pt": "estados separados para carregar e descarregar o armazenamento da bateria, estados adicionais para (des)autorizar ou desbloquear a estação de carregamento e definir data/hora, corrigir estados estrangeiros de cancelamento de assinatura (sentinela IOBROKER-KECONTACT-10)",
+                "nl": "aparte statussen voor opladen en ontladen batterijopslag, extra statussen om laadstation te (de)autoriseren of te ontgrendelen en datum/tijd in te stellen, afmelden buitenlandse staten te corrigeren (sentry IOBROKER-KECONTACT-10)",
+                "fr": "états séparés pour charger et décharger le stockage de la batterie, états supplémentaires pour (dés) autoriser ou déverrouiller la station de charge et régler la date/l'heure, corriger les états étrangers de désabonnement (sentry IOBROKER-KECONTACT-10)",
+                "it": "stati separati per caricare e scaricare la batteria di stoccaggio, stati aggiuntivi per (de)autorizzare o sbloccare la stazione di ricarica e impostare data/ora, correggere stati stranieri che annullano l'iscrizione (sentry IOBROKER-KECONTACT-10)",
+                "es": "estados separados para cargar y descargar el almacenamiento de la batería, estados adicionales para (des)autorizar o desbloquear la estación de carga y establecer la fecha/hora, corregir la cancelación de la suscripción de estados extranjeros (entrada IOBROKER-KECONTACT-10)",
+                "pl": "oddzielne stany ładowania i rozładowywania akumulatora, dodatkowe stany do (de)autoryzacji lub odblokowania stacji ładującej oraz ustawienia daty/godziny, naprawianie wypisywania stanów obcych (sentry IOBROKER-KECONTACT-10)",
+                "zh-cn": "用于充电和放电电池存储的单独状态，用于（取消）授权或解锁充电站并设置日期/时间的附加状态，修复取消订阅的外国状态（哨兵 IOBROKER-KECONTACT-10）",
+                "uk": "окремі стани для заряджання та розряджання акумулятора, додаткові стани для (де)авторизації або розблокування зарядної станції та встановлення дати/часу, виправлення скасування підписки за кордоном (сторожовий IOBROKER-KECONTACT-10)"
+            }
+        },
+        "titleLang": {
+            "en": "Control Keba KeContact P20 or P30 or BMW i wallbox",
+            "de": "Keba KeContact P20 oder P30 oder BMW i Wallbox steuern",
+            "ru": "Управление Keba KeContact P20 или P30 или настенный ящик BMW i",
+            "pt": "Controle Keba KeContact P20 ou P30 ou caixa de embutir BMW i",
+            "nl": "Bedien Keba KeContact P20 of P30 of BMW i wallbox",
+            "fr": "Commande Keba KeContact P20 ou P30 ou BMW i wallbox",
+            "it": "Controlla Keba KeContact P20 o P30 o BMW i wallbox",
+            "es": "Control Keba KeContact P20 o P30 o caja de empotrar BMW i",
+            "pl": "Sterowanie Keba KeContact P20 lub P30 lub BMW i wallbox",
+            "zh-cn": "控制 Keba KeContact P20 或 P30 或 BMW i wallbox",
+            "uk": "Керуйте Keba KeContact P20 або P30 або BMW i wallbox"
+        },
+        "desc": {
+            "en": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
+            "de": "Steuern Sie Ihre Ladestation und nutzen Sie die automatische Regelung z.B. ",
+            "ru": "Управляйте своей зарядной станцией и используйте автоматическое регулирование, например ",
+            "pt": "Controle sua estação de carregamento e use a regulação automática, por exemplo ",
+            "nl": "Bedien uw laadstation en gebruik automatische regeling, b.v. ",
+            "fr": "Contrôlez votre borne de recharge et utilisez la régulation automatique, par ex. ",
+            "it": "Controlla la tua stazione di ricarica e usa la regolazione automatica, ad es. ",
+            "es": "Controle su estación de carga y utilice la regulación automática, p. Ej. ",
+            "pl": "Kontroluj swoją stację ładowania i korzystaj z automatycznej regulacji m.in. ",
+            "zh-cn": "控制您的充电站并使用自动调节，例如",
+            "uk": "Керуйте своєю зарядною станцією та використовуйте автоматичне регулювання, напр. щоб зарядити свій автомобіль від надлишку фотоелектричної енергії"
+        },
+        "authors": [
+            "UncleSamSwiss <samuel.weibel@gmail.com>",
+            "Volker Sengler <git@sengler.de>"
+        ],
+        "keywords": [
+            "KeContact",
+            "P30",
+            "P20",
+            "BMW",
+            "KEBA",
+            "wallbox",
+            "emobility",
+            "e-mobility"
+        ],
+        "license": "Apache-2.0",
+        "platform": "Javascript/Node.js",
+        "icon": "kecontact.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.kecontact/master/admin/kecontact.png",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "hardware",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "supportCustoms": false,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://01d409e4ecea470485101a0f53720ee5@sentry.iobroker.net/139"
+            }
+        }
+    },
+    "native": {
+        "host": "0.0.0.0",
+        "passiveMode": true,
+        "pollInterval": 30,
+        "loadChargingSessions": false,
+        "useX1forAutomatic": false,
+        "stateRegard": "",
+        "stateSurplus": "",
+        "statesIncludeWallbox": true,
+        "1p3pViaX2": false,
+        "state1p3pSwitch": "",
+        "1p3pSwitchIsNO": true,
+        "stateBatteryCharging": "",
+        "stateBatteryDischarging": "",
+        "stateBatterySoC": "",
+        "batteryPower": 0,
+        "batteryMinSoC": 10,
+        "limitBatteryStoragePower": true,
+        "batteryStorageStrategy": 0,
+        "minAmperage": 6000,
+        "addPower": 0,
+        "delta": 0,
+        "underusage": 500,
+        "minTime": 300,
+        "regardTime": 180,
+        "min1p3pSwSTime": 0,
+        "maxPower": 0,
+        "stateEnergyMeter1": "",
+        "stateEnergyMeter2": "",
+        "stateEnergyMeter3": "",
+        "wallboxNotIncluded": false
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "name": "is wallbox connected?",
+                "type": "boolean",
+                "role": "indicator.connected",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "product",
+            "type": "state",
+            "common": {
+                "name": "Product ID",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false,
+                "desc": "Model name (variant)"
+            },
+            "native": {
+                "udpKey": "Product"
+            }
+        },
+        {
+            "_id": "serial",
+            "type": "state",
+            "common": {
+                "name": "Serial Number",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "Serial"
+            }
+        },
+        {
+            "_id": "x2phaseSource",
+            "type": "state",
+            "common": {
+                "name": "X2 phaseSwitch source",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": true
+            },
+            "native": {
+                "udpKey": "X2 phaseSwitch source"
+            }
+        },
+        {
+            "_id": "x2phaseSwitch",
+            "type": "state",
+            "common": {
+                "name": "X2 phaseSwitch",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": true
+            },
+            "native": {
+                "udpKey": "X2 phaseSwitch"
+            }
+        },
+        {
+            "_id": "firmware",
+            "type": "state",
+            "common": {
+                "name": "Firmware Version",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "Firmware"
+            }
+        },
+        {
+            "_id": "COM-module",
+            "type": "state",
+            "common": {
+                "name": "COM-Module present",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "COM-module"
+            }
+        },
+        {
+            "_id": "backend",
+            "type": "state",
+            "common": {
+                "name": "Backend communication present",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "Backend"
+            }
+        },
+        {
+            "_id": "timeQ",
+            "type": "state",
+            "common": {
+                "name": "Time Sync Quality",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "timeQ"
+            }
+        },
+        {
+            "_id": "DIP-Sw1",
+            "type": "state",
+            "common": {
+                "name": "Hex Value of Dip Switch 1 Setting",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "DIP-Sw1"
+            }
+        },
+        {
+            "_id": "DIP-Sw2",
+            "type": "state",
+            "common": {
+                "name": "Hex Value of Dip Switch 2 Setting",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false
+            },
+            "native": {
+                "udpKey": "DIP-Sw2"
+            }
+        },
+        {
+            "_id": "state",
+            "type": "state",
+            "common": {
+                "name": "State",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "desc": "Current state of the wallbox"
+            },
+            "native": {
+                "udpKey": "State"
+            }
+        },
+        {
+            "_id": "error1",
+            "type": "state",
+            "common": {
+                "name": "Error 1",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "desc": "Detail code for state 4; exceptions see FAQ on www.kecontact.com"
+            },
+            "native": {
+                "udpKey": "Error1"
+            }
+        },
+        {
+            "_id": "error2",
+            "type": "state",
+            "common": {
+                "name": "Error 2",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "desc": "Detail code for state 4 exception #6 see FAQ on www.kecontact.com"
+            },
+            "native": {
+                "udpKey": "Error2"
+            }
+        },
+        {
+            "_id": "plug",
+            "type": "state",
+            "common": {
+                "name": "Plug",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "desc": "Current condition of the loading connection"
+            },
+            "native": {
+                "udpKey": "Plug"
+            }
+        },
+        {
+            "_id": "enableSys",
+            "type": "state",
+            "common": {
+                "name": "Enable System",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "desc": "Enable state for charging (contains Enable input, RFID, UDP,..)."
+            },
+            "native": {
+                "udpKey": "Enable sys"
+            }
+        },
+        {
+            "_id": "enableUser",
+            "type": "state",
+            "common": {
+                "name": "Enable User",
+                "type": "boolean",
+                "role": "switch",
+                "read": true,
+                "write": true,
+                "desc": "Enable condition via UDP."
+            },
+            "native": {
+                "udpKey": "Enable user"
+            }
+        },
+        {
+            "_id": "maxCurrent",
+            "type": "state",
+            "common": {
+                "name": "Maximum Current",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Current preset value via Control pilot in milliampere."
+            },
+            "native": {
+                "udpKey": "Max curr"
+            }
+        },
+        {
+            "_id": "maxCurrentPercent",
+            "type": "state",
+            "common": {
+                "name": "Maximum Current Percent",
+                "type": "number",
+                "role": "value",
+                "unit": "%",
+                "read": true,
+                "write": false,
+                "desc": "Current preset value via Control pilot in % of the PWM value."
+            },
+            "native": {
+                "udpKey": "Max curr %",
+                "udpMultiplier": 0.1
+            }
+        },
+        {
+            "_id": "currentHardware",
+            "type": "state",
+            "common": {
+                "name": "Maximum Current Hardware",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Highest possible charging current of the charging connection."
+            },
+            "native": {
+                "udpKey": "Curr HW"
+            }
+        },
+        {
+            "_id": "currentUser",
+            "type": "state",
+            "common": {
+                "name": "Current User",
+                "type": "number",
+                "role": "level",
+                "unit": "mA",
+                "read": true,
+                "write": true,
+                "desc": "Current preset value of the user via UDP; Default = 63000mA."
+            },
+            "native": {
+                "udpKey": "Curr user"
+            }
+        },
+        {
+            "_id": "currentTimer",
+            "type": "state",
+            "common": {
+                "name": "Current for Timer",
+                "type": "number",
+                "role": "level",
+                "unit": "mA",
+                "read": true,
+                "write": true,
+                "desc": "Current value in mA that will replace the setting in the “Curr user” field as soon as “Tmo CT” expires."
+            },
+            "native": {
+                "udpKey": "Curr timer"
+            }
+        },
+        {
+            "_id": "timeoutCurrentTimer",
+            "type": "state",
+            "common": {
+                "name": "timeout Current Timer",
+                "type": "number",
+                "role": "value.interval",
+                "unit": "sec",
+                "read": true,
+                "write": true,
+                "desc": "Timeout in seconds before the current setting defined by the last currtime command will be applied."
+            },
+            "native": {
+                "udpKey": "Tmo CT"
+            }
+        },
+        {
+            "_id": "currentFailsafe",
+            "type": "state",
+            "common": {
+                "name": "Current Failsafe",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Current preset value for the Failsafe function."
+            },
+            "native": {
+                "udpKey": "Curr FS"
+            }
+        },
+        {
+            "_id": "timeoutFailsafe",
+            "type": "state",
+            "common": {
+                "name": "Current Failsafe Timer",
+                "type": "number",
+                "role": "value.interval",
+                "unit": "sec",
+                "read": true,
+                "write": false,
+                "desc": "Communication timeout before triggering the Failsafe function."
+            },
+            "native": {
+                "udpKey": "Tmo FS"
+            }
+        },
+        {
+            "_id": "output",
+            "type": "state",
+            "common": {
+                "name": "Output",
+                "type": "boolean",
+                "role": "switch",
+                "read": true,
+                "write": true,
+                "desc": "State of the relay output X2."
+            },
+            "native": {
+                "udpKey": "Output"
+            }
+        },
+        {
+            "_id": "input",
+            "type": "state",
+            "common": {
+                "name": "Input",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "desc": "State of the potential free Enable input X1."
+            },
+            "native": {
+                "udpKey": "Input"
+            }
+        },
+        {
+            "_id": "uptime",
+            "type": "state",
+            "common": {
+                "name": "Uptime",
+                "type": "number",
+                "role": "value.interval",
+                "unit": "sec",
+                "read": true,
+                "write": false,
+                "desc": "Current system clock since restart of the wallbox."
+            },
+            "native": {
+                "udpKey": "Sec"
+            }
+        },
+        {
+            "_id": "u1",
+            "type": "state",
+            "common": {
+                "name": "Voltage 1",
+                "type": "number",
+                "role": "value",
+                "unit": "V",
+                "read": true,
+                "write": false,
+                "desc": "Current voltage in V of phase 1."
+            },
+            "native": {
+                "udpKey": "U1"
+            }
+        },
+        {
+            "_id": "u2",
+            "type": "state",
+            "common": {
+                "name": "Voltage 2",
+                "type": "number",
+                "role": "value",
+                "unit": "V",
+                "read": true,
+                "write": false,
+                "desc": "Current voltage in V of phase 2."
+            },
+            "native": {
+                "udpKey": "U2"
+            }
+        },
+        {
+            "_id": "u3",
+            "type": "state",
+            "common": {
+                "name": "Voltage 3",
+                "type": "number",
+                "role": "value",
+                "unit": "V",
+                "read": true,
+                "write": false,
+                "desc": "Current voltage in V of phase 3."
+            },
+            "native": {
+                "udpKey": "U3"
+            }
+        },
+        {
+            "_id": "i1",
+            "type": "state",
+            "common": {
+                "name": "Current 1",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Current current value in mA of phase 1."
+            },
+            "native": {
+                "udpKey": "I1"
+            }
+        },
+        {
+            "_id": "i2",
+            "type": "state",
+            "common": {
+                "name": "Current 2",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Current current value in mA of phase 2."
+            },
+            "native": {
+                "udpKey": "I2"
+            }
+        },
+        {
+            "_id": "i3",
+            "type": "state",
+            "common": {
+                "name": "Current 3",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": false,
+                "desc": "Current current value in mA of phase 3."
+            },
+            "native": {
+                "udpKey": "I3"
+            }
+        },
+        {
+            "_id": "p",
+            "type": "state",
+            "common": {
+                "name": "Power",
+                "type": "number",
+                "role": "value",
+                "unit": "mW",
+                "read": true,
+                "write": false,
+                "desc": "Current power in mW (Real Power)."
+            },
+            "native": {
+                "udpKey": "P"
+            }
+        },
+        {
+            "_id": "pf",
+            "type": "state",
+            "common": {
+                "name": "Power Factor",
+                "type": "number",
+                "role": "value",
+                "unit": "%",
+                "read": true,
+                "write": false,
+                "desc": "Power factor in % (cosphi)"
+            },
+            "native": {
+                "udpKey": "PF",
+                "udpMultiplier": 0.1
+            }
+        },
+        {
+            "_id": "ePres",
+            "type": "state",
+            "common": {
+                "name": "Power Consumption",
+                "type": "number",
+                "role": "value",
+                "unit": "Wh",
+                "read": true,
+                "write": false,
+                "desc": "Power consumption of the current loading session in Wh."
+            },
+            "native": {
+                "udpKey": "E pres",
+                "udpMultiplier": 0.1
+            }
+        },
+        {
+            "_id": "eTotal",
+            "type": "state",
+            "common": {
+                "name": "Total Power Consumption",
+                "type": "number",
+                "role": "value",
+                "unit": "Wh",
+                "read": true,
+                "write": false,
+                "desc": "Total power consumption (persistent) without current loading session in Wh."
+            },
+            "native": {
+                "udpKey": "E total",
+                "udpMultiplier": 0.1
+            }
+        },
+        {
+            "_id": "setenergy",
+            "type": "state",
+            "common": {
+                "name": "Energy Value to Charge into Battery",
+                "type": "number",
+                "role": "level",
+                "unit": "Wh",
+                "read": true,
+                "write": true,
+                "desc": "Energy value in Wh defined by the last setenergy command. Max. value is 99999999 Wh (higher values will cause a counter overflow)."
+            },
+            "native": {
+                "udpKey": "Setenergy",
+                "udpMultiplier": 0.1
+            }
+        },
+        {
+            "_id": "authON",
+            "type": "state",
+            "common": {
+                "name": "Authorization Function active",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "desc": "Indicates if the Authorization Function is activated"
+            },
+            "native": {
+                "udpKey": "AuthON"
+            }
+        },
+        {
+            "_id": "authreq",
+            "type": "state",
+            "common": {
+                "name": "Authorization via RFID required",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "desc": "Authorization is neccesary (box locked) or already done"
+            },
+            "native": {
+                "udpKey": "Authreq"
+            }
+        },
+        {
+            "_id": "display",
+            "type": "state",
+            "common": {
+                "name": "Text to display on wallbox",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": true,
+                "desc": "Message to display on wallbox for a certain (short) time (max. 23 characters)"
+            }
+        },
+        {
+            "_id": "report",
+            "type": "state",
+            "common": {
+                "name": "number of report to be obtained",
+                "type": "number",
+                "role": "value",
+                "read": false,
+                "write": true,
+                "desc": "Number of report (1-3, 1xx) to get from charging station"
+            }
+        },
+        {
+            "_id": "start",
+            "type": "state",
+            "common": {
+                "name": "authorize wallbox",
+                "type": "string",
+                "role": "text",
+                "read": false,
+                "write": true,
+                "desc": "enter 8 byte hex for RFID tag and 10 byte hex for RFID class to authorize for charging"
+            }
+        },
+        {
+            "_id": "stop",
+            "type": "state",
+            "common": {
+                "name": "deauthorize wallbox",
+                "type": "string",
+                "role": "text",
+                "read": false,
+                "write": true,
+                "desc": "enter 8 byte hex for RFID tag to deauthorize from charging"
+            }
+        },
+        {
+            "_id": "setdatetime",
+            "type": "state",
+            "common": {
+                "name": "manually set date and time of charging station",
+                "type": "string",
+                "role": "text",
+                "read": false,
+                "write": true,
+                "desc": "with internet connection time is set by NTP, it can also be set manually in seconds (unix epoch time)"
+            }
+        },
+        {
+            "_id": "unlock",
+            "type": "state",
+            "common": {
+                "name": "unlock socket of charging station",
+                "type": "boolean",
+                "role": "switch",
+                "read": false,
+                "write": true,
+                "desc": "The command unlock unlocks the socket of the device. The charging process has to be stopped first (e.g. via currtime 0 1 or ena 0)"
+            }
+        },
+        {
+            "_id": "automatic",
+            "type": "channel",
+            "common": {
+                "name": "miscellaneous automatics"
+            },
+            "native": {}
+        },
+        {
+            "_id": "automatic.pauseWallbox",
+            "type": "state",
+            "common": {
+                "name": "pause charging of vehicle",
+                "type": "boolean",
+                "role": "value",
+                "read": true,
+                "write": true,
+                "def": false,
+                "desc": "Switch to stop charging of vehicle. This switch has higher priority than photovoltaics and should be used to stop charging of vehicle"
+            },
+            "native": {}
+        },
+        {
+            "_id": "automatic.photovoltaics",
+            "type": "state",
+            "common": {
+                "name": "photovoltaics automatic enabled",
+                "type": "boolean",
+                "role": "value",
+                "read": true,
+                "write": true,
+                "def": true,
+                "desc": "Switch to load vehicle according to surplus of photovoltaics (true); otherwise load with maximum power (false)."
+            },
+            "native": {}
+        },
+        {
+            "_id": "automatic.addPower",
+            "type": "state",
+            "common": {
+                "name": "additional regard to run charging session",
+                "type": "number",
+                "role": "value",
+                "unit": "W",
+                "read": true,
+                "write": true,
+                "def": 0,
+                "desc": "amount of watts to be used as regard to start charging session"
+            },
+            "native": {}
+        },
+        {
+            "_id": "automatic.limitCurrent",
+            "type": "state",
+            "common": {
+                "name": "limit dynamic charging to this value of amperage (0 = no limitation)",
+                "type": "number",
+                "role": "value",
+                "unit": "mA",
+                "read": true,
+                "write": true,
+                "def": 0,
+                "desc": "The amount of dynamic charing current will be limited to this value (0 = no limitation)"
+            },
+            "native": {}
+        },
+        {
+            "_id": "automatic.calcPhases",
+            "type": "state",
+            "common": {
+                "name": "count of phases to calculate with for KeContact Deutschland-Edition",
+                "type": "number",
+                "role": "value",
+                "unit": "phases",
+                "read": true,
+                "write": true,
+                "def": 0,
+                "desc": "Keba charging station KeContact Deutschland-Edition has no energy meter. Therefore the adapter cannot measure power comsuptions of vehicle. The help estimation please enter number of phases here."
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics",
+            "type": "channel",
+            "common": {
+                "name": "additional statistic information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.availableFirmware",
+            "type": "state",
+            "common": {
+                "name": "current available firmware version on keba.com",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "current version of firmware found on keba.com website"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.surplus",
+            "type": "state",
+            "common": {
+                "name": "current surplus for PV automatics",
+                "type": "number",
+                "role": "value",
+                "unit": "W",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "Surplus used for last calculation of PV automatics"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.maxPower",
+            "type": "state",
+            "common": {
+                "name": "maximum power for wallbox",
+                "type": "number",
+                "role": "value",
+                "unit": "W",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "maximum amount of watts available for charging station in case of power limitation"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.chargingPhases",
+            "type": "state",
+            "common": {
+                "name": "number of current charging phases",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "number of phases with which vehicle is currently charging"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.plugTimestamp",
+            "type": "state",
+            "common": {
+                "name": "timestamp when vehicle was pluged to wallbox",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when car was last plugged to wallbox, null if unplugged"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.chargeTimestamp",
+            "type": "state",
+            "common": {
+                "name": "timestamp when vehicle started to charge",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.regardTimestamp",
+            "type": "state",
+            "common": {
+                "name": "timestamp when charging session was continued with regard",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when charging was continued even when there were no longer a surplus"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.1p3pSwTimestamp",
+            "type": "state",
+            "common": {
+                "name": "timestamp when 1p3pSw was changed",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when last phase switch occured"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.lastChargeStart",
+            "type": "state",
+            "common": {
+                "name": "timestamp when last charging process was started",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when car was plugged to wallbox for last charging process"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.lastChargeFinish",
+            "type": "state",
+            "common": {
+                "name": "timestamp when last charging process was finished",
+                "type": "string",
+                "role": "datetime",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "date and time when car was unplugged from wallbox for last charging process"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.lastChargeAmount",
+            "type": "state",
+            "common": {
+                "name": "charge amount of last charging process",
+                "type": "number",
+                "role": "value",
+                "unit": "kWh",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "Power consumption of the last loading session in Wh."
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.sessionId",
+            "type": "state",
+            "common": {
+                "name": "session ID of current charging session",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "unique session ID"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.rfid_tag",
+            "type": "state",
+            "common": {
+                "name": "RFID tag of current charging session",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "RFID token used for charging session"
+            },
+            "native": {}
+        },
+        {
+            "_id": "statistics.rfid_class",
+            "type": "state",
+            "common": {
+                "name": "RFID class of current charging session",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": false,
+                "def": null,
+                "desc": "RFID class used for charging session"
+            },
+            "native": {}
+        },
+        {
+            "_id": "internal",
+            "type": "channel",
+            "common": {
+                "name": "internal data for communication between instances"
+            },
+            "native": {}
+        },
+        {
+            "_id": "internal.message",
+            "type": "state",
+            "common": {
+                "name": "wallbox message exchange",
+                "type": "string",
+                "role": "text",
+                "read": true,
+                "write": true,
+                "def": null,
+                "desc": "messages received from other instances for this wallbox"
+            },
+            "native": {}
+        }
+    ]
 }

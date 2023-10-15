@@ -99,6 +99,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (Sneak-L8) multiple options for battery storage strategy
+
 ### 2.0.2 (2023-10-10)
 * (Sneak-L8) default value for minimum regard time (180 seconds)
 * (Sneak-L8) fix calculation of phases for reduced charging

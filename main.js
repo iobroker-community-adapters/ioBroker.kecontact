@@ -68,7 +68,6 @@ let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
 let min1p3pSwSec         = 0;      // minimum time betwenn phase switching
-let batteryStategy       = 0;      // strategy how to use battery storage for charging EV
 let isMaxPowerCalculation = false; // switch to show if max power calculation is active
 let valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
 let valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging

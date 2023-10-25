@@ -77,7 +77,7 @@ let stateFor1p3pAck      = false;  // Is state acknowledged?
 let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching, -1 = temporarily disabled
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
-let limitBatteryStorage  = false;  // limit power of battery storage to mininum power to continue charging
+let batteryStrategy      = -1;     // default = don't care for a battery storage
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
@@ -369,7 +369,6 @@ async function main() {
     adapter.log.info("config stateBatterySoC: " + adapter.config.stateBatterySoC);
     adapter.log.info("config batteryPower: " + adapter.config.batteryPower);
     adapter.log.info("config batteryMinSoC: " + adapter.config.batteryMinSoC);
-    adapter.log.info("config limitBatteryStoragePower: " + adapter.config.limitBatteryStoragePower);
     adapter.log.info("config batteryStorageStrategy: " + adapter.config.batteryStorageStrategy);
     adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
     adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
@@ -681,11 +680,8 @@ function checkConfig() {
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatterySoC) && everythingFine;
         if ((isForeignStateSpecified(adapter.config.stateBatteryCharging) ||
             isForeignStateSpecified(adapter.config.stateBatteryDischarging) ||
-            adapter.config.batteryPower > 0) &&
-            adapter.config.limitBatteryStoragePower == true) {
-            limitBatteryStorage = true;
-        } else {
-            limitBatteryStorage = false;
+            adapter.config.batteryPower > 0)) {
+            batteryStrategy = adapter.config.batteryStorageStrategy;
         }
         if (adapter.config.useX1forAutomatic) {
             useX1switchForAutomatic = true;
@@ -978,6 +974,39 @@ async function handleJsonMessage(message) {
     }
 }
 
+/**
+ * Return whether battery is not to be used and vehicle is priorized
+ * @returns {boolean} true if this mode is activated
+ */
+function isNotUsingBatteryWithPrioOnVehicle() {
+    return batteryStrategy == 0;
+
+}
+
+/**
+ * Return whether battery is not to be used and battery is priorized before vehicle
+ * @returns {boolean} true if this mode is activated
+ */
+function isNotUsingBatteryWithPrioOnBattery() {
+    return batteryStrategy == 1;
+
+}
+
+/**
+ * Return whether battery is not to be used and vehicle is priorized
+ * @returns {boolean} true if this mode is activated
+ */
+function isUsingBatteryForMinimumChargingOfVehicle() {
+    return batteryStrategy == 2;
+}
+
+/**
+ * Return whether battery is not to be used and vehicle is priorized
+ * @returns {boolean} true if this mode is activated
+ */
+function isUsingBatteryForFullChargingOfVehicle() {
+    return batteryStrategy == 3;
+}
 
 /**
  * Get the minimum current for wallbox
@@ -1072,18 +1101,30 @@ function getWallboxPowerInWatts() {
 }
 
 /**
- * Get delta to add to available power to ignore battery power (fullPowerrequested == false) or to word with surplus plus power
+ * Get delta to add to available power to ignore battery power (fullPowerRequested == false) or to work with surplus plus power
  * of battery storage.
  *
  * @param {boolean} isFullPowerRequested if checked then maximum available power of battery storage will be returned
  * @returns {number} delta to be added to surplus for available power for charging vehicle.
  */
 function getBatteryStoragePower(isFullPowerRequested) {
+    // Beispiel: Surplus = 2000W
+    // Batterie entladen mit 1000W
+    // Max. Leistung Batterie: 2500W
     const batteryPower = getStateDefault0(adapter.config.stateBatteryCharging) - getStateDefault0(adapter.config.stateBatteryDischarging);
-    if (limitBatteryStorage == false || isFullPowerRequested == true) {
-        if (adapter.config.batteryMinSoC > 0 && getStateDefault0(adapter.config.stateBatterySoC) > adapter.config.batteryMinSoC) {
-            return batteryPower + getStateDefault0(adapter.config.batteryPower);
+    if (isNotUsingBatteryWithPrioOnBattery()) {
+        if (batteryPower > 0) {
+            return 0;
         }
+    } else if (isNotUsingBatteryWithPrioOnVehicle() ||
+            (isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested == false)) {
+        return batteryPower;
+    } else if (isUsingBatteryForFullChargingOfVehicle() ||
+            (isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested == true)) {
+        const maxBatteryPower = (adapter.config.batteryMinSoC == 0 || getStateDefault0(adapter.config.stateBatterySoC) > adapter.config.batteryMinSoC) ? adapter.config.batteryPower : 0;
+        return maxBatteryPower + batteryPower;
+    } else {
+        return 0;
     }
     return batteryPower;
 }
@@ -1554,8 +1595,8 @@ function checkWallboxPower() {
             if (curr > tempMax) {
                 curr = tempMax;
             }
-            if (limitBatteryStorage == true) {
-                if (curr < minAmperage && isVehicleCharging() && getSurplusWithoutWallbox(true) > minAmperage ) {
+            if (isUsingBatteryForMinimumChargingOfVehicle() == true) {
+                if (curr < minAmperage && isVehicleCharging() && getAmperage(getSurplusWithoutWallbox(true), phases) > minAmperage ) {
                     curr = minAmperage;
                 }
             }
@@ -1620,14 +1661,14 @@ function checkWallboxPower() {
             if (chargeTimestamp !== null) {
                 if (curr < getMinCurrent()) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
-                    if (addPower > 0) {
+                    if (underusage > 0) {
                         adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
                         curr = getAmperage(available + addPower + underusage, phases);
                         if (curr >= getMinCurrent()) {
                             adapter.log.info("tolerated under-usage of charge power, continuing charging session");
                             curr = getMinCurrent();
                             if (newValueFor1p3pSwitching == valueFor3pCharging) {
-                                newValueFor1p3pSwitching = null;  // than also stop possible 1p to 3p switching
+                                newValueFor1p3pSwitching = null;  // then also stop possible 1p to 3p switching
                             }
                         }
                     }

@@ -984,6 +984,20 @@
             "native": {}
         },
         {
+            "_id": "automatic.batteryStorageStrategy",
+            "type": "state",
+            "common": {
+                "name": "strategy to use for battery storage (1-4)",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": true,
+                "def": 0,
+                "desc": "Dynamic value which strategy should be used for battery storage (see values in settings, 0 = use strategy from settings)"
+            },
+            "native": {}
+        },
+        {
             "_id": "statistics",
             "type": "channel",
             "common": {

@@ -77,7 +77,7 @@ let stateFor1p3pAck      = false;  // Is state acknowledged?
 let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching, -1 = temporarily disabled
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
-let batteryStrategy      = -1;     // default = don't care for a battery storage
+let batteryStrategy      = 0;      // default = don't care for a battery storage
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
@@ -122,6 +122,7 @@ const statePvAutomatic         = "automatic.photovoltaics";     /*switch to char
 const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
 const stateLimitCurrent        = "automatic.limitCurrent";      /*maximum amperage for charging*/
 const stateManualPhases        = "automatic.calcPhases";        /*count of phases to calculate with for KeContact Deutschland-Edition*/
+const stateBatteryStrategy     = "automatic.batteryStorageStrategy"; /*strategy to use for battery storage dynamically*/
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
@@ -975,11 +976,24 @@ async function handleJsonMessage(message) {
 }
 
 /**
+ * Return battery storage strategy to be used (from state or from settings)
+ * @returns {number} number of strategy (1-4) or 0 if none
+ */
+function getBatteryStorageStrategy() {
+    const strategy = getStateDefault0(stateBatteryStrategy);
+    if (strategy > 0) {
+        return strategy;
+    }
+    return batteryStrategy;
+}
+
+
+/**
  * Return whether battery is not to be used and vehicle is priorized
  * @returns {boolean} true if this mode is activated
  */
 function isNotUsingBatteryWithPrioOnVehicle() {
-    return batteryStrategy == 0;
+    return getBatteryStorageStrategy() == 1;
 
 }
 
@@ -988,7 +1002,7 @@ function isNotUsingBatteryWithPrioOnVehicle() {
  * @returns {boolean} true if this mode is activated
  */
 function isNotUsingBatteryWithPrioOnBattery() {
-    return batteryStrategy == 1;
+    return getBatteryStorageStrategy() == 2;
 
 }
 
@@ -997,7 +1011,7 @@ function isNotUsingBatteryWithPrioOnBattery() {
  * @returns {boolean} true if this mode is activated
  */
 function isUsingBatteryForMinimumChargingOfVehicle() {
-    return batteryStrategy == 2;
+    return getBatteryStorageStrategy() == 3;
 }
 
 /**
@@ -1005,7 +1019,7 @@ function isUsingBatteryForMinimumChargingOfVehicle() {
  * @returns {boolean} true if this mode is activated
  */
 function isUsingBatteryForFullChargingOfVehicle() {
-    return batteryStrategy == 3;
+    return getBatteryStorageStrategy() == 4;
 }
 
 /**

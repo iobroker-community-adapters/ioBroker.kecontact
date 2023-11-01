@@ -579,6 +579,9 @@ function start() {
     stateChangeListeners[adapter.namespace + "." + stateLimitCurrent] = function () {
         // no real action to do
     };
+    stateChangeListeners[adapter.namespace + "." + stateBatteryStrategy] = function () {
+        // no real action to do
+    };
     stateChangeListeners[adapter.namespace + "." + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
         handleWallboxExchange(newValue);
     };

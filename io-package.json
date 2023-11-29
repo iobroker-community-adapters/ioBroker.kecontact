@@ -1015,7 +1015,7 @@
                 "write": true,
                 "def": 0,
                 "desc": "Dynamic value which strategy should be used for battery storage",
-                "states:": {
+                "states": {
                     "0": "none (use strategy set in adapter settings)",
                     "1": "do not use battery storage (priority on vehicle)",
                     "2": "do not use battery storgae (priority on battery)",

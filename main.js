@@ -1069,7 +1069,7 @@ function stopCharging() {
 
 function regulateWallbox(milliAmpere) {
     let oldValue = 0;
-    if ((getStateDefaultFalse(stateWallboxEnabled))||(getStateDefault0(stateWallboxState) == 3)) {
+    if (getStateDefaultFalse(stateWallboxEnabled) || (getStateDefault0(stateWallboxState) == 3)) {
         oldValue = getStateDefault0(stateWallboxCurrent);
     }
 
@@ -1077,7 +1077,7 @@ function regulateWallbox(milliAmpere) {
         if (milliAmpere == 0) {
             adapter.log.info("stop charging");
         } else if (oldValue == 0) {
-            adapter.log.info("(re)start charging");
+            adapter.log.info("(re)start charging with " + milliAmpere + "mA" + ((isMaxPowerCalculation) ? " (maxPower)" : ""));
         } else {
             adapter.log.info("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA" + ((isMaxPowerCalculation) ? " (maxPower)" : ""));
         }

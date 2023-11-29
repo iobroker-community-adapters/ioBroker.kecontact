@@ -321,7 +321,13 @@
                 "type": "number",
                 "role": "value",
                 "read": true,
-                "write": false
+                "write": false,
+                "states": {
+                    "0": "no time quality, clock never set",
+                    "1": "clock set but not synchronized",
+                    "2": "clock set and synchronized but not reliable",
+                    "3": "clock set and synchronized reliable (NTP, OCC, ...)"
+                }
             },
             "native": {
                 "udpKey": "timeQ"
@@ -364,7 +370,15 @@
                 "role": "value",
                 "read": true,
                 "write": false,
-                "desc": "Current state of the wallbox"
+                "desc": "Current state of the wallbox",
+                "states": {
+                    "0": "startup",
+                    "1": "not ready for charging",
+                    "2": "ready for charging, waiting for vehicle",
+                    "3": "charging",
+                    "4": "error present",
+                    "5": "charging temporarily interrupted due temperature, RFID auth or other"
+                }
             },
             "native": {
                 "udpKey": "State"
@@ -409,7 +423,14 @@
                 "role": "value",
                 "read": true,
                 "write": false,
-                "desc": "Current condition of the loading connection"
+                "desc": "Current condition of the loading connection",
+                "states": {
+                    "0": "no cable plugged",
+                    "1": "cable plugged in charging station, unlocked",
+                    "3": "cable plugged in charging station and locked",
+                    "5": "cable plugged in charging station and vehicle, unlocked",
+                    "7": "cable plugged in charging station and vehicle and locked"
+                }
             },
             "native": {
                 "udpKey": "Plug"

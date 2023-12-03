@@ -1603,7 +1603,7 @@ function checkWallboxPower() {
 
     // lock wallbox if requested or available amperage below minimum
     if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() ||
-        (isPvAutomaticsActive() && ! isVehiclePlugged())) {
+        (isPvAutomaticsActive() && (! isVehiclePlugged() || getStateDefault0(stateWallboxState) == 5))) {
         curr = 0;
     } else {
         // if vehicle is currently charging and was not before, then save timestamp

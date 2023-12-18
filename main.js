@@ -78,6 +78,7 @@ let stepFor1p3pSwitching = 0;      // 0 = nothing to switch, 1 = stop charging, 
 let retries1p3pSwitching = 0;
 let valueFor1p3pSwitching = null;  // value for switch
 let batteryStrategy      = 0;      // default = don't care for a battery storage
+let startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
 const voltage            = 230;    // calculate with european standard voltage of 230V
 const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
@@ -1073,6 +1074,13 @@ function regulateWallbox(milliAmpere) {
         oldValue = getStateDefault0(stateWallboxCurrent);
     }
 
+    if (isNoChargingDueToInterupptedStateOfWallbox(milliAmpere)) {
+        if (milliAmpere > 0) {
+            adapter.log.debug("No charging due to interupted charging station");
+        }
+        milliAmpere = 0;
+    }
+
     if (milliAmpere != oldValue) {
         if (milliAmpere == 0) {
             adapter.log.info("stop charging");
@@ -1550,6 +1558,26 @@ function isContinueDueToMin1p3pSwTime(aktDate) {
     return false;
 }
 
+/**
+ * Checks whether charging station is in state 5 (no charging due to no RFID, power limitation or conditions of vehicle).
+ * After one attempt was made, no futher attempts should be done.
+ * @param {number} milliAmpere  geplante Ladestromstärke
+ */
+function isNoChargingDueToInterupptedStateOfWallbox(milliAmpere) {
+    if (milliAmpere <= 0) {
+        startWithState5Attempted = false;
+        return false;
+    }
+    if (getStateDefault0(stateWallboxState) == 5) {
+        if (startWithState5Attempted == true) {
+            return true;
+        }
+        startWithState5Attempted = false;
+    } else {
+        startWithState5Attempted = false;
+    }
+    return false;
+}
 
 function checkWallboxPower() {
     // update charging state also between two calculations to recognize charging session
@@ -1602,8 +1630,7 @@ function checkWallboxPower() {
     let newValueFor1p3pSwitching = null;
 
     // lock wallbox if requested or available amperage below minimum
-    if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() ||
-        (isPvAutomaticsActive() && (! isVehiclePlugged()) || getStateDefault0(stateWallboxState) == 5)) {
+    if (getStateDefaultFalse(stateWallboxDisabled) == true || tempMax < getMinCurrent() || (isPvAutomaticsActive() && ! isVehiclePlugged())) {
         curr = 0;
     } else {
         // if vehicle is currently charging and was not before, then save timestamp

@@ -1026,6 +1026,20 @@
             "native": {}
         },
         {
+            "_id": "automatic.batterySoCForCharging",
+            "type": "state",
+            "common": {
+                "name": "SoC of battery storage above which battery power is used for charging",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": true,
+                "def": 0,
+                "desc": "With this state you can dynamically set a value of SoC /state of charge) above with battery storage can be used for charging vehicle"
+            },
+            "native": {}
+        },
+        {
             "_id": "statistics",
             "type": "channel",
             "common": {

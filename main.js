@@ -124,6 +124,7 @@ const stateAddPower            = "automatic.addPower";          /*additional reg
 const stateLimitCurrent        = "automatic.limitCurrent";      /*maximum amperage for charging*/
 const stateManualPhases        = "automatic.calcPhases";        /*count of phases to calculate with for KeContact Deutschland-Edition*/
 const stateBatteryStrategy     = "automatic.batteryStorageStrategy"; /*strategy to use for battery storage dynamically*/
+const stateMinimumSoCOfBatteryStorage = "automatic.batterySoCForCharging"; /*SoC above which battery storage may be used for charging vehicle*/
 const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
 const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
 const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
@@ -1126,6 +1127,25 @@ function getWallboxPowerInWatts() {
 }
 
 /**
+ * Get minimum SoC of battery storage above which it may be used for charging vehicle
+ * @returns {number} SoC
+ */
+function getMinimumBatteryStorageSocForCharging() {
+    const dynamicValue = getStateDefault0(stateMinimumSoCOfBatteryStorage);
+    const fixValue = adapter.config.batteryMinSoC;
+    let value;
+    if (dynamicValue > 0 && dynamicValue >= fixValue) {
+        value = dynamicValue;
+    } else {
+        value = fixValue;
+    }
+    if (value > 0 && value <= 100) {
+        return value;
+    }
+    return 0;
+}
+
+/**
  * Get delta to add to available power to ignore battery power (fullPowerRequested == false) or to work with surplus plus power
  * of battery storage.
  *
@@ -1146,7 +1166,7 @@ function getBatteryStoragePower(isFullPowerRequested) {
         return batteryPower;
     } else if (isUsingBatteryForFullChargingOfVehicle() ||
             (isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested == true)) {
-        const maxBatteryPower = (adapter.config.batteryMinSoC == 0 || getStateDefault0(adapter.config.stateBatterySoC) > adapter.config.batteryMinSoC) ? adapter.config.batteryPower : 0;
+        const maxBatteryPower = (getStateDefault0(adapter.config.stateBatterySoC) > getMinimumBatteryStorageSocForCharging()) ? adapter.config.batteryPower : 0;
         return maxBatteryPower + batteryPower;
     } else {
         return 0;

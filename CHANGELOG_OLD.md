@@ -1,4 +1,7 @@
 # Older changes
+## 1.5.1 (2022-11-02)
+* (Sneak-L8) update release script to v3
+
 ## 1.5.0 (2022-11-01)
 * (Sneak-L8) minor fixes from adapter check
 * (Sneak-L8) using Weblate for translations

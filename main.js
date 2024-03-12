@@ -587,7 +587,9 @@ function start() {
     stateChangeListeners[adapter.namespace + "." + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
         handleWallboxExchange(newValue);
     };
-
+    stateChangeListeners[adapter.namespace + "." + stateMinimumSoCOfBatteryStorage] = function (oldValue, newValue) {
+        handleWallboxExchange(newValue);
+    };
     //sendUdpDatagram("i");   only needed for discovery
     requestReports();
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);

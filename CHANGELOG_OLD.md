@@ -1,4 +1,7 @@
 # Older changes
+## 1.5.2 (2022-11-02)
+* (Sneak-L8) fix error in release script
+
 ## 1.5.1 (2022-11-02)
 * (Sneak-L8) update release script to v3
 

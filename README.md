@@ -106,6 +106,10 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+ * (fischmi) fix error when chanigig dynamic SoC parameter
+ 
 ### 2.1.0 (2024-01-06)
 * (Sneak-L8) multiple options for battery storage strategy
 * (Sneak-L8) added names for values of some states: state, plug, timeQ and batteryStorageStrategy

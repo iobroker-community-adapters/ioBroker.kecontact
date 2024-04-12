@@ -80,7 +80,7 @@ let valueFor1p3pSwitching = null;  // value for switch
 let batteryStrategy      = 0;      // default = don't care for a battery storage
 let startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
 const voltage            = 230;    // calculate with european standard voltage of 230V
-const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/Downloads";
+const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/downloads";
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
 //const regexP30xSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<h3/gi;
 const regexFirmware      = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;

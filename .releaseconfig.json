@@ -1,3 +1,4 @@
 {
-	"plugins": ["iobroker", "license", "manual-review"]
+    "plugins": ["iobroker", "license", "manual-review"],
+    "numNews": 99
 }

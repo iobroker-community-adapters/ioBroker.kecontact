@@ -135,13 +135,17 @@
       "emobility",
       "e-mobility"
     ],
-    "license": "Apache-2.0",
+    "licenseInformation": {
+      "license": "Apache-2.0",
+      "type": "free"
+    },
     "platform": "Javascript/Node.js",
     "icon": "kecontact.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.kecontact/master/admin/kecontact.png",
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.kecontact/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "daemon",
     "type": "hardware",
     "compact": true,
@@ -151,7 +155,12 @@
     "supportCustoms": false,
     "dependencies": [
       {
-        "js-controller": ">=2.0.0"
+        "js-controller": ">=5.0.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=5.1.13"
       }
     ],
     "plugins": {

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "news": {
+      "2.2.0": {
+        "en": "Adapter requires nodejs >= 18 and js-controller >= 5 now.\nDependencies have been updated.\nfix url for download page at Keba website\nfix lint problems by replacing double by single quotes",
+        "de": "Adapter benötigt Knoten >= 18 und js-Controller >= 5 jetzt.\nAbhängigkeiten wurden aktualisiert.\nurl für Download-Seite auf Keba Website\nlint-probleme beheben, indem doppel durch einzelne zitate ersetzt werden",
+        "ru": "Адаптер требует узлов >= 18 и js-контроллер >= Сейчас 5.\nЗависимость была обновлена.\nисправить URL для загрузки страницы на сайте Keba\nисправить проблемы линта, заменив двойную на одиночные цитаты",
+        "pt": "Adapter requer nodejs >= 18 e js-controller >= 5 agora.\nAs dependências foram atualizadas.\ncorrigir url para página de download no site da Keba\ncorrigir problemas lint substituindo o dobro por citações únicas",
+        "nl": "Voor adapters zijn nodejs (m.u.v. 18 en js-controller) vereist Vijf nu.\nAfhankelijkheden zijn bijgewerkt.\nfix url voor download pagina op Keba website\nfix pluis problemen door het vervangen van dubbele door enkele citaten",
+        "fr": "Adaptateur nécessite nodejs >= 18 et js-controller >= 5 maintenant.\nLes dépendances ont été actualisées.\nfixer url pour télécharger la page sur le site de Keba\nrésoudre les problèmes de linte en remplaçant le double par des guillemets simples",
+        "it": "Adattatore richiede nodejs >= 18 e js-controller >= 5 ora.\nLe dipendenze sono state aggiornate.\ncorrezione url per la pagina di download su Keba sito\nrisolvere i problemi legati sostituendo il doppio da singole citazioni",
+        "es": "Adaptador requiere nodejs н= 18 y js-controller √= 5 ahora.\nSe han actualizado las dependencias.\nfijar url para la página de descarga en el sitio web de Keba\nsolucionar problemas de lint reemplazando el doble por citas individuales",
+        "pl": "Adapter wymaga nodejs > = 18 i kontroler js- > = 5 teraz.\nZaktualizowano zależność.\nfix url do pobrania strony na stronie internetowej Keba\nrozwiązać problemy z kłami poprzez zastąpienie podwójnego przez pojedyncze cudzysłów",
+        "uk": "Адаптер вимагає nodejs >= 18 і js-controller >= 5 тепер.\nОновлено залежність.\nвиправити URL-адресу для завантаження сторінок на сайті Keba\nвиправити проблеми розфарбовування за допомогою заміни подвійних лапок",
+        "zh-cn": "适配器需要节点QQ18和js控制器QQ 5点了.\n附属关系已经更新.\nkeba 网站下载网页的校正url\n通过用单引号取代双引号来修正问题"
+      },
       "2.1.1": {
         "en": "fix error when chanigig dynamic SoC parameter",
         "de": "fehler beheben, wenn chanigig dynamischer SoC Parameter",

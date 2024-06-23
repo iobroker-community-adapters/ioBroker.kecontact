@@ -1,4 +1,12 @@
 # Older changes
+## 2.0.0 (2023-06-26)
+* (Sneak-L8) support for 1p/3p-charging (start charging with 1 phase and switch to 3 phases when enough surplus available) including Keba KeContact S10
+* (Sneak-L8) minimum amperage allowed to 5A because some vehicles and KeContact (undocumented) allow this value
+* (Sneak-L8) new switch to limit battery storage support only to hold minimum charging power
+* (Sneak-L8) catch error when requesting firmware page (sentry IOBROKER-KECONTACT-1H)
+* (Sneak-L8) RFID tag and class where not updated in channel "statitics" when no charging sessions were obtained
+* (Sneak-L8) added new Keba model Company Car Wall Box MID (sentry IOBROKER-KECONTACT-1K)
+
 ## 1.5.2 (2022-11-02)
 * (Sneak-L8) fix error in release script
 

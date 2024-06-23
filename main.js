@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /*
  * Created with @iobroker/create-adapter v1.33.0
@@ -6,11 +6,11 @@
 
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
-const utils = require("@iobroker/adapter-core");
+const utils = require('@iobroker/adapter-core');
 
 // Load your modules here, e.g.:
-const dgram = require("dgram");
-const request = require("request");
+const dgram = require('dgram');
+const request = require('request');
 
 /**
  * The adapter instance
@@ -41,15 +41,15 @@ const TYPE_D_EDITION = 6;    // product id (only P30) is KC-P30-EC220112-000-DE,
 
 
 //var ioBroker_Settings
-let ioBrokerLanguage      = "en";
-const chargeTextAutomatic = {"en": "PV automatic active", "de": "PV-optimierte Ladung"};
-const chargeTextMax       = {"en": "max. charging power", "de": "volle Ladeleistung"};
+let ioBrokerLanguage      = 'en';
+const chargeTextAutomatic = {'en': 'PV automatic active', 'de': 'PV-optimierte Ladung'};
+const chargeTextMax       = {'en': 'max. charging power', 'de': 'volle Ladeleistung'};
 
 let wallboxWarningSent   = false;  // Warning for inacurate regulation with Deutshcland Edition
 let wallboxUnknownSent   = false;  // Warning wallbox not recognized
 let isPassive            = true;   // no automatic power regulation?
 let lastDeviceData       = null;   // time of last check for device information
-const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => "report 1"
+const intervalDeviceDataUpdate = 24 * 60 * 60 * 1000;  // check device data (e.g. firmware) every 24 hours => 'report 1'
 let intervalPassiveUpdate = 10 * 60 * 1000;  // check charging information every 10 minutes
 let timerDataUpdate      = null;   // interval object for calculating timer
 const intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
@@ -80,57 +80,57 @@ let valueFor1p3pSwitching = null;  // value for switch
 let batteryStrategy      = 0;      // default = don't care for a battery storage
 let startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
 const voltage            = 230;    // calculate with european standard voltage of 230V
-const firmwareUrl        = "https://www.keba.com/en/emobility/service-support/downloads/downloads";
+const firmwareUrl        = 'https://www.keba.com/en/emobility/service-support/downloads/downloads';
 const regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
 //const regexP30xSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<h3/gi;
 const regexFirmware      = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;
 const regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
 
-const stateWallboxEnabled      = "enableUser";                  /*Enable User*/
-const stateWallboxCurrent      = "currentUser";                 /*Current User*/
-const stateWallboxMaxCurrent   = "currentHardware";             /*Maximum Current Hardware*/
-const stateWallboxPhase1       = "i1";                          /*Current 1*/
-const stateWallboxPhase2       = "i2";                          /*Current 2*/
-const stateWallboxPhase3       = "i3";                          /*Current 3*/
-const stateWallboxPlug         = "plug";                        /*Plug status */
-const stateWallboxState        = "state";                       /*State of charging session */
-const stateWallboxPower        = "p";                           /*Power*/
-const stateWallboxChargeAmount = "ePres";                       /*ePres - amount of charged energy in Wh */
-const stateWallboxDisplay      = "display";
-const stateWallboxOutput       = "output";
-const stateSetEnergy           = "setenergy";
-const stateReport              = "report";
-const stateStart               = "start";
-const stateStop                = "stop";
-const stateSetDateTime         = "setdatetime";
-const stateUnlock              = "unlock";
-const stateProduct             = "product";
-const stateX1input             = "input";
-const stateFirmware            = "firmware";                    /*current running version of firmware*/
-const stateFirmwareAvailable   = "statistics.availableFirmware";/*current version of firmware available at keba.com*/
-const stateSurplus             = "statistics.surplus";          /*current surplus for PV automatics*/
-const stateMaxPower            = "statistics.maxPower";         /*maximum power for wallbox*/
-const stateChargingPhases      = "statistics.chargingPhases";   /*number of phases with which vehicle is currently charging*/
-const statePlugTimestamp       = "statistics.plugTimestamp";    /*Timestamp when vehicled was plugged to wallbox*/
-const stateChargeTimestamp     = "statistics.chargeTimestamp";  /*Timestamp when charging (re)started */
-const stateRegardTimestamp     = "statistics.regardTimestamp";  /*Timestamp when charging session was continued with regard */
-const state1p3pSwTimestamp     = "statistics.1p3pSwTimestamp";  /*Timestamp when 1p3pSw was changed */
-const stateSessionId           = "statistics.sessionId";        /*id of current charging session */
-const stateRfidTag             = "statistics.rfid_tag";         /*rfid tag of current charging session */
-const stateRfidClass           = "statistics.rfid_class";       /*rfid class of current charging session */
-const stateWallboxDisabled     = "automatic.pauseWallbox";      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
-const statePvAutomatic         = "automatic.photovoltaics";     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
-const stateAddPower            = "automatic.addPower";          /*additional regard to run charging session*/
-const stateLimitCurrent        = "automatic.limitCurrent";      /*maximum amperage for charging*/
-const stateManualPhases        = "automatic.calcPhases";        /*count of phases to calculate with for KeContact Deutschland-Edition*/
-const stateBatteryStrategy     = "automatic.batteryStorageStrategy"; /*strategy to use for battery storage dynamically*/
-const stateMinimumSoCOfBatteryStorage = "automatic.batterySoCForCharging"; /*SoC above which battery storage may be used for charging vehicle*/
-const stateLastChargeStart     = "statistics.lastChargeStart";  /*Timestamp when *last* charging session was started*/
-const stateLastChargeFinish    = "statistics.lastChargeFinish"; /*Timestamp when *last* charging session was finished*/
-const stateLastChargeAmount    = "statistics.lastChargeAmount"; /*Energy charging in *last* session in kWh*/
-const stateMsgFromOtherwallbox = "internal.message";            /*Message passed on from other instance*/
-const stateX2Source            = "x2phaseSource";               /*X2 switch source */
-const stateX2Switch            = "x2phaseSwitch";               /*X2 switch */
+const stateWallboxEnabled      = 'enableUser';                  /*Enable User*/
+const stateWallboxCurrent      = 'currentUser';                 /*Current User*/
+const stateWallboxMaxCurrent   = 'currentHardware';             /*Maximum Current Hardware*/
+const stateWallboxPhase1       = 'i1';                          /*Current 1*/
+const stateWallboxPhase2       = 'i2';                          /*Current 2*/
+const stateWallboxPhase3       = 'i3';                          /*Current 3*/
+const stateWallboxPlug         = 'plug';                        /*Plug status */
+const stateWallboxState        = 'state';                       /*State of charging session */
+const stateWallboxPower        = 'p';                           /*Power*/
+const stateWallboxChargeAmount = 'ePres';                       /*ePres - amount of charged energy in Wh */
+const stateWallboxDisplay      = 'display';
+const stateWallboxOutput       = 'output';
+const stateSetEnergy           = 'setenergy';
+const stateReport              = 'report';
+const stateStart               = 'start';
+const stateStop                = 'stop';
+const stateSetDateTime         = 'setdatetime';
+const stateUnlock              = 'unlock';
+const stateProduct             = 'product';
+const stateX1input             = 'input';
+const stateFirmware            = 'firmware';                    /*current running version of firmware*/
+const stateFirmwareAvailable   = 'statistics.availableFirmware';/*current version of firmware available at keba.com*/
+const stateSurplus             = 'statistics.surplus';          /*current surplus for PV automatics*/
+const stateMaxPower            = 'statistics.maxPower';         /*maximum power for wallbox*/
+const stateChargingPhases      = 'statistics.chargingPhases';   /*number of phases with which vehicle is currently charging*/
+const statePlugTimestamp       = 'statistics.plugTimestamp';    /*Timestamp when vehicled was plugged to wallbox*/
+const stateChargeTimestamp     = 'statistics.chargeTimestamp';  /*Timestamp when charging (re)started */
+const stateRegardTimestamp     = 'statistics.regardTimestamp';  /*Timestamp when charging session was continued with regard */
+const state1p3pSwTimestamp     = 'statistics.1p3pSwTimestamp';  /*Timestamp when 1p3pSw was changed */
+const stateSessionId           = 'statistics.sessionId';        /*id of current charging session */
+const stateRfidTag             = 'statistics.rfid_tag';         /*rfid tag of current charging session */
+const stateRfidClass           = 'statistics.rfid_class';       /*rfid class of current charging session */
+const stateWallboxDisabled     = 'automatic.pauseWallbox';      /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
+const statePvAutomatic         = 'automatic.photovoltaics';     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
+const stateAddPower            = 'automatic.addPower';          /*additional regard to run charging session*/
+const stateLimitCurrent        = 'automatic.limitCurrent';      /*maximum amperage for charging*/
+const stateManualPhases        = 'automatic.calcPhases';        /*count of phases to calculate with for KeContact Deutschland-Edition*/
+const stateBatteryStrategy     = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/
+const stateMinimumSoCOfBatteryStorage = 'automatic.batterySoCForCharging'; /*SoC above which battery storage may be used for charging vehicle*/
+const stateLastChargeStart     = 'statistics.lastChargeStart';  /*Timestamp when *last* charging session was started*/
+const stateLastChargeFinish    = 'statistics.lastChargeFinish'; /*Timestamp when *last* charging session was finished*/
+const stateLastChargeAmount    = 'statistics.lastChargeAmount'; /*Energy charging in *last* session in kWh*/
+const stateMsgFromOtherwallbox = 'internal.message';            /*Message passed on from other instance*/
+const stateX2Source            = 'x2phaseSource';               /*X2 switch source */
+const stateX2Switch            = 'x2phaseSwitch';               /*X2 switch */
 
 /**
  * Starts the adapter instance
@@ -139,7 +139,7 @@ const stateX2Switch            = "x2phaseSwitch";               /*X2 switch */
 function startAdapter(options) {
     // Create the adapter and define its methods
     return adapter = utils.adapter(Object.assign({}, options, {
-        name: "kecontact",
+        name: 'kecontact',
 
         // The ready callback is called when databases are connected and adapter received configuration.
         // start here!
@@ -166,16 +166,16 @@ function startAdapter(options) {
         // If you need to accept messages in your adapter, uncomment the following block.
         // /**
         //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-        //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
+        //  * Using this method requires 'common.messagebox' property to be set to true in io-package.json
         //  */
         // message: (obj) => {
-        //     if (typeof obj === "object" && obj.message) {
-        //         if (obj.command === "send") {
+        //     if (typeof obj === 'object' && obj.message) {
+        //         if (obj.command === 'send') {
         //             // e.g. send email or pushover or whatever
-        //             adapter.log.info("send command");
+        //             adapter.log.info('send command');
 
         //             // Send response in callback if required
-        //             if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
+        //             if (obj.callback) adapter.sendTo(obj.from, obj.command, 'Message received', obj.callback);
         //         }
         //     }
         // },
@@ -187,7 +187,7 @@ function startAdapter(options) {
  */
 function onAdapterReady() {
     if (! checkConfig()) {
-        adapter.log.error("start of adapter not possible due to config errors");
+        adapter.log.error('start of adapter not possible due to config errors');
         return;
     }
     if (loadChargingSessions) {
@@ -240,8 +240,8 @@ function onAdapterUnload(callback) {
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter3);
 
     } catch (e) {
-        if (adapter.log)   // got an exception "TypeError: Cannot read property 'warn' of undefined"
-            adapter.log.warn("Error while closing: " + e);
+        if (adapter.log)   // got an exception 'TypeError: Cannot read property 'warn' of undefined'
+            adapter.log.warn('Error while closing: ' + e);
     }
 
     callback();
@@ -256,7 +256,7 @@ function onAdapterStateChange (id, state) {
     if (!id || !state) {
         return;
     }
-    //adapter.log.silly("stateChange " + id + " " + JSON.stringify(state));
+    //adapter.log.silly('stateChange ' + id + ' ' + JSON.stringify(state));
     // save state changes of foreign adapters - this is done even if value has not changed but acknowledged
 
     const oldValue = getStateInternal(id);
@@ -264,11 +264,11 @@ function onAdapterStateChange (id, state) {
     setStateInternal(id, newValue);
 
     // if vehicle is (un)plugged check if schedule has to be disabled/enabled
-    if (id == adapter.namespace + "." + stateWallboxPlug) {
+    if (id == adapter.namespace + '.' + stateWallboxPlug) {
         const wasVehiclePlugged   = isVehiclePlugged(oldValue);
         const isNowVehiclePlugged = isVehiclePlugged(newValue);
         if (isNowVehiclePlugged && ! wasVehiclePlugged) {
-            adapter.log.info("vehicle plugged to wallbox");
+            adapter.log.info('vehicle plugged to wallbox');
             if (stepFor1p3pSwitching < 0) {
                 reset1p3pSwitching();
             }
@@ -278,7 +278,7 @@ function onAdapterStateChange (id, state) {
             initChargingSession();
             forceUpdateOfCalculation();
         } else if (! isNowVehiclePlugged && wasVehiclePlugged) {
-            adapter.log.info("vehicle unplugged from wallbox");
+            adapter.log.info('vehicle unplugged from wallbox');
             finishChargingSession();
             set1p3pSwitching(valueFor1p3pOff);
             if (stepFor1p3pSwitching < 0) {
@@ -288,18 +288,18 @@ function onAdapterStateChange (id, state) {
     }
 
     // if the Wallbox have been disabled or enabled.
-    if (id == adapter.namespace + "." + stateWallboxDisabled) {
+    if (id == adapter.namespace + '.' + stateWallboxDisabled) {
         if (oldValue != newValue) {
-            adapter.log.info("change pause status of wallbox from " + oldValue + " to " + newValue);
+            adapter.log.info('change pause status of wallbox from ' + oldValue + ' to ' + newValue);
             newValue = getBoolean(newValue);
             forceUpdateOfCalculation();
         }
     }
 
     // if PV Automatic has been disable or enabled.
-    if (id == adapter.namespace + "." + statePvAutomatic) {
+    if (id == adapter.namespace + '.' + statePvAutomatic) {
         if (oldValue != newValue) {
-            adapter.log.info("change of photovoltaics automatic from " + oldValue + " to " + newValue);
+            adapter.log.info('change of photovoltaics automatic from ' + oldValue + ' to ' + newValue);
             newValue = getBoolean(newValue);
             displayChargeMode();
             forceUpdateOfCalculation();
@@ -307,10 +307,10 @@ function onAdapterStateChange (id, state) {
     }
 
     // if the state of the X1 Input has chaned.
-    if (id == adapter.namespace + "." + stateX1input) {
+    if (id == adapter.namespace + '.' + stateX1input) {
         if (useX1switchForAutomatic) {
             if (oldValue != newValue) {
-                adapter.log.info("change of photovoltaics automatic via X1 from " + oldValue + " to " + newValue);
+                adapter.log.info('change of photovoltaics automatic via X1 from ' + oldValue + ' to ' + newValue);
                 displayChargeMode();
                 forceUpdateOfCalculation();
             }
@@ -318,12 +318,12 @@ function onAdapterStateChange (id, state) {
     }
 
     // if the value for AddPower  was changes.
-    if (id == adapter.namespace + "." + stateAddPower) {
+    if (id == adapter.namespace + '.' + stateAddPower) {
         if (oldValue != newValue)
-            adapter.log.info("change additional power from regard from " + oldValue + " to " + newValue);
+            adapter.log.info('change additional power from regard from ' + oldValue + ' to ' + newValue);
     }
 
-    if (id == adapter.namespace + "." + stateFirmware) {
+    if (id == adapter.namespace + '.' + stateFirmware) {
         checkFirmware();
     }
 
@@ -340,7 +340,7 @@ function onAdapterStateChange (id, state) {
     }
 
     if (!Object.prototype.hasOwnProperty.call(stateChangeListeners, id)) {
-        adapter.log.error("Unsupported state change: " + id);
+        adapter.log.error('Unsupported state change: ' + id);
         return;
     }
 
@@ -356,51 +356,51 @@ function onAdapterStateChange (id, state) {
 async function main() {
 
     // Reset the connection indicator during startup
-    await adapter.setStateAsync("info.connection", false, true);
+    await adapter.setStateAsync('info.connection', false, true);
 
-    // The adapters config (in the instance object everything under the attribute "native") is accessible via
+    // The adapters config (in the instance object everything under the attribute 'native') is accessible via
     // adapter.config:
-    adapter.log.info("config host: " + adapter.config.host);
-    adapter.log.info("config passiveMode: " + adapter.config.passiveMode);
-    adapter.log.info("config pollInterval: " + adapter.config.pollInterval);
-    adapter.log.info("config loadChargingSessions: " + adapter.config.loadChargingSessions);
-    adapter.log.info("config useX1forAutomatic: " + adapter.config.useX1forAutomatic);
-    adapter.log.info("config stateRegard: " + adapter.config.stateRegard);
-    adapter.log.info("config stateSurplus: " + adapter.config.stateSurplus);
-    adapter.log.info("config stateBatteryCharging: " + adapter.config.stateBatteryCharging);
-    adapter.log.info("config stateBatteryDischarging: " + adapter.config.stateBatteryDischarging);
-    adapter.log.info("config stateBatterySoC: " + adapter.config.stateBatterySoC);
-    adapter.log.info("config batteryPower: " + adapter.config.batteryPower);
-    adapter.log.info("config batteryMinSoC: " + adapter.config.batteryMinSoC);
-    adapter.log.info("config batteryStorageStrategy: " + adapter.config.batteryStorageStrategy);
-    adapter.log.info("config statesIncludeWallbox: " + adapter.config.statesIncludeWallbox);
-    adapter.log.info("config.state1p3pSwitch: " + adapter.config.state1p3pSwitch);
-    adapter.log.info("config.1p3pViax2: " + adapter.config["1p3pViaX2"]);
-    adapter.log.info("config.1p3pSwitchIsNO: " + adapter.config["1p3pSwitchIsNO"] +
-        ", 1p = " + valueFor1pCharging + ", 3p = " + valueFor3pCharging + ", off = " + valueFor1p3pOff);
-    adapter.log.info("config minAmperage: " + adapter.config.minAmperage);
-    adapter.log.info("config addPower: " + adapter.config.addPower);
-    adapter.log.info("config delta: " + adapter.config.delta);
-    adapter.log.info("config underusage: " + adapter.config.underusage);
-    adapter.log.info("config minTime: " + adapter.config.minTime);
-    adapter.log.info("config regardTime: " + adapter.config.regardTime);
-    adapter.log.info("config maxPower: " + adapter.config.maxPower);
-    adapter.log.info("config stateEnergyMeter1: " + adapter.config.stateEnergyMeter1);
-    adapter.log.info("config stateEnergyMeter2: " + adapter.config.stateEnergyMeter2);
-    adapter.log.info("config stateEnergyMeter3: " + adapter.config.stateEnergyMeter3);
-    adapter.log.info("config wallboxNotIncluded: " + adapter.config.wallboxNotIncluded);
+    adapter.log.info('config host: ' + adapter.config.host);
+    adapter.log.info('config passiveMode: ' + adapter.config.passiveMode);
+    adapter.log.info('config pollInterval: ' + adapter.config.pollInterval);
+    adapter.log.info('config loadChargingSessions: ' + adapter.config.loadChargingSessions);
+    adapter.log.info('config useX1forAutomatic: ' + adapter.config.useX1forAutomatic);
+    adapter.log.info('config stateRegard: ' + adapter.config.stateRegard);
+    adapter.log.info('config stateSurplus: ' + adapter.config.stateSurplus);
+    adapter.log.info('config stateBatteryCharging: ' + adapter.config.stateBatteryCharging);
+    adapter.log.info('config stateBatteryDischarging: ' + adapter.config.stateBatteryDischarging);
+    adapter.log.info('config stateBatterySoC: ' + adapter.config.stateBatterySoC);
+    adapter.log.info('config batteryPower: ' + adapter.config.batteryPower);
+    adapter.log.info('config batteryMinSoC: ' + adapter.config.batteryMinSoC);
+    adapter.log.info('config batteryStorageStrategy: ' + adapter.config.batteryStorageStrategy);
+    adapter.log.info('config statesIncludeWallbox: ' + adapter.config.statesIncludeWallbox);
+    adapter.log.info('config.state1p3pSwitch: ' + adapter.config.state1p3pSwitch);
+    adapter.log.info('config.1p3pViax2: ' + adapter.config['1p3pViaX2']);
+    adapter.log.info('config.1p3pSwitchIsNO: ' + adapter.config['1p3pSwitchIsNO'] +
+        ', 1p = ' + valueFor1pCharging + ', 3p = ' + valueFor3pCharging + ', off = ' + valueFor1p3pOff);
+    adapter.log.info('config minAmperage: ' + adapter.config.minAmperage);
+    adapter.log.info('config addPower: ' + adapter.config.addPower);
+    adapter.log.info('config delta: ' + adapter.config.delta);
+    adapter.log.info('config underusage: ' + adapter.config.underusage);
+    adapter.log.info('config minTime: ' + adapter.config.minTime);
+    adapter.log.info('config regardTime: ' + adapter.config.regardTime);
+    adapter.log.info('config maxPower: ' + adapter.config.maxPower);
+    adapter.log.info('config stateEnergyMeter1: ' + adapter.config.stateEnergyMeter1);
+    adapter.log.info('config stateEnergyMeter2: ' + adapter.config.stateEnergyMeter2);
+    adapter.log.info('config stateEnergyMeter3: ' + adapter.config.stateEnergyMeter3);
+    adapter.log.info('config wallboxNotIncluded: ' + adapter.config.wallboxNotIncluded);
 
     /*
         For every state in the system there has to be also an object of type state
-        Here a simple template for a boolean variable named "testVariable"
+        Here a simple template for a boolean variable named 'testVariable'
         Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
     */
-    // await adapter.setObjectNotExistsAsync("testVariable", {
-    //     type: "state",
+    // await adapter.setObjectNotExistsAsync('testVariable', {
+    //     type: 'state',
     //     common: {
-    //         name: "testVariable",
-    //         type: "boolean",
-    //         role: "indicator",
+    //         name: 'testVariable',
+    //         type: 'boolean',
+    //         role: 'indicator',
     //         read: true,
     //         write: true,
     //     },
@@ -408,75 +408,75 @@ async function main() {
     // });
 
     // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-    // adapter.subscribeStates("testVariable");
-    // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-    // adapter.subscribeStates("lights.*");
+    // adapter.subscribeStates('testVariable');
+    // You can also add a subscription for multiple states. The following line watches all states starting with 'lights.'
+    // adapter.subscribeStates('lights.*');
     // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-    // adapter.subscribeStates("*");
+    // adapter.subscribeStates('*');
 
     /*
         setState examples
         you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
     */
     // the variable testVariable is set to true as command (ack=false)
-    // await adapter.setStateAsync("testVariable", true);
+    // await adapter.setStateAsync('testVariable', true);
 
-    // same thing, but the value is flagged "ack"
+    // same thing, but the value is flagged 'ack'
     // ack should be always set to true if the value is received from or acknowledged from the target system
-    // await adapter.setStateAsync("testVariable", { val: true, ack: true });
+    // await adapter.setStateAsync('testVariable', { val: true, ack: true });
 
     // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    // await adapter.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+    // await adapter.setStateAsync('testVariable', { val: true, ack: true, expire: 30 });
 
     // examples for the checkPassword/checkGroup functions
-    // adapter.checkPassword("admin", "iobroker", (res) => {
-    //     adapter.log.info("check user admin pw iobroker: " + res);
+    // adapter.checkPassword('admin', 'iobroker', (res) => {
+    //     adapter.log.info('check user admin pw iobroker: ' + res);
     // });
 
-    // adapter.checkGroup("admin", "admin", (res) => {
-    //     adapter.log.info("check group user admin group admin: " + res);
+    // adapter.checkGroup('admin', 'admin', (res) => {
+    //     adapter.log.info('check group user admin group admin: ' + res);
     // });
-    txSocket = dgram.createSocket("udp4");
+    txSocket = dgram.createSocket('udp4');
 
-    rxSocketReports = dgram.createSocket({ type: "udp4", reuseAddr: true });
-    rxSocketReports.on("error", (err) => {
-        adapter.log.error("RxSocketReports error: " + err.message + "\n" + err.stack);
+    rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+    rxSocketReports.on('error', (err) => {
+        adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
         rxSocketReports.close();
     });
-    rxSocketReports.on("listening", function () {
+    rxSocketReports.on('listening', function () {
         rxSocketReports.setBroadcast(true);
         const address = rxSocketReports.address();
-        adapter.log.debug("UDP server listening on " + address.address + ":" + address.port);
+        adapter.log.debug('UDP server listening on ' + address.address + ':' + address.port);
     });
-    rxSocketReports.on("message", handleWallboxMessage);
-    rxSocketReports.bind(DEFAULT_UDP_PORT, "0.0.0.0");
+    rxSocketReports.on('message', handleWallboxMessage);
+    rxSocketReports.bind(DEFAULT_UDP_PORT, '0.0.0.0');
 
-    rxSocketBroadcast = dgram.createSocket({ type: "udp4", reuseAddr: true });
-    rxSocketBroadcast.on("error", (err) => {
-        adapter.log.error("RxSocketBroadcast error: " + err.message + "\n" + err.stack);
+    rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+    rxSocketBroadcast.on('error', (err) => {
+        adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
         rxSocketBroadcast.close();
     });
-    rxSocketBroadcast.on("listening", function () {
+    rxSocketBroadcast.on('listening', function () {
         rxSocketBroadcast.setBroadcast(true);
         rxSocketBroadcast.setMulticastLoopback(true);
         const address = rxSocketBroadcast.address();
-        adapter.log.debug("UDP broadcast server listening on " + address.address + ":" + address.port);
+        adapter.log.debug('UDP broadcast server listening on ' + address.address + ':' + address.port);
     });
-    rxSocketBroadcast.on("message", handleWallboxBroadcast);
+    rxSocketBroadcast.on('message', handleWallboxBroadcast);
     rxSocketBroadcast.bind(BROADCAST_UDP_PORT);
 
-    //await adapter.setStateAsync("info.connection", true, true);  // too ealry to acknowledge ...
+    //await adapter.setStateAsync('info.connection', true, true);  // too ealry to acknowledge ...
 
-    adapter.getForeignObject("system.config", function(err, ioBroker_Settings) {
+    adapter.getForeignObject('system.config', function(err, ioBroker_Settings) {
         if (err) {
-            adapter.log.error("Error while fetching system.config: " + err);
+            adapter.log.error('Error while fetching system.config: ' + err);
             return;
         }
 
-        if (ioBroker_Settings && (ioBroker_Settings.common.language == "de")) {
-            ioBrokerLanguage = "de";
+        if (ioBroker_Settings && (ioBroker_Settings.common.language == 'de')) {
+            ioBrokerLanguage = 'de';
         } else {
-            ioBrokerLanguage = "en";
+            ioBrokerLanguage = 'en';
         }
     });
 
@@ -489,23 +489,23 @@ async function main() {
             }
         }
         // save all state value into internal store
-        adapter.getStates("*", function (err, obj) {
+        adapter.getStates('*', function (err, obj) {
             if (err) {
-                adapter.log.error("error reading states: " + err);
+                adapter.log.error('error reading states: ' + err);
             } else {
                 if (obj) {
                     for (const i in obj) {
                         if (! Object.prototype.hasOwnProperty.call(obj, i)) continue;
                         if (obj[i] !== null) {
-                            if (typeof obj[i] == "object") {
+                            if (typeof obj[i] == 'object') {
                                 setStateInternal(i, obj[i].val);
                             } else {
-                                adapter.log.error("unexpected state value: " + obj[i]);
+                                adapter.log.error('unexpected state value: ' + obj[i]);
                             }
                         }
                     }
                 } else {
-                    adapter.log.error("not states found");
+                    adapter.log.error('not states found');
                 }
             }
         });
@@ -519,79 +519,79 @@ async function main() {
  * of all the states of the dapter.
  */
 function start() {
-    adapter.subscribeStates("*");
+    adapter.subscribeStates('*');
 
-    stateChangeListeners[adapter.namespace + "." + stateWallboxEnabled] = function (oldValue, newValue) {
-        sendUdpDatagram("ena " + (newValue ? 1 : 0), true);
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxEnabled] = function (oldValue, newValue) {
+        sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateWallboxCurrent] = function (oldValue, newValue) {
-        //sendUdpDatagram("currtime " + parseInt(newValue) + " 1", true);
-        sendUdpDatagram("curr " + parseInt(newValue), true);
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrent] = function (oldValue, newValue) {
+        //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
+        sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateWallboxOutput] = function (oldValue, newValue) {
-        sendUdpDatagram("output " + (newValue ? 1 : 0), true);
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxOutput] = function (oldValue, newValue) {
+        sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateWallboxDisplay] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisplay] = function (oldValue, newValue) {
         if (newValue !== null) {
-            if (typeof newValue == "string") {
-                sendUdpDatagram("display 0 0 0 0 " + newValue.replace(/ /g, "$"), true);
+            if (typeof newValue == 'string') {
+                sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, '$'), true);
             } else {
-                adapter.log.error("invalid data to send to display: " + newValue);
+                adapter.log.error('invalid data to send to display: ' + newValue);
             }
         }
     };
-    stateChangeListeners[adapter.namespace + "." + stateWallboxDisabled] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function () {
         // parameters (oldValue, newValue) can be ommited if not needed
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + statePvAutomatic] = function () {
+    stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function () {
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + stateSetEnergy] = function (oldValue, newValue) {
-        sendUdpDatagram("setenergy " + parseInt(newValue) * 10, true);
+    stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (oldValue, newValue) {
+        sendUdpDatagram('setenergy ' + parseInt(newValue) * 10, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateReport] = function (oldValue, newValue) {
-        sendUdpDatagram("report " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateReport] = function (oldValue, newValue) {
+        sendUdpDatagram('report ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateStart] = function (oldValue, newValue) {
-        sendUdpDatagram("start " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateStart] = function (oldValue, newValue) {
+        sendUdpDatagram('start ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateStop] = function (oldValue, newValue) {
-        sendUdpDatagram("stop " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateStop] = function (oldValue, newValue) {
+        sendUdpDatagram('stop ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateSetDateTime] = function (oldValue, newValue) {
-        sendUdpDatagram("setdatetime " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateSetDateTime] = function (oldValue, newValue) {
+        sendUdpDatagram('setdatetime ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateUnlock] = function () {
-        sendUdpDatagram("unlock", true);
+    stateChangeListeners[adapter.namespace + '.' + stateUnlock] = function () {
+        sendUdpDatagram('unlock', true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateX2Source] = function (oldValue, newValue) {
-        sendUdpDatagram("x2src " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateX2Source] = function (oldValue, newValue) {
+        sendUdpDatagram('x2src ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + "." + stateX2Switch] = function (oldValue, newValue) {
-        sendUdpDatagram("x2 " + newValue, true);
+    stateChangeListeners[adapter.namespace + '.' + stateX2Switch] = function (oldValue, newValue) {
+        sendUdpDatagram('x2 ' + newValue, true);
         setStateAck(state1p3pSwTimestamp, new Date().toString());
     };
-    stateChangeListeners[adapter.namespace + "." + stateAddPower] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function () {
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + stateManualPhases] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateManualPhases] = function () {
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + stateLimitCurrent] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent] = function () {
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + stateBatteryStrategy] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateBatteryStrategy] = function () {
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + "." + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
         handleWallboxExchange(newValue);
     };
-    stateChangeListeners[adapter.namespace + "." + stateMinimumSoCOfBatteryStorage] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateMinimumSoCOfBatteryStorage] = function (_oldValue, _newValue) {
         // no real action to do
     };
 
-    //sendUdpDatagram("i");   only needed for discovery
+    //sendUdpDatagram('i');   only needed for discovery
     requestReports();
     enableChargingTimer((isPassive) ? intervalPassiveUpdate : intervalActiceUpdate);
 }
@@ -602,13 +602,13 @@ function start() {
  * @returns {*} true if the tate is specified.
  */
 function isForeignStateSpecified(stateValue) {
-    return stateValue && stateValue !== null && typeof stateValue == "string" && stateValue !== "" && stateValue !== "[object Object]";
+    return stateValue && stateValue !== null && typeof stateValue == 'string' && stateValue !== '' && stateValue !== '[object Object]';
 }
 
 
 /**
  * Function calls addForeignState which subscribes a foreign state to write values
- * in "currentStateValues"
+ * in 'currentStateValues'
  * @param {string} stateValue is a string with the value of the state.
  * @returns {boolean} returns true if the function addForeingnState was executed successful
  */
@@ -617,7 +617,7 @@ function addForeignStateFromConfig(stateValue) {
         if (addForeignState(stateValue)) {
             return true;
         } else {
-            adapter.log.error("Error when adding foreign state '" + stateValue + "'");
+            adapter.log.error('Error when adding foreign state "' + stateValue + '"');
             return false;
         }
     }
@@ -630,8 +630,8 @@ function addForeignStateFromConfig(stateValue) {
  */
 function checkConfig() {
     let everythingFine = true;
-    if (adapter.config.host == "0.0.0.0" || adapter.config.host == "127.0.0.1") {
-        adapter.log.warn("Can't start adapter for invalid IP address: " + adapter.config.host);
+    if (adapter.config.host == '0.0.0.0' || adapter.config.host == '127.0.0.1') {
+        adapter.log.warn('Can\'t start adapter for invalid IP address: ' + adapter.config.host);
         everythingFine = false;
     }
     if (adapter.config.loadChargingSessions == true) {
@@ -641,7 +641,7 @@ function checkConfig() {
     if (adapter.config.passiveMode) {
         isPassive = true;
         if (everythingFine) {
-            adapter.log.info("starting charging station in passive mode");
+            adapter.log.info('starting charging station in passive mode');
         }
     }
     if (isPassive) {
@@ -651,7 +651,7 @@ function checkConfig() {
     } else {
         isPassive = false;
         if (everythingFine) {
-            adapter.log.info("starting charging station in active mode");
+            adapter.log.info('starting charging station in active mode');
         }
     }
     if (isForeignStateSpecified(adapter.config.stateRegard)) {
@@ -667,12 +667,12 @@ function checkConfig() {
         if (isX2PhaseSwitch()) {
             if (isForeignStateSpecified(adapter.config.state1p3pSwitch)) {
                 everythingFine = false;
-                adapter.log.error("both, state for 1p/3p switch and switching via X2, must not be specified together");
+                adapter.log.error('both, state for 1p/3p switch and switching via X2, must not be specified together');
             }
             const valueOn = 1;
             const valueOff = 0;
             valueFor1p3pOff = valueOff;
-            if (adapter.config["1p3pSwitchIsNO"] === true) {
+            if (adapter.config['1p3pSwitchIsNO'] === true) {
                 valueFor1pCharging = valueOff;
                 valueFor3pCharging = valueOn;
             } else {
@@ -681,7 +681,7 @@ function checkConfig() {
             }
 
             min1p3pSwSec = 305;
-            adapter.log.info("Using min time between phase switching of: " +min1p3pSwSec);
+            adapter.log.info('Using min time between phase switching of: ' +min1p3pSwSec);
         }
 
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
@@ -698,15 +698,15 @@ function checkConfig() {
             useX1switchForAutomatic = false;
         }
         if (! adapter.config.delta || adapter.config.delta <= 50) {
-            adapter.log.info("amperage delta not speficied or too low, using default value of " + amperageDelta);
+            adapter.log.info('amperage delta not speficied or too low, using default value of ' + amperageDelta);
         } else {
             amperageDelta = getNumber(adapter.config.delta);
         }
         if (! adapter.config.minAmperage || adapter.config.minAmperage == 0) {
-            adapter.log.info("using default minimum amperage of " + minAmperageDefault);
+            adapter.log.info('using default minimum amperage of ' + minAmperageDefault);
             minAmperage = minAmperageDefault;
         } else if (adapter.config.minAmperage < minAmperage) {
-            adapter.log.info("minimum amperage not speficied or too low, using default value of " + minAmperage);
+            adapter.log.info('minimum amperage not speficied or too low, using default value of ' + minAmperage);
         } else {
             minAmperage = getNumber(adapter.config.minAmperage);
         }
@@ -717,12 +717,12 @@ function checkConfig() {
             underusage = getNumber(adapter.config.underusage);
         }
         if (! adapter.config.minTime || adapter.config.minTime < 0) {
-            adapter.log.info("minimum charge time not speficied or too low, using default value of " + minChargeSeconds);
+            adapter.log.info('minimum charge time not speficied or too low, using default value of ' + minChargeSeconds);
         } else {
             minChargeSeconds = getNumber(adapter.config.minTime);
         }
         if (! adapter.config.regardTime || adapter.config.regardTime < 0) {
-            adapter.log.info("minimum regard time not speficied or too low, using default value of " + minRegardSeconds);
+            adapter.log.info('minimum regard time not speficied or too low, using default value of ' + minRegardSeconds);
         } else {
             minRegardSeconds = getNumber(adapter.config.regardTime);
         }
@@ -730,7 +730,7 @@ function checkConfig() {
     if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
         maxPowerActive = true;
         if (adapter.config.maxPower <= 0) {
-            adapter.log.warn("max. power negative or zero - power limitation deactivated");
+            adapter.log.warn('max. power negative or zero - power limitation deactivated');
             maxPowerActive = false;
         }
     }
@@ -745,7 +745,7 @@ function checkConfig() {
         }
         if (everythingFine) {
             if (! (adapter.config.stateEnergyMeter1 || adapter.config.stateEnergyMeter2 || adapter.config.stateEnergyMeter1)) {
-                adapter.log.error("no energy meters defined - power limitation deactivated");
+                adapter.log.error('no energy meters defined - power limitation deactivated');
                 maxPowerActive = false;
             }
         }
@@ -762,26 +762,26 @@ function init1p3pSwitching(stateNameFor1p3p) {
     }
     adapter.getForeignState(stateNameFor1p3p, function (err, obj) {
         if (err) {
-            adapter.log.error("error reading state " + stateNameFor1p3p + ": " + err);
+            adapter.log.error('error reading state ' + stateNameFor1p3p + ': ' + err);
             return;
         } else {
             if (obj) {
                 stateFor1p3pCharging = stateNameFor1p3p;
                 let valueOn;
                 let valueOff;
-                if (typeof obj.val == "boolean") {
+                if (typeof obj.val == 'boolean') {
                     valueOn = true;
                     valueOff = false;
-                } else if (typeof obj.val == "number") {
+                } else if (typeof obj.val == 'number') {
                     valueOn = 1;
                     valueOff = 0;
                 } else {
-                    adapter.log.error("unhandled type " + typeof obj.val + " for state " + stateNameFor1p3p);
+                    adapter.log.error('unhandled type ' + typeof obj.val + ' for state ' + stateNameFor1p3p);
                     return;
                 }
                 stateFor1p3pAck = obj.ack;
                 valueFor1p3pOff = valueOff;
-                if (adapter.config["1p3pSwitchIsNO"] === true) {
+                if (adapter.config['1p3pSwitchIsNO'] === true) {
                     valueFor1pCharging = valueOff;
                     valueFor3pCharging = valueOn;
                 } else {
@@ -790,31 +790,31 @@ function init1p3pSwitching(stateNameFor1p3p) {
                 }
             }
             else {
-                adapter.log.error("state " + stateNameFor1p3p + " not found!");
+                adapter.log.error('state ' + stateNameFor1p3p + ' not found!');
             }
         }
     });
     return true;
 }
 
-// subscribe a foreign state to save values in "currentStateValues"
+// subscribe a foreign state to save values in 'currentStateValues'
 function addForeignState(id) {
-    if (typeof id !== "string")
+    if (typeof id !== 'string')
         return false;
-    if (id == "" || id == " ")
+    if (id == '' || id == ' ')
         return false;
     adapter.getForeignState(id, function (err, obj) {
         if (err) {
-            adapter.log.error("error subscribing " + id + ": " + err);
+            adapter.log.error('error subscribing ' + id + ': ' + err);
         } else {
             if (obj) {
-                adapter.log.debug("subscribe state " + id + " - current value: " + obj.val);
+                adapter.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
                 setStateInternal(id, obj.val);
                 adapter.subscribeForeignStates(id); // there's no return value (success, ...)
-                //adapter.subscribeForeignStates({id: id, change: "ne"}); // condition is not working
+                //adapter.subscribeForeignStates({id: id, change: 'ne'}); // condition is not working
             }
             else {
-                adapter.log.error("state " + id + " not found!");
+                adapter.log.error('state ' + id + ' not found!');
             }
         }
     });
@@ -827,12 +827,12 @@ function isMessageFromWallboxOfThisInstance(remote) {
 
 function sendMessageToOtherInstance(message, remote) {
     // save message for other instances by setting value into state
-    const prefix = "system.adapter.";
-    const adapterpart = adapter.name + ".";
-    const suffix = ".uptime";
-    adapter.getForeignObjects(prefix + adapterpart + "*" + suffix, function(err, objects) {
+    const prefix = 'system.adapter.';
+    const adapterpart = adapter.name + '.';
+    const suffix = '.uptime';
+    adapter.getForeignObjects(prefix + adapterpart + '*' + suffix, function(err, objects) {
         if (err) {
-            adapter.log.error("Error while fetching other instances: " + err);
+            adapter.log.error('Error while fetching other instances: ' + err);
             return;
         }
         if (objects) {
@@ -841,15 +841,15 @@ function sendMessageToOtherInstance(message, remote) {
                     const namespace = item.slice(prefix.length, - suffix.length);
                     adapter.getForeignObject(prefix + namespace, function(err, object) {
                         if (err) {
-                            adapter.log.error("Error while fetching other instances: " + err);
+                            adapter.log.error('Error while fetching other instances: ' + err);
                             return;
                         }
                         if (object) {
-                            if (Object.prototype.hasOwnProperty.call(object, "native")) {
-                                if (Object.prototype.hasOwnProperty.call(object.native, "host")) {
+                            if (Object.prototype.hasOwnProperty.call(object, 'native')) {
+                                if (Object.prototype.hasOwnProperty.call(object.native, 'host')) {
                                     if (object.native.host == remote.address) {
-                                        adapter.setForeignState(namespace + "." + stateMsgFromOtherwallbox, message.toString().trim());
-                                        adapter.log.debug("Message from " + remote.address + " send to " + namespace);
+                                        adapter.setForeignState(namespace + '.' + stateMsgFromOtherwallbox, message.toString().trim());
+                                        adapter.log.debug('Message from ' + remote.address + ' send to ' + namespace);
                                     }
                                 }
                             }
@@ -863,10 +863,10 @@ function sendMessageToOtherInstance(message, remote) {
 
 // handle incomming message from wallbox
 function handleWallboxMessage(message, remote) {
-    adapter.log.debug("UDP datagram from " + remote.address + ":" + remote.port + ": '" + message + "'");
+    adapter.log.debug('UDP datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
     if (isMessageFromWallboxOfThisInstance(remote)) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
         // Mark that connection is established by incomming data
-        handleMessage(message, "received");
+        handleMessage(message, 'received');
     } else {
         sendMessageToOtherInstance(message, remote);
     }
@@ -874,55 +874,55 @@ function handleWallboxMessage(message, remote) {
 
 // handle incomming broadcast message from wallbox
 function handleWallboxBroadcast(message, remote) {
-    adapter.log.debug("UDP broadcast datagram from " + remote.address + ":" + remote.port + ": '" + message + "'");
+    adapter.log.debug('UDP broadcast datagram from ' + remote.address + ':' + remote.port + ': "' + message + '"');
     if (isMessageFromWallboxOfThisInstance(remote)) {     // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
-        handleMessage(message, "broadcast");
+        handleMessage(message, 'broadcast');
     }
 }
 
 // handle incomming message from other instance for this wallbox
 function handleWallboxExchange(message) {
-    adapter.log.debug("datagram from other instance: '" + message + "'");
-    handleMessage(message, "instance");
+    adapter.log.debug('datagram from other instance: "' + message + '"');
+    handleMessage(message, 'instance');
 }
 
 function handleMessage(message, origin) {
     // Mark that connection is established by incomming data
-    adapter.setState("info.connection", true, true);
-    let msg = "";
+    adapter.setState('info.connection', true, true);
+    let msg = '';
     try {
         msg = message.toString().trim();
         if (msg.length === 0) {
             return;
         }
 
-        if (msg == "started ...") {
-            adapter.log.info("Wallbox startup complete");
+        if (msg == 'started ...') {
+            adapter.log.info('Wallbox startup complete');
             return;
         }
 
-        if (msg == "i") {
-            adapter.log.debug("Received: " + message);
+        if (msg == 'i') {
+            adapter.log.debug('Received: ' + message);
             return;
         }
 
-        if (msg.startsWith("TCH-OK")) {
-            adapter.log.debug("Received " + message);
+        if (msg.startsWith('TCH-OK')) {
+            adapter.log.debug('Received ' + message);
             return;
         }
 
-        if (msg.startsWith("TCH-ERR")) {
-            adapter.log.error("Error received from wallbox: " + message);
+        if (msg.startsWith('TCH-ERR')) {
+            adapter.log.error('Error received from wallbox: ' + message);
             return;
         }
 
         if (msg[0] == '"') {
-            msg = "{ " + msg + " }";
+            msg = '{ ' + msg + ' }';
         }
 
         handleJsonMessage(JSON.parse(msg));
     } catch (e) {
-        adapter.log.warn("Error handling " + origin + " message: " + e + " (" + msg + ")");
+        adapter.log.warn('Error handling ' + origin + ' message: ' + e + ' (' + msg + ')');
         return;
     }
 
@@ -931,30 +931,30 @@ function handleMessage(message, origin) {
 async function handleJsonMessage(message) {
     // message auf ID Kennung für Session History prüfen
     if (message.ID >= 100 && message.ID <= 130) {
-        adapter.log.debug("History ID received: " + message.ID.substr(1));
+        adapter.log.debug('History ID received: ' + message.ID.substr(1));
         const sessionid = message.ID.substr(1);
         if (loadChargingSessions) {
-            updateState(states[sessionid + "_json"], JSON.stringify([message]));
+            updateState(states[sessionid + '_json'], JSON.stringify([message]));
         }
         for (const key in message){
-            if (states[sessionid + "_" + key] || loadChargingSessions === false) {
+            if (states[sessionid + '_' + key] || loadChargingSessions === false) {
                 try {
                     if (message.ID == 100) {
                         // process some values of current charging session
                         switch (key) {
-                            case "Session ID": setStateAck(stateSessionId, message[key]); break;
-                            case "RFID tag": setStateAck(stateRfidTag, message[key]); break;
-                            case "RFID class": setStateAck(stateRfidClass, message[key]); break;
+                            case 'Session ID': setStateAck(stateSessionId, message[key]); break;
+                            case 'RFID tag': setStateAck(stateRfidTag, message[key]); break;
+                            case 'RFID class': setStateAck(stateRfidClass, message[key]); break;
                         }
                     }
                     if (loadChargingSessions) {
-                        updateState(states[sessionid + "_" + key], message[key]);
+                        updateState(states[sessionid + '_' + key], message[key]);
                     }
                 } catch (e) {
-                    adapter.log.warn("Couldn't update state " + "Session_" + sessionid + "." + key + ": " + e);
+                    adapter.log.warn('Couldn"t update state ' + 'Session_' + sessionid + '.' + key + ': ' + e);
                 }
-            } else if (key != "ID"){
-                adapter.log.warn("Unknown Session value received: " + key + "=" + message[key]);
+            } else if (key != 'ID'){
+                adapter.log.warn('Unknown Session value received: ' + key + '=' + message[key]);
             }
         }
     } else {
@@ -962,22 +962,22 @@ async function handleJsonMessage(message) {
             if (states[key]) {
                 try {
                     await updateState(states[key], message[key]);
-                    if (key == "X2 phaseSwitch source" && isX2PhaseSwitch()) {
+                    if (key == 'X2 phaseSwitch source' && isX2PhaseSwitch()) {
                         const currentValue = getStateDefault0(states[key]._id);
                         if (currentValue !== 4) {
-                            adapter.log.info("activating X2 source from " + currentValue + " to 4 for phase switching");
-                            sendUdpDatagram("x2src 4", true);
+                            adapter.log.info('activating X2 source from ' + currentValue + ' to 4 for phase switching');
+                            sendUdpDatagram('x2src 4', true);
                         }
                     }
                 } catch (e) {
-                    adapter.log.warn("Couldn't update state " + key + ": " + e);
+                    adapter.log.warn('Couldn"t update state ' + key + ': ' + e);
                 }
-            } else if (key != "ID") {
-                adapter.log.warn("Unknown value received: " + key + "=" + message[key]);
+            } else if (key != 'ID') {
+                adapter.log.warn('Unknown value received: ' + key + '=' + message[key]);
             }
         }
         if (message.ID == 3) {
-            // Do calculation after processing "report 3"
+            // Do calculation after processing 'report 3'
             checkWallboxPower();
         }
     }
@@ -1080,20 +1080,20 @@ function regulateWallbox(milliAmpere) {
 
     if (isNoChargingDueToInterupptedStateOfWallbox(milliAmpere)) {
         if (milliAmpere > 0) {
-            adapter.log.debug("No charging due to interupted charging station");
+            adapter.log.debug('No charging due to interupted charging station');
         }
         milliAmpere = 0;
     }
 
     if (milliAmpere != oldValue) {
         if (milliAmpere == 0) {
-            adapter.log.info("stop charging");
+            adapter.log.info('stop charging');
         } else if (oldValue == 0) {
-            adapter.log.info("(re)start charging with " + milliAmpere + "mA" + ((isMaxPowerCalculation) ? " (maxPower)" : ""));
+            adapter.log.info('(re)start charging with ' + milliAmpere + 'mA' + ((isMaxPowerCalculation) ? ' (maxPower)' : ''));
         } else {
-            adapter.log.info("regulate wallbox from " + oldValue + " to " + milliAmpere + "mA" + ((isMaxPowerCalculation) ? " (maxPower)" : ""));
+            adapter.log.info('regulate wallbox from ' + oldValue + ' to ' + milliAmpere + 'mA' + ((isMaxPowerCalculation) ? ' (maxPower)' : ''));
         }
-        sendUdpDatagram("currtime " + milliAmpere + " 1", true);
+        sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
     }
 }
 
@@ -1240,7 +1240,7 @@ function doNextStepOf1p3pSwitching() {
  *
  */
 function isX2PhaseSwitch() {
-    return adapter.config["1p3pViaX2"] == true;
+    return adapter.config['1p3pViaX2'] == true;
 }
 
 /**
@@ -1256,8 +1256,8 @@ function set1p3pSwitching(newValue) {
         if (isX2PhaseSwitch()) {
             if (newValue != getStateDefault0(stateX2Switch)) {
                 setStateAck(state1p3pSwTimestamp, new Date().toString());
-                adapter.log.info("updating X2 for switch of phases from " + getStateDefault0(stateX2Switch) + " to " + newValue + "...");
-                sendUdpDatagram("x2 " + newValue, true);
+                adapter.log.info('updating X2 for switch of phases from ' + getStateDefault0(stateX2Switch) + ' to ' + newValue + '...');
+                sendUdpDatagram('x2 ' + newValue, true);
             }
         } else {
             if (newValue !== getStateInternal(stateFor1p3pCharging)) {
@@ -1289,7 +1289,7 @@ function check1p3pSwitching() {
         case 1:
             if (isVehicleCharging()) {
                 if (retries1p3pSwitching == 0) {
-                    adapter.log.info("stop charging for switch of phases ...");
+                    adapter.log.info('stop charging for switch of phases ...');
                     stopCharging();
                 } else {
                     check1p3pSwitchingRetries();
@@ -1301,7 +1301,7 @@ function check1p3pSwitching() {
         case 2:
             if (valueFor1p3pSwitching !== getStateInternal(stateFor1p3pCharging)) {
                 stateFor1p3pAck = false;
-                adapter.log.info("switching 1p3p to " + valueFor1p3pSwitching + " ...");
+                adapter.log.info('switching 1p3p to ' + valueFor1p3pSwitching + ' ...');
                 adapter.setForeignState(stateFor1p3pCharging, valueFor1p3pSwitching);
                 doNextStepOf1p3pSwitching();
                 return true;
@@ -1314,10 +1314,10 @@ function check1p3pSwitching() {
                 return true;
             }
             reset1p3pSwitching();
-            adapter.log.info("switch 1p/3p successfully completed.");
+            adapter.log.info('switch 1p/3p successfully completed.');
             break;
         default:
-            adapter.log.error("unknown step for 1p/3p switching: " + stepFor1p3pSwitching);
+            adapter.log.error('unknown step for 1p/3p switching: ' + stepFor1p3pSwitching);
             reset1p3pSwitching();
     }
     return false;
@@ -1359,7 +1359,7 @@ function isReducedChargingBecause1p3p() {
     if (currentSwitch === valueFor3pCharging) {
         return false;
     }
-    adapter.log.warn("Invalid value for 1p3p switch: " + currentSwitch + " (type " + typeof currentSwitch + ")");
+    adapter.log.warn('Invalid value for 1p3p switch: ' + currentSwitch + ' (type ' + typeof currentSwitch + ')');
     return false;
 }
 
@@ -1371,7 +1371,7 @@ function get1p3pPhases() {
     if (isReducedChargingBecause1p3p()) {
         let phases = getStateDefault0(stateChargingPhases);
         if (isVehicleCharging() && phases > 1 && getChargingPhaseCount() > 1) {
-            adapter.log.error("Charging with " + phases + " but reduced (1p) expected, disabling 1p/3p switch for this charging session");
+            adapter.log.error('Charging with ' + phases + ' but reduced (1p) expected, disabling 1p/3p switch for this charging session');
             reset1p3pSwitching();
             stepFor1p3pSwitching = -1;
         }
@@ -1402,11 +1402,11 @@ function getChargingPhaseCount() {
         } else {
             retVal = getStateDefault0(stateManualPhases);
             if (retVal < 0) {
-                adapter.log.warn("invalid manual phases count " + retVal + " using 1 phases");
+                adapter.log.warn('invalid manual phases count ' + retVal + ' using 1 phases');
                 retVal = 1;
             }
             if (retVal > 3) {
-                adapter.log.warn("invalid manual phases count " + retVal + " using 3 phases");
+                adapter.log.warn('invalid manual phases count ' + retVal + ' using 3 phases');
                 retVal = 3;
             }
         }
@@ -1427,21 +1427,21 @@ function getChargingPhaseCount() {
         if (tempCount > 0) {
             // save phase count and write info message if changed
             if (retVal != tempCount)
-                adapter.log.debug("wallbox is charging with " + tempCount + " " + ((tempCount == 1) ? "phase" : "phases"));
+                adapter.log.debug('wallbox is charging with ' + tempCount + ' ' + ((tempCount == 1) ? 'phase' : 'phases'));
             if (! isReducedChargingBecause1p3p()) {
                 setStateAck(stateChargingPhases, tempCount);
             }
             retVal = tempCount;
         } else {
-            adapter.log.warn("wallbox is charging but no phases where recognized");
+            adapter.log.warn('wallbox is charging but no phases where recognized');
         }
     }
     // if no phases where detected then calculate with one phase
     if (retVal <= 0) {
-        adapter.log.debug("setting phase count to 1");
+        adapter.log.debug('setting phase count to 1');
         retVal = 1;
     }
-    adapter.log.silly("currently charging with " + retVal + " phases");
+    adapter.log.silly('currently charging with ' + retVal + ' phases');
     return retVal;
 }
 
@@ -1514,18 +1514,18 @@ function displayChargeMode() {
  */
 function getAmperage(power, phases) {
     const curr = Math.round(power / voltage * 1000 / amperageDelta / phases) * amperageDelta;
-    adapter.log.debug("power: " + power + " / voltage: " + voltage + " * 1000 / delta: " + amperageDelta + " / phases: " + phases + " * delta = " + curr);
+    adapter.log.debug('power: ' + power + ' / voltage: ' + voltage + ' * 1000 / delta: ' + amperageDelta + ' / phases: ' + phases + ' * delta = ' + curr);
     return curr;
 }
 
 function check1p3pSwitchingRetries() {
     if (retries1p3pSwitching >= 3) {
-        adapter.log.error("switching not possible in step " + stepFor1p3pSwitching + ", disabling 1p/3p switch for this charging session");
+        adapter.log.error('switching not possible in step ' + stepFor1p3pSwitching + ', disabling 1p/3p switch for this charging session');
         reset1p3pSwitching();
         stepFor1p3pSwitching = -1;
         return true;
     }
-    adapter.log.info("still waiting for 1p/3p step " + stepFor1p3pSwitching + " to complete...");
+    adapter.log.info('still waiting for 1p/3p step ' + stepFor1p3pSwitching + ' to complete...');
     retries1p3pSwitching ++;
     return false;
 }
@@ -1607,7 +1607,7 @@ function checkWallboxPower() {
     // before a new calculation will stop it again (as long as chargingTimestamp was not yet set)
     // it can be stopped immediatelly with no respect to minimim charging time...
     if (getStateAsDate(stateChargeTimestamp) === null && isVehicleCharging() && (chargingToBeStarted || isPassive)) {
-        adapter.log.info("vehicle (re)starts to charge");
+        adapter.log.info('vehicle (re)starts to charge');
         setStateAck(stateChargeTimestamp, new Date().toString());
     }
 
@@ -1622,7 +1622,7 @@ function checkWallboxPower() {
         // Always calculate with three phases for safety reasons
         const maxPower = getTotalPowerAvailable();
         setStateAck(stateMaxPower, Math.round(maxPower));
-        adapter.log.debug("Available max power: " + maxPower);
+        adapter.log.debug('Available max power: ' + maxPower);
         const maxAmperage = getAmperage(maxPower, phases);
         if (tempMax > maxAmperage) {
             tempMax = maxAmperage;
@@ -1631,7 +1631,7 @@ function checkWallboxPower() {
 
     const available = getSurplusWithoutWallbox();
     setStateAck(stateSurplus, Math.round(available));
-    adapter.log.debug("Available surplus: " + available);
+    adapter.log.debug('Available surplus: ' + available);
 
     if (check1p3pSwitching()) {
         return;
@@ -1680,11 +1680,11 @@ function checkWallboxPower() {
                             curr = currWith1p;
                         } else {
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                                adapter.log.debug("no switching to 1 phase because of minimum charging time: " + chargeTimestamp);
+                                adapter.log.debug('no switching to 1 phase because of minimum charging time: ' + chargeTimestamp);
                             } else if (chargeTimestamp !== null && isContinueDueToMinRegardTime(newDate)) {
-                                adapter.log.debug("no switching to 1 phase because of minimum regard time: " + regardTimestamp);
+                                adapter.log.debug('no switching to 1 phase because of minimum regard time: ' + regardTimestamp);
                             } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
-                                adapter.log.debug("no switching to 1 phase because of minimum time between switching: " + Sw1p3pTimestamp);
+                                adapter.log.debug('no switching to 1 phase because of minimum time between switching: ' + Sw1p3pTimestamp);
                             } else {
                                 newValueFor1p3pSwitching = valueFor1pCharging;
                                 phases = 1;
@@ -1695,14 +1695,14 @@ function checkWallboxPower() {
                         if (isReducedChargingBecause1p3p()) {
                             let isSwitchFrom1pTo3P = false;
                             if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                                adapter.log.debug("no switching to " + phases + " phases because of minimum charging time: " + chargeTimestamp);
+                                adapter.log.debug('no switching to ' + phases + ' phases because of minimum charging time: ' + chargeTimestamp);
                             } else if (Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate)) {
-                                adapter.log.debug("no switching to " + phases + " phase because of minimum time between switching: " + Sw1p3pTimestamp);
+                                adapter.log.debug('no switching to ' + phases + ' phase because of minimum time between switching: ' + Sw1p3pTimestamp);
                             } else {
                                 if (currWith1p < getCurrentForSwitchTo3p()) {
-                                    adapter.log.debug("no switching to " + phases + " phases because amperage " + currWith1p + " < " + getCurrentForSwitchTo3p());
+                                    adapter.log.debug('no switching to ' + phases + ' phases because amperage ' + currWith1p + ' < ' + getCurrentForSwitchTo3p());
                                 } else {
-                                    adapter.log.debug("switching to " + phases + " phases because amperage " + currWith1p + " >= " + getCurrentForSwitchTo3p());
+                                    adapter.log.debug('switching to ' + phases + ' phases because amperage ' + currWith1p + ' >= ' + getCurrentForSwitchTo3p());
                                     newValueFor1p3pSwitching = valueFor3pCharging;
                                     isSwitchFrom1pTo3P = true;
                                 }
@@ -1718,10 +1718,10 @@ function checkWallboxPower() {
 
             const addPower = getStateDefault0(stateAddPower);
             if (curr < getMinCurrent() && addPower > 0) {
-                // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis "addPower" zulassen
-                adapter.log.debug("check with additional power of: " + addPower);
+                // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis 'addPower' zulassen
+                adapter.log.debug('check with additional power of: ' + addPower);
                 if (getAmperage(available + addPower, phases) >= getMinCurrent()) {
-                    adapter.log.debug("Minimum amperage reached by addPower of " + addPower);
+                    adapter.log.debug('Minimum amperage reached by addPower of ' + addPower);
                     curr = getMinCurrent();
                 }
             }
@@ -1729,10 +1729,10 @@ function checkWallboxPower() {
                 if (curr < getMinCurrent()) {
                     // if vehicle is currently charging or is allowed to do so then check limits for power off
                     if (underusage > 0) {
-                        adapter.log.debug("check with additional power of: " + addPower + " and underUsage: " + underusage);
+                        adapter.log.debug('check with additional power of: ' + addPower + ' and underUsage: ' + underusage);
                         curr = getAmperage(available + addPower + underusage, phases);
                         if (curr >= getMinCurrent()) {
-                            adapter.log.info("tolerated under-usage of charge power, continuing charging session");
+                            adapter.log.info('tolerated under-usage of charge power, continuing charging session');
                             curr = getMinCurrent();
                             if (newValueFor1p3pSwitching == valueFor3pCharging) {
                                 newValueFor1p3pSwitching = null;  // then also stop possible 1p to 3p switching
@@ -1742,14 +1742,14 @@ function checkWallboxPower() {
                 }
                 if (curr < getMinCurrent()) {
                     if (isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                        adapter.log.info("minimum charge time of " + minChargeSeconds + "sec not reached, continuing charging session. " + chargeTimestamp);
+                        adapter.log.info('minimum charge time of ' + minChargeSeconds + 'sec not reached, continuing charging session. ' + chargeTimestamp);
                         curr = getMinCurrent();
                         newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }
                 }
                 if (curr < getMinCurrent()) {
                     if (isContinueDueToMinRegardTime(newDate)) {
-                        adapter.log.info("minimum regard time of " + minRegardSeconds + "sec not reached, continuing charging session. RegardTimestamp: " + regardTimestamp);
+                        adapter.log.info('minimum regard time of ' + minRegardSeconds + 'sec not reached, continuing charging session. RegardTimestamp: ' + regardTimestamp);
                         curr = getMinCurrent();
                         newValueFor1p3pSwitching = null;  // than also stop possible 1p/3p switching
                     }
@@ -1774,14 +1774,14 @@ function checkWallboxPower() {
         }
 
         if (currentSwitch === valueFor1p3pOff) {
-            adapter.log.silly("switch is already in valueFor1p3pOff");
+            adapter.log.silly('switch is already in valueFor1p3pOff');
         }
         else if ((Sw1p3pTimestamp !== null && isContinueDueToMin1p3pSwTime(newDate))){
-            adapter.log.debug("no switching to default phases because of minimum time between switching (stopCharging): " +  Sw1p3pTimestamp);
+            adapter.log.debug('no switching to default phases because of minimum time between switching (stopCharging): ' +  Sw1p3pTimestamp);
         }else {
-            adapter.log.debug("switching phases to default as charging is stopped");            set1p3pSwitching(valueFor1p3pOff);
+            adapter.log.debug('switching phases to default as charging is stopped');            set1p3pSwitching(valueFor1p3pOff);
         }
-        adapter.log.debug("not enough power for charging ...");
+        adapter.log.debug('not enough power for charging ...');
         stopCharging();
 
     } else {
@@ -1793,7 +1793,7 @@ function checkWallboxPower() {
         if (curr > tempMax) {
             curr = tempMax;
         }
-        adapter.log.debug("wallbox set to charging maximum of " + curr + " mA");
+        adapter.log.debug('wallbox set to charging maximum of ' + curr + ' mA');
         regulateWallbox(curr);
         chargingToBeStarted = true;
     }
@@ -1825,28 +1825,28 @@ function requestReports() {
 function requestDeviceDataReport() {
     const newDate = new Date();
     if (lastDeviceData == null || newDate.getTime() - lastDeviceData.getTime() >= intervalDeviceDataUpdate) {
-        sendUdpDatagram("report 1");
+        sendUdpDatagram('report 1');
         loadChargingSessionsFromWallbox();
         lastDeviceData = newDate;
     }
 }
 
 function requestChargingDataReport() {
-    sendUdpDatagram("report 2");
-    sendUdpDatagram("report 3");
-    sendUdpDatagram("report 100");
+    sendUdpDatagram('report 2');
+    sendUdpDatagram('report 3');
+    sendUdpDatagram('report 100');
 }
 
 function loadChargingSessionsFromWallbox() {
     if (loadChargingSessions) {
         for (let i = 101; i <= 130; i++) {
-            sendUdpDatagram("report " + i);
+            sendUdpDatagram('report ' + i);
         }
     }
 }
 
 async function updateState(stateData, value) {
-    if (stateData.common.type == "number") {
+    if (stateData.common.type == 'number') {
         value = parseFloat(value);
         if (stateData.native.udpMultiplier) {
             value *= parseFloat(stateData.native.udpMultiplier);
@@ -1854,16 +1854,16 @@ async function updateState(stateData, value) {
             value = Math.round(value * 100) / 100;
             //
         }
-    } else if (stateData.common.type == "boolean") {
+    } else if (stateData.common.type == 'boolean') {
         value = parseInt(value) !== 0;
     }
     // immediately update power and amperage values to prevent that value is not yet updated by setState()
     // when doing calculation after processing report 3
     // no longer needed when using await
-    //if (stateData._id == adapter.namespace + "." + stateWallboxPower ||
-    //    stateData._id == adapter.namespace + "." + stateWallboxPhase1 ||
-    //    stateData._id == adapter.namespace + "." + stateWallboxPhase2 ||
-    //    stateData._id == adapter.namespace + "." + stateWallboxPhase3) {
+    //if (stateData._id == adapter.namespace + '.' + stateWallboxPower ||
+    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase1 ||
+    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase2 ||
+    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase3) {
     //    setStateInternal(stateData._id, value);
     //}
     await setStateAckSync(stateData._id, value);
@@ -1891,33 +1891,33 @@ function sendNextQueueDatagram() {
     if (txSocket) {
         try {
             txSocket.send(message, 0, message.length, DEFAULT_UDP_PORT, adapter.config.host, function (err) {
-                // 2nd parameter "bytes" not needed, therefore only "err" coded
+                // 2nd parameter 'bytes' not needed, therefore only 'err' coded
                 if (err) {
-                    adapter.log.warn("UDP send error for " + adapter.config.host + ":" + DEFAULT_UDP_PORT + ": " + err);
+                    adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + DEFAULT_UDP_PORT + ': ' + err);
                     return;
                 }
-                adapter.log.debug("Sent '" + message + "' to " + adapter.config.host + ":" + DEFAULT_UDP_PORT);
+                adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + DEFAULT_UDP_PORT);
             });
         } catch (e) {
             if (adapter.log)
-                adapter.log.error("Error sending message '" + message + "': " + e);
+                adapter.log.error('Error sending message "' + message + '": ' + e);
         }
     }
 }
 
 function getStateInternal(id) {
-    if ((id == null) || (typeof id !== "string") || (id.trim().length == 0)) {
+    if ((id == null) || (typeof id !== 'string') || (id.trim().length == 0)) {
         return null;
     }
     let obj = id;
-    if (! obj.startsWith(adapter.namespace + "."))
-        obj = adapter.namespace + "." + id;
+    if (! obj.startsWith(adapter.namespace + '.'))
+        obj = adapter.namespace + '.' + id;
     return currentStateValues[obj];
 }
 
 function getNumber(value) {
     if (value) {
-        if (typeof value !== "number") {
+        if (typeof value !== 'number') {
             value = parseFloat(value);
             if (isNaN(value)) {
                 value = 0;
@@ -1938,8 +1938,8 @@ function getStateAsDate(id) {
 }
 
 function getBoolean(value) {
-    // "repair" state: VIS boolean control sets value to 0/1 instead of false/true
-    if (typeof value != "boolean") {
+    // 'repair' state: VIS boolean control sets value to 0/1 instead of false/true
+    if (typeof value != 'boolean') {
         return value == 1;
     }
     return value;
@@ -1960,14 +1960,14 @@ function getStateDefault0(id) {
 
 function setStateInternal(id, value) {
     let obj = id;
-    if (! obj.startsWith(adapter.namespace + "."))
-        obj = adapter.namespace + "." + id;
-    adapter.log.silly("update state " + obj + " with value:" + value);
+    if (! obj.startsWith(adapter.namespace + '.'))
+        obj = adapter.namespace + '.' + id;
+    adapter.log.silly('update state ' + obj + ' with value:' + value);
     currentStateValues[obj] = value;
 }
 
 function setStateAck(id, value) {
-    // State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
+    // State wird intern auch über 'onStateChange' angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
     // von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
     //setStateInternal(id, value);
     adapter.setState(id, {val: value, ack: true});
@@ -1975,7 +1975,7 @@ function setStateAck(id, value) {
 
 async function setStateAckSync(id, value) {
     // Do synchronous setState
-    // State wird intern auch über "onStateChange" angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
+    // State wird intern auch über 'onStateChange' angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
     // von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
     //setStateInternal(id, value);
     const promisedSetState = (id, value) => new Promise(resolve => adapter.setState(id, {val: value, ack: true}, resolve));
@@ -1987,7 +1987,7 @@ function checkFirmware() {
         try {
             request.get(firmwareUrl, processFirmwarePage);
         } catch (e) {
-            adapter.log.warn("Error requesting firmware url " + firmwareUrl + "e: " + e);
+            adapter.log.warn('Error requesting firmware url ' + firmwareUrl + 'e: ' + e);
         }
     }
     return;
@@ -2003,16 +2003,16 @@ function sendWallboxWarning(message) {
 
 function getWallboxModel() {
     const type = getStateInternal(stateProduct);
-    if (typeof type !== "string") {
+    if (typeof type !== 'string') {
         return -1;
     }
-    if (type.startsWith("KC-P20")) {
+    if (type.startsWith('KC-P20')) {
         return MODEL_P20;
     }
-    if (type.startsWith("KC-P30") && (type.substr(15, 1) == "-")) {
+    if (type.startsWith('KC-P30') && (type.substr(15, 1) == '-')) {
         return MODEL_P30;
     }
-    if (type.startsWith("BMW-10")  && (type.substr(15, 1) == "-")) {
+    if (type.startsWith('BMW-10')  && (type.substr(15, 1) == '-')) {
         return MODEL_BMW;
     }
     return 0;
@@ -2025,52 +2025,52 @@ function getWallboxType() {
             return 0;
         case MODEL_P20:
             switch (type.substr(13,1)) {
-                case "0": return TYPE_E_SERIES;
-                case "1":
-                    sendWallboxWarning("KeContact P20 b-series will not be supported!");
+                case '0': return TYPE_E_SERIES;
+                case '1':
+                    sendWallboxWarning('KeContact P20 b-series will not be supported!');
                     return TYPE_B_SERIES;
-                case "2":  // c-series
-                case "3":  // c-series + PLC (only P20)
-                case "A":  // c-series + WLAN
-                case "K":  // Dienstwagen-Wallbox / Company Car Wall Box MID / Art.no. 126 389
+                case '2':  // c-series
+                case '3':  // c-series + PLC (only P20)
+                case 'A':  // c-series + WLAN
+                case 'K':  // Dienstwagen-Wallbox / Company Car Wall Box MID / Art.no. 126 389
                     return TYPE_C_SERIES;
-                case "B":  // x-series
-                case "C":  // x-series + GSM
-                case "D":  // x-series + GSM + PLC
+                case 'B':  // x-series
+                case 'C':  // x-series + GSM
+                case 'D':  // x-series + GSM + PLC
                     return TYPE_X_SERIES;
             }
             break;
         case MODEL_P30:
-            if (type.endsWith("-DE")) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
-                sendWallboxWarning("Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.");
+            if (type.endsWith('-DE')) {   // KEBA says there's only one ID: KC-P30-EC220112-000-DE
+                sendWallboxWarning('Keba KeContact P30 Deutschland-Edition detected. Regulation may be inaccurate.');
                 return TYPE_D_EDITION;
             }
             // fall through
         case MODEL_BMW:
             switch (type.substr(13,1)) {
-                case "0":
+                case '0':
                     return TYPE_E_SERIES;
-                case "1":
-                    sendWallboxWarning("KeContact P30 b-series will not be supported!");
+                case '1':
+                    sendWallboxWarning('KeContact P30 b-series will not be supported!');
                     return TYPE_B_SERIES;
-                case "2":
+                case '2':
                     return TYPE_C_SERIES;
-                case "3":
-                    sendWallboxWarning("KeContact P30 a-series will not be supported!");
+                case '3':
+                    sendWallboxWarning('KeContact P30 a-series will not be supported!');
                     return TYPE_A_SERIES;
-                case "B":  // x-series WLAN
-                case "C":  // x-series WLAN + 3G
-                case "E":  // x-series WLAN + 4G
-                case "G":  // x-series 3G
-                case "H":  // x-series 4G
-                case "U":  // KC-P30-EC2204U2-M0R-CC (Company Car Wall Box MID - GREEN EDITION), KC-P30-EC2204U2-E00-PV (Photovoltaic Wallbox Cable - PV-Edition)
+                case 'B':  // x-series WLAN
+                case 'C':  // x-series WLAN + 3G
+                case 'E':  // x-series WLAN + 4G
+                case 'G':  // x-series 3G
+                case 'H':  // x-series 4G
+                case 'U':  // KC-P30-EC2204U2-M0R-CC (Company Car Wall Box MID - GREEN EDITION), KC-P30-EC2204U2-E00-PV (Photovoltaic Wallbox Cable - PV-Edition)
                     return TYPE_X_SERIES;
             }
             break;
         default:
     }
     if (! wallboxUnknownSent) {
-        sendSentryMessage( "unknown wallbox type " + type);
+        sendSentryMessage( 'unknown wallbox type ' + type);
         wallboxUnknownSent = true;
     }
     return 0;
@@ -2078,8 +2078,8 @@ function getWallboxType() {
 
 function sendSentryMessage(msg) {
     adapter.log.error(msg);
-    if (adapter.supportsFeature && adapter.supportsFeature("PLUGINS")) {
-        const sentryInstance = adapter.getPluginInstance("sentry");
+    if (adapter.supportsFeature && adapter.supportsFeature('PLUGINS')) {
+        const sentryInstance = adapter.getPluginInstance('sentry');
         if (sentryInstance) {
             sentryInstance.getSentryObject().captureException(msg);
         }
@@ -2108,11 +2108,11 @@ function getFirmwareRegEx() {
 }
 
 function processFirmwarePage(err, stat, body) {
-    const prefix = "Keba firmware check: ";
+    const prefix = 'Keba firmware check: ';
     if (err) {
         adapter.log.warn(prefix + err);
     } else if (stat.statusCode != 200) {
-        adapter.log.warn("Firmware page could not be loaded (" + stat.statusCode + ")");
+        adapter.log.warn('Firmware page could not be loaded (' + stat.statusCode + ')');
     } else if (body) {
         const regexPattern = getFirmwareRegEx();
         if (! regexPattern || (regexPattern == null)) {
@@ -2129,299 +2129,299 @@ function processFirmwarePage(err, stat, body) {
                 regexCurrFirmware.lastIndex = 0;
                 const currFirmwareList = regexCurrFirmware.exec(currFirmware);
                 if (currFirmwareList) {
-                    currFirmwareList[1] = "V"+currFirmwareList[1];
+                    currFirmwareList[1] = 'V'+currFirmwareList[1];
                     if (block[1] == currFirmwareList[1]) {
-                        adapter.log.info(prefix + "latest firmware installed");
+                        adapter.log.info(prefix + 'latest firmware installed');
                     } else {
-                        adapter.log.warn(prefix + "current firmware " + currFirmwareList[1] + ", <a href='" + firmwareUrl + "'>new firmware " + block[1] + " available</a>");
+                        adapter.log.warn(prefix + 'current firmware ' + currFirmwareList[1] + ', <a href="' + firmwareUrl + '">new firmware ' + block[1] + ' available</a>');
                     }
                 } else {
-                    adapter.log.error(prefix + "current firmare unknown: " + currFirmware);
+                    adapter.log.error(prefix + 'current firmare unknown: ' + currFirmware);
                 }
             } else {
-                adapter.log.warn(prefix + "no firmware found");
+                adapter.log.warn(prefix + 'no firmware found');
             }
         } else {
             // disabled due to chenges on webpage of Keba
-            //adapter.log.warn(prefix + "no section found");
+            //adapter.log.warn(prefix + 'no section found');
             //adapter.log.debug(body);
         }
     } else {
-        adapter.log.warn(prefix + "empty page, status code " + stat.statusCode);
+        adapter.log.warn(prefix + 'empty page, status code ' + stat.statusCode);
     }
     return true;
 }
 
 function createHistory() {
     // create Sessions Channel
-    adapter.setObject("Sessions",
+    adapter.setObject('Sessions',
         {
-            type: "channel",
+            type: 'channel',
             common: {
-                name: "Sessions Statistics"
+                name: 'Sessions Statistics'
             },
             native: {}
         });
     // create Datapoints for 31 Sessions
     for (let i = 0; i <= 30; i++){
-        let session = "";
+        let session = '';
         if (i < 10) {
-            session = "0";
+            session = '0';
         }
 
-        adapter.setObject("Sessions.Session_" + session + i,
+        adapter.setObject('Sessions.Session_' + session + i,
             {
-                type: "channel",
+                type: 'channel',
                 common: {
-                    name: "Session_" +session + i + " Statistics"
+                    name: 'Session_' +session + i + ' Statistics'
                 },
                 native: {}
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".json",
+        adapter.setObject('Sessions.Session_' + session + i + '.json',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Raw json string from Wallbox",
-                    "type":  "string",
-                    "role":  "json",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "RAW_Json message",
+                'type': 'state',
+                'common': {
+                    'name':  'Raw json string from Wallbox',
+                    'type':  'string',
+                    'role':  'json',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'RAW_Json message',
                 },
-                "native": {
-                    "udpKey": session + i + "_json"
+                'native': {
+                    'udpKey': session + i + '_json'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".sessionid",
+        adapter.setObject('Sessions.Session_' + session + i + '.sessionid',
             {
-                "type": "state",
-                "common": {
-                    "name":  "SessionID of Charging Session",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "unique Session ID",
+                'type': 'state',
+                'common': {
+                    'name':  'SessionID of Charging Session',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'unique Session ID',
                 },
-                "native": {
-                    "udpKey": session + i + "_Session ID"
+                'native': {
+                    'udpKey': session + i + '_Session ID'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".currentHardware",
+        adapter.setObject('Sessions.Session_' + session + i + '.currentHardware',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Maximum Current of Hardware",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Maximum Current that can be supported by hardware",
-                    "unit":  "mA",
+                'type': 'state',
+                'common': {
+                    'name':  'Maximum Current of Hardware',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Maximum Current that can be supported by hardware',
+                    'unit':  'mA',
                 },
-                "native": {
-                    "udpKey": session + i + "_Curr HW"
+                'native': {
+                    'udpKey': session + i + '_Curr HW'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".eStart",
+        adapter.setObject('Sessions.Session_' + session + i + '.eStart',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Energy Counter Value at Start",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Total Energy Consumption at beginning of Charging Session",
-                    "unit":  "Wh",
+                'type': 'state',
+                'common': {
+                    'name':  'Energy Counter Value at Start',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Total Energy Consumption at beginning of Charging Session',
+                    'unit':  'Wh',
                 },
-                "native": {
-                    "udpKey": session + i + "_E start",
-                    "udpMultiplier": 0.1
+                'native': {
+                    'udpKey': session + i + '_E start',
+                    'udpMultiplier': 0.1
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".ePres",
+        adapter.setObject('Sessions.Session_' + session + i + '.ePres',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Charged Energy in Current Session",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Energy Transfered in Current Charging Session",
-                    "unit":  "Wh",
+                'type': 'state',
+                'common': {
+                    'name':  'Charged Energy in Current Session',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Energy Transfered in Current Charging Session',
+                    'unit':  'Wh',
                 },
-                "native": {
-                    "udpKey": session + i + "_E pres",
-                    "udpMultiplier": 0.1
+                'native': {
+                    'udpKey': session + i + '_E pres',
+                    'udpMultiplier': 0.1
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".started_s",
+        adapter.setObject('Sessions.Session_' + session + i + '.started_s',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Time or Systemclock at Charging Start in Seconds",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Systemclock since System Startup at Charging Start",
-                    "unit":  "s",
+                'type': 'state',
+                'common': {
+                    'name':  'Time or Systemclock at Charging Start in Seconds',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Systemclock since System Startup at Charging Start',
+                    'unit':  's',
                 },
-                "native": {
-                    "udpKey": session + i + "_started[s]"
+                'native': {
+                    'udpKey': session + i + '_started[s]'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".ended_s",
+        adapter.setObject('Sessions.Session_' + session + i + '.ended_s',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Time or Systemclock at Charging End in Seconds",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Systemclock since System Startup at Charging End",
-                    "unit":  "s",
+                'type': 'state',
+                'common': {
+                    'name':  'Time or Systemclock at Charging End in Seconds',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Systemclock since System Startup at Charging End',
+                    'unit':  's',
                 },
-                "native": {
-                    "udpKey": session + i + "_ended[s]"
+                'native': {
+                    'udpKey': session + i + '_ended[s]'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".started",
+        adapter.setObject('Sessions.Session_' + session + i + '.started',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Time at Start of Charging",
-                    "type":  "string",
-                    "role":  "date",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Time at Charging Session Start",
+                'type': 'state',
+                'common': {
+                    'name':  'Time at Start of Charging',
+                    'type':  'string',
+                    'role':  'date',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Time at Charging Session Start',
                 },
-                "native": {
-                    "udpKey": session + i + "_started"
+                'native': {
+                    'udpKey': session + i + '_started'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".ended",
+        adapter.setObject('Sessions.Session_' + session + i + '.ended',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Time at End of Charging",
-                    "type":  "string",
-                    "role":  "date",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Time at Charging Session End",
+                'type': 'state',
+                'common': {
+                    'name':  'Time at End of Charging',
+                    'type':  'string',
+                    'role':  'date',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Time at Charging Session End',
                 },
-                "native": {
-                    "udpKey": session + i + "_ended"
+                'native': {
+                    'udpKey': session + i + '_ended'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".reason",
+        adapter.setObject('Sessions.Session_' + session + i + '.reason',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Reason for End of Session",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Reason for End of Charging Session",
+                'type': 'state',
+                'common': {
+                    'name':  'Reason for End of Session',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Reason for End of Charging Session',
                 },
-                "native": {
-                    "udpKey": session + i + "_reason"
+                'native': {
+                    'udpKey': session + i + '_reason'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".timeQ",
+        adapter.setObject('Sessions.Session_' + session + i + '.timeQ',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Time Sync Quality",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Time Synchronisation Mode",
+                'type': 'state',
+                'common': {
+                    'name':  'Time Sync Quality',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Time Synchronisation Mode',
                 },
-                "native": {
-                    "udpKey": session + i + "_timeQ"
+                'native': {
+                    'udpKey': session + i + '_timeQ'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".rfid_tag",
+        adapter.setObject('Sessions.Session_' + session + i + '.rfid_tag',
             {
-                "type": "state",
-                "common": {
-                    "name":  "RFID Tag of Card used to Start/Stop Session",
-                    "type":  "string",
-                    "role":  "text",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "RFID Token used for Charging Session",
+                'type': 'state',
+                'common': {
+                    'name':  'RFID Tag of Card used to Start/Stop Session',
+                    'type':  'string',
+                    'role':  'text',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'RFID Token used for Charging Session',
                 },
-                "native": {
-                    "udpKey": session + i + "_RFID tag"
+                'native': {
+                    'udpKey': session + i + '_RFID tag'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".rfid_class",
+        adapter.setObject('Sessions.Session_' + session + i + '.rfid_class',
             {
-                "type": "state",
-                "common": {
-                    "name":  "RFID Class of Card used to Start/Stop Session",
-                    "type":  "string",
-                    "role":  "text",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "RFID Class used for Session",
+                'type': 'state',
+                'common': {
+                    'name':  'RFID Class of Card used to Start/Stop Session',
+                    'type':  'string',
+                    'role':  'text',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'RFID Class used for Session',
                 },
-                "native": {
-                    "udpKey": session + i + "_RFID class"
+                'native': {
+                    'udpKey': session + i + '_RFID class'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".serial",
+        adapter.setObject('Sessions.Session_' + session + i + '.serial',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Serialnumber of Device",
-                    "type":  "string",
-                    "role":  "text",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Serial Number of Device",
+                'type': 'state',
+                'common': {
+                    'name':  'Serialnumber of Device',
+                    'type':  'string',
+                    'role':  'text',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Serial Number of Device',
                 },
-                "native": {
-                    "udpKey": session + i + "_Serial"
+                'native': {
+                    'udpKey': session + i + '_Serial'
                 }
             });
 
-        adapter.setObject("Sessions.Session_" + session + i + ".sec",
+        adapter.setObject('Sessions.Session_' + session + i + '.sec',
             {
-                "type": "state",
-                "common": {
-                    "name":  "Current State of Systemclock",
-                    "type":  "number",
-                    "role":  "value",
-                    "read":  true,
-                    "write": false,
-                    "desc":  "Current State of System Clock since Startup of Device",
+                'type': 'state',
+                'common': {
+                    'name':  'Current State of Systemclock',
+                    'type':  'number',
+                    'role':  'value',
+                    'read':  true,
+                    'write': false,
+                    'desc':  'Current State of System Clock since Startup of Device',
                 },
-                "native": {
-                    "udpKey": session + i + "_Sec"
+                'native': {
+                    'udpKey': session + i + '_Sec'
                 }
             });
 

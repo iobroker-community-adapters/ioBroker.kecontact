@@ -110,6 +110,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (mcm1957) Adapter requires nodejs >= 18 and js-controller >= 5 now.
 * (mcm1957) Dependencies have been updated.
 * (Sneak-L8) fix url for download page at Keba website
+* (Sneak-L8) fix lint problems by replacing double by single quotes
 
 ### 2.1.1 (2024-03-16)
 * (fischmi) fix error when chanigig dynamic SoC parameter

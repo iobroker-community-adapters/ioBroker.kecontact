@@ -89,6 +89,8 @@ const regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
 const stateWallboxEnabled      = 'enableUser';                  /*Enable User*/
 const stateWallboxCurrent      = 'currentUser';                 /*Current User*/
 const stateWallboxMaxCurrent   = 'currentHardware';             /*Maximum Current Hardware*/
+const stateWallboxCurrentWithTimer = 'currentTimer';            /*Current value for currTime */
+const stateTimeForCurrentChange = 'timeoutCurrentTimer';        /*Timer value for currTime */
 const stateWallboxPhase1       = 'i1';                          /*Current 1*/
 const stateWallboxPhase2       = 'i2';                          /*Current 2*/
 const stateWallboxPhase3       = 'i3';                          /*Current 3*/
@@ -525,8 +527,14 @@ function start() {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrent] = function (oldValue, newValue) {
-        //sendUdpDatagram('currtime ' + parseInt(newValue) + ' 1', true);
         sendUdpDatagram('curr ' + parseInt(newValue), true);
+    };
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrentWithTimer] = function (oldValue, newValue) {
+        sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + getStateDefault0(stateTimeForCurrentChange), true);
+    };
+    stateChangeListeners[adapter.namespace + '.' + stateTimeForCurrentChange] = function () {
+        // parameters (oldValue, newValue) can be ommited if not needed
+        // no real action to do
     };
     stateChangeListeners[adapter.namespace + '.' + stateWallboxOutput] = function (oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
@@ -664,26 +672,6 @@ function checkConfig() {
     }
     if (photovoltaicsActive) {
         everythingFine = init1p3pSwitching(adapter.config.state1p3pSwitch) && everythingFine;
-        if (isX2PhaseSwitch()) {
-            if (isForeignStateSpecified(adapter.config.state1p3pSwitch)) {
-                everythingFine = false;
-                adapter.log.error('both, state for 1p/3p switch and switching via X2, must not be specified together');
-            }
-            const valueOn = 1;
-            const valueOff = 0;
-            valueFor1p3pOff = valueOff;
-            if (adapter.config['1p3pSwitchIsNO'] === true) {
-                valueFor1pCharging = valueOff;
-                valueFor3pCharging = valueOn;
-            } else {
-                valueFor1pCharging = valueOn;
-                valueFor3pCharging = valueOff;
-            }
-
-            min1p3pSwSec = 305;
-            adapter.log.info('Using min time between phase switching of: ' +min1p3pSwSec);
-        }
-
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryCharging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatteryDischarging) && everythingFine;
         everythingFine = addForeignStateFromConfig(adapter.config.stateBatterySoC) && everythingFine;
@@ -727,6 +715,27 @@ function checkConfig() {
             minRegardSeconds = getNumber(adapter.config.regardTime);
         }
     }
+    
+    if (isX2PhaseSwitch()) {
+        if (isForeignStateSpecified(adapter.config.state1p3pSwitch)) {
+            everythingFine = false;
+            adapter.log.error('both, state for 1p/3p switch and switching via X2, must not be specified together');
+        }
+        const valueOn = 1;
+        const valueOff = 0;
+        valueFor1p3pOff = valueOff;
+        if (adapter.config['1p3pSwitchIsNO'] === true) {
+            valueFor1pCharging = valueOff;
+            valueFor3pCharging = valueOn;
+        } else {
+            valueFor1pCharging = valueOn;
+            valueFor3pCharging = valueOff;
+        }
+
+        min1p3pSwSec = 305;
+        adapter.log.info('Using min time between phase switching of: ' +min1p3pSwSec);
+    }
+
     if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
         maxPowerActive = true;
         if (adapter.config.maxPower <= 0) {

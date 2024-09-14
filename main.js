@@ -715,7 +715,7 @@ function checkConfig() {
             minRegardSeconds = getNumber(adapter.config.regardTime);
         }
     }
-    
+
     if (isX2PhaseSwitch()) {
         if (isForeignStateSpecified(adapter.config.state1p3pSwitch)) {
             everythingFine = false;

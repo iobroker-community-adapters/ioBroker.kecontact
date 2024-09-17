@@ -1,9 +1,9 @@
-const globals = require("globals");
-const js = require("@eslint/js");
+const globals = require('globals');
+const js = require('@eslint/js');
 
 const {
     FlatCompat,
-} = require("@eslint/eslintrc");
+} = require('@eslint/eslintrc');
 
 const compat = new FlatCompat({
     baseDirectory: __dirname,
@@ -11,7 +11,7 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-module.exports = [...compat.extends("eslint:recommended"), {
+module.exports = [...compat.extends('eslint:recommended'), {
     plugins: {},
 
     languageOptions: {
@@ -21,30 +21,30 @@ module.exports = [...compat.extends("eslint:recommended"), {
         },
 
         ecmaVersion: 2020,
-        sourceType: "commonjs",
+        sourceType: 'commonjs',
     },
 
     rules: {
-        indent: ["error", 4, {
+        indent: ['error', 4, {
             SwitchCase: 1,
         }],
 
-        "no-console": "off",
+        'no-console': 'off',
 
-        "no-unused-vars": ["error", {
+        'no-unused-vars': ['error', {
             ignoreRestSiblings: true,
-            argsIgnorePattern: "^_",
+            argsIgnorePattern: '^_',
         }],
 
-        "no-var": "error",
-        "no-trailing-spaces": "error",
-        "prefer-const": "error",
+        'no-var': 'error',
+        'no-trailing-spaces': 'error',
+        'prefer-const': 'error',
 
-        quotes: ["error", "single", {
+        quotes: ['error', 'single', {
             avoidEscape: true,
             allowTemplateLiterals: true,
         }],
 
-        semi: ["error", "always"],
+        semi: ['error', 'always'],
     },
 }];

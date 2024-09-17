@@ -4,6 +4,7 @@ nbproject/
 *.code-workspace
 Thumbs.db
 gulpfile.js
+iob_npm.done
 
 # CI test files
 test/

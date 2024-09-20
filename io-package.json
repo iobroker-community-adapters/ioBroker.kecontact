@@ -579,6 +579,7 @@
         "unit": "sec",
         "read": true,
         "write": true,
+        "def": 1,
         "desc": "Timeout in seconds before the current setting defined by the last currtime command will be applied."
       },
       "native": {

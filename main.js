@@ -124,6 +124,7 @@ const stateWallboxDisabled     = 'automatic.pauseWallbox';      /*switch to gene
 const statePvAutomatic         = 'automatic.photovoltaics';     /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
 const stateAddPower            = 'automatic.addPower';          /*additional regard to run charging session*/
 const stateLimitCurrent        = 'automatic.limitCurrent';      /*maximum amperage for charging*/
+const stateLimitCurrent1p      = 'automatic.limitCurrent1p';    /*maximum amperage for charging when 1p 3p switch set to 1p */
 const stateManualPhases        = 'automatic.calcPhases';        /*count of phases to calculate with for KeContact Deutschland-Edition*/
 const stateBatteryStrategy     = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/
 const stateMinimumSoCOfBatteryStorage = 'automatic.batterySoCForCharging'; /*SoC above which battery storage may be used for charging vehicle*/
@@ -587,6 +588,9 @@ function start() {
         // no real action to do
     };
     stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent] = function () {
+        // no real action to do
+    };
+    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent1p] = function () {
         // no real action to do
     };
     stateChangeListeners[adapter.namespace + '.' + stateBatteryStrategy] = function () {
@@ -1053,7 +1057,13 @@ function getMinCurrent() {
  */
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
-    const limit = getStateDefault0(stateLimitCurrent);
+    let limit = getStateDefault0(stateLimitCurrent);
+    if (has1P3PAutomatic() || isReducedChargingBecause1p3p()) {
+        const limit1p = getStateDefault0(stateLimitCurrent1p);
+        if (limit1p > 0) {
+            limit = limit1p;
+        }
+    }
     if ((limit > 0) && (limit < max)) {
         max = limit;
     }

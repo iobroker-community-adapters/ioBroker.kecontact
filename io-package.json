@@ -1013,6 +1013,21 @@
       "native": {}
     },
     {
+      "_id": "automatic.limitCurrent1p",
+      "type": "state",
+      "common": {
+        "name": "limit dynamic charging to this value of amperage in case of using 1p 3p switch ans set to 1 (0 = use limitation from limitCurrent)",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "The amount of dynamic charing current will be limited to this value if 1p 3p switch is set to 1p (0 = use limitation from limitCurrent))"
+      },
+      "native": {}
+    },
+    {
       "_id": "automatic.calcPhases",
       "type": "state",
       "common": {

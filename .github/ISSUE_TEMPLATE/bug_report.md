@@ -27,6 +27,9 @@ If applicable, add screenshots and logfiles to help explain your problem.
  - JS-Controller version: <js-controller-version> <!-- determine this with `iobroker -v` on the console -->
  - Node version: <node-version> <!-- determine this with `node -v` on the console -->
  - Operating system: <os-name>
+ - Type of wallbox (c-series, x-series, Deutschland-Edition, ...): 
+ - Brand and model of vehicle to be charged: 
+ - Used options (pv automatics, battery storage options, 1p/3p switch, ...): 
 
 **Additional context**  
 Add any other context about the problem here.

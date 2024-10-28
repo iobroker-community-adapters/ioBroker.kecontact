@@ -64,7 +64,7 @@ let wallboxIncluded      = true;   // amperage of wallbox include in energy mete
 let amperageDelta        = 500;    // default for step of amperage
 let underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
 const minAmperageDefault = 6000;   // default minimum amperage to start charging session
-const maxCurrentEnWG     = 6000;   // maximum current allowed when limitation of §34 EnWg is active
+const maxCurrentEnWG     = 6000;   // maximum current allowed when limitation of §14a EnWg is active
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
@@ -1701,7 +1701,7 @@ function checkWallboxPower() {
     if (maxCurrentEnWG >= 0) {
         if (maxCurrentEnWG < tempMax) {
             tempMax = maxCurrentEnWG;
-            adapter.log.debug('Limit current to ' + maxCurrentEnWG + ' mA due to §34 EnWG');
+            adapter.log.debug('Limit current to ' + maxCurrentEnWG + ' mA due to §14a EnWG');
         }
     }
 

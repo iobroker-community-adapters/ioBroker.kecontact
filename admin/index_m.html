@@ -119,6 +119,16 @@
                 });
             });
 
+            $('#OID_stateEnWG').on('click', function () {
+                initSelectId(function (sid) {
+                    sid.selectId('show', $('#stateEnWG').val(), function (newId) {
+                        if (newId) {
+                            $('#stateEnWG').val(newId).trigger('change');
+                        }
+                    });
+                });
+            });
+
             $('#OID_stateEnergyMeter1').on('click', function () {
                 initSelectId(function (sid) {
                     sid.selectId('show', $('#stateEnergyMeter1').val(), function (newId) {

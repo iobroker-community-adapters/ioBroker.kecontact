@@ -1249,10 +1249,9 @@ function getTotalPowerAvailable() {
  * @returns the total current available in mA
  */
 function getMaxCurrentEnWG() {
-    // TODO hier Code einfügen
     if (isEnWGDefined() && isEnWGActive()) {
         if (adapter.config.dynamicEnWG == true) {
-            const allowedPower = 3 * voltage * maxCurrentEnWG;
+            const allowedPower = 3 * voltage * maxCurrentEnWG / 1000;
             return getAmperage(allowedPower + getSurplusWithoutWallbox(), get1p3pPhases());
         } else {
             return maxCurrentEnWG;
@@ -1702,6 +1701,7 @@ function checkWallboxPower() {
     if (maxCurrentEnWG >= 0) {
         if (maxCurrentEnWG < tempMax) {
             tempMax = maxCurrentEnWG;
+            adapter.log.debug('Limit current to ' + maxCurrentEnWG + ' mA due to §34 EnWG');
         }
     }
 

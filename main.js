@@ -617,7 +617,7 @@ function start() {
 /**
  * Function which checks weahter the state given by the parameter is defined in the adapter.config page.
  * @param {string} stateValue is a string with the value of the state.
- * @returns {*} true if the tate is specified.
+ * @returns {*} true if the state is specified.
  */
 function isForeignStateSpecified(stateValue) {
     return stateValue && stateValue !== null && typeof stateValue == 'string' && stateValue !== '' && stateValue !== '[object Object]';
@@ -627,15 +627,15 @@ function isForeignStateSpecified(stateValue) {
 /**
  * Function calls addForeignState which subscribes a foreign state to write values
  * in 'currentStateValues'
- * @param {string} stateValue is a string with the value of the state.
+ * @param {string} stateName is a string with the name of the state.
  * @returns {boolean} returns true if the function addForeingnState was executed successful
  */
-function addForeignStateFromConfig(stateValue) {
-    if (isForeignStateSpecified(stateValue)) {
-        if (addForeignState(stateValue)) {
+function addForeignStateFromConfig(stateName) {
+    if (isForeignStateSpecified(stateName)) {
+        if (addForeignState(stateName)) {
             return true;
         } else {
-            adapter.log.error('Error when adding foreign state "' + stateValue + '"');
+            adapter.log.error('Error when adding foreign state "' + stateName + '"');
             return false;
         }
     }
@@ -1309,7 +1309,7 @@ function isX2PhaseSwitch() {
  *
  */
 function isEnWGDefined() {
-    return isForeignStateSpecified('stateEnWG');
+    return isForeignStateSpecified(adapter.config.stateEnWG);
 }
 
 /**

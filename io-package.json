@@ -207,6 +207,8 @@
     "minTime": 300,
     "regardTime": 180,
     "min1p3pSwSTime": 0,
+    "stateEnWG": "",
+    "dynamicEnWG": false,
     "maxPower": 0,
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",

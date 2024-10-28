@@ -64,6 +64,7 @@ let wallboxIncluded      = true;   // amperage of wallbox include in energy mete
 let amperageDelta        = 500;    // default for step of amperage
 let underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
 const minAmperageDefault = 6000;   // default minimum amperage to start charging session
+const maxCurrentEnWG     = 6000;   // maximum current allowed when limitation of §34 EnWg is active
 let minAmperage          = 5000;   // minimum amperage to start charging session
 let minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
 let minRegardSeconds     = 0;      // maximum time to accept regard when charging
@@ -241,6 +242,8 @@ function onAdapterUnload(callback) {
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter2);
         if (isForeignStateSpecified(adapter.config.stateEnergyMeter3))
             adapter.unsubscribeForeignStates(adapter.config.stateEnergyMeter3);
+        if (isForeignStateSpecified(adapter.config.stateEnWG))
+            adapter.unsubscribeForeignStates(adapter.config.stateEnWG);
 
     } catch (e) {
         if (adapter.log)   // got an exception 'TypeError: Cannot read property 'warn' of undefined'
@@ -249,6 +252,7 @@ function onAdapterUnload(callback) {
 
     callback();
 }
+
 /**
  * Function is called if a subscribed state changes
  * @param {string} id is the id of the state which changed
@@ -387,6 +391,8 @@ async function main() {
     adapter.log.info('config underusage: ' + adapter.config.underusage);
     adapter.log.info('config minTime: ' + adapter.config.minTime);
     adapter.log.info('config regardTime: ' + adapter.config.regardTime);
+    adapter.log.info('config stateEnWG: ' + adapter.config.stateEnWG);
+    adapter.log.info('config dynamicEnWG: ' + adapter.config.dynamicEnWG);
     adapter.log.info('config maxPower: ' + adapter.config.maxPower);
     adapter.log.info('config stateEnergyMeter1: ' + adapter.config.stateEnergyMeter1);
     adapter.log.info('config stateEnergyMeter2: ' + adapter.config.stateEnergyMeter2);
@@ -655,13 +661,10 @@ function checkConfig() {
         if (everythingFine) {
             adapter.log.info('starting charging station in passive mode');
         }
-    }
-    if (isPassive) {
         if (adapter.config.pollInterval > 0) {
             intervalPassiveUpdate = getNumber(adapter.config.pollInterval) * 1000;
         }
     } else {
-        isPassive = false;
         if (everythingFine) {
             adapter.log.info('starting charging station in active mode');
         }
@@ -738,6 +741,10 @@ function checkConfig() {
 
         min1p3pSwSec = 305;
         adapter.log.info('Using min time between phase switching of: ' +min1p3pSwSec);
+    }
+
+    if (isEnWGDefined()) {
+        everythingFine = addForeignStateFromConfig(adapter.config.stateEnWG) && everythingFine;
     }
 
     if (adapter.config.maxPower && (adapter.config.maxPower != 0)) {
@@ -1045,7 +1052,7 @@ function isUsingBatteryForFullChargingOfVehicle() {
 
 /**
  * Get the minimum current for wallbox
- * @returns {number} the  minimum amperage to start charging session
+ * @returns {number} the  minimum amperage to start charging session in mA
  */
 function getMinCurrent() {
     return minAmperage;
@@ -1053,7 +1060,7 @@ function getMinCurrent() {
 
 /**
  * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent an stateLimitCurrent
- * @returns {number} the  maxium allowed charging current
+ * @returns {number} the  maxium allowed charging current in mA
  */
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
@@ -1200,7 +1207,7 @@ function getBatteryStoragePower(isFullPowerRequested) {
  * The available surplus is calculated and returned not considering the used power for charging. If configured the availabe storage power is added.
  *
  * @param {boolean} isFullBatteryStoragePowerRequested if checked then maximum available power of the battery is added
- * @returns {number} the available surplus without considering the wallbox power currently used for charging.
+ * @returns {number} the available surplus without considering the wallbox power currently used for charging or negative value is case of regard.
  */
 function getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested = false) {
     let power = getStateDefault0(adapter.config.stateSurplus) - getStateDefault0(adapter.config.stateRegard) + getBatteryStoragePower(isFullBatteryStoragePowerRequested);
@@ -1238,6 +1245,40 @@ function getTotalPowerAvailable() {
 }
 
 /**
+ * If the §14a EnWG is active calculate max current
+ * @returns the total current available in mA
+ */
+function getMaxCurrentEnWG() {
+    // TODO hier Code einfügen
+    if (isEnWGDefined() && isEnWGActive()) {
+        if (adapter.config.dynamicEnWG == true) {
+            const allowedPower = 3 * voltage * maxCurrentEnWG;
+            return getAmperage(allowedPower + getSurplusWithoutWallbox(), get1p3pPhases());
+        } else {
+            return maxCurrentEnWG;
+        }
+    }
+    return -1;  // no value defined
+}
+
+/**
+ * Return, if a possible power limitation according to §14a EnWG was activated by the common carrier
+ * @returns true, if EnWG limitation is defined and active
+ */
+function isEnWGActive() {
+    const stateName = adapter.config.stateEnWG;
+    const value = getStateInternal(stateName);
+    if (typeof value == 'boolean') {
+        return value;
+    } else if (typeof value == 'number') {
+        return value > 0;
+    } else {
+        adapter.log.error('unhandled type ' + typeof value + ' for state ' + stateName);
+        return false;
+    }
+}
+
+/**
  * resets values for 1p/3p switching
  */
 function reset1p3pSwitching() {
@@ -1260,6 +1301,15 @@ function doNextStepOf1p3pSwitching() {
  */
 function isX2PhaseSwitch() {
     return adapter.config['1p3pViaX2'] == true;
+}
+
+/**
+ * Returns whether EnWG limitation is defined in config
+ * @returns true, if EnWG limiting is defined oin config
+ *
+ */
+function isEnWGDefined() {
+    return isForeignStateSpecified('stateEnWG');
 }
 
 /**
@@ -1645,6 +1695,13 @@ function checkWallboxPower() {
         const maxAmperage = getAmperage(maxPower, phases);
         if (tempMax > maxAmperage) {
             tempMax = maxAmperage;
+        }
+    }
+    // next check if limitation is active according to german for §14a EnWG
+    const maxCurrentEnWG = getMaxCurrentEnWG();
+    if (maxCurrentEnWG >= 0) {
+        if (maxCurrentEnWG < tempMax) {
+            tempMax = maxCurrentEnWG;
         }
     }
 

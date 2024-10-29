@@ -12,6 +12,7 @@
     height: 100%;
     width: 100%;
     position: relative;
+    overflow: auto;
 }
 .m .select-wrapper + label {
     /* The positioning for dropdown labels is messed up */
@@ -27,6 +28,16 @@ label > i[title] {
 .dropdown-content {
     /* Don't wrap text in dropdowns */
     white-space: nowrap;
+}
+
+.m [type=checkbox]+span:not(.lever) {
+    height: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+    .m {
+        overflow: hidden;
+    }
 }
 
 /* Add your styles here */

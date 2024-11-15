@@ -275,7 +275,14 @@
         "type": "number",
         "role": "value",
         "read": true,
-        "write": true
+        "write": true,
+        "states": {
+          "0": "no phase toggle source is available",
+          "1": "toggle via OCPP",
+          "2": "direct toggle command via RESTAPI",
+          "3": "toggle via Modbus",
+          "4": "toggle via UDP"
+        }
       },
       "native": {
         "udpKey": "X2 phaseSwitch source"
@@ -289,7 +296,11 @@
         "type": "number",
         "role": "value",
         "read": true,
-        "write": true
+        "write": true,
+        "states": {
+          "0": "1 phase (default value)",
+          "1": "3 phases"
+        }
       },
       "native": {
         "udpKey": "X2 phaseSwitch"

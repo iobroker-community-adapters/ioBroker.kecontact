@@ -1066,7 +1066,7 @@ function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
     let limit = getStateDefault0(stateLimitCurrent);
     if (has1P3PAutomatic() || isReducedChargingBecause1p3p()) {
-        const limit1p = getStateDefault0(   );
+        const limit1p = getStateDefault0(stateLimitCurrent1p);
         if (limit1p > 0) {
             limit = limit1p;
         }

@@ -386,6 +386,20 @@
       }
     },
     {
+      "_id": "setBoot",
+      "type": "state",
+      "common": {
+        "name": "Resume session after powercut",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "setBoot"
+      }
+    },
+    {
       "_id": "state",
       "type": "state",
       "common": {

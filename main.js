@@ -530,23 +530,23 @@ async function main() {
 function start() {
     adapter.subscribeStates('*');
 
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxEnabled] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxEnabled] = function (_oldValue, newValue) {
         sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrent] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrent] = function (_oldValue, newValue) {
         sendUdpDatagram('curr ' + parseInt(newValue), true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrentWithTimer] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxCurrentWithTimer] = function (_oldValue, newValue) {
         sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + getStateDefault0(stateTimeForCurrentChange), true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateTimeForCurrentChange] = function () {
         // parameters (oldValue, newValue) can be ommited if not needed
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxOutput] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxOutput] = function (_oldValue, newValue) {
         sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisplay] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisplay] = function (_oldValue, newValue) {
         if (newValue !== null) {
             if (typeof newValue == 'string') {
                 sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, '$'), true);
@@ -555,57 +555,64 @@ function start() {
             }
         }
     };
-    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function () {
-        // parameters (oldValue, newValue) can be ommited if not needed
+    stateChangeListeners[adapter.namespace + '.' + stateWallboxDisabled] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateWallboxDisabled + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function () {
+    stateChangeListeners[adapter.namespace + '.' + statePvAutomatic] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + statePvAutomatic + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateSetEnergy] = function (_oldValue, newValue) {
         sendUdpDatagram('setenergy ' + parseInt(newValue) * 10, true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateReport] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateReport] = function (_oldValue, newValue) {
         sendUdpDatagram('report ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateStart] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateStart] = function (_oldValue, newValue) {
         sendUdpDatagram('start ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateStop] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateStop] = function (_oldValue, newValue) {
         sendUdpDatagram('stop ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateSetDateTime] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateSetDateTime] = function (_oldValue, newValue) {
         sendUdpDatagram('setdatetime ' + newValue, true);
     };
     stateChangeListeners[adapter.namespace + '.' + stateUnlock] = function () {
         sendUdpDatagram('unlock', true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateX2Source] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateX2Source] = function (_oldValue, newValue) {
         sendUdpDatagram('x2src ' + newValue, true);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateX2Switch] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateX2Switch] = function (_oldValue, newValue) {
         sendUdpDatagram('x2 ' + newValue, true);
         setStateAck(state1p3pSwTimestamp, new Date().toString());
     };
-    stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateAddPower] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateAddPower + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateManualPhases] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateManualPhases] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateManualPhases + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateLimitCurrent + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent1p] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateLimitCurrent1p] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateLimitCurrent1p + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateBatteryStrategy] = function () {
+    stateChangeListeners[adapter.namespace + '.' + stateBatteryStrategy] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateBatteryStrategy + ' to ' + newValue);
         // no real action to do
     };
-    stateChangeListeners[adapter.namespace + '.' + stateMsgFromOtherwallbox] = function (oldValue, newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateMsgFromOtherwallbox] = function (_oldValue, newValue) {
         handleWallboxExchange(newValue);
     };
-    stateChangeListeners[adapter.namespace + '.' + stateMinimumSoCOfBatteryStorage] = function (_oldValue, _newValue) {
+    stateChangeListeners[adapter.namespace + '.' + stateMinimumSoCOfBatteryStorage] = function (_oldValue, newValue) {
+        adapter.log.debug('set ' + stateMinimumSoCOfBatteryStorage + ' to ' + newValue);
         // no real action to do
     };
 
@@ -1065,7 +1072,7 @@ function getMinCurrent() {
 function getMaxCurrent() {
     let max = getStateDefault0(stateWallboxMaxCurrent);
     let limit = getStateDefault0(stateLimitCurrent);
-    if (has1P3PAutomatic() || isReducedChargingBecause1p3p()) {
+    if (has1P3PAutomatic() && isReducedChargingBecause1p3p()) {
         const limit1p = getStateDefault0(stateLimitCurrent1p);
         if (limit1p > 0) {
             limit = limit1p;

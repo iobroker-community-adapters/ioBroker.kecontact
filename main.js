@@ -10,7 +10,7 @@ const utils = require('@iobroker/adapter-core');
 
 // Load your modules here, e.g.:
 const dgram = require('dgram');
-const request = require('request');
+const axios = require('axios').default;
 
 /**
  * The adapter instance
@@ -2067,10 +2067,11 @@ async function setStateAckSync(id, value) {
     await promisedSetState(id, value);
 }
 
-function checkFirmware() {
+async function checkFirmware() {
     if (getWallboxModel() == MODEL_P30) {
         try {
-            request.get(firmwareUrl, processFirmwarePage);
+            const response = await axios.get(firmwareUrl);
+            processFirmwarePage(response.status, response.data);
         } catch (e) {
             adapter.log.warn('Error requesting firmware url ' + firmwareUrl + 'e: ' + e);
         }
@@ -2192,12 +2193,10 @@ function getFirmwareRegEx() {
     }
 }
 
-function processFirmwarePage(err, stat, body) {
+function processFirmwarePage(statusCode, body) {
     const prefix = 'Keba firmware check: ';
-    if (err) {
-        adapter.log.warn(prefix + err);
-    } else if (stat.statusCode != 200) {
-        adapter.log.warn('Firmware page could not be loaded (' + stat.statusCode + ')');
+    if (statusCode != 200) {
+        adapter.log.warn('Firmware page could not be loaded (' + statusCode + ')');
     } else if (body) {
         const regexPattern = getFirmwareRegEx();
         if (! regexPattern || (regexPattern == null)) {
@@ -2232,7 +2231,7 @@ function processFirmwarePage(err, stat, body) {
             //adapter.log.debug(body);
         }
     } else {
-        adapter.log.warn(prefix + 'empty page, status code ' + stat.statusCode);
+        adapter.log.warn(prefix + 'empty page, status code ' + statusCode);
     }
     return true;
 }

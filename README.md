@@ -112,6 +112,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 -->
 ### **WORK IN PROGRESS**
 * (Sneak-L8) fix error sentry IOBROKER-KECONTACT-21
+* (sneak-L8) migrate from request to axios
 
 ### 2.3.0 (2024-11-29)
 * (Sneak-L8) new option to limit charging station according to german §14a EnWG

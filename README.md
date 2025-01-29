@@ -110,6 +110,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
   Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (Sneak-L8) fix error sentry IOBROKER-KECONTACT-21
+
 ### 2.3.0 (2024-11-29)
 * (Sneak-L8) new option to limit charging station according to german §14a EnWG
 * (Sneak-L8) enable currTime for manual use and X2 even in passive mode

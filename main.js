@@ -1929,27 +1929,29 @@ function loadChargingSessionsFromWallbox() {
 }
 
 async function updateState(stateData, value) {
-    if (stateData.common.type == 'number') {
-        value = parseFloat(value);
-        if (stateData.native.udpMultiplier) {
-            value *= parseFloat(stateData.native.udpMultiplier);
-            //Workaround for Javascript parseFloat round error for max. 2 digits after comma
-            value = Math.round(value * 100) / 100;
-            //
+    if (stateData && stateData.common) {
+        if (stateData.common.type == 'number') {
+            value = parseFloat(value);
+            if (stateData.native.udpMultiplier) {
+                value *= parseFloat(stateData.native.udpMultiplier);
+                //Workaround for Javascript parseFloat round error for max. 2 digits after comma
+                value = Math.round(value * 100) / 100;
+                //
+            }
+        } else if (stateData.common.type == 'boolean') {
+            value = parseInt(value) !== 0;
         }
-    } else if (stateData.common.type == 'boolean') {
-        value = parseInt(value) !== 0;
+        // immediately update power and amperage values to prevent that value is not yet updated by setState()
+        // when doing calculation after processing report 3
+        // no longer needed when using await
+        //if (stateData._id == adapter.namespace + '.' + stateWallboxPower ||
+        //    stateData._id == adapter.namespace + '.' + stateWallboxPhase1 ||
+        //    stateData._id == adapter.namespace + '.' + stateWallboxPhase2 ||
+        //    stateData._id == adapter.namespace + '.' + stateWallboxPhase3) {
+        //    setStateInternal(stateData._id, value);
+        //}
+        await setStateAckSync(stateData._id, value);
     }
-    // immediately update power and amperage values to prevent that value is not yet updated by setState()
-    // when doing calculation after processing report 3
-    // no longer needed when using await
-    //if (stateData._id == adapter.namespace + '.' + stateWallboxPower ||
-    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase1 ||
-    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase2 ||
-    //    stateData._id == adapter.namespace + '.' + stateWallboxPhase3) {
-    //    setStateInternal(stateData._id, value);
-    //}
-    await setStateAckSync(stateData._id, value);
 }
 
 function sendUdpDatagram(message, highPriority) {

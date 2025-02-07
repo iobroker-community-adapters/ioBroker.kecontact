@@ -485,7 +485,7 @@ class Kecontact extends utils.Adapter {
             const address = adapter.rxSocketBroadcast.address();
             adapter.log.debug('UDP broadcast server listening on ' + address.address + ':' + address.port);
         });
-        this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast);
+        this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast.bind(this));
         this.rxSocketBroadcast.bind(this.BROADCAST_UDP_PORT);
     }
 
@@ -1911,7 +1911,7 @@ class Kecontact extends utils.Adapter {
 
     enableChargingTimer(time) {
         this.disableChargingTimer();
-        this.timerDataUpdate = setInterval(this.requestReports, time);
+        this.timerDataUpdate = setInterval(this.requestReports.bind(this), time);
     }
 
     forceUpdateOfCalculation() {
@@ -1982,7 +1982,7 @@ class Kecontact extends utils.Adapter {
         }
         if (!this.sendDelayTimer) {
             this.sendNextQueueDatagram();
-            this.sendDelayTimer = setInterval(this.sendNextQueueDatagram, 300);
+            this.sendDelayTimer = setInterval(this.sendNextQueueDatagram.bind(this), 300);
         }
     }
 

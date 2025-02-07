@@ -107,10 +107,17 @@
                     "step": 50,
                     "default": 500,
                     "tooltip": "tooltip_delta",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": true
+                },
+                "deltaUnit": {
+                    "type": "staticText",
+                    "label": "mA",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "minAmperage": {
                     "type": "number",
@@ -120,30 +127,51 @@
                     "step": 100,
                     "default": 6000,
                     "tooltip": "tooltip_minAmperage",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": false
+                },
+                "minAmperageUnit": {
+                    "type": "staticText",
+                    "label": "mA",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "addPower": {
                     "type": "number",
                     "label": "addPower",
                     "default": 0,
                     "tooltip": "tooltip_addPower",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": false
+                },
+                "addPowerUnit": {
+                    "type": "staticText",
+                    "label": "watts",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "underusage": {
                     "type": "number",
                     "label": "underusage",
                     "default": 500,
                     "tooltip": "tooltip_underusage",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": true
+                },
+                "underusageUnit": {
+                    "type": "staticText",
+                    "label": "watts",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "minTime": {
                     "type": "number",
@@ -151,10 +179,17 @@
                     "min": 0,
                     "default": 300,
                     "tooltip": "tooltip_minTime",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": false
+                },
+                "minTimeUnit": {
+                    "type": "staticText",
+                    "label": "secs",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "regardTime": {
                     "type": "number",
@@ -162,10 +197,17 @@
                     "min": 0,
                     "default": 180,
                     "tooltip": "tooltip_regardTime",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": false
+                },
+                "regardTimeUnit": {
+                    "type": "staticText",
+                    "label": "secs",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 }
             }
         },
@@ -246,10 +288,17 @@
                     "label": "batteryPower",
                     "min": 0,
                     "tooltip": "tooltip_batteryPower",
-                    "sm": 12,
-                    "md": 9,
-                    "lg": 6,
+                    "sm": 11,
+                    "md": 8,
+                    "lg": 5,
                     "newLine": true
+                },
+                "batteryPowerUnit": {
+                    "type": "staticText",
+                    "label": "watts",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "batteryStorageStrategy": {
                     "type": "select",
@@ -292,10 +341,17 @@
                     "min": 0,
                     "max": 100,
                     "tooltip": "tooltip_batteryMinSoC",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": false
+                },
+                "batteryMinSoCUnit": {
+                    "type": "staticText",
+                    "label": "%",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 }
             }
         },
@@ -348,10 +404,17 @@
                     "label": "maxPower",
                     "min": 0,
                     "tooltip": "tooltip_maxPower",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
                     "newLine": true
+                },
+                "maxPowerUnit": {
+                    "type": "staticText",
+                    "label": "watts",
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1
                 },
                 "stateEnergyMeter1": {
                     "type": "objectId",

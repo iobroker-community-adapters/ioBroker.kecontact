@@ -4,6 +4,7 @@
     "items": {
         "host": {
             "type": "text",
+            "label": "host",
             "tooltip": "tooltip_host",
             "sm": 12,
             "md": 6,
@@ -25,13 +26,20 @@
             "type": "number",
             "label": "pollInterval",
             "tooltip": "tooltip_pollInterval",
-            "sm": 12,
-            "md": 6,
-            "lg": 4,
+            "sm": 11,
+            "md": 5,
+            "lg": 3,
             "min": 0,
             "max": 3600,
             "default": 30,
             "newLine": false
+        },
+        "pollIntervalUnit": {
+            "type": "staticText",
+            "label": "secs",
+            "sm": 1,
+            "md": 1,
+            "lg": 1
         },
         "loadChargingSessions": {
             "type": "checkbox",
@@ -51,7 +59,7 @@
                 },
                 "header": {
                     "type": "header",
-                    "size": 3,
+                    "size": 2,
                     "text": "only-special-values"
                 },
                 "stateRegard": {
@@ -170,7 +178,7 @@
                 },
                 "header": {
                     "type": "header",
-                    "size": 3,
+                    "size": 2,
                     "text": "1p3pSettingsSection"
                 },
                 "1p3pViaX2": {
@@ -212,7 +220,7 @@
                 },
                 "header": {
                     "type": "header",
-                    "size": 3,
+                    "size": 2,
                     "text": "batteryStorageSettingsSection"
                 },
                 "stateBatteryCharging": {
@@ -239,8 +247,8 @@
                     "min": 0,
                     "tooltip": "tooltip_batteryPower",
                     "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "md": 9,
+                    "lg": 6,
                     "newLine": true
                 },
                 "batteryStorageStrategy": {
@@ -300,7 +308,7 @@
                 },
                 "header": {
                     "type": "header",
-                    "size": 3,
+                    "size": 2,
                     "text": "powerEnWG"
                 },
                 "stateEnWG": {
@@ -332,7 +340,7 @@
                 },
                 "header": {
                     "type": "header",
-                    "size": 3,
+                    "size": 2,
                     "text": "powerLimitation"
                 },
                 "maxPower": {
@@ -377,8 +385,8 @@
                     "label": "wallboxNotIncluded",
                     "tooltip": "tooltip_wallboxNotIncluded",
                     "sm": 12,
-                    "md": 6,
-                    "lg": 4,
+                    "md": 9,
+                    "lg": 6,
                     "newLine": true
                 }
             }

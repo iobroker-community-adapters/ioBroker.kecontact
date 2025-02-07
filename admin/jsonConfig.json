@@ -1,0 +1,258 @@
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "host": {
+            "type": "ip",
+            "label": "host",
+            "tooltip": "tooltip_host",
+            "onlyIp4": true,
+            "newLine": true
+        },
+        "passiveMode": {
+            "type": "checkbox",
+            "label": "passiveMode",
+            "tooltip": "tooltip_passiveMode",
+            "default": true,
+            "newLine": true
+        },
+        "pollInterval": {
+            "type": "number",
+            "label": "pollInterval",
+            "tooltip": "tooltip_pollInterval",
+            "min": 0,
+            "max": 3600,
+            "default": 30,
+            "newLine": false
+        },
+        "loadChargingSessions": {
+            "type": "checkbox",
+            "label": "loadChargingSessions",
+            "tooltip": "tooltip_loadChargingSessions",
+            "newLine": false
+        },
+        "only-special-values": {
+            "type": "panel",
+            "label": "only-special-values",
+            "items": {
+                "stateRegard": {
+                    "type": "objectId",
+                    "label": "stateRegard",
+                    "tooltip": "tooltip_stateRegard",
+                    "newLine": true
+                },
+                "stateSurplus": {
+                    "type": "objectId",
+                    "label": "stateSurplus",
+                    "tooltip": "tooltip_stateSurplus",
+                    "newLine": false
+                },
+                "statesIncludeWallbox": {
+                    "type": "checkbox",
+                    "label": "statesIncludeWallbox",
+                    "tooltip": "tooltip_statesIncludeWallbox",
+                    "default": true,
+                    "newLine": false
+                },
+                "useX1forAutomatic": {
+                    "type": "checkbox",
+                    "label": "useX1forAutomatic",
+                    "tooltip": "tooltip_useX1",
+                    "newLine": true
+                },
+                "delta": {
+                    "type": "number",
+                    "label": "delta",
+                    "min": 100,
+                    "max": 6000,
+                    "step": 50,
+                    "default": 500,
+                    "tooltip": "tooltip_delta",
+                    "newLine": true
+                },
+                "minAmperage": {
+                    "type": "number",
+                    "label": "minAmperage",
+                    "min": 5000,
+                    "max": 16000,
+                    "step": 100,
+                    "default": 6000,
+                    "tooltip": "tooltip_minAmperage",
+                    "newLine": false
+                },
+                "addPower": {
+                    "type": "number",
+                    "label": "addPower",
+                    "default": 0,
+                    "tooltip": "tooltip_addPower",
+                    "newLine": false
+                },
+                "underusage": {
+                    "type": "number",
+                    "label": "underusage",
+                    "default": 500,
+                    "tooltip": "tooltip_underusage",
+                    "newLine": true
+                },
+                "minTime": {
+                    "type": "number",
+                    "label": "minTime",
+                    "min": 0,
+                    "default": 300,
+                    "tooltip": "tooltip_minTime",
+                    "newLine": false
+                },
+                "regardTime": {
+                    "type": "number",
+                    "label": "regardTime",
+                    "min": 0,
+                    "default": 180,
+                    "tooltip": "tooltip_regardTime",
+                    "newLine": false
+                }
+            }
+        },
+        "1p3pSettingsSection": {
+            "type": "panel",
+            "label": "1p3pSettingsSection",
+            "items": {
+                "1p3pViaX2": {
+                    "type": "checkbox",
+                    "label": "1p3pViaX2",
+                    "tooltip": "tooltip_1p3pViaX2",
+                    "newLine": true
+                },
+                "stateRegard": {
+                    "type": "objectId",
+                    "label": "state1p3pSwitch",
+                    "tooltip": "tooltip_state1p3pSwitch",
+                    "hidden": "data.1p3pViaX2 === true",
+                    "newLine": false
+                },
+                "1p3pSwitchIsNO": {
+                    "type": "checkbox",
+                    "label": "1p3pSwitchIsNO",
+                    "tooltip": "tooltip_1p3pSwitchIsNO",
+                    "newLine": true
+                }
+            }
+        },
+        "batteryStorageSettingsSection": {
+            "type": "panel",
+            "label": "batteryStorageSettingsSection",
+            "items": {
+                "stateBatteryCharging": {
+                    "type": "objectId",
+                    "label": "stateBatteryCharging",
+                    "tooltip": "tooltip_stateBatteryCharging",
+                    "newLine": true
+                },
+                "stateBatteryDischarging": {
+                    "type": "objectId",
+                    "label": "stateBatteryDischarging",
+                    "tooltip": "tooltip_stateBatteryDischarging",
+                    "newLine": false
+                },
+                "batteryPower": {
+                    "type": "number",
+                    "label": "batteryPower",
+                    "min": 0,
+                    "tooltip": "tooltip_batteryPower",
+                    "newLine": true
+                },
+                "batteryStorageStrategy": {
+                    "type": "select",
+                    "label": "batteryStorageStrategy",
+                    "options": [
+                        {
+                            "label": "no-battery-vehicle-first",
+                            "value": 1
+                        },
+                        {
+                            "label": "no-battery-battery-first",
+                            "value": 2
+                        },
+                        {
+                            "label": "use-battery-for-minimum-charging",
+                            "value": 3
+                        },
+                        {
+                            "label": "use-battery-for-full-charging",
+                            "value": 4
+                        }
+                    ],
+                    "newLine": false
+                },
+                "stateBatterySoC": {
+                    "type": "objectId",
+                    "label": "stateBatterySoC",
+                    "tooltip": "tooltip_stateBatterySoC",
+                    "newLine": true
+                },
+                "batteryMinSoC": {
+                    "type": "number",
+                    "label": "batteryMinSoC",
+                    "min": 0,
+                    "max": 100,
+                    "tooltip": "tooltip_batteryMinSoC",
+                    "newLine": false
+                }
+            }
+        },
+        "powerEnWG": {
+            "type": "panel",
+            "label": "powerEnWG",
+            "items": {
+                "stateEnWG": {
+                    "type": "objectId",
+                    "label": "stateEnWG",
+                    "tooltip": "tooltip_stateEnWG",
+                    "newLine": true
+                },
+                "dynamicEnWG": {
+                    "type": "checkbox",
+                    "label": "dynamicEnWG",
+                    "tooltip": "tooltip_dynamicEnWG",
+                    "newLine": false
+                }
+            }
+        },
+        "powerLimitation": {
+            "type": "panel",
+            "label": "powerLimitation",
+            "items": {
+                "maxPower": {
+                    "type": "number",
+                    "label": "maxPower",
+                    "min": 0,
+                    "tooltip": "tooltip_maxPower",
+                    "newLine": true
+                },
+                "stateEnergyMeter1": {
+                    "type": "objectId",
+                    "label": "stateEnergyMeter1",
+                    "tooltip": "tooltip_stateEnergyMeter1",
+                    "newLine": true
+                },
+                "stateEnergyMeter2": {
+                    "type": "objectId",
+                    "label": "stateEnergyMeter2",
+                    "tooltip": "tooltip_stateEnergyMeter2",
+                    "newLine": false
+                },
+                "stateEnergyMeter3": {
+                    "type": "objectId",
+                    "label": "stateEnergyMeter3",
+                    "tooltip": "tooltip_stateEnergyMeter3",
+                    "newLine": false
+                },
+                "wallboxNotIncluded": {
+                    "type": "checkbox",
+                    "label": "wallboxNotIncluded",
+                    "tooltip": "tooltip_wallboxNotIncluded",
+                    "newLine": true
+                }
+            }
+        }
+    }
+}

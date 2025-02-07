@@ -1999,10 +1999,10 @@ class Kecontact extends utils.Adapter {
                 this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, function (err) {
                     // 2nd parameter 'bytes' not needed, therefore only 'err' coded
                     if (err) {
-                        adapter.log.warn('UDP send error for ' + this.config.host + ':' + this.DEFAULT_UDP_PORT + ': ' + err);
+                        adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT + ': ' + err);
                         return;
                     }
-                    adapter.log.debug('Sent "' + message + '" to ' + this.config.host + ':' + this.DEFAULT_UDP_PORT);
+                    adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT);
                 });
             } catch (e) {
                 if (this.log)

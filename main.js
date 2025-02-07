@@ -457,31 +457,33 @@ class Kecontact extends utils.Adapter {
     // }
 
     setupUdpCommunication() {
+        const adapter = this;
+
         this.txSocket = dgram.createSocket('udp4');
 
         this.rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         this.rxSocketReports.on('error', (err) => {
-            this.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
-            this.rxSocketReports.close();
+            adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
+            adapter.rxSocketReports.close();
         });
         this.rxSocketReports.on('listening', function () {
-            this.rxSocketReports.setBroadcast(true);
-            const address = this.rxSocketReports.address();
-            this.log.debug('UDP server listening on ' + address.address + ':' + address.port);
+            adapter.rxSocketReports.setBroadcast(true);
+            const address = adapter.rxSocketReports.address();
+            adapter.log.debug('UDP server listening on ' + address.address + ':' + address.port);
         });
         this.rxSocketReports.on('message', this.handleWallboxMessage);
         this.rxSocketReports.bind(this.DEFAULT_UDP_PORT, '0.0.0.0');
 
         this.rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         this.rxSocketBroadcast.on('error', (err) => {
-            this.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
-            this.rxSocketBroadcast.close();
+            adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
+            adapter.rxSocketBroadcast.close();
         });
         this.rxSocketBroadcast.on('listening', function () {
-            this.rxSocketBroadcast.setBroadcast(true);
-            this.rxSocketBroadcast.setMulticastLoopback(true);
-            const address = this.rxSocketBroadcast.address();
-            this.log.debug('UDP broadcast server listening on ' + address.address + ':' + address.port);
+            adapter.rxSocketBroadcast.setBroadcast(true);
+            adapter.rxSocketBroadcast.setMulticastLoopback(true);
+            const address = adapter.rxSocketBroadcast.address();
+            adapter.log.debug('UDP broadcast server listening on ' + address.address + ':' + address.port);
         });
         this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast);
         this.rxSocketBroadcast.bind(this.BROADCAST_UDP_PORT);
@@ -509,7 +511,7 @@ class Kecontact extends utils.Adapter {
             if (data) {
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].native && data[i].native.udpKey) {
-                        this.states[data[i].native.udpKey] = data[i];
+                        adapter.states[data[i].native.udpKey] = data[i];
                     }
                 }
             }
@@ -523,7 +525,7 @@ class Kecontact extends utils.Adapter {
                             if (! Object.prototype.hasOwnProperty.call(obj, i)) continue;
                             if (obj[i] !== null) {
                                 if (typeof obj[i] == 'object') {
-                                    this.setStateInternal(i, obj[i].val);
+                                    adapter.setStateInternal(i, obj[i].val);
                                 } else {
                                     adapter.log.error('unexpected state value: ' + obj[i]);
                                 }
@@ -534,7 +536,7 @@ class Kecontact extends utils.Adapter {
                     }
                 }
             });
-            this.subscribeStatesAndStartWorking();
+            adapter.subscribeStatesAndStartWorking();
         });
     }
 
@@ -545,14 +547,15 @@ class Kecontact extends utils.Adapter {
     subscribeStatesAndStartWorking() {
         this.subscribeStates('*');
 
+        const adapter = this;
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxEnabled] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
+            adapter.sendUdpDatagram('ena ' + (newValue ? 1 : 0), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxCurrent] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('curr ' + parseInt(newValue), true);
+            adapter.sendUdpDatagram('curr ' + parseInt(newValue), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxCurrentWithTimer] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + this.getStateDefault0(this.stateTimeForCurrentChange), true);
+            adapter.sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + adapter.getStateDefault0(this.stateTimeForCurrentChange), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateTimeForCurrentChange] = function () {
             // parameters (oldValue, newValue) can be ommited if not needed
@@ -564,70 +567,70 @@ class Kecontact extends utils.Adapter {
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxDisplay] = function (_oldValue, newValue) {
             if (newValue !== null) {
                 if (typeof newValue == 'string') {
-                    this.sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, '$'), true);
+                    adapter.sendUdpDatagram('display 0 0 0 0 ' + newValue.replace(/ /g, '$'), true);
                 } else {
-                    this.log.error('invalid data to send to display: ' + newValue);
+                    adapter.log.error('invalid data to send to display: ' + newValue);
                 }
             }
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxDisabled] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateWallboxDisabled + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateWallboxDisabled + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.statePvAutomatic] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.statePvAutomatic + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.statePvAutomatic + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateSetEnergy] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('setenergy ' + parseInt(newValue) * 10, true);
+            adapter.sendUdpDatagram('setenergy ' + parseInt(newValue) * 10, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateReport] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('report ' + newValue, true);
+            adapter.sendUdpDatagram('report ' + newValue, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateStart] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('start ' + newValue, true);
+            adapter.sendUdpDatagram('start ' + newValue, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateStop] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('stop ' + newValue, true);
+            adapter.sendUdpDatagram('stop ' + newValue, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateSetDateTime] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('setdatetime ' + newValue, true);
+            adapter.sendUdpDatagram('setdatetime ' + newValue, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateUnlock] = function () {
-            this.sendUdpDatagram('unlock', true);
+            adapter.sendUdpDatagram('unlock', true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateX2Source] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('x2src ' + newValue, true);
+            adapter.sendUdpDatagram('x2src ' + newValue, true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateX2Switch] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('x2 ' + newValue, true);
-            this.setStateAck(this.state1p3pSwTimestamp, new Date().toString());
+            adapter.sendUdpDatagram('x2 ' + newValue, true);
+            adapter.setStateAck(adapter.state1p3pSwTimestamp, new Date().toString());
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateAddPower] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateAddPower + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateAddPower + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateManualPhases] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateManualPhases + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateManualPhases + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateLimitCurrent] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateLimitCurrent + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateLimitCurrent + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateLimitCurrent1p] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateLimitCurrent1p + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateLimitCurrent1p + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateBatteryStrategy] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateBatteryStrategy + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateBatteryStrategy + ' to ' + newValue);
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateMsgFromOtherwallbox] = function (_oldValue, newValue) {
-            this.handleWallboxExchange(newValue);
+            adapter.handleWallboxExchange(newValue);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateMinimumSoCOfBatteryStorage] = function (_oldValue, newValue) {
-            this.log.debug('set ' + this.stateMinimumSoCOfBatteryStorage + ' to ' + newValue);
+            adapter.log.debug('set ' + adapter.stateMinimumSoCOfBatteryStorage + ' to ' + newValue);
             // no real action to do
         };
 
@@ -809,7 +812,7 @@ class Kecontact extends utils.Adapter {
                 return;
             } else {
                 if (obj) {
-                    this.stateFor1p3pCharging = stateNameFor1p3p;
+                    adapter.stateFor1p3pCharging = stateNameFor1p3p;
                     let valueOn;
                     let valueOff;
                     if (typeof obj.val == 'boolean') {
@@ -846,18 +849,19 @@ class Kecontact extends utils.Adapter {
             return false;
         if (id == '' || id == ' ')
             return false;
+        const adapter = this;
         this.getForeignState(id, function (err, obj) {
             if (err) {
-                this.log.error('error subscribing ' + id + ': ' + err);
+                adapter.log.error('error subscribing ' + id + ': ' + err);
             } else {
                 if (obj) {
-                    this.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
-                    this.setStateInternal(id, obj.val);
-                    this.subscribeForeignStates(id); // there's no return value (success, ...)
+                    adapter.log.debug('subscribe state ' + id + ' - current value: ' + obj.val);
+                    adapter.setStateInternal(id, obj.val);
+                    adapter.subscribeForeignStates(id); // there's no return value (success, ...)
                     //adapter.subscribeForeignStates({id: id, change: 'ne'}); // condition is not working
                 }
                 else {
-                    this.log.error('state ' + id + ' not found!');
+                    adapter.log.error('state ' + id + ' not found!');
                 }
             }
         });
@@ -1990,14 +1994,15 @@ class Kecontact extends utils.Adapter {
         }
         const message = this.sendQueue.shift();
         if (this.txSocket) {
+            const adapter = this;
             try {
                 this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, function (err) {
                     // 2nd parameter 'bytes' not needed, therefore only 'err' coded
                     if (err) {
-                        this.log.warn('UDP send error for ' + this.config.host + ':' + this.DEFAULT_UDP_PORT + ': ' + err);
+                        adapter.log.warn('UDP send error for ' + this.config.host + ':' + this.DEFAULT_UDP_PORT + ': ' + err);
                         return;
                     }
-                    this.log.debug('Sent "' + message + '" to ' + this.config.host + ':' + this.DEFAULT_UDP_PORT);
+                    adapter.log.debug('Sent "' + message + '" to ' + this.config.host + ':' + this.DEFAULT_UDP_PORT);
                 });
             } catch (e) {
                 if (this.log)

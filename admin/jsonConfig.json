@@ -6,13 +6,16 @@
             "type": "ip",
             "label": "host",
             "tooltip": "tooltip_host",
-            "onlyIp4": true,
+            "sm": 6,
+            "lg": 2,
             "newLine": true
         },
         "passiveMode": {
             "type": "checkbox",
             "label": "passiveMode",
             "tooltip": "tooltip_passiveMode",
+            "sm": 6,
+            "lg": 2,
             "default": true,
             "newLine": true
         },
@@ -20,6 +23,8 @@
             "type": "number",
             "label": "pollInterval",
             "tooltip": "tooltip_pollInterval",
+            "sm": 6,
+            "lg": 2,
             "min": 0,
             "max": 3600,
             "default": 30,
@@ -29,6 +34,8 @@
             "type": "checkbox",
             "label": "loadChargingSessions",
             "tooltip": "tooltip_loadChargingSessions",
+            "sm": 6,
+            "lg": 2,
             "newLine": false
         },
         "only-special-values": {
@@ -39,18 +46,24 @@
                     "type": "objectId",
                     "label": "stateRegard",
                     "tooltip": "tooltip_stateRegard",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": true
                 },
                 "stateSurplus": {
                     "type": "objectId",
                     "label": "stateSurplus",
                     "tooltip": "tooltip_stateSurplus",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": false
                 },
                 "statesIncludeWallbox": {
                     "type": "checkbox",
                     "label": "statesIncludeWallbox",
                     "tooltip": "tooltip_statesIncludeWallbox",
+                    "sm": 6,
+                    "lg": 2,
                     "default": true,
                     "newLine": false
                 },
@@ -58,6 +71,8 @@
                     "type": "checkbox",
                     "label": "useX1forAutomatic",
                     "tooltip": "tooltip_useX1",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "delta": {
@@ -68,6 +83,8 @@
                     "step": 50,
                     "default": 500,
                     "tooltip": "tooltip_delta",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "minAmperage": {
@@ -78,6 +95,8 @@
                     "step": 100,
                     "default": 6000,
                     "tooltip": "tooltip_minAmperage",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 },
                 "addPower": {
@@ -85,6 +104,8 @@
                     "label": "addPower",
                     "default": 0,
                     "tooltip": "tooltip_addPower",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 },
                 "underusage": {
@@ -92,6 +113,8 @@
                     "label": "underusage",
                     "default": 500,
                     "tooltip": "tooltip_underusage",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "minTime": {
@@ -100,6 +123,8 @@
                     "min": 0,
                     "default": 300,
                     "tooltip": "tooltip_minTime",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 },
                 "regardTime": {
@@ -108,6 +133,8 @@
                     "min": 0,
                     "default": 180,
                     "tooltip": "tooltip_regardTime",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 }
             }
@@ -120,12 +147,16 @@
                     "type": "checkbox",
                     "label": "1p3pViaX2",
                     "tooltip": "tooltip_1p3pViaX2",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "stateRegard": {
                     "type": "objectId",
                     "label": "state1p3pSwitch",
                     "tooltip": "tooltip_state1p3pSwitch",
+                    "sm": 9,
+                    "lg": 3,
                     "hidden": "data.1p3pViaX2 === true",
                     "newLine": false
                 },
@@ -133,6 +164,8 @@
                     "type": "checkbox",
                     "label": "1p3pSwitchIsNO",
                     "tooltip": "tooltip_1p3pSwitchIsNO",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 }
             }
@@ -145,12 +178,16 @@
                     "type": "objectId",
                     "label": "stateBatteryCharging",
                     "tooltip": "tooltip_stateBatteryCharging",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": true
                 },
                 "stateBatteryDischarging": {
                     "type": "objectId",
                     "label": "stateBatteryDischarging",
                     "tooltip": "tooltip_stateBatteryDischarging",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": false
                 },
                 "batteryPower": {
@@ -158,6 +195,8 @@
                     "label": "batteryPower",
                     "min": 0,
                     "tooltip": "tooltip_batteryPower",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "batteryStorageStrategy": {
@@ -181,12 +220,16 @@
                             "value": 4
                         }
                     ],
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": false
                 },
                 "stateBatterySoC": {
                     "type": "objectId",
                     "label": "stateBatterySoC",
                     "tooltip": "tooltip_stateBatterySoC",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": true
                 },
                 "batteryMinSoC": {
@@ -195,6 +238,8 @@
                     "min": 0,
                     "max": 100,
                     "tooltip": "tooltip_batteryMinSoC",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 }
             }
@@ -206,13 +251,17 @@
                 "stateEnWG": {
                     "type": "objectId",
                     "label": "stateEnWG",
-                    "tooltip": "tooltip_stateEnWG",
+                    "tooltip": "tooltop_stateEnWG",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": true
                 },
                 "dynamicEnWG": {
                     "type": "checkbox",
                     "label": "dynamicEnWG",
                     "tooltip": "tooltip_dynamicEnWG",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": false
                 }
             }
@@ -226,30 +275,40 @@
                     "label": "maxPower",
                     "min": 0,
                     "tooltip": "tooltip_maxPower",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 },
                 "stateEnergyMeter1": {
                     "type": "objectId",
                     "label": "stateEnergyMeter1",
                     "tooltip": "tooltip_stateEnergyMeter1",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": true
                 },
                 "stateEnergyMeter2": {
                     "type": "objectId",
                     "label": "stateEnergyMeter2",
                     "tooltip": "tooltip_stateEnergyMeter2",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": false
                 },
                 "stateEnergyMeter3": {
                     "type": "objectId",
                     "label": "stateEnergyMeter3",
                     "tooltip": "tooltip_stateEnergyMeter3",
+                    "sm": 9,
+                    "lg": 3,
                     "newLine": false
                 },
                 "wallboxNotIncluded": {
                     "type": "checkbox",
                     "label": "wallboxNotIncluded",
                     "tooltip": "tooltip_wallboxNotIncluded",
+                    "sm": 6,
+                    "lg": 2,
                     "newLine": true
                 }
             }

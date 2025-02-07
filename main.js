@@ -1994,21 +1994,31 @@ class Kecontact extends utils.Adapter {
         }
         const message = this.sendQueue.shift();
         if (this.txSocket) {
-            const adapter = this;
+            //const adapter = this;
             try {
-                this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, function (err) {
-                    // 2nd parameter 'bytes' not needed, therefore only 'err' coded
-                    if (err) {
-                        adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT + ': ' + err);
-                        return;
-                    }
-                    adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT);
-                });
+                this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, this.handleTxSocketSend);
+                // this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, function (err) {
+                //     // 2nd parameter 'bytes' not needed, therefore only 'err' coded
+                //     if (err) {
+                //         adapter.log.warn('UDP send error for ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT + ': ' + err);
+                //         return;
+                //     }
+                //     adapter.log.debug('Sent "' + message + '" to ' + adapter.config.host + ':' + adapter.DEFAULT_UDP_PORT);
+                // });
             } catch (e) {
                 if (this.log)
                     this.log.error('Error sending message "' + message + '": ' + e);
             }
         }
+    }
+
+    handleTxSocketSend(err) {
+        // 2nd parameter 'bytes' not needed, therefore only 'err' coded
+        if (err) {
+            this.log.warn('UDP send error for ' + this.config.host + ':' + this.DEFAULT_UDP_PORT + ': ' + err);
+            return;
+        }
+        this.log.debug('Sent message to ' + this.config.host + ':' + this.DEFAULT_UDP_PORT);
     }
 
     getStateInternal(id) {

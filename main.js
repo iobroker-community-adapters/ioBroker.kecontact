@@ -266,19 +266,24 @@ class Kecontact extends utils.Adapter {
                 this.disableChargingTimer();
 
                 if (this.txSocket !== null) {
+                    // @ts-ignore
                     this.txSocket.close();
                     this.txSocket = null;
                 }
 
                 if (this.rxSocketReports !== null) {
+                    // @ts-ignore
                     if (this.rxSocketBroadcast.active) {
+                        // @ts-ignore
                         this.rxSocketReports.close();
                     }
                     this.rxSocketReports = null;
                 }
 
                 if (this.rxSocketBroadcast !== null) {
+                    // @ts-ignore
                     if (this.rxSocketBroadcast.active) {
+                        // @ts-ignore
                         this.rxSocketBroadcast.close();
                     }
                     this.rxSocketBroadcast = null;
@@ -459,33 +464,51 @@ class Kecontact extends utils.Adapter {
     setupUdpCommunication() {
         const adapter = this;
 
+        // @ts-ignore
         this.txSocket = dgram.createSocket('udp4');
 
+        // @ts-ignore
         this.rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+        // @ts-ignore
         this.rxSocketReports.on('error', (err) => {
             adapter.log.error('RxSocketReports error: ' + err.message + '\n' + err.stack);
+            // @ts-ignore
             adapter.rxSocketReports.close();
         });
+        // @ts-ignore
         this.rxSocketReports.on('listening', function () {
+            // @ts-ignore
             adapter.rxSocketReports.setBroadcast(true);
+            // @ts-ignore
             const address = adapter.rxSocketReports.address();
             adapter.log.debug('UDP server listening on ' + address.address + ':' + address.port);
         });
+        // @ts-ignore
         this.rxSocketReports.on('message', this.handleWallboxMessage.bind(this));
+        // @ts-ignore
         this.rxSocketReports.bind(this.DEFAULT_UDP_PORT, '0.0.0.0');
 
+        // @ts-ignore
         this.rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+        // @ts-ignore
         this.rxSocketBroadcast.on('error', (err) => {
             adapter.log.error('RxSocketBroadcast error: ' + err.message + '\n' + err.stack);
+            // @ts-ignore
             adapter.rxSocketBroadcast.close();
         });
+        // @ts-ignore
         this.rxSocketBroadcast.on('listening', function () {
+            // @ts-ignore
             adapter.rxSocketBroadcast.setBroadcast(true);
+            // @ts-ignore
             adapter.rxSocketBroadcast.setMulticastLoopback(true);
+            // @ts-ignore
             const address = adapter.rxSocketBroadcast.address();
             adapter.log.debug('UDP broadcast server listening on ' + address.address + ':' + address.port);
         });
+        // @ts-ignore
         this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast.bind(this));
+        // @ts-ignore
         this.rxSocketBroadcast.bind(this.BROADCAST_UDP_PORT);
     }
 
@@ -498,15 +521,16 @@ class Kecontact extends utils.Adapter {
             }
 
             if (ioBroker_Settings && (ioBroker_Settings.common.language == 'de')) {
-                this.ioBrokerLanguage = 'de';
+                adapter.ioBrokerLanguage = 'de';
             } else {
-                this.ioBrokerLanguage = 'en';
+                adapter.ioBrokerLanguage = 'en';
             }
         });
     }
 
     initializeInternalStateValues() {
         const adapter = this;
+        // @ts-ignore
         this.getStatesOf(function (err, data) {
             if (data) {
                 for (let i = 0; i < data.length; i++) {
@@ -755,12 +779,17 @@ class Kecontact extends utils.Adapter {
             }
             const valueOn = 1;
             const valueOff = 0;
+            // @ts-ignore
             this.valueFor1p3pOff = valueOff;
             if (this.config['1p3pSwitchIsNO'] === true) {
+                // @ts-ignore
                 this.valueFor1pCharging = valueOff;
+                // @ts-ignore
                 this.valueFor3pCharging = valueOn;
             } else {
+                // @ts-ignore
                 this.valueFor1pCharging = valueOn;
+                // @ts-ignore
                 this.valueFor3pCharging = valueOff;
             }
 
@@ -826,12 +855,17 @@ class Kecontact extends utils.Adapter {
                         return;
                     }
                     adapter.stateFor1p3pAck = obj.ack;
+                    // @ts-ignore
                     adapter.valueFor1p3pOff = valueOff;
                     if (adapter.config['1p3pSwitchIsNO'] === true) {
+                        // @ts-ignore
                         adapter.valueFor1pCharging = valueOff;
+                        // @ts-ignore
                         adapter.valueFor3pCharging = valueOn;
                     } else {
+                        // @ts-ignore
                         adapter.valueFor1pCharging = valueOn;
+                        // @ts-ignore
                         adapter.valueFor3pCharging = valueOff;
                     }
                 }
@@ -879,6 +913,7 @@ class Kecontact extends utils.Adapter {
         const suffix = '.uptime';
         this.getForeignObjects(prefix + adapterpart + '*' + suffix, function(err, objects) {
             if (err) {
+                // @ts-ignore
                 this.log.error('Error while fetching other instances: ' + err);
                 return;
             }
@@ -886,8 +921,10 @@ class Kecontact extends utils.Adapter {
                 for (const item in objects) {
                     if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
                         const namespace = item.slice(prefix.length, - suffix.length);
+                        // @ts-ignore
                         this.getForeignObject(prefix + namespace, function(err, object) {
                             if (err) {
+                                // @ts-ignore
                                 this.log.error('Error while fetching other instances: ' + err);
                                 return;
                             }
@@ -895,7 +932,9 @@ class Kecontact extends utils.Adapter {
                                 if (Object.prototype.hasOwnProperty.call(object, 'native')) {
                                     if (Object.prototype.hasOwnProperty.call(object.native, 'host')) {
                                         if (object.native.host == remote.address) {
+                                            // @ts-ignore
                                             this.setForeignState(namespace + '.' + this.stateMsgFromOtherwallbox, message.toString().trim());
+                                            // @ts-ignore
                                             this.log.debug('Message from ' + remote.address + ' send to ' + namespace);
                                         }
                                     }
@@ -1397,6 +1436,7 @@ class Kecontact extends utils.Adapter {
                 if (this.valueFor1p3pSwitching !== this.getStateInternal(this.stateFor1p3pCharging)) {
                     this.stateFor1p3pAck = false;
                     this.log.info('switching 1p3p to ' + this.valueFor1p3pSwitching + ' ...');
+                    // @ts-ignore
                     this.setForeignState(this.stateFor1p3pCharging, this.valueFor1p3pSwitching);
                     this.doNextStepOf1p3pSwitching();
                     return true;
@@ -1747,10 +1787,12 @@ class Kecontact extends utils.Adapter {
         }
 
         const newDate = new Date();
+        // @ts-ignore
         if (this.lastCalculating !== null && newDate.getTime() - this.lastCalculating.getTime() < this.intervalCalculating) {
             return;
         }
 
+        // @ts-ignore
         this.lastCalculating = newDate;
         let newValueFor1p3pSwitching = null;
 
@@ -1911,6 +1953,7 @@ class Kecontact extends utils.Adapter {
 
     enableChargingTimer(time) {
         this.disableChargingTimer();
+        // @ts-ignore
         this.timerDataUpdate = setInterval(this.requestReports.bind(this), time);
     }
 
@@ -1927,9 +1970,11 @@ class Kecontact extends utils.Adapter {
 
     requestDeviceDataReport() {
         const newDate = new Date();
+        // @ts-ignore
         if (this.lastDeviceData == null || newDate.getTime() - this.lastDeviceData.getTime() >= this.intervalDeviceDataUpdate) {
             this.sendUdpDatagram('report 1');
             this.loadChargingSessionsFromWallbox();
+            // @ts-ignore
             this.lastDeviceData = newDate;
         }
     }
@@ -1982,12 +2027,14 @@ class Kecontact extends utils.Adapter {
         }
         if (!this.sendDelayTimer) {
             this.sendNextQueueDatagram();
+            // @ts-ignore
             this.sendDelayTimer = setInterval(this.sendNextQueueDatagram.bind(this), 300);
         }
     }
 
     sendNextQueueDatagram() {
         if (this.sendQueue.length === 0) {
+            // @ts-ignore
             clearInterval(this.sendDelayTimer);
             this.sendDelayTimer = null;
             return;
@@ -1996,6 +2043,7 @@ class Kecontact extends utils.Adapter {
         if (this.txSocket) {
             const adapter = this;
             try {
+                // @ts-ignore
                 this.txSocket.send(message, 0, message.length, this.DEFAULT_UDP_PORT, this.config.host, function (err) {
                     // 2nd parameter 'bytes' not needed, therefore only 'err' coded
                     if (err) {

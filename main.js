@@ -579,14 +579,14 @@ class Kecontact extends utils.Adapter {
             adapter.sendUdpDatagram('curr ' + parseInt(newValue), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxCurrentWithTimer] = function (_oldValue, newValue) {
-            adapter.sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + adapter.getStateDefault0(this.stateTimeForCurrentChange), true);
+            adapter.sendUdpDatagram('currtime ' + parseInt(newValue) + ' ' + adapter.getStateDefault0(adapter.stateTimeForCurrentChange), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateTimeForCurrentChange] = function () {
             // parameters (oldValue, newValue) can be ommited if not needed
             // no real action to do
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxOutput] = function (_oldValue, newValue) {
-            this.sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
+            adapter.sendUdpDatagram('output ' + (newValue ? 1 : 0), true);
         };
         this.stateChangeListeners[this.namespace + '.' + this.stateWallboxDisplay] = function (_oldValue, newValue) {
             if (newValue !== null) {
@@ -911,31 +911,27 @@ class Kecontact extends utils.Adapter {
         const prefix = 'system.adapter.';
         const adapterpart = this.name + '.';
         const suffix = '.uptime';
+        const adapter = this;
         this.getForeignObjects(prefix + adapterpart + '*' + suffix, function(err, objects) {
             if (err) {
-                // @ts-ignore
-                this.log.error('Error while fetching other instances: ' + err);
+                adapter.log.error('Error while fetching other instances: ' + err);
                 return;
             }
             if (objects) {
                 for (const item in objects) {
                     if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
                         const namespace = item.slice(prefix.length, - suffix.length);
-                        // @ts-ignore
-                        this.getForeignObject(prefix + namespace, function(err, object) {
+                        adapter.getForeignObject(prefix + namespace, function(err, object) {
                             if (err) {
-                                // @ts-ignore
-                                this.log.error('Error while fetching other instances: ' + err);
+                                adapter.log.error('Error while fetching other instances: ' + err);
                                 return;
                             }
                             if (object) {
                                 if (Object.prototype.hasOwnProperty.call(object, 'native')) {
                                     if (Object.prototype.hasOwnProperty.call(object.native, 'host')) {
                                         if (object.native.host == remote.address) {
-                                            // @ts-ignore
-                                            this.setForeignState(namespace + '.' + this.stateMsgFromOtherwallbox, message.toString().trim());
-                                            // @ts-ignore
-                                            this.log.debug('Message from ' + remote.address + ' send to ' + namespace);
+                                            adapter.setForeignState(namespace + '.' + adapter.stateMsgFromOtherwallbox, message.toString().trim());
+                                            adapter.log.debug('Message from ' + remote.address + ' send to ' + namespace);
                                         }
                                     }
                                 }
@@ -2131,7 +2127,8 @@ class Kecontact extends utils.Adapter {
         // State wird intern auch über 'onStateChange' angepasst. Wenn es bereits hier gesetzt wird, klappt die Erkennung
         // von Wertänderungen nicht, weil der interne Wert bereits aktualisiert ist.
         //setStateInternal(id, value);
-        const promisedSetState = (id, value) => new Promise(resolve => this.setState(id, {val: value, ack: true}, resolve));
+        const adapter = this;
+        const promisedSetState = (id, value) => new Promise(resolve => adapter.setState(id, {val: value, ack: true}, resolve));
         await promisedSetState(id, value);
     }
 

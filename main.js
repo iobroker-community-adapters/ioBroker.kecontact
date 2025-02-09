@@ -701,7 +701,7 @@ class Kecontact extends utils.Adapter {
             this.log.warn('Can\'t start adapter for invalid IP address: ' + this.config.host);
             everythingFine = false;
         }
-        if (this.config.loadChargingSessions == true) {
+        if (this.config.loadChargingSessions === true) {
             this.loadChargingSessions = true;
         }
         this.isPassive = false;
@@ -1120,7 +1120,7 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
-     * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent an stateLimitCurrent
+     * Get maximum current for wallbox (hardware defined by dip switch) min. of stateWallboxMaxCurrent and stateLimitCurrent
      * @returns {number} the  maxium allowed charging current in mA
      */
     getMaxCurrent() {
@@ -1176,9 +1176,9 @@ class Kecontact extends utils.Adapter {
             if (milliAmpere == 0) {
                 this.log.info('stop charging');
             } else if (oldValue == 0) {
-                this.log.info('(re)start charging with ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation == true) ? ' (maxPower)' : ''));
+                this.log.info('(re)start charging with ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
             } else {
-                this.log.info('regulate wallbox from ' + oldValue + ' to ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation == true) ? ' (maxPower)' : ''));
+                this.log.info('regulate wallbox from ' + oldValue + ' to ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
             }
             this.sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
         }
@@ -1235,7 +1235,7 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
-     * Get delta to add to available power to ignore battery power (fullPowerRequested == false) or to work with surplus plus power
+     * Get delta to add to available power to ignore battery power (fullPowerRequested === false) or to work with surplus plus power
      * of battery storage.
      *
      * @param {boolean} isFullPowerRequested if checked then maximum available power of battery storage will be returned
@@ -1251,10 +1251,10 @@ class Kecontact extends utils.Adapter {
                 return 0;
             }
         } else if (this.isNotUsingBatteryWithPrioOnVehicle() ||
-                (this.isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested == false)) {
+                (this.isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested === false)) {
             return batteryPower;
         } else if (this.isUsingBatteryForFullChargingOfVehicle() ||
-                (this.isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested == true)) {
+                (this.isUsingBatteryForMinimumChargingOfVehicle() && isFullPowerRequested === true)) {
             const maxBatteryPower = (this.getStateDefault0(this.config.stateBatterySoC) > this.getMinimumBatteryStorageSocForCharging()) ? this.config.batteryPower : 0;
             return maxBatteryPower + batteryPower;
         } else {
@@ -1296,7 +1296,7 @@ class Kecontact extends utils.Adapter {
 
     /**
      * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit.
-     * @returns the total power available
+     * @returns the total power available in watts
      */
     getTotalPowerAvailable() {
         // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
@@ -1312,7 +1312,7 @@ class Kecontact extends utils.Adapter {
      */
     getMaxCurrentEnWG() {
         if (this.isEnWGDefined() && this.isEnWGActive()) {
-            if (this.config.dynamicEnWG == true) {
+            if (this.config.dynamicEnWG === true) {
                 const allowedPower = 3 * this.voltage * this.maxCurrentEnWG / 1000;
                 return this.getAmperage(allowedPower + this.getSurplusWithoutWallbox(), this.get1p3pPhases());
             } else {
@@ -1361,7 +1361,7 @@ class Kecontact extends utils.Adapter {
      *
      */
     isX2PhaseSwitch() {
-        return this.config['1p3pViaX2'] == true;
+        return this.config['1p3pViaX2'] === true;
     }
 
     /**
@@ -1559,7 +1559,7 @@ class Kecontact extends utils.Adapter {
                 // save phase count and write info message if changed
                 if (retVal != tempCount)
                     this.log.debug('wallbox is charging with ' + tempCount + ' ' + ((tempCount == 1) ? 'phase' : 'phases'));
-                if (! this.isReducedChargingBecause1p3p()) {
+                if (! this.isReducedChargingBecause1p3p() === true) {
                     this.setStateAck(this.stateChargingPhases, tempCount);
                 }
                 retVal = tempCount;
@@ -1610,11 +1610,11 @@ class Kecontact extends utils.Adapter {
      * @returns true if PV automatic is active
      */
     isPvAutomaticsActive() {
-        if (this.isPassive == true || ! this.photovoltaicsActive == true) {
+        if (this.isPassive === true || this.photovoltaicsActive === false) {
             return false;
         }
-        if (this.useX1switchForAutomatic == true) {
-            if (this.getStateDefaultFalse(this.stateX1input) == true) {
+        if (this.useX1switchForAutomatic === true) {
+            if (this.getStateDefaultFalse(this.stateX1input)) {
                 return false;
             }
         }
@@ -1625,7 +1625,7 @@ class Kecontact extends utils.Adapter {
     }
 
     displayChargeMode() {
-        if (this.isPassive == true) {
+        if (this.isPassive) {
             return;
         }
         let text;
@@ -1722,7 +1722,7 @@ class Kecontact extends utils.Adapter {
             return false;
         }
         if (this.getStateDefault0(this.stateWallboxState) == 5) {
-            if (this.startWithState5Attempted == true) {
+            if (this.startWithState5Attempted === true) {
                 return true;
             }
             this.startWithState5Attempted = true;
@@ -1736,19 +1736,20 @@ class Kecontact extends utils.Adapter {
         // update charging state also between two calculations to recognize charging session
         // before a new calculation will stop it again (as long as chargingTimestamp was not yet set)
         // it can be stopped immediatelly with no respect to minimim charging time...
-        if (this.getStateAsDate(this.stateChargeTimestamp) === null && this.isVehicleCharging() && (this.chargingToBeStarted == true || this.isPassive == true)) {
+        if (this.getStateAsDate(this.stateChargeTimestamp) === null && this.isVehicleCharging() && (this.chargingToBeStarted === true || this.isPassive === true)) {
             this.log.info('vehicle (re)starts to charge');
             this.setStateAck(this.stateChargeTimestamp, new Date().toString());
         }
 
         let curr    = 0;      // in mA
         let tempMax = this.getMaxCurrent();
+        this.log.debug('current max current is ' + tempMax);
         let phases = this.get1p3pPhases();
         this.isMaxPowerCalculation = false;
         this.chargingToBeStarted = false;
 
         // first of all check maximum power allowed
-        if (this.maxPowerActive == true) {
+        if (this.maxPowerActive === true) {
             // Always calculate with three phases for safety reasons
             const maxPower = this.getTotalPowerAvailable();
             this.setStateAck(this.stateMaxPower, Math.round(maxPower));
@@ -1775,7 +1776,7 @@ class Kecontact extends utils.Adapter {
             return;
         }
 
-        if (this.isPassive == true) {
+        if (this.isPassive === true) {
             if (this.getStateAsDate(this.stateChargeTimestamp) !== null && ! this.isVehicleCharging()) {
                 this.resetChargingSessionData();
             }
@@ -1792,19 +1793,25 @@ class Kecontact extends utils.Adapter {
         this.lastCalculating = newDate;
         let newValueFor1p3pSwitching = null;
 
+        this.log.debug('pvAutomaticsActive: ' + this.isPvAutomaticsActive() + ', vehicleIsPlugged: ' + this.isVehiclePlugged());
+
         // lock wallbox if requested or available amperage below minimum
-        if (this.getStateDefaultFalse(this.stateWallboxDisabled) == true || tempMax < this.getMinCurrent() || (this.isPvAutomaticsActive() && ! this.isVehiclePlugged())) {
+        if (this.getStateDefaultFalse(this.stateWallboxDisabled) === true || tempMax < this.getMinCurrent() || (this.isPvAutomaticsActive() && ! this.isVehiclePlugged())) {
             curr = 0;
+            this.log.debug('no charging calculated');
         } else {
             // if vehicle is currently charging and was not before, then save timestamp
             if (this.isVehiclePlugged() && this.isPvAutomaticsActive()) {
                 curr = this.getAmperage(available, phases);
+                this.log.debug('first calculation for current is ' + curr);
                 if (curr > tempMax) {
                     curr = tempMax;
+                    this.log.debug('new current due to max current is ' + curr);
                 }
-                if (this.isUsingBatteryForMinimumChargingOfVehicle() == true) {
+                if (this.isUsingBatteryForMinimumChargingOfVehicle() === true) {
                     if (curr < this.minAmperage && this.isVehicleCharging() && this.getAmperage(this.getSurplusWithoutWallbox(true), phases) > this.minAmperage ) {
                         curr = this.minAmperage;
+                        this.log.debug('new current due to min charging by battery storage is ' + curr);
                     }
                 }
                 const chargeTimestamp = this.getStateAsDate(this.stateChargeTimestamp);
@@ -1818,6 +1825,7 @@ class Kecontact extends utils.Adapter {
                             if (this.isReducedChargingBecause1p3p()) {
                                 phases = 1;
                                 curr = currWith1p;
+                                this.log.debug('new current due to 1p charging is ' + curr);
                             } else {
                                 if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                     this.log.debug('no switching to 1 phase because of minimum charging time: ' + chargeTimestamp);
@@ -1829,6 +1837,7 @@ class Kecontact extends utils.Adapter {
                                     newValueFor1p3pSwitching = this.valueFor1pCharging;
                                     phases = 1;
                                     curr = currWith1p;
+                                    this.log.debug('new current due to switching to 1p charging is ' + curr);
                                 }
                             }
                         } else {
@@ -1845,11 +1854,13 @@ class Kecontact extends utils.Adapter {
                                         this.log.debug('switching to ' + phases + ' phases because amperage ' + currWith1p + ' >= ' + this.getCurrentForSwitchTo3p());
                                         newValueFor1p3pSwitching = this.valueFor3pCharging;
                                         isSwitchFrom1pTo3P = true;
+                                        this.log.debug('will swiutch back to 3p');
                                     }
                                 }
-                                if (isSwitchFrom1pTo3P == false) {
+                                if (isSwitchFrom1pTo3P === false) {
                                     phases = 1;
                                     curr = currWith1p;
+                                    this.log.debug('new current due to not switching to 3p charging is ' + curr);
                                 }
                             }
                         }
@@ -1899,6 +1910,7 @@ class Kecontact extends utils.Adapter {
                 }
             } else {
                 curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
+                this.log.debug('new current due to vehicle not plugged or pv automatics not active is ' + curr);
                 this.isMaxPowerCalculation = true;
                 newValueFor1p3pSwitching = this.valueFor3pCharging;
             }
@@ -1924,7 +1936,6 @@ class Kecontact extends utils.Adapter {
             }
             this.log.debug('not enough power for charging ...');
             this.stopCharging();
-
         } else {
             if (newValueFor1p3pSwitching !== null) {
                 if (this.set1p3pSwitching(newValueFor1p3pSwitching)) {
@@ -2090,7 +2101,7 @@ class Kecontact extends utils.Adapter {
     getBoolean(value) {
         // 'repair' state: VIS boolean control sets value to 0/1 instead of false/true
         if (typeof value != 'boolean') {
-            return value == 1;
+            return value === 1;
         }
         return value;
     }

@@ -232,7 +232,7 @@
                     "lg": 4,
                     "newLine": true
                 },
-                "stateRegard": {
+                "state1p3pSwitch": {
                     "type": "objectId",
                     "label": "state1p3pSwitch",
                     "tooltip": "tooltip_state1p3pSwitch",

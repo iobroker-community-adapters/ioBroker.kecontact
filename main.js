@@ -58,12 +58,12 @@ class Kecontact extends utils.Adapter {
     wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
     amperageDelta        = 500;    // default for step of amperage
     underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
-    minAmperageDefault = 6000;   // default minimum amperage to start charging session
-    maxCurrentEnWG     = 6000;   // maximum current allowed when limitation of §14a EnWg is active
+    minAmperageDefault   = 6000;   // default minimum amperage to start charging session
+    maxCurrentEnWG       = 6000;   // maximum current allowed when limitation of §14a EnWg is active
     minAmperage          = 5000;   // minimum amperage to start charging session
     minChargeSeconds     = 0;      // minimum of charge time even when surplus is not sufficient
     minRegardSeconds     = 0;      // maximum time to accept regard when charging
-    min1p3pSwSec         = 0;      // minimum time betwenn phase switching
+    min1p3pSwSec         = 0;      // minimum time between phase switching
     isMaxPowerCalculation = false; // switch to show if max power calculation is active
     valueFor1p3pOff      = null;   // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
     valueFor1pCharging   = null;   // value that will be assigned to 1p/3p state to switch to 1 phase charging
@@ -75,12 +75,12 @@ class Kecontact extends utils.Adapter {
     valueFor1p3pSwitching = null;  // value for switch
     batteryStrategy      = 0;      // default = don't care for a battery storage
     startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
-    voltage            = 230;    // calculate with european standard voltage of 230V
-    firmwareUrl        = 'https://www.keba.com/en/emobility/service-support/downloads/downloads';
-    regexP30cSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
+    voltage              = 230;    // calculate with european standard voltage of 230V
+    firmwareUrl          = 'https://www.keba.com/en/emobility/service-support/downloads/downloads';
+    regexP30cSeries      = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
     //regexP30xSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<h3/gi;
-    regexFirmware      = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;
-    regexCurrFirmware  = /P30 v\s+((?:.)*?)\s+\(/gi;
+    regexFirmware        = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;
+    regexCurrFirmware    = /P30 v\s+((?:.)*?)\s+\(/gi;
 
     stateWallboxEnabled      = 'enableUser';                  /*Enable User*/
     stateWallboxCurrent      = 'currentUser';                 /*Current User*/
@@ -371,9 +371,13 @@ class Kecontact extends utils.Adapter {
                 } else if (! isNowVehiclePlugged && wasVehiclePlugged) {
                     this.log.info('vehicle unplugged from wallbox');
                     this.finishChargingSession();
-                    this.set1p3pSwitching(this.valueFor1p3pOff);
-                    if (this.stepFor1p3pSwitching < 0) {
-                        this.reset1p3pSwitching();
+                    if (this.isContinueDueToMin1p3pSwTime(new Date())) {
+                        this.log.debug('wait for minimum time for phase switch to "off"');
+                    } else {
+                        this.set1p3pSwitching(this.valueFor1p3pOff);
+                        if (this.stepFor1p3pSwitching < 0) {
+                            this.reset1p3pSwitching();
+                        }
                     }
                 }
             }
@@ -794,7 +798,7 @@ class Kecontact extends utils.Adapter {
             }
 
             this.min1p3pSwSec = 305;
-            this.log.info('Using min time between phase switching of: ' + this.min1p3pSwSec);
+            this.log.info('Using min time between phase switching of: ' + this.min1p3pSwSec + ' sec');
         }
 
         if (this.isEnWGDefined()) {
@@ -1694,7 +1698,7 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
-     * Checks whether switching between phases can not be performed since time has between switching is not yet reached.
+     * Checks whether switching between phases can not be performed since minimum waiting time has not yet reached.
      * @returns true if minimum time between switching phased was not yet reached
      */
     isContinueDueToMin1p3pSwTime(aktDate) {
@@ -1702,7 +1706,7 @@ class Kecontact extends utils.Adapter {
             return false;
         }
         const sw1p3pDate = this.getStateAsDate(this.state1p3pSwTimestamp);
-        if (sw1p3pDate == null) {
+        if (sw1p3pDate === null) {
             return false;
         }
         if ((aktDate.getTime() - sw1p3pDate.getTime()) / 1000 < this.min1p3pSwSec) {
@@ -1815,7 +1819,7 @@ class Kecontact extends utils.Adapter {
                     }
                 }
                 const chargeTimestamp = this.getStateAsDate(this.stateChargeTimestamp);
-                const Sw1p3pTimestamp = this.getStateAsDate(this.state1p3pSwTimestamp);
+                const sw1p3pTimestamp = this.getStateAsDate(this.state1p3pSwTimestamp);
                 const regardTimestamp = this.getStateAsDate(this.stateRegardTimestamp);
 
                 if (this.has1P3PAutomatic()) {
@@ -1831,8 +1835,8 @@ class Kecontact extends utils.Adapter {
                                     this.log.debug('no switching to 1 phase because of minimum charging time: ' + chargeTimestamp);
                                 } else if (chargeTimestamp !== null && this.isContinueDueToMinRegardTime(newDate)) {
                                     this.log.debug('no switching to 1 phase because of minimum regard time: ' + regardTimestamp);
-                                } else if (Sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
-                                    this.log.debug('no switching to 1 phase because of minimum time between switching: ' + Sw1p3pTimestamp);
+                                } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
+                                    this.log.debug('no switching to 1 phase because of minimum time between switching: ' + sw1p3pTimestamp);
                                 } else {
                                     newValueFor1p3pSwitching = this.valueFor1pCharging;
                                     phases = 1;
@@ -1845,8 +1849,8 @@ class Kecontact extends utils.Adapter {
                                 let isSwitchFrom1pTo3P = false;
                                 if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                     this.log.debug('no switching to ' + phases + ' phases because of minimum charging time: ' + chargeTimestamp);
-                                } else if (Sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
-                                    this.log.debug('no switching to ' + phases + ' phase because of minimum time between switching: ' + Sw1p3pTimestamp);
+                                } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
+                                    this.log.debug('no switching to ' + phases + ' phase because of minimum time between switching: ' + sw1p3pTimestamp);
                                 } else {
                                     if (currWith1p < this.getCurrentForSwitchTo3p()) {
                                         this.log.debug('no switching to ' + phases + ' phases because amperage ' + currWith1p + ' < ' + this.getCurrentForSwitchTo3p());
@@ -1930,7 +1934,7 @@ class Kecontact extends utils.Adapter {
             }
             else if ((sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate))){
                 this.log.debug('no switching to default phases because of minimum time between switching (stopCharging): ' +  sw1p3pTimestamp);
-            }else {
+            } else {
                 this.log.debug('switching phases to default as charging is stopped');
                 this.set1p3pSwitching(this.valueFor1p3pOff);
             }
@@ -1938,8 +1942,12 @@ class Kecontact extends utils.Adapter {
             this.stopCharging();
         } else {
             if (newValueFor1p3pSwitching !== null) {
-                if (this.set1p3pSwitching(newValueFor1p3pSwitching)) {
-                    return;
+                if (this.isContinueDueToMin1p3pSwTime(newDate)) {
+                    this.log.debug('wait for minimum time for phase switch to 3p');
+                } else {
+                    if (this.set1p3pSwitching(newValueFor1p3pSwitching)) {
+                        return;
+                    }
                 }
             }
             if (curr > tempMax) {
@@ -2091,7 +2099,7 @@ class Kecontact extends utils.Adapter {
 
     getStateAsDate(id) {
         let result = this.getStateInternal(id);
-        // state come as timestamp string => to be converted to date object
+        // state comes as timestamp string => to be converted to date object
         if (result != null) {
             result = new Date(result);
         }

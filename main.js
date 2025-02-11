@@ -1916,7 +1916,11 @@ class Kecontact extends utils.Adapter {
                 curr = tempMax;   // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
                 this.log.debug('new current due to vehicle not plugged or pv automatics not active is ' + curr);
                 this.isMaxPowerCalculation = true;
-                newValueFor1p3pSwitching = this.valueFor3pCharging;
+                if (this.isVehiclePlugged()) {
+                    newValueFor1p3pSwitching = this.valueFor3pCharging;
+                } else {
+                    newValueFor1p3pSwitching = this.valueFor1p3pOff;
+                }
             }
         }
 

@@ -149,7 +149,7 @@
     },
     "authors": [
       "UncleSamSwiss <samuel.weibel@gmail.com>",
-      "Volker Sengler <git@sengler.de>"
+      "Sneak-L8 <git@sengler.de>"
     ],
     "keywords": [
       "KeContact",
@@ -162,8 +162,8 @@
       "e-mobility"
     ],
     "licenseInformation": {
-      "license": "Apache-2.0",
-      "type": "free"
+      "type": "free",
+      "license": "Apache-2.0"      
     },
     "platform": "Javascript/Node.js",
     "icon": "kecontact.png",
@@ -177,16 +177,18 @@
     "compact": true,
     "connectionType": "local",
     "dataSource": "poll",
-    "materialize": true,
-    "supportCustoms": false,
+    "adminUI": {
+      "config": "json"
+    },
+    "supportCustoms": true,
     "dependencies": [
       {
-        "js-controller": ">=5.0.19"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=5.1.13"
+        "admin": ">=7.0.23"
       }
     ],
     "plugins": {
@@ -242,9 +244,9 @@
       "_id": "info.connection",
       "type": "state",
       "common": {
-        "name": "is wallbox connected?",
-        "type": "boolean",
         "role": "indicator.connected",
+        "name": "wallbox is connected",
+        "type": "boolean",       
         "read": true,
         "write": false,
         "def": false

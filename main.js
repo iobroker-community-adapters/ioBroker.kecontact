@@ -1182,7 +1182,12 @@ class Kecontact extends utils.Adapter {
             } else if (oldValue == 0) {
                 this.log.info('(re)start charging with ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
             } else {
-                this.log.info('regulate wallbox from ' + oldValue + ' to ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
+                const text = 'regulate wallbox from ' + oldValue + ' to ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : '');
+                if (this.isMaxPowerCalculation === true && !this.isVehiclePlugged()) {
+                    this.log.debug(text);
+                } else {
+                    this.log.info(text);
+                }
             }
             this.sendUdpDatagram('currtime ' + milliAmpere + ' 1', true);
         }

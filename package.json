@@ -1,6 +1,6 @@
 {
   "name": "iobroker.kecontact",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
   "author": {
     "name": "UncleSamSwiss",
@@ -38,7 +38,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.2",
+    "@iobroker/adapter-core": "^3.2.3",
+    "@tsconfig/node20": "^20.1.4",
     "dgram": "^1.0.1",
     "os": "^0.1.1",
     "request": "^2.88.2"
@@ -49,27 +50,35 @@
     "@alcalzone/release-script-plugin-license": "^3.7.0",
     "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
     "@iobroker/adapter-dev": "^1.3.0",
-    "@iobroker/testing": "^5.0.0",
+    "@iobroker/testing": "^5.0.3",
     "@types/chai": "^4.3.11",
     "@types/chai-as-promised": "^8.0.1",
-    "@types/gulp": "^4.0.17",
-    "@types/mocha": "^10.0.9",
-    "@types/node": "^22.8.6",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.4",
     "@types/proxyquire": "^1.3.31",
     "@types/sinon": "^17.0.3",
     "@types/sinon-chai": "^3.2.12",
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "chai": "^4.5.0",
-    "chai-as-promised": "^8.0.0",
+    "chai-as-promised": "^8.0.1",
     "eslint": "^8.57.0",
     "gulp": "^5.0.0",
-    "mocha": "^10.8.2",
+    "mocha": "^11.1.0",
     "proxyquire": "^2.1.3",
     "sinon": "^19.0.2",
     "sinon-chai": "^3.7.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.3"
   },
   "main": "main.js",
+  "files": [
+    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
+    "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
+    "lib/",
+    "www/",
+    "io-package.json",
+    "LICENSE",
+    "main.js"
+  ],
   "scripts": {
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",

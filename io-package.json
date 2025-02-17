@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "news": {
+      "2.3.0": {
+        "en": "new option to limit charging station according to german §14a EnWG\nenable currTime for manual use and X2 even in passive mode\nminimum verison für js-controller now 5.0.19\nset currTimer timeout default value from 0 to 1\nsupport new option \"setBoot\" of c-series stating firmware 3.10.57",
+        "de": "neue Option zur Begrenzung der Ladestation nach deutschem §14a EnWG\ncurrTime für den manuellen Einsatz und X2 auch im passiven Modus aktivieren\nminimal verison für js-controller jetzt 5.0.19\ncurrTimer Timeout Standardwert von 0 bis 1 einstellen\nunterstützen neue Option \"setBoot\" der c-Serie mit Firmware 3.10.57",
+        "ru": "новый вариант ограничения зарядной станции согласно немецкому §14a EnWG\nвключить currTime для ручного использования и X2 даже в пассивном режиме\n5.0.19\nустановить значение тайм-аута курсора от 0 до 1\nподдержка новой опции \"setBoot\" c-серий с прошивкой 3.10.57",
+        "pt": "nova opção para limitar a estação de carregamento de acordo com alemão §14a EnWG\nhabilitar currTime para uso manual e X2 mesmo no modo passivo\nmínimo verison für js-controller agora 5.0.19\nset currTimer valor padrão timeout de 0 a 1\nsuporte nova opção \"setBoot\" de série c afirmando firmware 3.10.57",
+        "nl": "nieuwe optie om het laadstation te beperken volgens Duits §14a EnWG\nactiveer currTime voor handmatig gebruik en X2 zelfs in passieve modus\nminimum verison für js-controller nu 5.0.19\nset currTimer timeout standaard waarde van 0 tot 1\nondersteuning van nieuwe optie \"setBoot\" van c-serie met vermelding van firmware 3.10.57",
+        "fr": "nouvelle option pour limiter la station de recharge selon allemand §14a\nactiver currTime pour une utilisation manuelle et X2 même en mode passif\nminimum verison für js-controller maintenant 5.0.19\nparamètre currTimer timeout valeur par défaut de 0 à 1\nsoutenir la nouvelle option \"setBoot\" de la série c déclarant firmware 3.10.57",
+        "it": "nuova opzione per limitare la stazione di ricarica secondo il tedesco §14a EnWG\nabilitare currTime per uso manuale e X2 anche in modalità passiva\nverifica minima per js-controller ora 5.0.19\nimposta il valore predefinito currTimer timeout da 0 a 1\nsupporto nuova opzione \"setBoot\" di c-serie che afferma il firmware 3.10.57",
+        "es": "nueva opción para limitar la estación de carga según german §14a EnWG\nhabilitar currTime para uso manual y X2 incluso en modo pasivo\nmínimo verison für js-controller ahora 5.0.19\nset currTimer valor predeterminado de 0 a 1\nsoporte nueva opción \"setBoot\" de c-series indicando firmware 3.10.57",
+        "pl": "nowa opcja ograniczenia stacji ładowania zgodnie z german § 14a EnWG\nwłączyć currTime do użytku ręcznego i X2 nawet w trybie pasywnym\nminimum verison für js- controller teraz 5.0.19\nustaw domyślną wartość currTimer timeout od 0 do 1\nobsługa nowej opcji \"setBoot\" z serii c- z podaniem firmware 3.10.57",
+        "uk": "новий варіант для обмеження зарядної станції за німецькою §14a EnWG\nувімкніть currTime для ручного використання та X2 навіть у пасивному режимі\nмінімальний verison für js-controller тепер 5.0.19\nset currTimer timeout значення за замовчуванням від 0 до 1\nпідтримка нового варіанту \"setBoot\" прошивки c-series 3.10.57",
+        "zh-cn": "根据德国§14a EnWG限制充电站的新选项\n允许手动使用 currTime , X2 甚至是被动模式\n最低控制器现在5.0.19\n设置 currTimer 超时默认值从 0 到 1\n支持 c 序列中的“ setBoot” 的新选项,该选项表示固件 3.10.57"
+      },
       "2.2.0": {
         "en": "Adapter requires nodejs >= 18 and js-controller >= 5 now.\nDependencies have been updated.\nfix url for download page at Keba website\nfix lint problems by replacing double by single quotes",
         "de": "Adapter benötigt Knoten >= 18 und js-Controller >= 5 jetzt.\nAbhängigkeiten wurden aktualisiert.\nurl für Download-Seite auf Keba Website\nlint-probleme beheben, indem doppel durch einzelne zitate ersetzt werden",
@@ -136,7 +149,7 @@
     },
     "authors": [
       "UncleSamSwiss <samuel.weibel@gmail.com>",
-      "Volker Sengler <git@sengler.de>"
+      "Sneak-L8 <git@sengler.de>"
     ],
     "keywords": [
       "KeContact",
@@ -149,8 +162,8 @@
       "e-mobility"
     ],
     "licenseInformation": {
-      "license": "Apache-2.0",
-      "type": "free"
+      "type": "free",
+      "license": "Apache-2.0"      
     },
     "platform": "Javascript/Node.js",
     "icon": "kecontact.png",
@@ -164,16 +177,18 @@
     "compact": true,
     "connectionType": "local",
     "dataSource": "poll",
-    "materialize": true,
-    "supportCustoms": false,
+    "adminUI": {
+      "config": "json"
+    },
+    "supportCustoms": true,
     "dependencies": [
       {
-        "js-controller": ">=5.0.19"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=5.1.13"
+        "admin": ">=7.0.23"
       }
     ],
     "plugins": {
@@ -229,9 +244,9 @@
       "_id": "info.connection",
       "type": "state",
       "common": {
-        "name": "is wallbox connected?",
-        "type": "boolean",
         "role": "indicator.connected",
+        "name": "wallbox is connected",
+        "type": "boolean",       
         "read": true,
         "write": false,
         "def": false
@@ -275,7 +290,14 @@
         "type": "number",
         "role": "value",
         "read": true,
-        "write": true
+        "write": true,
+        "states": {
+          "0": "no phase toggle source is available",
+          "1": "toggle via OCPP",
+          "2": "direct toggle command via RESTAPI",
+          "3": "toggle via Modbus",
+          "4": "toggle via UDP"
+        }
       },
       "native": {
         "udpKey": "X2 phaseSwitch source"
@@ -289,7 +311,11 @@
         "type": "number",
         "role": "value",
         "read": true,
-        "write": true
+        "write": true,
+        "states": {
+          "0": "1 phase (default value)",
+          "1": "3 phases"
+        }
       },
       "native": {
         "udpKey": "X2 phaseSwitch"
@@ -383,6 +409,20 @@
       },
       "native": {
         "udpKey": "DIP-Sw2"
+      }
+    },
+    {
+      "_id": "setBoot",
+      "type": "state",
+      "common": {
+        "name": "Resume session after powercut",
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false
+      },
+      "native": {
+        "udpKey": "setBoot"
       }
     },
     {

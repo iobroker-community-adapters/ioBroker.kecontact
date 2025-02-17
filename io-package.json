@@ -180,7 +180,7 @@
     "adminUI": {
       "config": "json"
     },
-    "supportCustoms": true,
+    "supportCustoms": false,
     "dependencies": [
       {
         "js-controller": ">=6.0.11"

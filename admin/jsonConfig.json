@@ -555,7 +555,7 @@
                 },
                 "stateAmperagePhase1": {
                     "type": "objectId",
-                    "label": "statAmperagePhase1",
+                    "label": "stateAmperagePhase1",
                     "tooltip": "tooltip_stateAmperagePhase",
                     "xs": 12,
                     "sm": 12,

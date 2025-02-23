@@ -163,7 +163,7 @@
     ],
     "licenseInformation": {
       "type": "free",
-      "license": "Apache-2.0"      
+      "license": "Apache-2.0"
     },
     "platform": "Javascript/Node.js",
     "icon": "kecontact.png",
@@ -233,7 +233,7 @@
     "stateAmperagePhase1": "",
     "stateAmperagePhase2": "",
     "stateAmperagePhase3": "",
-    "amperageUnit":"mA"
+    "amperageUnit": "mA"
   },
   "objects": [],
   "instanceObjects": [
@@ -251,7 +251,7 @@
       "common": {
         "role": "indicator.connected",
         "name": "wallbox is connected",
-        "type": "boolean",       
+        "type": "boolean",
         "read": true,
         "write": false,
         "def": false

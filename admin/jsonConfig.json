@@ -448,9 +448,9 @@
                     "tooltip": "tooltip_dynamicEnWG",
                     "xs": 12,
                     "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "xl": 3,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
                     "newLine": false
                 }
             }

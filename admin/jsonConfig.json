@@ -555,7 +555,7 @@
                 },
                 "stateAmperagePhase1": {
                     "type": "objectId",
-                    "label": "stateAmperagePhase1",
+                    "label": "stateAmperagePhase1_new",
                     "tooltip": "tooltip_stateAmperagePhase",
                     "xs": 12,
                     "sm": 12,
@@ -566,7 +566,7 @@
                 },
                 "stateAmperagePhase2": {
                     "type": "objectId",
-                    "label": "stateAmperagePhase2",
+                    "label": "stateAmperagePhase2_new",
                     "tooltip": "tooltip_stateAmperagePhase",
                     "xs": 12,
                     "sm": 12,
@@ -577,7 +577,7 @@
                 },
                 "stateAmperagePhase3": {
                     "type": "objectId",
-                    "label": "stateAmperagePhase3",
+                    "label": "stateAmperagePhase3_new",
                     "tooltip": "tooltip_stateAmperagePhase",
                     "xs": 12,
                     "sm": 12,

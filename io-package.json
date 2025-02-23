@@ -228,7 +228,12 @@
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",
     "stateEnergyMeter3": "",
-    "wallboxNotIncluded": false
+    "wallboxNotIncluded": false,
+    "maxAmperage": 0,
+    "stateAmperagePhase1": "",
+    "stateAmperagePhase2": "",
+    "stateAmperagePhase3": "",
+    "amperageUnit":"mA"
   },
   "objects": [],
   "instanceObjects": [

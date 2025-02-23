@@ -87,6 +87,9 @@ If you enter a value, your wallbox will be limited continously to not pass your 
 Up to three states of energy meters can be specified for limitation. All values will be added to calculate current consumption.
 An extra checkbox is used to specified whether wallbox power is included (in this case wallbox power will be subtracted from the state values).
 
+An other option gives you the possibility not to limit power but amperage. With this options amperage of charging station will be reduced to not pass a maximum amperage of each phase.
+Therefore you need to specify the amperage states of each phase of your enegy meter. Please ensure, that phases of charging station and energy meter have the same numbering.
+
 ### dynamic options
 
 Additionally there are some states to influence behaviour of photovoltaics automatic on the fly, e.g. by a script of your own updating these values according to your needs)
@@ -115,6 +118,8 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (sneak-L8) migrate from request to axios
 * (Sneak-L8) fix one time attempt for recharging vehicle in state 5
 * (Sneak-L8) pay attention to minimum time for phase switch by x2 when vehicle is plugged/unplugged
+* (Sneak-L8) new option to limit amperage of charging station to maximum value for amperage of whole mains circuit
+* (Sneak-L8) reduces info logs for max power adjustment when no vehicle is plugged (log as debug in that case)
 
 ### 2.3.0 (2024-11-29)
 * (Sneak-L8) new option to limit charging station according to german §14a EnWG

@@ -49,12 +49,13 @@ class Kecontact extends utils.Adapter {
     timerDataUpdate      = null;   // interval object for calculating timer
     intervalActiceUpdate = 15 * 1000;  // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
     lastCalculating      = null;   // time of last check for charging information
-    intervalCalculating = 25 * 1000;  // calculate charging poser every 25(-30) seconds
-    chargingToBeStarted = false;   // tried to start charging session last time?
+    intervalCalculating  = 25 * 1000;  // calculate charging poser every 25(-30) seconds
+    chargingToBeStarted  = false;   // tried to start charging session last time?
     loadChargingSessions = false;
     photovoltaicsActive  = false;  // is photovoltaics automatic active?
     useX1switchForAutomatic = true;
-    maxPowerActive       = false;  // is limiter für maximum power active?
+    maxPowerActive       = false;  // is limiter for maximum power active?
+    maxAmperageActive    = false;  // is limiter for maximum amperage active?
     wallboxIncluded      = true;   // amperage of wallbox include in energy meters 1, 2 or 3?
     amperageDelta        = 500;    // default for step of amperage
     underusage           = 0;      // maximum regard use to reach minimal charge power for vehicle
@@ -196,6 +197,10 @@ class Kecontact extends utils.Adapter {
         this.log.info('config stateEnergyMeter2: ' + this.config.stateEnergyMeter2);
         this.log.info('config stateEnergyMeter3: ' + this.config.stateEnergyMeter3);
         this.log.info('config wallboxNotIncluded: ' + this.config.wallboxNotIncluded);
+        this.log.info('config maxAmperage: ' + this.config.maxAmperage);
+        this.log.info('config stateAmperagePhase1: ' + this.config.stateAmperagePhase1);
+        this.log.info('config stateAmperagePhase2: ' + this.config.stateAmperagePhase2);
+        this.log.info('config stateAmperagePhase3: ' + this.config.stateAmperagePhase3);
 
         /*
         For every state in the system there has to be also an object of type state
@@ -805,7 +810,7 @@ class Kecontact extends utils.Adapter {
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnWG) && everythingFine;
         }
 
-        if (this.config.maxPower && (this.config.maxPower != 0)) {
+        if (this.config.maxPower && (this.config.maxPower > 0)) {
             this.maxPowerActive = true;
             if (this.config.maxPower <= 0) {
                 this.log.warn('max. power negative or zero - power limitation deactivated');
@@ -828,6 +833,26 @@ class Kecontact extends utils.Adapter {
                 }
             }
         }
+
+        if (this.config.maxAmperage && (this.config.maxAmperage > 0)) {
+            this.maxAmperageActive = true;
+            if (this.config.maxAmperage <= 0) {
+                this.log.warn('max. current negative or zero - current limitation deactivated');
+                this.maxAmperageActive = false;
+            }
+        }
+        if (this.maxAmperageActive) {
+            everythingFine = this.addForeignStateFromConfig(this.config.stateAmperagePhase1) && everythingFine;
+            everythingFine = this.addForeignStateFromConfig(this.config.stateAmperagePhase2) && everythingFine;
+            everythingFine = this.addForeignStateFromConfig(this.config.stateAmperagePhase3) && everythingFine;
+            if (everythingFine) {
+                if (! (this.config.stateAmperagePhase1 || this.config.stateAmperagePhase2 || this.config.stateAmperagePhase3)) {
+                    this.log.error('no energy meters defined - amperage limitation deactivated');
+                    this.maxAmperageActive = false;
+                }
+            }
+        }
+
         return everythingFine;
     }
 
@@ -1302,9 +1327,8 @@ class Kecontact extends utils.Adapter {
         return result;
     }
 
-
     /**
-     * If the maximum power available is defined and max power limitation is active a reduced value is return, otherwise no real limit.
+     * If the maximum power available is defined and max power limitation is active, a reduced value is returned, otherwise no real limit.
      * @returns the total power available in watts
      */
     getTotalPowerAvailable() {
@@ -1313,6 +1337,34 @@ class Kecontact extends utils.Adapter {
             return this.config.maxPower - this.getTotalPower();
         }
         return 999999;  // return default maximum
+    }
+
+    /**
+     * If max amperage limitation is active, a reduced value is returned, otherwise no real limit.
+     * @returns the total current available in mA
+     */
+    getTotalAmperageAvailable() {
+        // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
+        if (this.maxAmperageActive && (this.config.maxAmperage > 0)) {
+            if (this.getWallboxType() === this.TYPE_D_EDITION) {
+                this.log.warn('Amperage limitation not possible with Keba Deutschland-Edition! Limitation disabled.');
+                this.maxAmperageActive = false;
+            } else {
+                const amperageUnit = this.getStateInternal(this.config.amperageUnit);
+                const amperageFactor = (amperageUnit === 'A') ? 1000 : 1;
+                const amperagePhase1 = this.getStateDefault0(this.config.stateAmperagePhase1) * amperageFactor;
+                const amperagePhase2 = this.getStateDefault0(this.config.stateAmperagePhase2) * amperageFactor;
+                const amperagePhase3 = this.getStateDefault0(this.config.stateAmperagePhase3) * amperageFactor;
+                const amperageWallbox1 = this.getStateDefault0(this.stateWallboxPhase1);
+                const amperageWallbox2 = this.getStateDefault0(this.stateWallboxPhase2);
+                const amperageWallbox3 = this.getStateDefault0(this.stateWallboxPhase3);
+                const amperageAvailable1 = this.config.maxAmperage - (amperagePhase1 - amperageWallbox1);
+                const amperageAvailable2 = this.config.maxAmperage - (amperagePhase2 - amperageWallbox2);
+                const amperageAvailable3 = this.config.maxAmperage - (amperagePhase3 - amperageWallbox3);
+                return Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3);
+            }
+        }
+        return this.getMaxCurrent();  // return default maximum
     }
 
     /**
@@ -1764,6 +1816,15 @@ class Kecontact extends utils.Adapter {
             this.setStateAck(this.stateMaxPower, Math.round(maxPower));
             this.log.debug('Available max power: ' + maxPower);
             const maxAmperage = this.getAmperage(maxPower, phases);
+            if (tempMax > maxAmperage) {
+                tempMax = maxAmperage;
+            }
+        }
+
+        // check also maximum current allowed
+        if (this.maxAmperageActive === true) {
+            const maxAmperage = this.getTotalAmperageAvailable();
+            this.log.debug('Available max amperage: ' + maxAmperage);
             if (tempMax > maxAmperage) {
                 tempMax = maxAmperage;
             }

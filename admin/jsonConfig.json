@@ -531,6 +531,81 @@
                     "lg": 6,
                     "xl": 4,
                     "newLine": true
+                },
+                "maxAmperage": {
+                    "type": "number",
+                    "label": "maxAmperage",
+                    "min": 0,
+                    "tooltip": "tooltip_maxAmperage",
+                    "xs": 12,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
+                    "xl": 2,
+                    "newLine": true
+                },
+                "maxAmperageUnit": {
+                    "type": "staticText",
+                    "label": "mA",
+                    "xs": 12,
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1,
+                    "xl": 1
+                },
+                "stateAmperagePhase1": {
+                    "type": "objectId",
+                    "label": "statAmperagePhase1",
+                    "tooltip": "tooltip_stateAmperagePhase",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
+                    "newLine": true
+                },
+                "stateAmperagePhase2": {
+                    "type": "objectId",
+                    "label": "stateAmperagePhase2",
+                    "tooltip": "tooltip_stateAmperagePhase",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
+                    "newLine": false
+                },
+                "stateAmperagePhase3": {
+                    "type": "objectId",
+                    "label": "stateAmperagePhase3",
+                    "tooltip": "tooltip_stateAmperagePhase",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
+                    "newLine": false
+                },
+                "amperageUnit": {
+                    "type": "select",
+                    "label": "amperageUnit",
+                    "tooltip": "tooltip_amperageUnit",
+                    "options": [
+                        {
+                            "label": "mA",
+                            "value": "mA"
+                        },
+                        {
+                            "label": "A",
+                            "value": "A"
+                        }
+                    ],
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
+                    "newLine": false
                 }
             }
         }

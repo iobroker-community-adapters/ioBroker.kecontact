@@ -109,6 +109,7 @@ class Kecontact extends utils.Adapter {
     stateFirmwareAvailable   = 'statistics.availableFirmware';/*current version of firmware available at keba.com*/
     stateSurplus             = 'statistics.surplus';          /*current surplus for PV automatics*/
     stateMaxPower            = 'statistics.maxPower';         /*maximum power for wallbox*/
+    stateMaxAmperage         = 'statistics.maxAmperage';      /*maximum amperage for wallbox*/
     stateChargingPhases      = 'statistics.chargingPhases';   /*number of phases with which vehicle is currently charging*/
     statePlugTimestamp       = 'statistics.plugTimestamp';    /*Timestamp when vehicled was plugged to wallbox*/
     stateChargeTimestamp     = 'statistics.chargeTimestamp';  /*Timestamp when charging (re)started */
@@ -1827,6 +1828,7 @@ class Kecontact extends utils.Adapter {
         // check also maximum current allowed
         if (this.maxAmperageActive === true) {
             const maxAmperage = this.getTotalAmperageAvailable();
+            this.setStateAck(this.stateMaxAmperage, Math.round(maxAmperage));
             this.log.debug('Available max amperage: ' + maxAmperage);
             if (tempMax > maxAmperage) {
                 tempMax = maxAmperage;

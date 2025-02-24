@@ -1177,6 +1177,21 @@
       "native": {}
     },
     {
+      "_id": "statistics.maxAmperage",
+      "type": "state",
+      "common": {
+        "name": "maximum amperage for wallbox",
+        "type": "number",
+        "role": "value",
+        "unit": "mA",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "maximum amount of mA available for charging station in case of amperage limitation"
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics.chargingPhases",
       "type": "state",
       "common": {

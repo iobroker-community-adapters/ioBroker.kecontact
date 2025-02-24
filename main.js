@@ -1361,6 +1361,9 @@ class Kecontact extends utils.Adapter {
                 const amperageAvailable1 = this.config.maxAmperage - (amperagePhase1 - amperageWallbox1);
                 const amperageAvailable2 = this.config.maxAmperage - (amperagePhase2 - amperageWallbox2);
                 const amperageAvailable3 = this.config.maxAmperage - (amperagePhase3 - amperageWallbox3);
+                this.log.debug('amperage of mains: ' + amperagePhase1 + '/' + amperagePhase2 + '/' + amperagePhase3 +
+                    ', amperage of charging station: ' + amperageWallbox1 + '/' + amperageWallbox2 + '/' + amperageWallbox3 +
+                    ' => available: ' + amperageAvailable1 + '/' + amperageAvailable2 + '/' + amperageAvailable3);
                 return Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3);
             }
         }
@@ -1829,6 +1832,7 @@ class Kecontact extends utils.Adapter {
                 tempMax = maxAmperage;
             }
         }
+
         // next check if limitation is active according to german for §14a EnWG
         const maxCurrentEnWG = this.getMaxCurrentEnWG();
         if (maxCurrentEnWG >= 0) {

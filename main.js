@@ -10,7 +10,7 @@ const utils = require('@iobroker/adapter-core');
 
 // Load your modules here, e.g.:
 const dgram = require('dgram');
-const axios = require('axios').default;
+const axios = require('axios');
 
 class Kecontact extends utils.Adapter {
 

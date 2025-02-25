@@ -202,6 +202,7 @@ class Kecontact extends utils.Adapter {
         this.log.info('config stateAmperagePhase1: ' + this.config.stateAmperagePhase1);
         this.log.info('config stateAmperagePhase2: ' + this.config.stateAmperagePhase2);
         this.log.info('config stateAmperagePhase3: ' + this.config.stateAmperagePhase3);
+        this.log.info('config amperageUnit: ' + this.config.amperageUnit + ' => factor is ' + this.getAmperageFactor());
 
         /*
         For every state in the system there has to be also an object of type state
@@ -1341,6 +1342,14 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
+     * Return factor for calculation maxAmperage with values from energy meter
+     * @returns factor for multiplying value to bring them to mA
+     */
+    getAmperageFactor() {
+        return (this.config.amperageUnit === 'A') ? 1000 : 1;
+    }
+
+    /**
      * If max amperage limitation is active, a reduced value is returned, otherwise no real limit.
      * @returns the total current available in mA
      */
@@ -1351,8 +1360,7 @@ class Kecontact extends utils.Adapter {
                 this.log.warn('Amperage limitation not possible with Keba Deutschland-Edition! Limitation disabled.');
                 this.maxAmperageActive = false;
             } else {
-                const amperageUnit = this.getStateInternal(this.config.amperageUnit);
-                const amperageFactor = (amperageUnit === 'A') ? 1000 : 1;
+                const amperageFactor = this.getAmperageFactor();
                 const amperagePhase1 = this.getStateDefault0(this.config.stateAmperagePhase1) * amperageFactor;
                 const amperagePhase2 = this.getStateDefault0(this.config.stateAmperagePhase2) * amperageFactor;
                 const amperagePhase3 = this.getStateDefault0(this.config.stateAmperagePhase3) * amperageFactor;

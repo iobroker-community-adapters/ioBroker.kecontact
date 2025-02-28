@@ -1205,7 +1205,7 @@ class Kecontact extends utils.Adapter {
 
         if (milliAmpere != oldValue) {
             if (milliAmpere == 0) {
-                this.log.info('stop charging');
+                this.log.info('stop charging '+ ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
             } else if (oldValue == 0) {
                 this.log.info('(re)start charging with ' + milliAmpere + 'mA' + ((this.isMaxPowerCalculation === true) ? ' (maxPower)' : ''));
             } else {
@@ -1373,10 +1373,10 @@ class Kecontact extends utils.Adapter {
                 this.log.debug('amperage of mains: ' + amperagePhase1 + '/' + amperagePhase2 + '/' + amperagePhase3 +
                     ', amperage of charging station: ' + amperageWallbox1 + '/' + amperageWallbox2 + '/' + amperageWallbox3 +
                     ' => available: ' + amperageAvailable1 + '/' + amperageAvailable2 + '/' + amperageAvailable3);
-                return Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3);
+                return this.getRoundedAmperage(Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3));
             }
         }
-        return this.getMaxCurrent();  // return default maximum
+        return this.getRoundedAmperage(this.getMaxCurrent());  // return default maximum
     }
 
     /**
@@ -1710,15 +1710,24 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
+     * Returns the rounded value for charging amperage.
+     * @param {number} amperage power in Watts used for calculation
+     * @returns rounded value according to amperageDelta.
+     */
+    getRoundedAmperage(amperage) {
+        return Math.round(amperage / this.amperageDelta) * this.amperageDelta;
+    }
+
+    /**
      * Returns the rounded value for charging amperage possible based on the defined power and phases given to the function.
      * @param {*} power power in Watts used for calculation
      * @param {*} phases number of phases to be used for calculation
      * @returns the values for the amperage based on amperageDelta and parameters.
      */
     getAmperage(power, phases) {
-        const curr = Math.round(power / this.voltage * 1000 / this.amperageDelta / phases) * this.amperageDelta;
+        const curr = power / this.voltage * 1000 / phases;
         this.log.debug('power: ' + power + ' / voltage: ' + this.voltage + ' * 1000 / delta: ' + this.amperageDelta + ' / phases: ' + phases + ' * delta = ' + curr);
-        return curr;
+        return this.getRoundedAmperage(curr);
     }
 
     check1p3pSwitchingRetries() {
@@ -1851,6 +1860,9 @@ class Kecontact extends utils.Adapter {
                 this.log.debug('Limit current to ' + maxCurrentEnWG + ' mA due to §14a EnWG');
             }
         }
+        if (tempMax < this.getMinCurrent()) {
+            tempMax = 0;
+        }
 
         const available = this.getSurplusWithoutWallbox();
         this.setStateAck(this.stateSurplus, Math.round(available));
@@ -1870,6 +1882,10 @@ class Kecontact extends utils.Adapter {
         const newDate = new Date();
         // @ts-ignore
         if (this.lastCalculating !== null && newDate.getTime() - this.lastCalculating.getTime() < this.intervalCalculating) {
+            if (this.getStateDefault0(this.stateWallboxCurrent) > tempMax) {
+                this.log.debug('set intermediate charging maximum of ' + curr + ' mA');
+                this.regulateWallbox(curr);
+            }
             return;
         }
 
@@ -1880,7 +1896,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug('pvAutomaticsActive: ' + this.isPvAutomaticsActive() + ', vehicleIsPlugged: ' + this.isVehiclePlugged());
 
         // lock wallbox if requested or available amperage below minimum
-        if (this.getStateDefaultFalse(this.stateWallboxDisabled) === true || tempMax < this.getMinCurrent() || (this.isPvAutomaticsActive() && ! this.isVehiclePlugged())) {
+        if (this.getStateDefaultFalse(this.stateWallboxDisabled) === true || tempMax == 0 || (this.isPvAutomaticsActive() && ! this.isVehiclePlugged())) {
             curr = 0;
             this.log.debug('no charging calculated');
         } else {

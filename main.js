@@ -11,6 +11,7 @@ const utils = require('@iobroker/adapter-core');
 // Load your modules here, e.g.:
 const dgram = require('dgram');
 const axios = require('axios');
+const I18n = require('@iobroker/adapter-core').I18n;
 
 class Kecontact extends utils.Adapter {
     DEFAULT_UDP_PORT = 7090;
@@ -40,8 +41,8 @@ class Kecontact extends utils.Adapter {
     TYPE_D_EDITION = 6; // product id (only P30) is KC-P30-EC220112-000-DE, there's no other
 
     ioBrokerLanguage = 'en';
-    chargeTextAutomatic = { en: 'PV automatic active', de: 'PV-optimierte Ladung' };
-    chargeTextMax = { en: 'max. charging power', de: 'volle Ladeleistung' };
+    chargeTextAutomatic = 'pvActivepvAutomaticActive';
+    chargeTextMax = 'pvAutomaticInactive';
 
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition
     wallboxUnknownSent = false; // Warning wallbox not recognized
@@ -168,6 +169,8 @@ class Kecontact extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
+        await I18n.init(__dirname, this);
+
         if (!this.checkConfig()) {
             this.log.error('start of adapter not possible due to config errors');
             return;
@@ -1805,9 +1808,9 @@ class Kecontact extends utils.Adapter {
         }
         let text;
         if (this.isPvAutomaticsActive()) {
-            text = this.chargeTextAutomatic[this.ioBrokerLanguage];
+            text = I18n.translate(this.chargeTextAutomatic);
         } else {
-            text = this.chargeTextMax[this.ioBrokerLanguage];
+            text = I18n.translate(this.chargeTextMax);
         }
         this.setState(this.stateWallboxDisplay, text);
     }

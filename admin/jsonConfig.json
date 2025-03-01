@@ -434,7 +434,7 @@
                 "stateEnWG": {
                     "type": "objectId",
                     "label": "stateEnWG",
-                    "tooltip": "tooltop_stateEnWG",
+                    "tooltip": "tooltip_stateEnWG",
                     "xs": 12,
                     "sm": 12,
                     "md": 9,

@@ -62,6 +62,7 @@ class Kecontact extends utils.Adapter {
     useX1switchForAutomatic = true;
     maxPowerActive = false; // is limiter for maximum power active?
     maxAmperageActive = false; // is limiter for maximum amperage active?
+    maxAmperageDeltaLimit = 1000; // raising limit (in mA) when an immediate max power calculation is enforced
     wallboxIncluded = true; // amperage of wallbox include in energy meters 1, 2 or 3?
     amperageDelta = 500; // default for step of amperage
     underusage = 0; // maximum regard use to reach minimal charge power for vehicle
@@ -461,7 +462,7 @@ class Kecontact extends utils.Adapter {
                     id == this.config.stateEnergyMeter2 ||
                     id == this.config.stateEnergyMeter3
                 ) {
-                    if (newValue - oldValue > 500) {
+                    if (newValue - oldValue > (this.maxAmperageDeltaLimit / 1000) * this.voltage) {
                         this.checkWallboxPower();
                     }
                 }
@@ -473,7 +474,7 @@ class Kecontact extends utils.Adapter {
                     id == this.config.stateAmperagePhase2 ||
                     id == this.config.stateAmperagePhase3
                 ) {
-                    if ((newValue - oldValue) * this.getAmperageFactor() > 500) {
+                    if ((newValue - oldValue) * this.getAmperageFactor() > this.maxAmperageDeltaLimit) {
                         this.checkWallboxPower();
                     }
                 }

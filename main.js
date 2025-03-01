@@ -1815,9 +1815,13 @@ class Kecontact extends utils.Adapter {
      * Returns the rounded value for charging amperage.
      *
      * @param amperage power in Watts used for calculation
+     * @param forceRoundOff do not use commercial rounding but round off
      * @returns rounded value according to amperageDelta.
      */
-    getRoundedAmperage(amperage) {
+    getRoundedAmperage(amperage, forceRoundOff = false) {
+        if (forceRoundOff === true) {
+            return Math.floor(amperage / this.amperageDelta) * this.amperageDelta;
+        }
         return Math.round(amperage / this.amperageDelta) * this.amperageDelta;
     }
 
@@ -1826,14 +1830,15 @@ class Kecontact extends utils.Adapter {
      *
      * @param power power in Watts used for calculation
      * @param phases number of phases to be used for calculation
+     * @param forceRoundOff do not use commercial rounding but round off
      * @returns the values for the amperage based on amperageDelta and parameters.
      */
-    getAmperage(power, phases) {
+    getAmperage(power, phases, forceRoundOff = false) {
         const curr = ((power / this.voltage) * 1000) / phases;
         this.log.debug(
             `power: ${power} / voltage: ${this.voltage} * 1000 / delta: ${this.amperageDelta} / phases: ${phases} * delta = ${curr}`,
         );
-        return this.getRoundedAmperage(curr);
+        return this.getRoundedAmperage(curr, forceRoundOff);
     }
 
     check1p3pSwitchingRetries() {
@@ -1956,7 +1961,7 @@ class Kecontact extends utils.Adapter {
             const maxPower = this.getTotalPowerAvailable();
             this.setStateAck(this.stateMaxPower, Math.round(maxPower));
             this.log.debug(`Available max power: ${maxPower}`);
-            const maxAmperage = this.getAmperage(maxPower, phases);
+            const maxAmperage = this.getAmperage(maxPower, phases, true);
             if (tempMax > maxAmperage) {
                 tempMax = maxAmperage;
             }

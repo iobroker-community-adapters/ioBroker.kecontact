@@ -5,9 +5,9 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.kecontact.svg)](https://www.npmjs.com/package/iobroker.kecontact)
 ![Number of Installations](https://iobroker.live/badges/kecontact-installed.svg)
 ![Current version in stable repository](https://iobroker.live/badges/kecontact-stable.svg)
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/kecontact/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
 
 [![NPM](https://nodei.co/npm/iobroker.kecontact.png?downloads=true)](https://nodei.co/npm/iobroker.kecontact/)
-[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/kecontact/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
 
 **Tests:** ![Test and Release](https://github.com/Sneak-L8/ioBroker.kecontact/workflows/Test%20and%20Release/badge.svg)
 
@@ -116,10 +116,12 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) rebase adapter on newest version of adapter creator
 * (Sneak-L8) required js-controller now >= 6.0.11 and admin >= 7.0.23
 * (Sneak-L8) fix error sentry IOBROKER-KECONTACT-21
-* (sneak-L8) migrate from request to axios
+* (Sneak-L8) migrate from request to axios
+* (Sneak-L8) migrate from ESlint v8 to v9
 * (Sneak-L8) fix one time attempt for recharging vehicle in state 5
 * (Sneak-L8) pay attention to minimum time for phase switch by x2 when vehicle is plugged/unplugged
 * (Sneak-L8) new option to limit amperage of charging station to maximum value for amperage of whole mains circuit
+* (Sneak-L8) immediately reduce charging power when over max amperage or max power limits
 * (Sneak-L8) reduces info logs for max power adjustment when no vehicle is plugged (log as debug in that case)
 
 ### 2.3.0 (2024-11-29)

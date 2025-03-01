@@ -447,7 +447,7 @@ class Kecontact extends utils.Adapter {
                 if (id == this.config.stateAmperagePhase1 ||
                     id == this.config.stateAmperagePhase2 ||
                     id == this.config.stateAmperagePhase3) {
-                    if (newValue - oldValue > 0.5) {
+                    if ((newValue - oldValue) * this.getAmperageFactor() > 500) {
                         this.checkWallboxPower();
                     }
                 }

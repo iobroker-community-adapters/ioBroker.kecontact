@@ -433,6 +433,26 @@ class Kecontact extends utils.Adapter {
                 this.stateFor1p3pAck = state.ack;
             }
 
+            if (this.maxPowerActive === true && typeof newValue == 'number') {
+                if (id == this.config.stateEnergyMeter1 ||
+                    id == this.config.stateEnergyMeter2 ||
+                    id == this.config.stateEnergyMeter3) {
+                    if (newValue - oldValue > 500) {
+                        this.checkWallboxPower();
+                    }
+                }
+            }
+
+            if (this.maxAmperageActive === true && typeof newValue == 'number') {
+                if (id == this.config.stateAmperagePhase1 ||
+                    id == this.config.stateAmperagePhase2 ||
+                    id == this.config.stateAmperagePhase3) {
+                    if (newValue - oldValue > 0.5) {
+                        this.checkWallboxPower();
+                    }
+                }
+            }
+
             if (state.ack) {
                 return;
             }
@@ -829,7 +849,9 @@ class Kecontact extends utils.Adapter {
                 this.wallboxIncluded = true;
             }
             if (everythingFine) {
-                if (! (this.config.stateEnergyMeter1 || this.config.stateEnergyMeter2 || this.config.stateEnergyMeter1)) {
+                if (! (this.isForeignStateSpecified(this.config.stateEnergyMeter1) ||
+                        this.isForeignStateSpecified(this.config.stateEnergyMeter2) ||
+                        this.isForeignStateSpecified(this.config.stateEnergyMeter3))) {
                     this.log.error('no energy meters defined - power limitation deactivated');
                     this.maxPowerActive = false;
                 }
@@ -848,8 +870,10 @@ class Kecontact extends utils.Adapter {
             everythingFine = this.addForeignStateFromConfig(this.config.stateAmperagePhase2) && everythingFine;
             everythingFine = this.addForeignStateFromConfig(this.config.stateAmperagePhase3) && everythingFine;
             if (everythingFine) {
-                if (! (this.config.stateAmperagePhase1 || this.config.stateAmperagePhase2 || this.config.stateAmperagePhase3)) {
-                    this.log.error('no energy meters defined - amperage limitation deactivated');
+                if (! (this.isForeignStateSpecified(this.config.stateAmperagePhase1) &&
+                        this.isForeignStateSpecified(this.config.stateAmperagePhase2) &&
+                        this.isForeignStateSpecified(this.config.stateAmperagePhase3))) {
+                    this.log.error('not all energy meters defined - amperage limitation deactivated');
                     this.maxAmperageActive = false;
                 }
             }

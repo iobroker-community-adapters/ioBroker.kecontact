@@ -42,7 +42,7 @@ class Kecontact extends utils.Adapter {
     TYPE_D_EDITION = 6; // product id (only P30) is KC-P30-EC220112-000-DE, there's no other
 
     ioBrokerLanguage = 'en';
-    chargeTextAutomatic = 'pvActivepvAutomaticActive';
+    chargeTextAutomatic = 'pvAutomaticActive';
     chargeTextMax = 'pvAutomaticInactive';
 
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition

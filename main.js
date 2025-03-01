@@ -16,9 +16,13 @@ class Kecontact extends utils.Adapter {
     DEFAULT_UDP_PORT = 7090;
     BROADCAST_UDP_PORT = 7092;
 
+    /** @type {dgram.Socket | null} */
     txSocket = null;
+    /** @type {dgram.Socket | null} */
     rxSocketReports = null;
+    /** @type {dgram.Socket | null} */
     rxSocketBroadcast = null;
+    /** @type {NodeJS.Timeout | null} */
     sendDelayTimer = null;
 
     states = {}; // contains all actual state values
@@ -42,11 +46,14 @@ class Kecontact extends utils.Adapter {
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition
     wallboxUnknownSent = false; // Warning wallbox not recognized
     isPassive = true; // no automatic power regulation?
+    /** @type {Date | null} */
     lastDeviceData = null; // time of last check for device information
     intervalDeviceDataUpdate = 24 * 60 * 60 * 1000; // check device data (e.g. firmware) every 24 hours => 'report 1'
     intervalPassiveUpdate = 10 * 60 * 1000; // check charging information every 10 minutes
+    /** @type {NodeJS.Timeout | null} */
     timerDataUpdate = null; // interval object for calculating timer
     intervalActiceUpdate = 15 * 1000; // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
+    /** @type {Date | null} */
     lastCalculating = null; // time of last check for charging information
     intervalCalculating = 25 * 1000; // calculate charging poser every 25(-30) seconds
     chargingToBeStarted = false; // tried to start charging session last time?
@@ -65,9 +72,13 @@ class Kecontact extends utils.Adapter {
     minRegardSeconds = 0; // maximum time to accept regard when charging
     min1p3pSwSec = 0; // minimum time between phase switching
     isMaxPowerCalculation = false; // switch to show if max power calculation is active
-    valueFor1p3pOff = null; // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
-    valueFor1pCharging = null; // value that will be assigned to 1p/3p state to switch to 1 phase charging
-    valueFor3pCharging = null; // value that will be assigned to 1p/3p state to switch to 3 phase charging
+    /** @type {boolean | number} */
+    valueFor1p3pOff = 0; // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
+    /** @type {boolean | number} */
+    valueFor1pCharging = 0; // value that will be assigned to 1p/3p state to switch to 1 phase charging
+    /** @type {boolean | number} */
+    valueFor3pCharging = 1; // value that will be assigned to 1p/3p state to switch to 3 phase charging
+    /** @type {String | null} */
     stateFor1p3pCharging = null; // state for switching installation contactor
     stateFor1p3pAck = false; // Is state acknowledged?
     stepFor1p3pSwitching = 0; // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching, -1 = temporarily disabled
@@ -285,16 +296,12 @@ class Kecontact extends utils.Adapter {
                 }
 
                 if (this.rxSocketReports !== null) {
-                    if (this.rxSocketReports.active) {
-                        this.rxSocketReports.close();
-                    }
+                    this.rxSocketReports.close();
                     this.rxSocketReports = null;
                 }
 
                 if (this.rxSocketBroadcast !== null) {
-                    if (this.rxSocketBroadcast.active) {
-                        this.rxSocketBroadcast.close();
-                    }
+                    this.rxSocketBroadcast.close();
                     this.rxSocketBroadcast = null;
                 }
 
@@ -517,26 +524,34 @@ class Kecontact extends utils.Adapter {
         this.rxSocketReports = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         this.rxSocketReports.on('error', err => {
             this.log.error(`RxSocketReports error: ${err.message}\n${err.stack}`);
-            this.rxSocketReports.close();
+            if (this.rxSocketReports !== null) {
+                this.rxSocketReports.close();
+            }
         });
         this.rxSocketReports.on('listening', () => {
-            this.rxSocketReports.setBroadcast(true);
-            const address = this.rxSocketReports.address();
-            this.log.debug(`UDP server listening on ${address.address}:${address.port}`);
+            if (this.rxSocketReports !== null) {
+                this.rxSocketReports.setBroadcast(true);
+                const address = this.rxSocketReports.address();
+                this.log.debug(`UDP server listening on ${address.address}:${address.port}`);
+            }
         });
         this.rxSocketReports.on('message', this.handleWallboxMessage.bind(this));
         this.rxSocketReports.bind(this.DEFAULT_UDP_PORT, '0.0.0.0');
 
         this.rxSocketBroadcast = dgram.createSocket({ type: 'udp4', reuseAddr: true });
         this.rxSocketBroadcast.on('error', err => {
-            this.log.error(`RxSocketBroadcast error: ${err.message}\n${err.stack}`);
-            this.rxSocketBroadcast.close();
+            if (this.rxSocketBroadcast !== null) {
+                this.log.error(`RxSocketBroadcast error: ${err.message}\n${err.stack}`);
+                this.rxSocketBroadcast.close();
+            }
         });
         this.rxSocketBroadcast.on('listening', () => {
-            this.rxSocketBroadcast.setBroadcast(true);
-            this.rxSocketBroadcast.setMulticastLoopback(true);
-            const address = this.rxSocketBroadcast.address();
-            this.log.debug(`UDP broadcast server listening on ${address.address}:${address.port}`);
+            if (this.rxSocketBroadcast !== null) {
+                this.rxSocketBroadcast.setBroadcast(true);
+                this.rxSocketBroadcast.setMulticastLoopback(true);
+                const address = this.rxSocketBroadcast.address();
+                this.log.debug(`UDP broadcast server listening on ${address.address}:${address.port}`);
+            }
         });
         this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast.bind(this));
         this.rxSocketBroadcast.bind(this.BROADCAST_UDP_PORT);
@@ -1581,7 +1596,10 @@ class Kecontact extends utils.Adapter {
                 this.doNextStepOf1p3pSwitching();
             // falls through
             case 2:
-                if (this.valueFor1p3pSwitching !== this.getStateInternal(this.stateFor1p3pCharging)) {
+                if (
+                    this.valueFor1p3pSwitching !== this.getStateInternal(this.stateFor1p3pCharging) &&
+                    this.stateFor1p3pCharging !== null
+                ) {
                     this.stateFor1p3pAck = false;
                     this.log.info(`switching 1p3p to ${this.valueFor1p3pSwitching} ...`);
                     this.setForeignState(this.stateFor1p3pCharging, this.valueFor1p3pSwitching);
@@ -2282,8 +2300,10 @@ class Kecontact extends utils.Adapter {
 
     sendNextQueueDatagram() {
         if (this.sendQueue.length === 0) {
-            clearInterval(this.sendDelayTimer);
-            this.sendDelayTimer = null;
+            if (this.sendDelayTimer !== null) {
+                clearInterval(this.sendDelayTimer);
+                this.sendDelayTimer = null;
+            }
             return;
         }
         const message = this.sendQueue.shift();

@@ -43,8 +43,6 @@
     "pollInterval": "refresh interval (for passive mode)",
     "powerEnWG": "limitation according to german §14a EnWG",
     "powerLimitation": "Following values are only needed if maximum power must be limited",
-    "pvAutomaticActive": "PV-optimized charging",
-    "pvAutomaticInactive": "full charging power",
     "regardTime": "time to continue charging even with regard",
     "secs": "seconds",
     "state1p3pSwitch": "state for switching 1 phase to 3 phases charging",

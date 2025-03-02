@@ -11,7 +11,6 @@ const utils = require('@iobroker/adapter-core');
 // Load your modules here, e.g.:
 const dgram = require('dgram');
 const axios = require('axios');
-const { join } = require('node:path');
 const I18n = require('@iobroker/adapter-core').I18n;
 
 class Kecontact extends utils.Adapter {
@@ -180,7 +179,7 @@ class Kecontact extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
-        await I18n.init(join(__dirname, 'admin'), this);
+        await I18n.init(__dirname, this);
 
         if (!this.checkConfig()) {
             this.log.error('start of adapter not possible due to config errors');

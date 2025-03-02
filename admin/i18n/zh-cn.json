@@ -43,7 +43,6 @@
     "pollInterval": "刷新间隔（用于被动模式）",
     "powerEnWG": "根据德国 §14a EnWG 的限制",
     "powerLimitation": "仅当必须限制最大功率时才需要以下值",
-    "pvAutomaticInactive": "充分充电功率",
     "regardTime": "是时候继续充电了",
     "secs": "秒",
     "state1p3pSwitch": "1相转3相充电状态",

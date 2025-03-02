@@ -43,7 +43,6 @@
     "pollInterval": "Aktualisierungsintervall (für passiven Modus)",
     "powerEnWG": "Beschränkung gemäß §14a EnWG",
     "powerLimitation": "Folgende Werte werden nur benötigt, wenn die Gesamtleistung begrenzt ist",
-    "pvAutomaticInactive": "Vollständige Ladekraft",
     "regardTime": "Laden auch bei zu geringem Überschuss für diese Dauer fortsetzen",
     "secs": "Sekunden",
     "state1p3pSwitch": "State zum Schalten von 1 Phase auf 3 Phasen",

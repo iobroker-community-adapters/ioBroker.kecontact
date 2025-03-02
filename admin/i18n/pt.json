@@ -43,7 +43,6 @@
     "pollInterval": "Intervalo de atualização (para modo passivo)",
     "powerEnWG": "limitação de acordo com o §14a EnWG alemão",
     "powerLimitation": "Os seguintes valores são necessários apenas se a potência máxima deve ser limitada",
-    "pvAutomaticInactive": "Poder de carregamento total",
     "regardTime": "É hora de continuar a carregar, mesmo em relação",
     "secs": "segundos",
     "state1p3pSwitch": "estado para comutação de 1 fase para 3 fases de carregamento",

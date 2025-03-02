@@ -70,6 +70,7 @@
   "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
+    "i18n/",
     "lib/",
     "www/",
     "io-package.json",

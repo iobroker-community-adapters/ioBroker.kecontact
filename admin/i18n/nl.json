@@ -43,7 +43,6 @@
     "pollInterval": "Vernieuwingsinterval (voor passieve modus)",
     "powerEnWG": "beperking volgens Duitse §14a EnWG",
     "powerLimitation": "De volgende waarden zijn alleen nodig als het maximale vermogen moet worden beperkt",
-    "pvAutomaticActive": "PV-geoptimaliseerd opladen",
     "pvAutomaticInactive": "Volledige oplaadkracht",
     "regardTime": "Tijd om door te gaan met opladen, zelfs met betrekking tot",
     "secs": "seconden",

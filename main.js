@@ -41,7 +41,6 @@ class Kecontact extends utils.Adapter {
     TYPE_X_SERIES = 5;
     TYPE_D_EDITION = 6; // product id (only P30) is KC-P30-EC220112-000-DE, there's no other
 
-    ioBrokerLanguage = 'en';
     chargeTextAutomatic = 'pvAutomaticActive';
     chargeTextMax = 'pvAutomaticInactive';
 
@@ -274,8 +273,6 @@ class Kecontact extends utils.Adapter {
         this.setupUdpCommunication();
 
         //await adapter.setStateAsync('info.connection', true, true);  // too early to acknowledge ...
-
-        this.detectIoBrokerLanguage();
 
         this.initializeInternalStateValues();
     }
@@ -560,21 +557,6 @@ class Kecontact extends utils.Adapter {
         });
         this.rxSocketBroadcast.on('message', this.handleWallboxBroadcast.bind(this));
         this.rxSocketBroadcast.bind(this.BROADCAST_UDP_PORT);
-    }
-
-    detectIoBrokerLanguage() {
-        this.getForeignObject('system.config', (err, ioBroker_Settings) => {
-            if (err) {
-                this.log.error(`Error while fetching system.config: ${err}`);
-                return;
-            }
-
-            if (ioBroker_Settings && ioBroker_Settings.common.language == 'de') {
-                this.ioBrokerLanguage = 'de';
-            } else {
-                this.ioBrokerLanguage = 'en';
-            }
-        });
     }
 
     initializeInternalStateValues() {

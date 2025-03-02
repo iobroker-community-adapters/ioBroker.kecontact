@@ -18,12 +18,16 @@ class Kecontact extends utils.Adapter {
     DEFAULT_UDP_PORT = 7090;
     BROADCAST_UDP_PORT = 7092;
 
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {dgram.Socket | null} */
     txSocket = null;
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {dgram.Socket | null} */
     rxSocketReports = null;
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {dgram.Socket | null} */
     rxSocketBroadcast = null;
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {NodeJS.Timeout | null} */
     sendDelayTimer = null;
 
@@ -47,13 +51,16 @@ class Kecontact extends utils.Adapter {
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition
     wallboxUnknownSent = false; // Warning wallbox not recognized
     isPassive = true; // no automatic power regulation?
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {Date | null} */
     lastDeviceData = null; // time of last check for device information
     intervalDeviceDataUpdate = 24 * 60 * 60 * 1000; // check device data (e.g. firmware) every 24 hours => 'report 1'
     intervalPassiveUpdate = 10 * 60 * 1000; // check charging information every 10 minutes
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {NodeJS.Timeout | null} */
     timerDataUpdate = null; // interval object for calculating timer
     intervalActiceUpdate = 15 * 1000; // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {Date | null} */
     lastCalculating = null; // time of last check for charging information
     intervalCalculating = 25 * 1000; // calculate charging poser every 25(-30) seconds
@@ -74,13 +81,17 @@ class Kecontact extends utils.Adapter {
     minRegardSeconds = 0; // maximum time to accept regard when charging
     min1p3pSwSec = 0; // minimum time between phase switching
     isMaxPowerCalculation = false; // switch to show if max power calculation is active
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {boolean | number} */
     valueFor1p3pOff = 0; // value that will be assigned to 1p/3p state when vehicle is unplugged (unpower switch)
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {boolean | number} */
     valueFor1pCharging = 0; // value that will be assigned to 1p/3p state to switch to 1 phase charging
+    // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {boolean | number} */
     valueFor3pCharging = 1; // value that will be assigned to 1p/3p state to switch to 3 phase charging
-    /** @type {String | null} */
+    // eslint-disable-next-line jsdoc/check-tag-names
+    /** @type {string | null} */
     stateFor1p3pCharging = null; // state for switching installation contactor
     stateFor1p3pAck = false; // Is state acknowledged?
     stepFor1p3pSwitching = 0; // 0 = nothing to switch, 1 = stop charging, 2 = switch phases, 3 = acknowledge switching, -1 = temporarily disabled

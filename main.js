@@ -1985,7 +1985,7 @@ class Kecontact extends utils.Adapter {
         // check also maximum current allowed
         if (this.maxAmperageActive === true) {
             const maxAmperage = this.getTotalAmperageAvailable();
-            this.setStateAck(this.stateMaxAmperage, Math.round(maxAmperage));
+            this.setStateAck(this.stateMaxAmperage, maxAmperage);
             this.log.debug(`Available max amperage: ${maxAmperage}`);
             if (tempMax > maxAmperage) {
                 tempMax = maxAmperage;

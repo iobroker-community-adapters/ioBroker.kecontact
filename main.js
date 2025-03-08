@@ -68,7 +68,11 @@ class Kecontact extends utils.Adapter {
     photovoltaicsActive = false; // is photovoltaics automatic active?
     useX1switchForAutomatic = true;
     maxPowerActive = false; // is limiter for maximum power active?
+    lastPower = 0; // max power value when checking maxPower
     maxAmperageActive = false; // is limiter for maximum amperage active?
+    lastAmperagePhase1; // last amperage value of phase 1 when checking maxAmperage
+    lastAmperagePhase2; // last amperage value of phase 2 when checking maxAmperage
+    lastAmperagePhase3; // last amperage value of phase 3 when checking maxAmperage
     maxAmperageDeltaLimit = 1000; // raising limit (in mA) when an immediate max power calculation is enforced
     wallboxIncluded = true; // amperage of wallbox include in energy meters 1, 2 or 3?
     amperageDelta = 500; // default for step of amperage
@@ -473,8 +477,8 @@ class Kecontact extends utils.Adapter {
                     id == this.config.stateEnergyMeter2 ||
                     id == this.config.stateEnergyMeter3
                 ) {
-                    if (newValue - oldValue > (this.maxAmperageDeltaLimit / 1000) * this.voltage) {
-                        this.checkWallboxPower();
+                    if (this.getTotalPower() - this.lastPower > (this.maxAmperageDeltaLimit / 1000) * this.voltage) {
+                        this.requestCurrentChargingValuesDataReport();
                     }
                 }
             }
@@ -485,8 +489,18 @@ class Kecontact extends utils.Adapter {
                     id == this.config.stateAmperagePhase2 ||
                     id == this.config.stateAmperagePhase3
                 ) {
-                    if ((newValue - oldValue) * this.getAmperageFactor() > this.maxAmperageDeltaLimit) {
-                        this.checkWallboxPower();
+                    if (
+                        this.getStateDefault0(this.config.stateAmperagePhase1) * this.getAmperageFactor() -
+                            this.lastAmperagePhase1 >
+                            this.maxAmperageDeltaLimit ||
+                        this.getStateDefault0(this.config.stateAmperagePhase2) * this.getAmperageFactor() -
+                            this.lastAmperagePhase2 >
+                            this.maxAmperageDeltaLimit ||
+                        this.getStateDefault0(this.config.stateAmperagePhase3) * this.getAmperageFactor() -
+                            this.lastAmperagePhase3 >
+                            this.maxAmperageDeltaLimit
+                    ) {
+                        this.requestCurrentChargingValuesDataReport();
                     }
                 }
             }
@@ -1417,7 +1431,8 @@ class Kecontact extends utils.Adapter {
     getTotalPowerAvailable() {
         // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
         if (this.maxPowerActive && this.config.maxPower > 0) {
-            return this.config.maxPower - this.getTotalPower();
+            this.lastPower = this.getTotalPower();
+            return this.config.maxPower - this.lastPower;
         }
         return 999999; // return default maximum
     }
@@ -1444,18 +1459,18 @@ class Kecontact extends utils.Adapter {
                 this.maxAmperageActive = false;
             } else {
                 const amperageFactor = this.getAmperageFactor();
-                const amperagePhase1 = this.getStateDefault0(this.config.stateAmperagePhase1) * amperageFactor;
-                const amperagePhase2 = this.getStateDefault0(this.config.stateAmperagePhase2) * amperageFactor;
-                const amperagePhase3 = this.getStateDefault0(this.config.stateAmperagePhase3) * amperageFactor;
+                this.lastAmperagePhase1 = this.getStateDefault0(this.config.stateAmperagePhase1) * amperageFactor;
+                this.lastAmperagePhase2 = this.getStateDefault0(this.config.stateAmperagePhase2) * amperageFactor;
+                this.lastAmperagePhase3 = this.getStateDefault0(this.config.stateAmperagePhase3) * amperageFactor;
                 const amperageWallbox1 = this.getStateDefault0(this.stateWallboxPhase1);
                 const amperageWallbox2 = this.getStateDefault0(this.stateWallboxPhase2);
                 const amperageWallbox3 = this.getStateDefault0(this.stateWallboxPhase3);
-                const amperageAvailable1 = this.config.maxAmperage - (amperagePhase1 - amperageWallbox1);
-                const amperageAvailable2 = this.config.maxAmperage - (amperagePhase2 - amperageWallbox2);
-                const amperageAvailable3 = this.config.maxAmperage - (amperagePhase3 - amperageWallbox3);
+                const amperageAvailable1 = this.config.maxAmperage - (this.lastAmperagePhase1 - amperageWallbox1);
+                const amperageAvailable2 = this.config.maxAmperage - (this.lastAmperagePhase2 - amperageWallbox2);
+                const amperageAvailable3 = this.config.maxAmperage - (this.lastAmperagePhase3 - amperageWallbox3);
                 this.log.debug(
-                    `amperage of mains: ${amperagePhase1}/${amperagePhase2}/${
-                        amperagePhase3
+                    `amperage of mains: ${this.lastAmperagePhase1}/${this.lastAmperagePhase2}/${
+                        this.lastAmperagePhase3
                     }, amperage of charging station: ${amperageWallbox1}/${amperageWallbox2}/${
                         amperageWallbox3
                     } => available: ${amperageAvailable1}/${amperageAvailable2}/${amperageAvailable3}`,
@@ -2236,6 +2251,9 @@ class Kecontact extends utils.Adapter {
         this.requestChargingDataReport();
     }
 
+    /**
+     * Requests data report with ID 1 from charging station (containing permanent values from charging station)
+     */
     requestDeviceDataReport() {
         const newDate = new Date();
         if (
@@ -2248,10 +2266,34 @@ class Kecontact extends utils.Adapter {
         }
     }
 
-    requestChargingDataReport() {
+    /**
+     * Requests data report with ID 2 from charging station (containing general data of charging session)
+     */
+    requestCurrentChargingSessionDataReport() {
         this.sendUdpDatagram('report 2');
+    }
+
+    /**
+     * Requests data report with ID 3 from charging station (containing voltage, amperage and power of charging session)
+     */
+    requestCurrentChargingValuesDataReport() {
         this.sendUdpDatagram('report 3');
+    }
+
+    /**
+     * Requests data report with ID 100 from charging station (containing data from last charging session)
+     */
+    requestLastChargingSessionDataReport() {
         this.sendUdpDatagram('report 100');
+    }
+
+    /**
+     * Requests all three data reports from charging station
+     */
+    requestChargingDataReport() {
+        this.requestCurrentChargingSessionDataReport();
+        this.requestCurrentChargingValuesDataReport();
+        this.requestLastChargingSessionDataReport();
     }
 
     loadChargingSessionsFromWallbox() {

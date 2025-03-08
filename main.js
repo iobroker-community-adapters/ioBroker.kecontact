@@ -1475,10 +1475,13 @@ class Kecontact extends utils.Adapter {
                         amperageWallbox3
                     } => available: ${amperageAvailable1}/${amperageAvailable2}/${amperageAvailable3}`,
                 );
-                return this.getRoundedAmperage(Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3));
+                return this.getRoundedAmperage(
+                    Math.min(amperageAvailable1, amperageAvailable2, amperageAvailable3),
+                    true,
+                );
             }
         }
-        return this.getRoundedAmperage(this.getMaxCurrent()); // return default maximum
+        return this.getRoundedAmperage(this.getMaxCurrent(), true); // return default maximum
     }
 
     /**
@@ -1490,7 +1493,7 @@ class Kecontact extends utils.Adapter {
         if (this.isEnWGDefined() && this.isEnWGActive()) {
             if (this.config.dynamicEnWG === true) {
                 const allowedPower = (3 * this.voltage * this.maxCurrentEnWG) / 1000;
-                return this.getAmperage(allowedPower + this.getSurplusWithoutWallbox(), this.get1p3pPhases());
+                return this.getAmperage(allowedPower + this.getSurplusWithoutWallbox(), this.get1p3pPhases(), true);
             }
             return this.maxCurrentEnWG;
         }

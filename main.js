@@ -2025,8 +2025,8 @@ class Kecontact extends utils.Adapter {
             newDate.getTime() - this.lastCalculating.getTime() < this.intervalCalculating
         ) {
             if (this.getStateDefault0(this.stateWallboxCurrent) > tempMax) {
-                this.log.debug(`set intermediate charging maximum of ${curr} mA`);
-                this.regulateWallbox(curr);
+                this.log.debug(`set intermediate charging maximum of ${tempMax} mA`);
+                this.regulateWallbox(tempMax);
             }
             return;
         }

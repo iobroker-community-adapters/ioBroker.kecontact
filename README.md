@@ -115,14 +115,14 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 ### **WORK IN PROGRESS**
 * (Sneak-L8) rebase adapter on newest version of adapter creator
 * (Sneak-L8) required js-controller now >= 6.0.11 and admin >= 7.0.23
+* (Sneak-L8) new option to limit amperage of charging station to maximum value for amperage of whole mains circuit
+* (Sneak-L8) immediately reduce charging power when over max amperage or max power limits
+* (Sneak-L8) fix one time attempt for recharging vehicle in state 5
+* (Sneak-L8) reduced info logs for max power adjustment when no vehicle is plugged (log as debug in that case)
+* (Sneak-L8) pay attention to minimum time for phase switch by x2 when vehicle is plugged/unplugged
 * (Sneak-L8) fix error sentry IOBROKER-KECONTACT-21
 * (Sneak-L8) migrate from request to axios
 * (Sneak-L8) migrate from ESlint v8 to v9
-* (Sneak-L8) fix one time attempt for recharging vehicle in state 5
-* (Sneak-L8) pay attention to minimum time for phase switch by x2 when vehicle is plugged/unplugged
-* (Sneak-L8) new option to limit amperage of charging station to maximum value for amperage of whole mains circuit
-* (Sneak-L8) immediately reduce charging power when over max amperage or max power limits
-* (Sneak-L8) reduces info logs for max power adjustment when no vehicle is plugged (log as debug in that case)
 
 ### 2.3.0 (2024-11-29)
 * (Sneak-L8) new option to limit charging station according to german §14a EnWG

@@ -111,8 +111,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 3.0.0 (2025-03-10)
 * (Sneak-L8) rebase adapter on newest version of adapter creator
 * (Sneak-L8) required js-controller now >= 6.0.11 and admin >= 7.0.23
 * (Sneak-L8) new option to limit amperage of charging station to maximum value for amperage of whole mains circuit
@@ -145,13 +144,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) added names for values of some states: state, plug, timeQ and batteryStorageStrategy
 * (Sneak-L8) don't try to charge when state is 5 (auth req, car not ready, ...)
 * (Sneak-L8) new state to dynamically set SoC above which battery storage may be used for charging vehicle
-
-### 2.0.2 (2023-10-10)
-* (Sneak-L8) default value for minimum regard time (180 seconds)
-* (Sneak-L8) fix calculation of phases for reduced charging
-* (chrisko) added minimum timer to switch between phases if 1p/3p charging is used.
-* (Sneak-L8) disable firmware check for c-series due to changes on webpage of Keba
-* (Sneak-L8) sometimes 1p/3p switch was not working correctly (repeatedly "stop charging fpr switch of phases...")
 
 ## Legal
 

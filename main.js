@@ -205,45 +205,45 @@ class Kecontact extends utils.Adapter {
 
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
-        this.log.info(`config host: ${this.config.host}`);
-        this.log.info(`config passiveMode: ${this.config.passiveMode}`);
-        this.log.info(`config pollInterval: ${this.config.pollInterval}`);
-        this.log.info(`config loadChargingSessions: ${this.config.loadChargingSessions}`);
-        this.log.info(`config useX1forAutomatic: ${this.config.useX1forAutomatic}`);
-        this.log.info(`config stateRegard: ${this.config.stateRegard}`);
-        this.log.info(`config stateSurplus: ${this.config.stateSurplus}`);
-        this.log.info(`config stateBatteryCharging: ${this.config.stateBatteryCharging}`);
-        this.log.info(`config stateBatteryDischarging: ${this.config.stateBatteryDischarging}`);
-        this.log.info(`config stateBatterySoC: ${this.config.stateBatterySoC}`);
-        this.log.info(`config batteryPower: ${this.config.batteryPower}`);
-        this.log.info(`config batteryMinSoC: ${this.config.batteryMinSoC}`);
-        this.log.info(`config batteryStorageStrategy: ${this.config.batteryStorageStrategy}`);
-        this.log.info(`config statesIncludeWallbox: ${this.config.statesIncludeWallbox}`);
-        this.log.info(`config.state1p3pSwitch: ${this.config.state1p3pSwitch}`);
-        this.log.info(`config.1p3pViax2: ${this.config['1p3pViaX2']}`);
-        this.log.info(
+        this.log.debug(`config host: ${this.config.host}`);
+        this.log.debug(`config passiveMode: ${this.config.passiveMode}`);
+        this.log.debug(`config pollInterval: ${this.config.pollInterval}`);
+        this.log.debug(`config loadChargingSessions: ${this.config.loadChargingSessions}`);
+        this.log.debug(`config useX1forAutomatic: ${this.config.useX1forAutomatic}`);
+        this.log.debug(`config stateRegard: ${this.config.stateRegard}`);
+        this.log.debug(`config stateSurplus: ${this.config.stateSurplus}`);
+        this.log.debug(`config stateBatteryCharging: ${this.config.stateBatteryCharging}`);
+        this.log.debug(`config stateBatteryDischarging: ${this.config.stateBatteryDischarging}`);
+        this.log.debug(`config stateBatterySoC: ${this.config.stateBatterySoC}`);
+        this.log.debug(`config batteryPower: ${this.config.batteryPower}`);
+        this.log.debug(`config batteryMinSoC: ${this.config.batteryMinSoC}`);
+        this.log.debug(`config batteryStorageStrategy: ${this.config.batteryStorageStrategy}`);
+        this.log.debug(`config statesIncludeWallbox: ${this.config.statesIncludeWallbox}`);
+        this.log.debug(`config.state1p3pSwitch: ${this.config.state1p3pSwitch}`);
+        this.log.debug(`config.1p3pViax2: ${this.config['1p3pViaX2']}`);
+        this.log.debug(
             `config.1p3pSwitchIsNO: ${this.config['1p3pSwitchIsNO']}, 1p = ${this.valueFor1pCharging}, 3p = ${
                 this.valueFor3pCharging
             }, off = ${this.valueFor1p3pOff}`,
         );
-        this.log.info(`config minAmperage: ${this.config.minAmperage}`);
-        this.log.info(`config addPower: ${this.config.addPower}`);
-        this.log.info(`config delta: ${this.config.delta}`);
-        this.log.info(`config underusage: ${this.config.underusage}`);
-        this.log.info(`config minTime: ${this.config.minTime}`);
-        this.log.info(`config regardTime: ${this.config.regardTime}`);
-        this.log.info(`config stateEnWG: ${this.config.stateEnWG}`);
-        this.log.info(`config dynamicEnWG: ${this.config.dynamicEnWG}`);
-        this.log.info(`config maxPower: ${this.config.maxPower}`);
-        this.log.info(`config stateEnergyMeter1: ${this.config.stateEnergyMeter1}`);
-        this.log.info(`config stateEnergyMeter2: ${this.config.stateEnergyMeter2}`);
-        this.log.info(`config stateEnergyMeter3: ${this.config.stateEnergyMeter3}`);
-        this.log.info(`config wallboxNotIncluded: ${this.config.wallboxNotIncluded}`);
-        this.log.info(`config maxAmperage: ${this.config.maxAmperage}`);
-        this.log.info(`config stateAmperagePhase1: ${this.config.stateAmperagePhase1}`);
-        this.log.info(`config stateAmperagePhase2: ${this.config.stateAmperagePhase2}`);
-        this.log.info(`config stateAmperagePhase3: ${this.config.stateAmperagePhase3}`);
-        this.log.info(`config amperageUnit: ${this.config.amperageUnit} => factor is ${this.getAmperageFactor()}`);
+        this.log.debug(`config minAmperage: ${this.config.minAmperage}`);
+        this.log.debug(`config addPower: ${this.config.addPower}`);
+        this.log.debug(`config delta: ${this.config.delta}`);
+        this.log.debug(`config underusage: ${this.config.underusage}`);
+        this.log.debug(`config minTime: ${this.config.minTime}`);
+        this.log.debug(`config regardTime: ${this.config.regardTime}`);
+        this.log.debug(`config stateEnWG: ${this.config.stateEnWG}`);
+        this.log.debug(`config dynamicEnWG: ${this.config.dynamicEnWG}`);
+        this.log.debug(`config maxPower: ${this.config.maxPower}`);
+        this.log.debug(`config stateEnergyMeter1: ${this.config.stateEnergyMeter1}`);
+        this.log.debug(`config stateEnergyMeter2: ${this.config.stateEnergyMeter2}`);
+        this.log.debug(`config stateEnergyMeter3: ${this.config.stateEnergyMeter3}`);
+        this.log.debug(`config wallboxNotIncluded: ${this.config.wallboxNotIncluded}`);
+        this.log.debug(`config maxAmperage: ${this.config.maxAmperage}`);
+        this.log.debug(`config stateAmperagePhase1: ${this.config.stateAmperagePhase1}`);
+        this.log.debug(`config stateAmperagePhase2: ${this.config.stateAmperagePhase2}`);
+        this.log.debug(`config stateAmperagePhase3: ${this.config.stateAmperagePhase3}`);
+        this.log.debug(`config amperageUnit: ${this.config.amperageUnit} => factor is ${this.getAmperageFactor()}`);
 
         /*
         For every state in the system there has to be also an object of type state

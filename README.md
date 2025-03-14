@@ -111,6 +111,14 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (Sneak-L8) fix error sentry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A
+* (Sneak-L8) minimum js-controller now >= 7 due to I18n
+* (Sneak-L8) fix roles of states in io-package.json
+* (Sneak-L8) log of config on level debug instead of info
+
+
 ### 3.0.0 (2025-03-10)
 * (Sneak-L8) rebase adapter on newest version of adapter creator
 * (Sneak-L8) required js-controller now >= 6.0.11 and admin >= 7.0.23

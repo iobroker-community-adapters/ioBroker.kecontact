@@ -17,7 +17,7 @@
         "zh-cn": "在最新版本的适配器创建器上重新设置适配器\n现在需要js控制器 ++ 6.0.11 和管理员 ++ 7.0.23\n新的选项, 将充电站的振幅限制为整个主电路的振幅最大值\n当超过最大放大或最大功率限制时立即降低充电功率\n5号州际公路的一次充电试验\n在没有车辆被插上时减少最大功率调整的信息日志(该情况下作为调试的日志)\n注意车辆插座/插座时x2的相位切换最小时间\n固定错误哨兵IOBROKER-KECONTACT-21\n从请求移到轴\n从ESlint v8 迁移到 v9"
       },
       "2.3.0": {
-        "en": "new option to limit charging station according to german §14a EnWG\nenable currTime for manual use and X2 even in passive mode\nminimum verison für js-controller now 5.0.19\nset currTimer timeout default value from 0 to 1\nsupport new option \"setBoot\" of c-series stating firmware 3.10.57",
+        "en": "new option to limit charging station according to german §14a EnWG\nenable currTime for manual use and X2 even in passive mode\nminimum verison für troller now 5.0.19\nset currTimer timeout default value from 0 to 1\nsupport new option \"setBoot\" of c-series stating firmware 3.10.57",
         "de": "neue Option zur Begrenzung der Ladestation nach deutschem §14a EnWG\ncurrTime für den manuellen Einsatz und X2 auch im passiven Modus aktivieren\nminimal verison für js-controller jetzt 5.0.19\ncurrTimer Timeout Standardwert von 0 bis 1 einstellen\nunterstützen neue Option \"setBoot\" der c-Serie mit Firmware 3.10.57",
         "ru": "новый вариант ограничения зарядной станции согласно немецкому §14a EnWG\nвключить currTime для ручного использования и X2 даже в пассивном режиме\n5.0.19\nустановить значение тайм-аута курсора от 0 до 1\nподдержка новой опции \"setBoot\" c-серий с прошивкой 3.10.57",
         "pt": "nova opção para limitar a estação de carregamento de acordo com alemão §14a EnWG\nhabilitar currTime para uso manual e X2 mesmo no modo passivo\nmínimo verison für js-controller agora 5.0.19\nset currTimer valor padrão timeout de 0 a 1\nsuporte nova opção \"setBoot\" de série c afirmando firmware 3.10.57",
@@ -157,7 +157,7 @@
     "supportCustoms": false,
     "dependencies": [
       {
-        "js-controller": ">=6.0.11"
+        "js-controller": ">=7.0.6"
       }
     ],
     "globalDependencies": [

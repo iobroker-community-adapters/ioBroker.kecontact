@@ -267,7 +267,7 @@
       "common": {
         "name": "X2 phaseSwitch source",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "read": true,
         "write": true,
         "states": {
@@ -288,7 +288,7 @@
       "common": {
         "name": "X2 phaseSwitch",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "read": true,
         "write": true,
         "states": {
@@ -515,7 +515,7 @@
       "common": {
         "name": "Maximum Current",
         "type": "number",
-        "role": "value",
+        "role": "value.max",
         "unit": "mA",
         "read": true,
         "write": false,
@@ -531,7 +531,7 @@
       "common": {
         "name": "Maximum Current Percent",
         "type": "number",
-        "role": "value",
+        "role": "value.max",
         "unit": "%",
         "read": true,
         "write": false,
@@ -548,7 +548,7 @@
       "common": {
         "name": "Maximum Current Hardware",
         "type": "number",
-        "role": "value",
+        "role": "value.max",
         "unit": "mA",
         "read": true,
         "write": false,
@@ -596,7 +596,7 @@
       "common": {
         "name": "timeout Current Timer",
         "type": "number",
-        "role": "value.interval",
+        "role": "level.timer",
         "unit": "sec",
         "read": true,
         "write": true,
@@ -691,7 +691,7 @@
       "common": {
         "name": "Voltage 1",
         "type": "number",
-        "role": "value",
+        "role": "value.voltage",
         "unit": "V",
         "read": true,
         "write": false,
@@ -707,7 +707,7 @@
       "common": {
         "name": "Voltage 2",
         "type": "number",
-        "role": "value",
+        "role": "value.voltage",
         "unit": "V",
         "read": true,
         "write": false,
@@ -723,7 +723,7 @@
       "common": {
         "name": "Voltage 3",
         "type": "number",
-        "role": "value",
+        "role": "value.voltage",
         "unit": "V",
         "read": true,
         "write": false,
@@ -913,7 +913,7 @@
       "common": {
         "name": "number of report to be obtained",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "read": false,
         "write": true,
         "desc": "Number of report (1-3, 1xx) to get from charging station"
@@ -981,7 +981,7 @@
       "common": {
         "name": "pause charging of vehicle",
         "type": "boolean",
-        "role": "value",
+        "role": "switch.power",
         "read": true,
         "write": true,
         "def": false,
@@ -995,7 +995,7 @@
       "common": {
         "name": "photovoltaics automatic enabled",
         "type": "boolean",
-        "role": "value",
+        "role": "switch.mode.auto",
         "read": true,
         "write": true,
         "def": true,
@@ -1009,7 +1009,7 @@
       "common": {
         "name": "additional regard to run charging session",
         "type": "number",
-        "role": "value",
+        "role": "level.max",
         "unit": "W",
         "read": true,
         "write": true,
@@ -1024,7 +1024,7 @@
       "common": {
         "name": "limit dynamic charging to this value of amperage (0 = no limitation)",
         "type": "number",
-        "role": "value",
+        "role": "level.current.max",
         "unit": "mA",
         "read": true,
         "write": true,
@@ -1039,7 +1039,7 @@
       "common": {
         "name": "limit dynamic charging to this value of amperage in case of using 1p 3p switch ans set to 1 (0 = use limitation from limitCurrent)",
         "type": "number",
-        "role": "value",
+        "role": "level.current.max",
         "unit": "mA",
         "read": true,
         "write": true,
@@ -1054,7 +1054,7 @@
       "common": {
         "name": "count of phases to calculate with for KeContact Deutschland-Edition",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "unit": "phases",
         "read": true,
         "write": true,
@@ -1069,7 +1069,7 @@
       "common": {
         "name": "strategy to use for battery storage (1-4)",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "read": true,
         "write": true,
         "def": 0,
@@ -1090,7 +1090,7 @@
       "common": {
         "name": "SoC of battery storage above which battery power is used for charging",
         "type": "number",
-        "role": "value",
+        "role": "level",
         "read": true,
         "write": true,
         "def": 0,
@@ -1126,7 +1126,7 @@
       "common": {
         "name": "current surplus for PV automatics",
         "type": "number",
-        "role": "value",
+        "role": "value.power.produced",
         "unit": "W",
         "read": true,
         "write": false,
@@ -1141,7 +1141,7 @@
       "common": {
         "name": "maximum power for wallbox",
         "type": "number",
-        "role": "value",
+        "role": "value.power.consumed",
         "unit": "W",
         "read": true,
         "write": false,
@@ -1185,7 +1185,7 @@
       "common": {
         "name": "timestamp when vehicle was pluged to wallbox",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,
@@ -1199,7 +1199,7 @@
       "common": {
         "name": "timestamp when vehicle started to charge",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,
@@ -1213,7 +1213,7 @@
       "common": {
         "name": "timestamp when charging session was continued with regard",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,
@@ -1227,7 +1227,7 @@
       "common": {
         "name": "timestamp when 1p3pSw was changed",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,
@@ -1241,7 +1241,7 @@
       "common": {
         "name": "timestamp when last charging process was started",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,
@@ -1255,7 +1255,7 @@
       "common": {
         "name": "timestamp when last charging process was finished",
         "type": "string",
-        "role": "datetime",
+        "role": "date",
         "read": true,
         "write": false,
         "def": null,

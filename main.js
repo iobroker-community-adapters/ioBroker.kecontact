@@ -183,6 +183,12 @@ class Kecontact extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
+        if (I18n === undefined) {
+            this.log.error(
+                'start of adapter not possible due to missing translation - please ensure js-controller >= 7',
+            );
+            return;
+        }
         await I18n.init(__dirname, this);
 
         if (!this.checkConfig()) {

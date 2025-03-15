@@ -111,13 +111,11 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 3.0.1 (2025-03-15)
 * (Sneak-L8) fix error sentry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A
 * (Sneak-L8) minimum js-controller now >= 7 due to I18n
 * (Sneak-L8) fix roles of states in io-package.json
 * (Sneak-L8) log of config on level debug instead of info
-
 
 ### 3.0.0 (2025-03-10)
 * (Sneak-L8) rebase adapter on newest version of adapter creator
@@ -146,12 +144,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ### 2.1.1 (2024-03-16)
 * (fischmi) fix error when chanigig dynamic SoC parameter
-
-### 2.1.0 (2024-01-06)
-* (Sneak-L8) multiple options for battery storage strategy
-* (Sneak-L8) added names for values of some states: state, plug, timeQ and batteryStorageStrategy
-* (Sneak-L8) don't try to charge when state is 5 (auth req, car not ready, ...)
-* (Sneak-L8) new state to dynamically set SoC above which battery storage may be used for charging vehicle
 
 ## Legal
 

@@ -1,4 +1,10 @@
 # Older changes
+## 2.1.0 (2024-01-06)
+* (Sneak-L8) multiple options for battery storage strategy
+* (Sneak-L8) added names for values of some states: state, plug, timeQ and batteryStorageStrategy
+* (Sneak-L8) don't try to charge when state is 5 (auth req, car not ready, ...)
+* (Sneak-L8) new state to dynamically set SoC above which battery storage may be used for charging vehicle
+
 ## 2.0.2 (2023-10-10)
 * (Sneak-L8) default value for minimum regard time (180 seconds)
 * (Sneak-L8) fix calculation of phases for reduced charging

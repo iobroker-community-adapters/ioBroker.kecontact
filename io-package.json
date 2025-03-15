@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "news": {
+      "3.0.1": {
+        "en": "fix error sentry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A\nminimum js-controller now >= 7 due to I18n\nfix roles of states in io-package.json\nlog of config on level debug instead of info",
+        "de": "fehlerbehebung IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A\nminimum js-controller jetzt >= 7 aufgrund von I18n\ndie rolle der staaten in der io-paket. json\nlog of config auf ebene debug statt info",
+        "ru": "исправление ошибки часового ИОБРОКЕР-КЕКОНТАКТ-29 и ИОБРОКЕР-КЕКОНТАКТ-2А\nминимальный JS-контроллер 7 из-за I18n\nфиксировать роли состояний в io-пакете. джонсон\nlog of config on level debug вместо info",
+        "pt": "corrigir o erro enviado IOBROKER-KECONTACT-29 um IOBROKER-KECONTACT-2A\njs-controller mínimo agora >= 7 devido a I18n\ncorrigir papéis de estados em io-package. o que foi\nlog de config no debug de nível em vez de info",
+        "nl": "fix error sentry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A\nde waarde van niet meer dan 20% van de prijs af fabriek van het product 7 wegens I18n\nfix rollen van staten in io-package. json\nlog van config op niveau debug in plaats van info",
+        "fr": "correction de l'erreur sentinelle IOBROKER-KECONTACT-29 un IOBROKER-KECONTACT-2A\nminimum js-controller maintenant >= 7 dû à l'I18n\nfixer les rôles des états dans io-package. json\njournal de configuration au niveau de débogage au lieu d'info",
+        "it": "errore di correzione inviato IOBROKER-KECONTACT-29 un IOBROKER-KECONTACT-2A\ncontrollore minimo ora >= 7 a causa di I18n\nrisolvere i ruoli degli stati in io-package. j\nlog di config su livello debug invece di info",
+        "es": "error centry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A\njs-controller mínimo ahora >= 7 debido a I18n\nfijar roles de estados en el io-paquete. json\nlog of config on level debug en lugar de info",
+        "pl": "naprawić czujnik błędów IOBROKER- KECONTACT-29 i IOBROKER- KECONTACT-2A\nminimalny kontroler js- teraz > = 7 ze względu na I18n\nustala role stanów w pakiecie jo-. json\nlog konfiguracji na poziomie debugowania zamiast informacji",
+        "uk": "виправлено помилку відправника IOBROKER-KECONTACT-29 IOBROKER-KECONTACT-2A\nмінімальний js-controller тепер >= 7 через I18n\nфіксувати ролі станів в io-package. свінгери\nжурнал налаштування на рівні debug замість інформації",
+        "zh-cn": "固定错误哨兵IOBROKER-KECONTACT-29 一台IOBROKER-KECONTACT-2A\n现在最小的 js 控制器 7 应付 I18n\n固定国家在io-package中的作用。 贾森\n级别调试而不是信息上的配置日志"
+      },
       "3.0.0": {
         "en": "rebase adapter on newest version of adapter creator\nrequired js-controller now >= 6.0.11 and admin >= 7.0.23\nnew option to limit amperage of charging station to maximum value for amperage of whole mains circuit\nimmediately reduce charging power when over max amperage or max power limits\nfix one time attempt for recharging vehicle in state 5\nreduced info logs for max power adjustment when no vehicle is plugged (log as debug in that case)\npay attention to minimum time for phase switch by x2 when vehicle is plugged/unplugged\nfix error sentry IOBROKER-KECONTACT-21\nmigrate from request to axios\nmigrate from ESlint v8 to v9",
         "de": "rebase adapter auf neueste version des adapter-erstellers\njs-controller jetzt >= 6.0.11 und admin >= 7.0.23\nneue möglichkeit, die amperage der ladestation auf den maximalwert für die amperage der gesamten netzschaltung zu begrenzen\nsofort die ladeleistung reduzieren, wenn über maximale stromstärke oder maximale stromgrenzen\nfestlegen eines zeitversuchs zum nachladen von fahrzeugen im zustand 5\nreduzierte info-logs für maximale leistungsverstellung, wenn kein fahrzeug angeschlossen ist (log als debug in diesem fall)\nachten sie auf minimale zeit für phasenschalter um x2 wenn das fahrzeug angesteckt/unplugged\nfehlerbehebung IOBROKER-KECONTACT-21\nvon der anfrage nach axios migrieren\nmigration von ESlint v8 bis v9",
@@ -80,19 +93,6 @@
         "pl": "domyślna wartość dla minimum czasu (180 sekund)\nobliczenia fazy zredukowania obciążenia\ndodano minimalny czas ładowania pomiędzy fazami, jeżeli stosuje się 1p/3p.\nzdyskwalifikowana kontrola oprogramowania dla seriali C ze względu na zmiany strony internetowej Keba\nczasami przełącznik 1p/3p nie pracował prawidłowo (odpowiednio \"przełączanie fpru\"",
         "uk": "значення за замовчуванням для мінімального часу (180 секунд)\nфіксувати розрахунок фази для зменшення зарядки\nдодано мінімальний таймер для перемикання між фазами, якщо використовується зарядка 1p/3p.\nперевірити дискримінацію прошивки на c-series через зміни на веб-сторінці Кеба\nіноді 1p/3p перемикач не працює належним чином (повторно \"стояча зарядка fpr перемикач фази\")",
         "zh-cn": "最低时间(180秒)的拖欠值\nf 固定计算减税阶段\n如果使用了1p/3p charing,则在各个阶段之间增加最低时间。.\n由于Keba网页上的变化,难以对面包进行系统检查\n有时候,1p/3p的转换没有正确地进行(反而“对阶段的投机”)。"
-      },
-      "2.0.1": {
-        "en": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "de": "unterstützung für Company Car Wall Box MID - GREEN EDITION (Sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) und PV-Edition (Sentry IOBROKER-KECONTACT-1M)",
-        "ru": "поддержка компании Car Wall Box MID - GREEN EDITION (центр IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) и PV-Edition (центр IOBROKER-KECONTACT-1M)",
-        "pt": "suporte para a caixa de parede de carro da empresa MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "nl": "quality over Quantity (QoQ) Releases Vertaling:",
-        "fr": "support for Company Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) and PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "it": "supporto per l'azienda Car Wall Box MID - GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) e PV-Edition (sentry IOBROKER-KECONTACT-1M)",
-        "es": "soporte para la empresa caja de la pared MID - EDICIÓN GREEN (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) y la edición PV (sentry IOBROKER-KECONTACT-1M)",
-        "pl": "wsparcie dla spółki Car Wall Box MID – GREEN EDITION (sentry IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) i PV-Edition (wejście IOBROKER-KECONTACT-1M)",
-        "uk": "підтримка для компанії Car Wall Box MID - ЗЕЛЕНИЙ EDITION (серія IOBROKER-KECONTACT-1K & IOBROKER-KECONTACT-1N) та PV-редагування (серія IOBROKER-KECONTACT-1M)",
-        "zh-cn": "b. 支持Car隔离墙箱MID - GREEN EDI(化学公司IPOKER-KECONTACT-1K & IPOKER-KECONTACT-1N)和聚乙烯-Edition(工业公司IPOKER-KECONTACT-1M)"
       }
     },
     "titleLang": {

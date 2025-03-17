@@ -60,6 +60,17 @@
             "xl": 3,
             "newLine": false
         },
+        "lessInfoLogs": {
+            "type": "checkbox",
+            "label": "lessInfoLogs",
+            "tooltip": "tooltip_lessInfoLogs",
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 3,
+            "newLine": false
+        },
         "only-special-values": {
             "type": "panel",
             "label": "only-special-values",
@@ -242,7 +253,7 @@
                     "xl": 2,
                     "newLine": false
                 },
-                "regardTimeUnit": {
+                "consumptionTimeUnit": {
                     "type": "staticText",
                     "label": "secs",
                     "xs": 12,

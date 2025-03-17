@@ -6,7 +6,7 @@
 * (Sneak-L8) new state to dynamically set SoC above which battery storage may be used for charging vehicle
 
 ## 2.0.2 (2023-10-10)
-* (Sneak-L8) default value for minimum regard time (180 seconds)
+* (Sneak-L8) default value for minimum grid consumption time (180 seconds)
 * (Sneak-L8) fix calculation of phases for reduced charging
 * (chrisko) added minimum timer to switch between phases if 1p/3p charging is used.
 * (Sneak-L8) disable firmware check for c-series due to changes on webpage of Keba
@@ -54,7 +54,7 @@
 
 ## 1.3.3 (2021-12-11)
 * (Sneak-L8) fix error when message to display is empty (sentry IOBROKER-KECONTACT-Q) 
-* (Sneak-L8) new option whether power of wallbox is included in surplus/regard
+* (Sneak-L8) new option whether power of wallbox is included in surplus/grid consumption
 
 ## 1.3.2 (2021-11-09)
 * (Sneak-L8) firmware check for x-series no longer supported due to changes on website of Keba
@@ -85,7 +85,7 @@
 * (Sneak-L8) support for KeContact P30 Deutschland edition
 
 ## 1.1.3 (2021-04-26)
-* (Sneak-L8) new time option to continue charging session with regard
+* (Sneak-L8) new time option to continue charging session with grid consumption
 * (Sneak-L8) optimized calculation of surplus (prevent alternating amperage)
 
 ## 1.1.2 (2021-04-02)
@@ -103,7 +103,7 @@
 * (Sneak-L8) additional power for charging session as state
 
 ## 1.0.3 (2021-02-08)
-* (Sneak-L8) new options for minimal amerage (e.g. Renault Zoe) and permanent regard value
+* (Sneak-L8) new options for minimal amerage (e.g. Renault Zoe) and permanent grid consumption value
 
 ## 1.0.2
 * Added readout of last 30 Charging Sessions from Wallbox; Enabled 'setenergy' State to send and set Charging Goal in Wh to Wallbox

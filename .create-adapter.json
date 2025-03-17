@@ -64,7 +64,7 @@
         },
         {
             "key": "stateRegard",
-            "label": "name of regard state",
+            "label": "name of grid consumption state",
             "inputType": "text",
             "defaultValue": ""
         },
@@ -82,7 +82,7 @@
         },
         {
             "key": "addPower",
-            "label": "additional regard value",
+            "label": "additional grid consumption value",
             "inputType": "number",
             "defaultValue": 0
         },
@@ -106,7 +106,7 @@
         },
         {
             "key": "regardTime",
-            "label": "time to continue charging even with regard",
+            "label": "time to continue charging even with grid consumption",
             "inputType": "number",
             "defaultValue": 0
         },

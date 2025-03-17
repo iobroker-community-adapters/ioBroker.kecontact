@@ -177,6 +177,7 @@
     "pollInterval": 30,
     "loadChargingSessions": false,
     "useX1forAutomatic": false,
+    "lessInfoLogs": false,
     "stateRegard": "",
     "stateSurplus": "",
     "statesIncludeWallbox": true,
@@ -1007,14 +1008,14 @@
       "_id": "automatic.addPower",
       "type": "state",
       "common": {
-        "name": "additional regard to run charging session",
+        "name": "additional grid consumption to run charging session",
         "type": "number",
         "role": "level.max",
         "unit": "W",
         "read": true,
         "write": true,
         "def": 0,
-        "desc": "amount of watts to be used as regard to start charging session"
+        "desc": "amount of watts to be used as grid consumption to start charging session"
       },
       "native": {}
     },
@@ -1211,7 +1212,7 @@
       "_id": "statistics.regardTimestamp",
       "type": "state",
       "common": {
-        "name": "timestamp when charging session was continued with regard",
+        "name": "timestamp when charging session was continued with grid consumption",
         "type": "string",
         "role": "date",
         "read": true,

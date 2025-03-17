@@ -76,12 +76,12 @@ class Kecontact extends utils.Adapter {
     maxAmperageDeltaLimit = 1000; // raising limit (in mA) when an immediate max power calculation is enforced
     wallboxIncluded = true; // amperage of wallbox include in energy meters 1, 2 or 3?
     amperageDelta = 500; // default for step of amperage
-    underusage = 0; // maximum regard use to reach minimal charge power for vehicle
+    underusage = 0; // maximum grid consumption use to reach minimal charge power for vehicle
     minAmperageDefault = 6000; // default minimum amperage to start charging session
     maxCurrentEnWG = 6000; // maximum current allowed when limitation of §14a EnWg is active
     minAmperage = 5000; // minimum amperage to start charging session
     minChargeSeconds = 0; // minimum of charge time even when surplus is not sufficient
-    minRegardSeconds = 0; // maximum time to accept regard when charging
+    minConsumptionSeconds = 0; // maximum time to accept grid consumption when charging
     min1p3pSwSec = 0; // minimum time between phase switching
     isMaxPowerCalculation = false; // switch to show if max power calculation is active
     // eslint-disable-next-line jsdoc/check-tag-names
@@ -140,7 +140,8 @@ class Kecontact extends utils.Adapter {
     stateChargingPhases = 'statistics.chargingPhases'; /*number of phases with which vehicle is currently charging*/
     statePlugTimestamp = 'statistics.plugTimestamp'; /*Timestamp when vehicled was plugged to wallbox*/
     stateChargeTimestamp = 'statistics.chargeTimestamp'; /*Timestamp when charging (re)started */
-    stateRegardTimestamp = 'statistics.regardTimestamp'; /*Timestamp when charging session was continued with regard */
+    stateConsumptionTimestamp =
+        'statistics.regardTimestamp'; /*Timestamp when charging session was continued with grid consumption */
     state1p3pSwTimestamp = 'statistics.1p3pSwTimestamp'; /*Timestamp when 1p3pSw was changed */
     stateSessionId = 'statistics.sessionId'; /*id of current charging session */
     stateRfidTag = 'statistics.rfid_tag'; /*rfid tag of current charging session */
@@ -148,8 +149,8 @@ class Kecontact extends utils.Adapter {
     stateWallboxDisabled =
         'automatic.pauseWallbox'; /*switch to generally disable charging of wallbox, e.g. because of night storage heater */
     statePvAutomatic =
-        'automatic.photovoltaics'; /*switch to charge vehicle in regard to surplus of photovoltaics (false= charge with max available power) */
-    stateAddPower = 'automatic.addPower'; /*additional regard to run charging session*/
+        'automatic.photovoltaics'; /*switch to charge vehicle in grid consumption to surplus of photovoltaics (false= charge with max available power) */
+    stateAddPower = 'automatic.addPower'; /*additional grid consumption to run charging session*/
     stateLimitCurrent = 'automatic.limitCurrent'; /*maximum amperage for charging*/
     stateLimitCurrent1p = 'automatic.limitCurrent1p'; /*maximum amperage for charging when 1p 3p switch set to 1p */
     stateManualPhases = 'automatic.calcPhases'; /*count of phases to calculate with for KeContact Deutschland-Edition*/
@@ -209,6 +210,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config passiveMode: ${this.config.passiveMode}`);
         this.log.debug(`config pollInterval: ${this.config.pollInterval}`);
         this.log.debug(`config loadChargingSessions: ${this.config.loadChargingSessions}`);
+        this.log.debug(`config lessInfoLogs: ${this.config.lessInfoLogs}`);
         this.log.debug(`config useX1forAutomatic: ${this.config.useX1forAutomatic}`);
         this.log.debug(`config stateRegard: ${this.config.stateRegard}`);
         this.log.debug(`config stateSurplus: ${this.config.stateSurplus}`);
@@ -465,7 +467,7 @@ class Kecontact extends utils.Adapter {
             // if the value for AddPower  was changes.
             if (id == `${this.namespace}.${this.stateAddPower}`) {
                 if (oldValue != newValue) {
-                    this.log.info(`change additional power from regard from ${oldValue} to ${newValue}`);
+                    this.log.info(`change additional power from grid consumption from ${oldValue} to ${newValue}`);
                 }
             }
 
@@ -844,10 +846,10 @@ class Kecontact extends utils.Adapter {
             }
             if (!this.config.regardTime || this.config.regardTime < 0) {
                 this.log.info(
-                    `minimum regard time not speficied or too low, using default value of ${this.minRegardSeconds}`,
+                    `minimum grid consumption time not speficied or too low, using default value of ${this.minConsumptionSeconds}`,
                 );
             } else {
-                this.minRegardSeconds = this.getNumber(this.config.regardTime);
+                this.minConsumptionSeconds = this.getNumber(this.config.regardTime);
             }
         }
 
@@ -931,6 +933,19 @@ class Kecontact extends utils.Adapter {
         }
 
         return everythingFine;
+    }
+
+    /**
+     * Writes text to log with info or debug level depending on config setting "lessInfoLogs"
+     *
+     * @param text text to be logged
+     */
+    logInfoOrDebug(text) {
+        if (this.config.lessInfoLogs === true) {
+            this.log.debug(text);
+        } else {
+            this.log.info(text);
+        }
     }
 
     init1p3pSwitching(stateNameFor1p3p) {
@@ -1252,7 +1267,7 @@ class Kecontact extends utils.Adapter {
 
     resetChargingSessionData() {
         this.setStateAck(this.stateChargeTimestamp, null);
-        this.setStateAck(this.stateRegardTimestamp, null);
+        this.setStateAck(this.stateConsumptionTimestamp, null);
     }
 
     saveChargingSessionData() {
@@ -1298,7 +1313,7 @@ class Kecontact extends utils.Adapter {
                 if (this.isMaxPowerCalculation === true && !this.isVehiclePlugged()) {
                     this.log.debug(text);
                 } else {
-                    this.log.info(text);
+                    this.logInfoOrDebug(text);
                 }
             }
             this.sendUdpDatagram(`currtime ${milliAmpere} 1`, true);
@@ -1400,7 +1415,7 @@ class Kecontact extends utils.Adapter {
      * The available surplus is calculated and returned not considering the used power for charging. If configured the availabe storage power is added.
      *
      * @param isFullBatteryStoragePowerRequested if checked then maximum available power of the battery is added
-     * @returns the available surplus without considering the wallbox power currently used for charging or negative value is case of regard.
+     * @returns the available surplus without considering the wallbox power currently used for charging or negative value is case of grid consumption.
      */
     getSurplusWithoutWallbox(isFullBatteryStoragePowerRequested = false) {
         let power =
@@ -1894,21 +1909,21 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
-     * Checks whether charging should continue because minimum time for charging even with regard was not yet reached
+     * Checks whether charging should continue because minimum time for charging even with grid consumption was not yet reached
      *
      * @param aktDate current time as Date object
      * @returns true if minimum charging time was not yet reached
      */
-    isContinueDueToMinRegardTime(aktDate) {
-        if (this.minRegardSeconds <= 0) {
+    isContinueDueToMinConsumptionTime(aktDate) {
+        if (this.minConsumptionSeconds <= 0) {
             return false;
         }
-        let regardTimestamp = this.getStateAsDate(this.stateRegardTimestamp);
-        if (regardTimestamp == null) {
-            this.setStateAck(this.stateRegardTimestamp, aktDate.toString());
-            regardTimestamp = aktDate;
+        let consumptionTimestamp = this.getStateAsDate(this.stateConsumptionTimestamp);
+        if (consumptionTimestamp == null) {
+            this.setStateAck(this.stateConsumptionTimestamp, aktDate.toString());
+            consumptionTimestamp = aktDate;
         }
-        if ((aktDate.getTime() - regardTimestamp.getTime()) / 1000 < this.minRegardSeconds) {
+        if ((aktDate.getTime() - consumptionTimestamp.getTime()) / 1000 < this.minConsumptionSeconds) {
             return true;
         }
         return false;
@@ -2073,7 +2088,7 @@ class Kecontact extends utils.Adapter {
                 }
                 const chargeTimestamp = this.getStateAsDate(this.stateChargeTimestamp);
                 const sw1p3pTimestamp = this.getStateAsDate(this.state1p3pSwTimestamp);
-                const regardTimestamp = this.getStateAsDate(this.stateRegardTimestamp);
+                const consumptionTimestamp = this.getStateAsDate(this.stateConsumptionTimestamp);
 
                 if (this.has1P3PAutomatic()) {
                     const currWith1p = this.getAmperage(available, 1);
@@ -2088,9 +2103,12 @@ class Kecontact extends utils.Adapter {
                                     this.log.debug(
                                         `no switching to 1 phase because of minimum charging time: ${chargeTimestamp}`,
                                     );
-                                } else if (chargeTimestamp !== null && this.isContinueDueToMinRegardTime(newDate)) {
+                                } else if (
+                                    chargeTimestamp !== null &&
+                                    this.isContinueDueToMinConsumptionTime(newDate)
+                                ) {
                                     this.log.debug(
-                                        `no switching to 1 phase because of minimum regard time: ${regardTimestamp}`,
+                                        `no switching to 1 phase because of minimum grid consumption time: ${consumptionTimestamp}`,
                                     );
                                 } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
                                     this.log.debug(
@@ -2156,7 +2174,9 @@ class Kecontact extends utils.Adapter {
                             );
                             curr = this.getAmperage(available + addPower + this.underusage, phases);
                             if (curr >= this.getMinCurrent()) {
-                                this.log.info('tolerated under-usage of charge power, continuing charging session');
+                                this.logInfoOrDebug(
+                                    'tolerated under-usage of charge power, continuing charging session',
+                                );
                                 curr = this.getMinCurrent();
                                 if (newValueFor1p3pSwitching == this.valueFor3pCharging) {
                                     newValueFor1p3pSwitching = null; // then also stop possible 1p to 3p switching
@@ -2166,7 +2186,7 @@ class Kecontact extends utils.Adapter {
                     }
                     if (curr < this.getMinCurrent()) {
                         if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                            this.log.info(
+                            this.logInfoOrDebug(
                                 `minimum charge time of ${this.minChargeSeconds}sec not reached, continuing charging session. ${chargeTimestamp}`,
                             );
                             curr = this.getMinCurrent();
@@ -2174,15 +2194,15 @@ class Kecontact extends utils.Adapter {
                         }
                     }
                     if (curr < this.getMinCurrent()) {
-                        if (this.isContinueDueToMinRegardTime(newDate)) {
-                            this.log.info(
-                                `minimum regard time of ${this.minRegardSeconds}sec not reached, continuing charging session. RegardTimestamp: ${regardTimestamp}`,
+                        if (this.isContinueDueToMinConsumptionTime(newDate)) {
+                            this.logInfoOrDebug(
+                                `minimum grid consumption time of ${this.minConsumptionSeconds}sec not reached, continuing charging session. RegardTimestamp: ${consumptionTimestamp}`,
                             );
                             curr = this.getMinCurrent();
                             newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching
                         }
                     } else {
-                        this.setStateAck(this.stateRegardTimestamp, null);
+                        this.setStateAck(this.stateConsumptionTimestamp, null);
                     }
                 }
             } else {

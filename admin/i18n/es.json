@@ -3,7 +3,6 @@
     "1p3pSwitchIsNO": "El contactor de instalación 1p/3p es NO, de lo contrario, NC",
     "1p3pViaX2": "cambio de fases usando la salida X2 de la estación de carga",
     "A": "A",
-    "Select all": "Seleccionar todo",
     "addPower": "valor de consideración adicional",
     "amperageUnit": "Los valores son amperios o miliamperios",
     "batteryMinSoC": "SoC mínimo de almacenamiento de batería",

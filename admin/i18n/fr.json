@@ -3,7 +3,6 @@
     "1p3pSwitchIsNO": "Le contacteur d'installation 1p/3p est NO sinon NC",
     "1p3pViaX2": "commutation de phases à l'aide de la sortie X2 de la borne de recharge",
     "A": "UN",
-    "Select all": "Tout sélectionner",
     "addPower": "valeur de regard supplémentaire",
     "amperageUnit": "Les valeurs sont Ampère ou Milliampère",
     "batteryMinSoC": "SoC minimum de stockage de la batterie",

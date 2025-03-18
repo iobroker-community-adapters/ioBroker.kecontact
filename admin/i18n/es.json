@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "Utilice el almacenamiento de la batería para mantener la carga del vehículo con una corriente mínima.",
     "useX1forAutomatic": "utilizar interruptor X1 para fotovoltaica automática",
     "wallboxNotIncluded": "Potencia de wallbox NO incluida en los contadores de energía",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "A",
+    "lessInfoLogs": "Reducir el número de entradas de registro de información",
+    "milliAmpere": "mamá",
+    "tooltip_lessInfoLogs": "Las entradas de registro sobre el cambio de amperaje o la carga continua se escribirán con nivel de depuración en lugar del nivel de información"
 }

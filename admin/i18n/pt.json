@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "use o armazenamento da bateria para manter o carregamento do veículo com corrente mínima",
     "useX1forAutomatic": "use o interruptor X1 para fotovoltaico automático",
     "wallboxNotIncluded": "Potência da caixa de embutir NÃO incluída nos medidores de energia",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "UM",
+    "lessInfoLogs": "Reduza o número de entradas de log de informações",
+    "milliAmpere": "MA",
+    "tooltip_lessInfoLogs": "As entradas de log em relação à mudança de amora ou cobrança contínua serão escritas com o nível de depuração em vez do nível de informação"
 }

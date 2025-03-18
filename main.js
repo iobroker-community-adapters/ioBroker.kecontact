@@ -141,7 +141,7 @@ class Kecontact extends utils.Adapter {
     statePlugTimestamp = 'statistics.plugTimestamp'; /*Timestamp when vehicled was plugged to wallbox*/
     stateChargeTimestamp = 'statistics.chargeTimestamp'; /*Timestamp when charging (re)started */
     stateConsumptionTimestamp =
-        'statistics.regardTimestamp'; /*Timestamp when charging session was continued with grid consumption */
+        'statistics.consumptionTimestamp'; /*Timestamp when charging session was continued with grid consumption */
     state1p3pSwTimestamp = 'statistics.1p3pSwTimestamp'; /*Timestamp when 1p3pSw was changed */
     stateSessionId = 'statistics.sessionId'; /*id of current charging session */
     stateRfidTag = 'statistics.rfid_tag'; /*rfid tag of current charging session */
@@ -2196,7 +2196,7 @@ class Kecontact extends utils.Adapter {
                     if (curr < this.getMinCurrent()) {
                         if (this.isContinueDueToMinConsumptionTime(newDate)) {
                             this.logInfoOrDebug(
-                                `minimum grid consumption time of ${this.minConsumptionSeconds}sec not reached, continuing charging session. RegardTimestamp: ${consumptionTimestamp}`,
+                                `minimum grid consumption time of ${this.minConsumptionSeconds}sec not reached, continuing charging session. ConsumptionTimestamp: ${consumptionTimestamp}`,
                             );
                             curr = this.getMinCurrent();
                             newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching

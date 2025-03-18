@@ -1209,7 +1209,7 @@
       "native": {}
     },
     {
-      "_id": "statistics.regardTimestamp",
+      "_id": "statistics.consumptionTimestamp",
       "type": "state",
       "common": {
         "name": "timestamp when charging session was continued with grid consumption",

@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "Batteriespeicher verwenden, um das Laden des Fahrzeugs mit minimalem Strom aufrechtzuerhalten",
     "useX1forAutomatic": "X1-Schalter für PV-Automatik nutzen",
     "wallboxNotIncluded": "Verbrauch der Wallbox in keinem der Energy-Meter enthalten",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "A",
+    "lessInfoLogs": "Reduzieren Sie die Anzahl der Info -Protokolleinträge",
+    "milliAmpere": "ma",
+    "tooltip_lessInfoLogs": "Protokolleinträge zur Änderung der Stromverbindung oder des fortgesetzten Gebühren"
 }

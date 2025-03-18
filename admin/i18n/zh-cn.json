@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "使用电池存储来维持以最小电流给车辆充电",
     "useX1forAutomatic": "使用X1开关进行光伏自动",
     "wallboxNotIncluded": "电表的功率不包括在电表中",
-    "watts": "瓦特"
+    "watts": "瓦特",
+    "ampere": "一个",
+    "lessInfoLogs": "减少信息日志条目的数量",
+    "milliAmpere": "马",
+    "tooltip_lessInfoLogs": "有关变更安培或继续充电的日志条目将以调试级别而不是信息级别编写"
 }

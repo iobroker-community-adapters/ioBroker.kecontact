@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "gebruik batterijopslag om het opladen van het voertuig met minimale stroom te ondersteunen",
     "useX1forAutomatic": "gebruik X1-schakelaar voor fotovoltaïsche automaat",
     "wallboxNotIncluded": "Vermogen van wallbox NIET inbegrepen in energiemeters",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "A",
+    "lessInfoLogs": "Verminder het aantal informatie over info -log",
+    "milliAmpere": "ma",
+    "tooltip_lessInfoLogs": "Logboekitems met betrekking tot wijziging van stroomsterkte of doorgaande opladen zullen worden geschreven met foutopsporingsniveau in plaats van info -niveau"
 }

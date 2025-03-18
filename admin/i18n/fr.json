@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "utiliser le stockage de la batterie pour maintenir le véhicule en charge avec un courant minimum",
     "useX1forAutomatic": "utiliser le commutateur X1 pour le photovoltaïque automatique",
     "wallboxNotIncluded": "Puissance de la wallbox NON incluse dans les compteurs d'énergie",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "UN",
+    "lessInfoLogs": "Réduire le nombre d'entrées de journal d'informations",
+    "milliAmpere": "mame",
+    "tooltip_lessInfoLogs": "Les entrées de journal concernant le changement d'ampérage ou la charge continue seront écrites avec un niveau de débogage au lieu du niveau d'information"
 }

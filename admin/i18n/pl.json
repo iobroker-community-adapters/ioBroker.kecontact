@@ -78,5 +78,9 @@
     "use-battery-for-minimum-charging": "korzystaj z magazynu akumulatorów, aby podtrzymać ładowanie pojazdu minimalnym prądem",
     "useX1forAutomatic": "Użyj przełącznika X1 do automatycznego fotowoltaicznego;",
     "wallboxNotIncluded": "Moc Wallbox NIE jest uwzględniona w licznikach energii",
-    "watts": "W"
+    "watts": "W",
+    "ampere": "A",
+    "lessInfoLogs": "Zmniejsz liczbę wpisów dziennika informacji",
+    "milliAmpere": "mama",
+    "tooltip_lessInfoLogs": "Zgłoszenia dziennika dotyczące zmiany prądu lub dalszego ładowania zostaną napisane z poziomem debugowania zamiast poziomu informacyjnego"
 }

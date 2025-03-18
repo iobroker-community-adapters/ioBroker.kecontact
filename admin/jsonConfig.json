@@ -603,11 +603,11 @@
                     "tooltip": "tooltip_amperageUnit",
                     "options": [
                         {
-                            "label": "mA",
+                            "label": "milliAmpere",
                             "value": "mA"
                         },
                         {
-                            "label": "A",
+                            "label": "ampere",
                             "value": "A"
                         }
                     ],

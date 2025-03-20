@@ -115,7 +115,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 ### **WORK IN PROGRESS**
 * (Sneak-L8) new option to reduce log entries on info level (write them with debug level)
 * (Sneak-L8) fix wording error ("regard" changed to grid consumption)
-* (Sneak-L8) fixed some english transaltions
+* (Sneak-L8) fixed some english translations
 * (Sneak-L8) renamed state "regardTimestamp" to "consumptionTimestamp" - please delete old state
 
 ### 3.0.1 (2025-03-15)

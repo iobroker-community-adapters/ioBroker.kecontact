@@ -2564,7 +2564,9 @@ class Kecontact extends utils.Adapter {
                     case 'E': // x-series WLAN + 4G
                     case 'G': // x-series 3G
                     case 'H': // x-series 4G
-                    case 'U': // KC-P30-EC2204U2-M0R-CC (Company Car Wall Box MID - GREEN EDITION), KC-P30-EC2204U2-E00-PV (Photovoltaic Wallbox Cable - PV-Edition)
+                    case 'U': // KC-P30-EC2204U2-M0R-CC (Company Car Wall Box MID     - GREEN EDITION),
+                        //       KC-P30-EC2204U2-E00-PV (Photovoltaic Wallbox Cable   - PV-Edition),
+                        //       KC-P30-ES2400U2-E00-PV (Photovoltaic WallBox Shutter - PV-Edition)
                         return this.TYPE_X_SERIES;
                 }
                 break;

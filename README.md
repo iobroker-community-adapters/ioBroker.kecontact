@@ -111,8 +111,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 3.1.0 (2025-03-20)
 * (Sneak-L8) new option to reduce log entries on info level (write them with debug level)
 * (Sneak-L8) fix wording error ("regard" changed to grid consumption)
 * (Sneak-L8) fixed some english translations
@@ -148,9 +147,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (mcm1957) Dependencies have been updated.
 * (Sneak-L8) fix url for download page at Keba website
 * (Sneak-L8) fix lint problems by replacing double by single quotes
-
-### 2.1.1 (2024-03-16)
-* (fischmi) fix error when chanigig dynamic SoC parameter
 
 ## Legal
 

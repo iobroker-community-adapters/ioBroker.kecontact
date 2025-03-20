@@ -1,4 +1,7 @@
 # Older changes
+## 2.1.1 (2024-03-16)
+* (fischmi) fix error when chanigig dynamic SoC parameter
+
 ## 2.1.0 (2024-01-06)
 * (Sneak-L8) multiple options for battery storage strategy
 * (Sneak-L8) added names for values of some states: state, plug, timeQ and batteryStorageStrategy

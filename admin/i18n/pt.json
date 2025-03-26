@@ -82,5 +82,6 @@
     "milliAmpere": "MA",
     "tooltip_lessInfoLogs": "As entradas de log em relação à mudança de amora ou cobrança contínua serão escritas com o nível de depuração em vez do nível de informação",
     "batteryLimit": "SOC de armazenamento de bateria quando a energia de carregamento reduzida entrará em vigor",
-    "tooltip_batteryLimitSoC": "O carregamento total da bateria será reduzido, quando o SOC (estado de carga) marcará para 100%. Este valor indica quando esse efeito entrará em vigor"
+    "tooltip_batteryLimitSoC": "O carregamento total da bateria será reduzido, quando o SOC (estado de carga) marcará para 100%. Este valor indica quando esse efeito entrará em vigor",
+    "batteryLimitSoC": "SOC de armazenamento de bateria quando a energia de carregamento reduzida entrará em vigor"
 }

@@ -82,5 +82,6 @@
     "milliAmpere": "Ma",
     "tooltip_lessInfoLogs": "Le voci di registro per quanto riguarda il cambio di amperaggio o la ricarica continua verranno scritte con livello di debug anziché il livello di informazioni",
     "batteryLimit": "Il SoC di archiviazione della batteria quando la potenza di ricarica ridotta avrà effetto",
-    "tooltip_batteryLimitSoC": "La ricarica a piena potenza della batteria verrà ridotta, quando SOC (Stato di carica) segnerà al 100%. Questo valore indica quando questo effetto avrà effetto"
+    "tooltip_batteryLimitSoC": "La ricarica a piena potenza della batteria verrà ridotta, quando SOC (Stato di carica) segnerà al 100%. Questo valore indica quando questo effetto avrà effetto",
+    "batteryLimitSoC": "Il SoC di archiviazione della batteria quando la potenza di ricarica ridotta avrà effetto"
 }

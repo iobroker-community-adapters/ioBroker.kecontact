@@ -80,5 +80,7 @@
     "ampere": "A",
     "lessInfoLogs": "Verminder het aantal informatie over info -log",
     "milliAmpere": "ma",
-    "tooltip_lessInfoLogs": "Logboekitems met betrekking tot wijziging van stroomsterkte of doorgaande opladen zullen worden geschreven met foutopsporingsniveau in plaats van info -niveau"
+    "tooltip_lessInfoLogs": "Logboekitems met betrekking tot wijziging van stroomsterkte of doorgaande opladen zullen worden geschreven met foutopsporingsniveau in plaats van info -niveau",
+    "batteryLimit": "SOC van batterijopslag wanneer verminderd laadvermogen van kracht wordt",
+    "tooltip_batteryLimitSoC": "Volledig vermogenslaading van de batterij zal worden verminderd wanneer SOC (toestand van lading) scoort tot 100%. Deze waarde -indicae wanneer dit effect van kracht wordt"
 }

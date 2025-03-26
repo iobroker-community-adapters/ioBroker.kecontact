@@ -80,5 +80,7 @@
     "ampere": "A",
     "lessInfoLogs": "Reducir el número de entradas de registro de información",
     "milliAmpere": "mamá",
-    "tooltip_lessInfoLogs": "Las entradas de registro sobre el cambio de amperaje o la carga continua se escribirán con nivel de depuración en lugar del nivel de información"
+    "tooltip_lessInfoLogs": "Las entradas de registro sobre el cambio de amperaje o la carga continua se escribirán con nivel de depuración en lugar del nivel de información",
+    "batteryLimit": "SOC del almacenamiento de la batería cuando la energía de carga reducida entrará en vigencia",
+    "tooltip_batteryLimitSoC": "Se reducirá la carga total de la batería, cuando SOC (estado de carga) obtendrá al 100%. Este valor indica cuando este efecto entrará en vigencia"
 }

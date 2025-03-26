@@ -219,6 +219,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config stateBatterySoC: ${this.config.stateBatterySoC}`);
         this.log.debug(`config batteryPower: ${this.config.batteryPower}`);
         this.log.debug(`config batteryMinSoC: ${this.config.batteryMinSoC}`);
+        this.log.debug(`config batteryLimitSoC: ${this.config.batteryLimitSoC}`);
         this.log.debug(`config batteryStorageStrategy: ${this.config.batteryStorageStrategy}`);
         this.log.debug(`config statesIncludeWallbox: ${this.config.statesIncludeWallbox}`);
         this.log.debug(`config.state1p3pSwitch: ${this.config.state1p3pSwitch}`);
@@ -1388,8 +1389,12 @@ class Kecontact extends utils.Adapter {
             this.getStateDefault0(this.config.stateBatteryCharging) -
             this.getStateDefault0(this.config.stateBatteryDischarging);
         if (this.isNotUsingBatteryWithPrioOnBattery()) {
-            if (batteryPower > 0) {
-                return 0;
+            if (this.getStateDefault0(this.config.stateBatterySoC) >= this.config.batteryLimitSoC) {
+                if (batteryPower > 0) {
+                    return 0;
+                }
+            } else {
+                return batteryPower - this.config.batteryPower;
             }
         } else if (
             this.isNotUsingBatteryWithPrioOnVehicle() ||

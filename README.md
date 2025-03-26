@@ -111,6 +111,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (Sneak-L8) optimized strategy for battery charging
+
 ### 3.1.0 (2025-03-20)
 * (Sneak-L8) new option to reduce log entries on info level (write them with debug level)
 * (Sneak-L8) fix wording error ("regard" changed to grid consumption)

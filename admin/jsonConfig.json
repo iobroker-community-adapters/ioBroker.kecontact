@@ -419,6 +419,19 @@
                     "xl": 2,
                     "newLine": false
                 },
+                "batteryLimitSoC": {
+                    "type": "number",
+                    "label": "batteryLimitSoC",
+                    "min": 0,
+                    "max": 100,
+                    "tooltip": "tooltip_batteryLimitSoC",
+                    "xs": 12,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
+                    "xl": 2,
+                    "newLine": false
+                },
                 "batteryMinSoCUnit": {
                     "type": "staticText",
                     "label": "%",

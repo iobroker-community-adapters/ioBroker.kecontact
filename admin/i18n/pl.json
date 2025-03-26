@@ -81,7 +81,6 @@
     "lessInfoLogs": "Zmniejsz liczbę wpisów dziennika informacji",
     "milliAmpere": "mama",
     "tooltip_lessInfoLogs": "Zgłoszenia dziennika dotyczące zmiany prądu lub dalszego ładowania zostaną napisane z poziomem debugowania zamiast poziomu informacyjnego",
-    "batteryLimit": "SOC przechowywania akumulatorów, gdy uda się zmniejszyć moc ładowania",
     "tooltip_batteryLimitSoC": "Pełne ładowanie baterii zostanie zmniejszone, gdy SOC (stan ładowania) wyrówna się do 100%. Ta wartość wskazuje, że ten efekt wejdzie w życie",
     "batteryLimitSoC": "SOC przechowywania akumulatorów, gdy uda się zmniejszyć moc ładowania"
 }

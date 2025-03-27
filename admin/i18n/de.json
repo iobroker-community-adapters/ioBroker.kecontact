@@ -81,6 +81,6 @@
     "lessInfoLogs": "Reduzieren Sie die Anzahl der Info -Protokolleinträge",
     "milliAmpere": "ma",
     "tooltip_lessInfoLogs": "Protokolleinträge zur Änderung der Stromverbindung oder des fortgesetzten Gebühren",
-    "tooltip_batteryLimitSoC": "Die volle Leistung des Akkus wird reduziert, wenn SOC (Ladungszustand) auf 100%erzielt wird. Dieser Wert zeigt, wenn dieser Effekt wirksam wird",
+    "tooltip_batteryLimitSoC": "Die Ladeleistung des Akkus wird kurz vor Erreichen der 100% SoC (Ladezustand) automatisch reduziert. Dieser Wert gibt an, ab welchem SoC dies eintritt",
     "batteryLimitSoC": "SOC der Batteriespeicherung bei reduzierter Ladekraft wird wirksam werden"
 }

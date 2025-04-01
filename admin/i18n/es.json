@@ -82,5 +82,7 @@
     "milliAmpere": "mamá",
     "tooltip_lessInfoLogs": "Las entradas de registro sobre el cambio de amperaje o la carga continua se escribirán con nivel de depuración en lugar del nivel de información",
     "tooltip_batteryLimitSoC": "Se reducirá la carga total de la batería, cuando SOC (estado de carga) obtendrá al 100%. Este valor indica cuando este efecto entrará en vigencia",
-    "batteryLimitSoC": "SOC del almacenamiento de la batería cuando la energía de carga reducida entrará en vigencia"
+    "batteryLimitSoC": "SOC del almacenamiento de la batería cuando la energía de carga reducida entrará en vigencia",
+    "authChargingTime": "tiempo de cargar cuando está enchufado y la autenticación está encendida",
+    "tooltip_authChargingTime": "El vehículo se cargará por ese tiempo tan pronto como esté conectado y se requiere autorización (esto es para evitar un error en Keba que de lo contrario el vehículo no se cargará más adelante con suficiente excedente."
 }

@@ -177,6 +177,7 @@
     "pollInterval": 30,
     "loadChargingSessions": false,
     "useX1forAutomatic": false,
+    "authChargingTime": 60,
     "lessInfoLogs": false,
     "stateRegard": "",
     "stateSurplus": "",
@@ -1206,6 +1207,20 @@
         "write": false,
         "def": null,
         "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
+      },
+      "native": {}
+    },
+    {
+      "_id": "statistics.authPlugTimestamp",
+      "type": "state",
+      "common": {
+        "name": "timestamp when vehicle was plugged and charging was authorized",
+        "type": "string",
+        "role": "date",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "date and time when vehicle was plugged to wallbox and neccessary authorization was successfel"
       },
       "native": {}
     },

@@ -128,6 +128,28 @@
                     "xl": 3,
                     "newLine": true
                 },
+                "authChargingTime": {
+                    "type": "number",
+                    "label": "authChargingTime",
+                    "min": 0,
+                    "default": 60,
+                    "tooltip": "tooltip_authChargingTime",
+                    "xs": 12,
+                    "sm": 11,
+                    "md": 5,
+                    "lg": 3,
+                    "xl": 2,
+                    "newLine": false
+                },
+                "authChargingTimeUnit": {
+                    "type": "staticText",
+                    "label": "secs",
+                    "xs": 12,
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1,
+                    "xl": 1
+                },
                 "delta": {
                     "type": "number",
                     "label": "delta",

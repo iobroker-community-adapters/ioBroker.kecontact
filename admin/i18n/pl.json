@@ -82,5 +82,7 @@
     "milliAmpere": "mama",
     "tooltip_lessInfoLogs": "Zgłoszenia dziennika dotyczące zmiany prądu lub dalszego ładowania zostaną napisane z poziomem debugowania zamiast poziomu informacyjnego",
     "tooltip_batteryLimitSoC": "Pełne ładowanie baterii zostanie zmniejszone, gdy SOC (stan ładowania) wyrówna się do 100%. Ta wartość wskazuje, że ten efekt wejdzie w życie",
-    "batteryLimitSoC": "SOC przechowywania akumulatorów, gdy uda się zmniejszyć moc ładowania"
+    "batteryLimitSoC": "SOC przechowywania akumulatorów, gdy uda się zmniejszyć moc ładowania",
+    "authChargingTime": "czas na ładowanie po podłączeniu i autorytecie",
+    "tooltip_authChargingTime": "pojazd zostanie obciążony na ten czas, gdy tylko zostanie podłączony i wymagana jest autoryzacja (ma to zapobiec błędowi w KEBA, który w przeciwnym razie pojazd nie będzie późniejszy z wystarczającą nadwyżką"
 }

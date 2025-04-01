@@ -82,5 +82,7 @@
     "milliAmpere": "ma",
     "tooltip_lessInfoLogs": "Logboekitems met betrekking tot wijziging van stroomsterkte of doorgaande opladen zullen worden geschreven met foutopsporingsniveau in plaats van info -niveau",
     "tooltip_batteryLimitSoC": "Volledig vermogenslaading van de batterij zal worden verminderd wanneer SOC (toestand van lading) scoort tot 100%. Deze waarde -indicae wanneer dit effect van kracht wordt",
-    "batteryLimitSoC": "SOC van batterijopslag wanneer verminderd laadvermogen van kracht wordt"
+    "batteryLimitSoC": "SOC van batterijopslag wanneer verminderd laadvermogen van kracht wordt",
+    "authChargingTime": "Tijd om op te laden wanneer het wordt aangesloten en is AUT",
+    "tooltip_authChargingTime": "Voertuig wordt voor die tijd in rekening gebracht zodra het is aangesloten en de autorisatie is vereist (dit is om een ​​bug in Keba te voorkomen dat anders het voertuig later niet met voldoende overtollige wordt opgeladen"
 }

@@ -82,5 +82,7 @@
     "milliAmpere": "Ma",
     "tooltip_lessInfoLogs": "Le voci di registro per quanto riguarda il cambio di amperaggio o la ricarica continua verranno scritte con livello di debug anziché il livello di informazioni",
     "tooltip_batteryLimitSoC": "La ricarica a piena potenza della batteria verrà ridotta, quando SOC (Stato di carica) segnerà al 100%. Questo valore indica quando questo effetto avrà effetto",
-    "batteryLimitSoC": "Il SoC di archiviazione della batteria quando la potenza di ricarica ridotta avrà effetto"
+    "batteryLimitSoC": "Il SoC di archiviazione della batteria quando la potenza di ricarica ridotta avrà effetto",
+    "authChargingTime": "È ora di caricare quando è stato collegato e l'auth è accesa",
+    "tooltip_authChargingTime": "Il veicolo verrà addebitato per quel tempo non appena è collegato ed è necessaria l'autorizzazione (questo è per impedire un bug in keba che altrimenti il ​​veicolo non si caricherà in seguito con sufficiente surplus"
 }

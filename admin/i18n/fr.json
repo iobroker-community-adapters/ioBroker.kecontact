@@ -82,5 +82,7 @@
     "milliAmpere": "mame",
     "tooltip_lessInfoLogs": "Les entrées de journal concernant le changement d'ampérage ou la charge continue seront écrites avec un niveau de débogage au lieu du niveau d'information",
     "tooltip_batteryLimitSoC": "La charge complète de la batterie sera réduite, lorsque SOC (état de charge) passera à 100%. Cette valeur indique quand cet effet prendra effet",
-    "batteryLimitSoC": "SoC du stockage de batteries en cas de réduction de l'alimentation de charge prendra effet"
+    "batteryLimitSoC": "SoC du stockage de batteries en cas de réduction de l'alimentation de charge prendra effet",
+    "authChargingTime": "Il est temps de charger lorsqu'il est branché et que l'authentique est allumé",
+    "tooltip_authChargingTime": "Le véhicule sera facturé pour ce temps dès qu'il sera branché et que l'autorisation est nécessaire (c'est pour empêcher un bug dans KEBA que sinon le véhicule ne facturera pas plus tard avec un surplus suffisant"
 }

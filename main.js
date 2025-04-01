@@ -121,6 +121,8 @@ class Kecontact extends utils.Adapter {
     stateWallboxPlug = 'plug'; /*Plug status */
     stateWallboxState = 'state'; /*State of charging session */
     stateWallboxPower = 'p'; /*Power*/
+    stateAuthActivated = 'authON';
+    stateAuthPending = 'autoreq';
     stateWallboxChargeAmount = 'ePres'; /*ePres - amount of charged energy in Wh */
     stateWallboxDisplay = 'display';
     stateWallboxOutput = 'output';
@@ -139,6 +141,8 @@ class Kecontact extends utils.Adapter {
     stateMaxAmperage = 'statistics.maxAmperage'; /*maximum amperage for wallbox*/
     stateChargingPhases = 'statistics.chargingPhases'; /*number of phases with which vehicle is currently charging*/
     statePlugTimestamp = 'statistics.plugTimestamp'; /*Timestamp when vehicled was plugged to wallbox*/
+    stateAuthPlugTimestamp =
+        'statistics.authPlugTimestamp'; /* Timestamp when vehicle was plugged and charging was authorized */
     stateChargeTimestamp = 'statistics.chargeTimestamp'; /*Timestamp when charging (re)started */
     stateConsumptionTimestamp =
         'statistics.consumptionTimestamp'; /*Timestamp when charging session was continued with grid consumption */
@@ -212,6 +216,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config loadChargingSessions: ${this.config.loadChargingSessions}`);
         this.log.debug(`config lessInfoLogs: ${this.config.lessInfoLogs}`);
         this.log.debug(`config useX1forAutomatic: ${this.config.useX1forAutomatic}`);
+        this.log.debug(`config authChargingTime: ${this.config.authChargingTime}`);
         this.log.debug(`config stateRegard: ${this.config.stateRegard}`);
         this.log.debug(`config stateSurplus: ${this.config.stateSurplus}`);
         this.log.debug(`config stateBatteryCharging: ${this.config.stateBatteryCharging}`);
@@ -1324,6 +1329,7 @@ class Kecontact extends utils.Adapter {
     initChargingSession() {
         this.resetChargingSessionData();
         this.setStateAck(this.statePlugTimestamp, new Date().toString());
+        this.setStateAck(this.stateAuthPlugTimestamp, null);
         this.setStateAck(this.stateSessionId, null);
         this.setStateAck(this.stateRfidTag, null);
         this.setStateAck(this.stateRfidClass, null);
@@ -1333,6 +1339,7 @@ class Kecontact extends utils.Adapter {
     finishChargingSession() {
         this.saveChargingSessionData();
         this.setStateAck(this.statePlugTimestamp, null);
+        this.setStateAck(this.stateAuthPlugTimestamp, null);
         this.resetChargingSessionData();
     }
 
@@ -1976,6 +1983,18 @@ class Kecontact extends utils.Adapter {
         return false;
     }
 
+    /**
+     * Checks whether the vehicle is plugged to the charging station, authorization is needed and successfully done
+     * In this case, we should charge a bit. Otherwise due to a Keba bug charging will not be possible later on
+     */
+    isVehicleReadyToChargeAndAuthorizationDone() {
+        return (
+            this.isVehiclePlugged() &&
+            this.getStateDefaultFalse(this.stateAuthActivated) === true &&
+            this.getStateDefaultFalse(this.stateAuthPending) == false
+        );
+    }
+
     checkWallboxPower() {
         // update charging state also between two calculations to recognize charging session
         // before a new calculation will stop it again (as long as chargingTimestamp was not yet set)
@@ -2218,6 +2237,23 @@ class Kecontact extends utils.Adapter {
                     newValueFor1p3pSwitching = this.valueFor3pCharging;
                 } else {
                     newValueFor1p3pSwitching = this.valueFor1p3pOff;
+                }
+            }
+        }
+
+        if (this.config.authChargingTime > 0 && this.isVehicleReadyToChargeAndAuthorizationDone()) {
+            let authTimestamp = this.getStateAsDate(this.stateAuthPlugTimestamp);
+            if (authTimestamp == null) {
+                authTimestamp = new Date().toString();
+                this.setStateAckSync(this.stateAuthPlugTimestamp, new Date().toString());
+            }
+            if (newDate.getTime() - authTimestamp.getTime() < this.config.authChargingTime * 1000) {
+                this.log.debug(
+                    `${this.isVehicleCharging() ? 'continue' : 'start'} charging after successful authorization`,
+                );
+                curr = this.getMinCurrent();
+                if (this.has1P3PAutomatic()) {
+                    newValueFor1p3pSwitching = this.valueFor1pCharging;
                 }
             }
         }

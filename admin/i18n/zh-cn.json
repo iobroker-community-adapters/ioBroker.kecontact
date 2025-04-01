@@ -82,5 +82,7 @@
     "milliAmpere": "马",
     "tooltip_lessInfoLogs": "有关变更安培或继续充电的日志条目将以调试级别而不是信息级别编写",
     "tooltip_batteryLimitSoC": "当SOC（充电状态）得分为100％时，电池充电将减少。此效果生效时，此值表示",
-    "batteryLimitSoC": "降低充电功率时电池存储的SOC将生效"
+    "batteryLimitSoC": "降低充电功率时电池存储的SOC将生效",
+    "authChargingTime": "插件和auth即将打开时充电的时间",
+    "tooltip_authChargingTime": "车辆插入并需要授权时，车辆将在那段时间内收取（这是为了防止Keba中的一个错误，否则车辆以后不会充分盈余。"
 }

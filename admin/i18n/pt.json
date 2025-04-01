@@ -82,5 +82,7 @@
     "milliAmpere": "MA",
     "tooltip_lessInfoLogs": "As entradas de log em relação à mudança de amora ou cobrança contínua serão escritas com o nível de depuração em vez do nível de informação",
     "tooltip_batteryLimitSoC": "O carregamento total da bateria será reduzido, quando o SOC (estado de carga) marcará para 100%. Este valor indica quando esse efeito entrará em vigor",
-    "batteryLimitSoC": "SOC de armazenamento de bateria quando a energia de carregamento reduzida entrará em vigor"
+    "batteryLimitSoC": "SOC de armazenamento de bateria quando a energia de carregamento reduzida entrará em vigor",
+    "authChargingTime": "Hora de cobrar quando conectado e Auth está ligado",
+    "tooltip_authChargingTime": "O veículo será carregado para esse tempo assim que estiver conectado e a autorização for necessária (isso é para evitar um bug em keba que, de outra forma"
 }

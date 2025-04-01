@@ -2244,8 +2244,8 @@ class Kecontact extends utils.Adapter {
         if (this.config.authChargingTime > 0 && this.isVehicleReadyToChargeAndAuthorizationDone()) {
             let authTimestamp = this.getStateAsDate(this.stateAuthPlugTimestamp);
             if (authTimestamp == null) {
-                authTimestamp = new Date().toString();
-                this.setStateAckSync(this.stateAuthPlugTimestamp, new Date().toString());
+                authTimestamp = new Date();
+                this.setStateAckSync(this.stateAuthPlugTimestamp, authTimestamp.toString());
             }
             if (
                 curr < this.getMinCurrent() &&

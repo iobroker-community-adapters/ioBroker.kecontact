@@ -2247,6 +2247,7 @@ class Kecontact extends utils.Adapter {
                 authTimestamp = new Date();
                 this.setStateAckSync(this.stateAuthPlugTimestamp, authTimestamp.toString());
             }
+            this.log.debug(`authTimestamp is ${typeof authTimestamp}`);
             if (
                 curr < this.getMinCurrent() &&
                 newDate.getTime() - authTimestamp.getTime() < this.config.authChargingTime * 1000
@@ -2469,7 +2470,7 @@ class Kecontact extends utils.Adapter {
     getStateAsDate(id) {
         let result = this.getStateInternal(id);
         // state comes as timestamp string => to be converted to date object
-        if (result != null) {
+        if (result != null && result != '') {
             result = new Date(result);
         }
         return result;

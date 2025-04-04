@@ -2247,7 +2247,12 @@ class Kecontact extends utils.Adapter {
                 authTimestamp = new Date();
                 this.setStateAckSync(this.stateAuthPlugTimestamp, authTimestamp.toString());
             }
-            this.log.debug(`authTimestamp is ${typeof authTimestamp}`);
+            this.log.debug(
+                `authTimestamp is ${typeof authTimestamp} with value ${authTimestamp.toString()}, time diff ${newDate.getTime() - authTimestamp.getTime()}`,
+            );
+            this.log.debug(
+                `curr is ${curr}, minCurrent ${this.getMinCurrent()}, mikntime = ${this.config.authChargingTime * 1000}`,
+            );
             if (
                 curr < this.getMinCurrent() &&
                 newDate.getTime() - authTimestamp.getTime() < this.config.authChargingTime * 1000

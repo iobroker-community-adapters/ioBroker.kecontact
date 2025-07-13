@@ -2251,7 +2251,7 @@ class Kecontact extends utils.Adapter {
                 `authTimestamp is ${typeof authTimestamp} with value ${authTimestamp.toString()}, time diff ${newDate.getTime() - authTimestamp.getTime()}`,
             );
             this.log.debug(
-                `curr is ${curr}, minCurrent ${this.getMinCurrent()}, mikntime = ${this.config.authChargingTime * 1000}`,
+                `curr is ${curr}, minCurrent ${this.getMinCurrent()}, mintime = ${this.config.authChargingTime * 1000}`,
             );
             if (
                 curr < this.getMinCurrent() &&

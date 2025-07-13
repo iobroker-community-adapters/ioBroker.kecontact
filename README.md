@@ -112,7 +112,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.2.0 (2025-07-13)
 * (Sneak-L8) new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging
 * (Sneak-L8) optimized strategy for battery charging
 * (Sneak-L8) node.js >= 20 required
@@ -147,12 +147,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) minimum verison für js-controller now 5.0.19
 * (Sneak-L8) set currTimer timeout default value from 0 to 1
 * (Sneak-L8) support new option "setBoot" of c-series stating firmware 3.10.57
-
-### 2.2.0 (2024-06-23)
-* (mcm1957) Adapter requires nodejs >= 18 and js-controller >= 5 now.
-* (mcm1957) Dependencies have been updated.
-* (Sneak-L8) fix url for download page at Keba website
-* (Sneak-L8) fix lint problems by replacing double by single quotes
 
 ## Legal
 

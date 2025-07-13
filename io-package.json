@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "3.1.0",
+    "version": "3.2.0",
     "news": {
+      "3.2.0": {
+        "en": "new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging\noptimized strategy for battery charging\nnode.js >= 20 required",
+        "de": "neue option, immer zu starten lade, wenn das fahrzeug gesteckt wird, wenn die berechtigung erforderlich ist, ladestation zu blockieren lade\noptimierte strategie für batterielade\nnode.js >= 20 erforderlich",
+        "ru": "новая возможность всегда начинать зарядку при подключении транспортного средства, если требуется разрешение для предотвращения блокировки зарядки зарядной станции\nоптимизированная стратегия зарядки аккумулятора\nnode.js >= 20 обязательных",
+        "pt": "nova opção para sempre começar a carregar quando o veículo é ligado se a autorização é necessária para evitar a estação de carregamento para bloquear a carga\nestratégia otimizada para carregamento de bateria\nnó.js >= 20",
+        "nl": "nieuwe optie om altijd te beginnen met opladen wanneer het voertuig is aangesloten als er een vergunning is vereist om te voorkomen dat laadstation te blokkeren laden\ngeoptimaliseerde strategie voor het opladen van batterijen\nknooppunten < 20 vereist",
+        "fr": "nouvelle option pour toujours commencer la recharge lorsque le véhicule est branché si l'autorisation est nécessaire pour empêcher la borne de recharge de bloquer la recharge\nstratégie optimisée pour le chargement de la batterie\nnode.js >= 20 requis",
+        "it": "nuova opzione per avviare sempre la ricarica quando il veicolo è collegato se l'autorizzazione è necessaria per evitare la stazione di ricarica per bloccare la ricarica\nstrategia ottimizzata per la ricarica della batteria\nnode.js >= 20 richiesto",
+        "es": "nueva opción para comenzar siempre la carga cuando el vehículo está conectado si se requiere autorización para evitar la estación de carga para bloquear la carga\nestrategia optimizada para la carga de baterías\nnode.js= 20 requerido",
+        "pl": "nowa opcja, aby zawsze rozpocząć ładowanie, gdy pojazd jest podłączony, jeśli wymagane jest zezwolenie, aby uniemożliwić stacji ładowania do blokowania ładowania\nzoptymalizowana strategia ładowania akumulatorów\nnode.js > = 20 wymaganych",
+        "uk": "новий варіант, щоб завжди почати заряджання, коли автомобіль підключений, якщо авторизація необхідна для запобігання зарядки станції для блокування зарядки\nоптимізована стратегія зарядки акумулятора\nnode.js >= 20 потрібно",
+        "zh-cn": "如果需要授权以防止充电站阻塞充电,则在车辆被堵塞时总是开始充电的新选项\n电池充电的优化策略\n需要20个节点"
+      },
       "3.1.0": {
         "en": "new option to reduce log entries on info level (write them with debug level)\nfix wording error (\"regard\" changed to grid consumption)\nfixed some english translations\nrenamed state \"regardTimestamp\" to \"consumptionTimestamp\" - please delete old state",
         "de": "neue option, um log-einträge auf info-ebene zu reduzieren (schreiben sie sie mit debug-ebene)\nfix-wortungsfehler (\"regard\" geändert zum netzverbrauch)\neinige englische übersetzungen\numbenannt Zustand \"regardTimestamp\" zu \"consumptionTimestamp\" - bitte löschen alten Zustand",
@@ -80,19 +93,6 @@
         "pl": "naprawić błąd, gdy chanigig dynamiczny parametr SoC",
         "uk": "виправлено помилку при механічній динамічній параметрі SoC",
         "zh-cn": "chanigig 动态 SOC 参数时修复错误"
-      },
-      "2.1.0": {
-        "en": "multiple options for battery storage strategy\nadded names for values of some states: state, plug, timeQ and batteryStorageStrategy\ndon't try to charge when state is 5 (auth req, car not ready, ...)\nnew state to dynamically set SoC above which battery storage may be used for charging vehicle",
-        "de": "mehrere optionen für die batteriespeicherstrategie\nnamen für Werte einiger Zustände hinzugefügt: Zustand, Plug, TimeQ und Batterie Speicherstrategie\nnicht versuchen, zu berechnen, wenn zustand 5 ist (auth req, auto nicht bereit, ...)\nneuer Zustand zur dynamisch eingestellten SoC, über dem Batteriespeicher zum Laden von Fahrzeugen verwendet werden kann",
-        "ru": "несколько вариантов стратегии хранения аккумуляторов\nдобавленные названия для значений некоторых состояний: состояние, плагин, TimeQ и батарея Стратегия хранения\nне пытайтесь зарядить, когда состояние 5 (auth req, автомобиль не готов, ...)\nновое состояние для динамической установки SoC выше, какое хранилище аккумулятора может использоваться для зарядки транспортного средства",
-        "pt": "várias opções para a estratégia de armazenamento de bateria\nnomes adicionados para valores de alguns estados: estado, plug, timeQ e bateria Taxa de armazenamento\nnão tente cobrar quando o estado é 5 (auth req, carro não pronto, ...)\nnovo estado para definir dinamicamente SoC acima do qual o armazenamento da bateria pode ser usado para o veículo de carregamento",
-        "nl": "meerdere opties voor batterijopslagstrategie\ntoegevoegde namen voor waarden van sommige staten: status, plug, timeQ en batterij Opslagstrategie\nprobeer niet op te laden wanneer de toestand is 5 (auth req, auto niet klaar, ...)\nnieuwe toestand om SoC dynamisch in te stellen waarboven batterijopslag kan worden gebruikt voor het opladen van voertuig",
-        "fr": "plusieurs options pour la stratégie de stockage de la batterie\ndes noms ajoutés pour les valeurs de certains états: état, plug, timeQ et batterie Stratégie de stockage\nne pas essayer de charger quand l'état est 5 (auth req, voiture pas prêt, ...)\nun nouvel état au-dessus duquel le stockage de la batterie peut être utilisé pour charger le véhicule",
-        "it": "molteplici opzioni per la strategia di memorizzazione della batteria\nnomi aggiunti per i valori di alcuni stati: stato, spina, timeQ e batteria Strategie di stoccaggio\nnon cercare di caricare quando lo stato è 5 (auth req, auto non pronto, ...)\nnuovo stato per impostare dinamicamente SoC sopra quale memoria della batteria può essere utilizzato per la ricarica del veicolo",
-        "es": "múltiples opciones para la estrategia de almacenamiento de baterías\nnombres añadidos para valores de algunos estados: estado, plug, timeQ y batería AlmacenamientoStrategy\nno trate de cobrar cuando el estado es 5 (auth req, coche no listo, ...)\nnuevo estado para fijar dinámicamente SoC sobre qué almacenamiento de batería se puede utilizar para el vehículo de carga",
-        "pl": "wiele opcji dla strategii przechowywania baterii\ndodane nazwy dla wartości niektórych stanów: stan, wtyczka, timeQ i bateria Strategia przechowalni\nnie próbuj ładować, gdy stan jest 5 (auth req, samochód nie gotowy,...)\nnowy stan do dynamicznego ustawienia SOC powyżej, powyżej którego można używać pamięci akumulatora do ładowania pojazdu",
-        "uk": "кілька варіантів стратегії зберігання акумулятора\nдодані імена для значень деяких станів: стан, плагін, таймер і акумулятор Склад\nне намагайтеся заряджати, коли держава 5 (додаток, автомобіль не готовий, ...)\nновий стан для динамічного встановлення SoC, над яким акумуляторний накопичувач може використовуватися для зарядного пристрою",
-        "zh-cn": "电池存储策略的多种选项\n为一些状态的值添加名称:状态、插件、时间Q和电池 储存战略\n5岁时不要试图充电(auth req,汽车没有准备好,......)\n动态设置 SoC 的新状态, 上面的电池储存可用于充电车辆"
       }
     },
     "titleLang": {

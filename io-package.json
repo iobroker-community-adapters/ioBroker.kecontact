@@ -1067,6 +1067,25 @@
       "native": {}
     },
     {
+      "_id": "automatic.1p3pCharging",
+      "type": "state",
+      "common": {
+        "name": "define whether to charge with 1p or 3p",
+        "type": "number",
+        "role": "level",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "Set option to charge with 1p or 3p regardless of surplus (0 = automatic by surplus)",
+        "states": {
+          "0": "use 1p or 3p depending of surplus",
+          "1": "charge only with 1p",
+          "3": "ucharge only with 3p"
+        }
+      },
+      "native": {}
+    },
+    {
       "_id": "automatic.batteryStorageStrategy",
       "type": "state",
       "common": {

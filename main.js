@@ -158,6 +158,7 @@ class Kecontact extends utils.Adapter {
     stateLimitCurrent = 'automatic.limitCurrent'; /*maximum amperage for charging*/
     stateLimitCurrent1p = 'automatic.limitCurrent1p'; /*maximum amperage for charging when 1p 3p switch set to 1p */
     stateManualPhases = 'automatic.calcPhases'; /*count of phases to calculate with for KeContact Deutschland-Edition*/
+    stateManual1p3p = 'automatic.1p3pSwitch'; /*switch to permanently charge with 1p or 3p*/
     stateBatteryStrategy = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/
     stateMinimumSoCOfBatteryStorage =
         'automatic.batterySoCForCharging'; /*SoC above which battery storage may be used for charging vehicle*/
@@ -2115,68 +2116,57 @@ class Kecontact extends utils.Adapter {
                 const consumptionTimestamp = this.getStateAsDate(this.stateConsumptionTimestamp);
 
                 if (this.has1P3PAutomatic()) {
+                    const switch1p3p = this.getStateDefault0(this.stateManual1p3p);
                     const currWith1p = this.getAmperage(available, 1);
-                    if (curr != currWith1p) {
-                        if (curr < this.getMinCurrent()) {
-                            if (this.isReducedChargingBecause1p3p()) {
-                                phases = 1;
-                                curr = currWith1p;
-                                this.log.debug(`new current due to 1p charging is ${curr}`);
-                            } else {
-                                if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                                    this.log.debug(
-                                        `no switching to 1 phase because of minimum charging time: ${chargeTimestamp}`,
-                                    );
-                                } else if (
-                                    chargeTimestamp !== null &&
-                                    this.isContinueDueToMinConsumptionTime(newDate)
-                                ) {
-                                    this.log.debug(
-                                        `no switching to 1 phase because of minimum grid consumption time: ${consumptionTimestamp}`,
-                                    );
-                                } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
-                                    this.log.debug(
-                                        `no switching to 1 phase because of minimum time between switching: ${sw1p3pTimestamp}`,
-                                    );
-                                } else {
-                                    newValueFor1p3pSwitching = this.valueFor1pCharging;
-                                    phases = 1;
-                                    curr = currWith1p;
-                                    this.log.debug(`new current due to switching to 1p charging is ${curr}`);
-                                }
-                            }
-                        } else {
-                            if (this.isReducedChargingBecause1p3p()) {
-                                let isSwitchFrom1pTo3P = false;
-                                if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                                    this.log.debug(
-                                        `no switching to ${phases} phases because of minimum charging time: ${chargeTimestamp}`,
-                                    );
-                                } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
-                                    this.log.debug(
-                                        `no switching to ${phases} phase because of minimum time between switching: ${sw1p3pTimestamp}`,
+                    let newValues = [];
+                    switch (switch1p3p) {
+                        case 1:
+                            newValues = this.prepareFor1pCharging(
+                                currWith1p,
+                                chargeTimestamp,
+                                newDate,
+                                consumptionTimestamp,
+                                sw1p3pTimestamp,
+                            );
+                            break;
+                        case 3:
+                            newValues = this.prepareFor3pCharging(
+                                currWith1p,
+                                chargeTimestamp,
+                                newDate,
+                                phases,
+                                sw1p3pTimestamp,
+                            );
+                            break;
+                        default:
+                            if (curr != currWith1p) {
+                                if (curr < this.getMinCurrent()) {
+                                    newValues = this.prepareFor1pCharging(
+                                        currWith1p,
+                                        chargeTimestamp,
+                                        newDate,
+                                        consumptionTimestamp,
+                                        sw1p3pTimestamp,
                                     );
                                 } else {
-                                    if (currWith1p < this.getCurrentForSwitchTo3p()) {
-                                        this.log.debug(
-                                            `no switching to ${phases} phases because amperage ${currWith1p} < ${this.getCurrentForSwitchTo3p()}`,
-                                        );
-                                    } else {
-                                        this.log.debug(
-                                            `switching to ${phases} phases because amperage ${currWith1p} >= ${this.getCurrentForSwitchTo3p()}`,
-                                        );
-                                        newValueFor1p3pSwitching = this.valueFor3pCharging;
-                                        isSwitchFrom1pTo3P = true;
-                                        this.log.debug('will swiutch back to 3p');
-                                    }
-                                }
-                                if (isSwitchFrom1pTo3P === false) {
-                                    phases = 1;
-                                    curr = currWith1p;
-                                    this.log.debug(`new current due to not switching to 3p charging is ${curr}`);
+                                    newValues = this.prepareFor3pCharging(
+                                        currWith1p,
+                                        chargeTimestamp,
+                                        newDate,
+                                        phases,
+                                        sw1p3pTimestamp,
+                                    );
                                 }
                             }
-                        }
+                    }
+                    if (newValues['phases'] !== undefined) {
+                        phases = newValues['phases'];
+                    }
+                    if (newValues['curr'] !== undefined) {
+                        curr = newValues['curr'];
+                    }
+                    if (newValues['newValueFor1p3pSwitching'] !== undefined) {
+                        newValueFor1p3pSwitching = newValues['newValueFor1p3pSwitching'];
                     }
                 }
 
@@ -2305,6 +2295,82 @@ class Kecontact extends utils.Adapter {
             this.regulateWallbox(curr);
             this.chargingToBeStarted = true;
         }
+    }
+
+    /**
+     * tries to setup everything for charging with 1p
+     *
+     * @param {*} currWith1p current if charging with 1p
+     * @param {*} chargeTimestamp timestamp when charging was started
+     * @param {*} newDate current timestamp
+     * @param {*} consumptionTimestamp timestamp when charging fell into consumption from grid
+     * @param {*} sw1p3pTimestamp timestamp of last 1p3p switch
+     */
+    prepareFor1pCharging(currWith1p, chargeTimestamp, newDate, consumptionTimestamp, sw1p3pTimestamp) {
+        let result = [];
+        if (this.isReducedChargingBecause1p3p()) {
+            result['phases'] = 1;
+            result['curr'] = currWith1p;
+            this.log.debug(`new current due to 1p charging is ${currWith1p}`);
+        } else {
+            if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
+                this.log.debug(`no switching to 1 phase because of minimum charging time: ${chargeTimestamp}`);
+            } else if (chargeTimestamp !== null && this.isContinueDueToMinConsumptionTime(newDate)) {
+                this.log.debug(
+                    `no switching to 1 phase because of minimum grid consumption time: ${consumptionTimestamp}`,
+                );
+            } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
+                this.log.debug(`no switching to 1 phase because of minimum time between switching: ${sw1p3pTimestamp}`);
+            } else {
+                result['newValueFor1p3pSwitching'] = this.valueFor1pCharging;
+                result['phases'] = 1;
+                result['curr'] = currWith1p;
+                this.log.debug(`new current due to switching to 1p charging is ${currWith1p}`);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * tries to setup everything for charging with 3p
+     *
+     * @param {*} currWith1p current if charging with 1p
+     * @param {*} chargeTimestamp timestamp when charging was started
+     * @param {*} newDate current timestamp
+     * @param {*} phases number of phases to be used for calculation
+     * @param {*} sw1p3pTimestamp timestamp of last 1p3p switch
+     */
+    prepareFor3pCharging(currWith1p, chargeTimestamp, newDate, phases, sw1p3pTimestamp) {
+        let result = [];
+        if (this.isReducedChargingBecause1p3p()) {
+            let isSwitchFrom1pTo3p = false;
+            if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
+                this.log.debug(`no switching to ${phases} phases because of minimum charging time: ${chargeTimestamp}`);
+            } else if (sw1p3pTimestamp !== null && this.isContinueDueToMin1p3pSwTime(newDate)) {
+                this.log.debug(
+                    `no switching to ${phases} phase because of minimum time between switching: ${sw1p3pTimestamp}`,
+                );
+            } else {
+                if (currWith1p < this.getCurrentForSwitchTo3p()) {
+                    this.log.debug(
+                        `no switching to ${phases} phases because amperage ${currWith1p} < ${this.getCurrentForSwitchTo3p()}`,
+                    );
+                } else {
+                    this.log.debug(
+                        `switching to ${phases} phases because amperage ${currWith1p} >= ${this.getCurrentForSwitchTo3p()}`,
+                    );
+                    result['newValueFor1p3pSwitching'] = this.valueFor3pCharging;
+                    isSwitchFrom1pTo3p = true;
+                    this.log.debug('will swiutch back to 3p');
+                }
+            }
+            if (isSwitchFrom1pTo3p === false) {
+                result['phases'] = 1;
+                result['curr'] = currWith1p;
+                this.log.debug(`new current due to not switching to 3p charging is ${currWith1p}`);
+            }
+        }
+        return result;
     }
 
     disableChargingTimer() {

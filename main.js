@@ -158,7 +158,7 @@ class Kecontact extends utils.Adapter {
     stateLimitCurrent = 'automatic.limitCurrent'; /*maximum amperage for charging*/
     stateLimitCurrent1p = 'automatic.limitCurrent1p'; /*maximum amperage for charging when 1p 3p switch set to 1p */
     stateManualPhases = 'automatic.calcPhases'; /*count of phases to calculate with for KeContact Deutschland-Edition*/
-    stateManual1p3p = 'automatic.1p3pSwitch'; /*switch to permanently charge with 1p or 3p*/
+    stateManual1p3p = 'automatic.1p3pCharging'; /*switch to permanently charge with 1p or 3p*/
     stateBatteryStrategy = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/
     stateMinimumSoCOfBatteryStorage =
         'automatic.batterySoCForCharging'; /*SoC above which battery storage may be used for charging vehicle*/

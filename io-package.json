@@ -1080,7 +1080,7 @@
         "states": {
           "0": "use 1p or 3p depending of surplus",
           "1": "charge only with 1p",
-          "3": "ucharge only with 3p"
+          "3": "charge only with 3p"
         }
       },
       "native": {}

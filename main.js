@@ -714,6 +714,10 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateLimitCurrent} to ${newValue}`);
             // no real action to do
         };
+        this.stateChangeListeners[`${this.namespace}.${this.stateManual1p3p}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateManual1p3p} to ${newValue}`);
+            // no real action to do
+        };
         this.stateChangeListeners[`${this.namespace}.${this.stateLimitCurrent1p}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateLimitCurrent1p} to ${newValue}`);
             // no real action to do

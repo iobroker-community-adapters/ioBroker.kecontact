@@ -29,7 +29,7 @@
     "stateAmperagePhase1_new": "Datenpunkt für die Stromstärke auf der 1. Phase",
     "stateAmperagePhase2_new": "Datenpunkt für die Stromstärke auf der 2. Phase",
     "stateAmperagePhase3_new": "Datenpunkt für die Stromstärke auf der 3. Phase",
-    "stateBatteryCharging": "Der Name des Zustands für die aktuelle Leistungsaufnahme des Batteriespeichers",
+    "stateBatteryCharging": "Name des Zustands für die aktuelle Leistungsaufnahme des Batteriespeichers",
     "stateBatteryDischarging": "Name des Zustands der Leistungsabgabe des Batteriespeichers",
     "stateBatterySoC": "Name des States für den Ladezustand (SoC) des Batteriespeichers",
     "stateEnWG": "Name des Zustands, der die Informationen zur Aktivierung der Leistungsbegrenzung gemäß §14a EnWG enthält.",

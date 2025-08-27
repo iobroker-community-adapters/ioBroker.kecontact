@@ -116,6 +116,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 -->
 ### **WORK IN PROGRESS**
 * (Sneak-L8) new option to always charge with 1p oder 3p
+* (Sneak-L8) new setting for discharging power of storage battery (if not equal to max battery power)
 
 ### 3.2.0 (2025-07-13)
 * (Sneak-L8) new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging

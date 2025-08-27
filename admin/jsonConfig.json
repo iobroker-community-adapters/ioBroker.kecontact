@@ -389,6 +389,27 @@
                     "lg": 1,
                     "xl": 1
                 },
+                "batteryChargePower": {
+                    "type": "number",
+                    "label": "batteryChargePower",
+                    "min": 0,
+                    "tooltip": "tooltip_batteryChargePower",
+                    "xs": 12,
+                    "sm": 11,
+                    "md": 8,
+                    "lg": 5,
+                    "xl": 3,
+                    "newLine": false
+                },
+                "batteryChargePowerUnit": {
+                    "type": "staticText",
+                    "label": "watts",
+                    "xs": 12,
+                    "sm": 1,
+                    "md": 1,
+                    "lg": 1,
+                    "xl": 1
+                },
                 "batteryStorageStrategy": {
                     "type": "select",
                     "label": "batteryStorageStrategy",

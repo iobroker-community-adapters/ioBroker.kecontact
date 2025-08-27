@@ -189,6 +189,7 @@
     "stateBatteryDischarging": "",
     "stateBatterySoC": "",
     "batteryPower": 0,
+    "batteryChargePower": 0,
     "batteryMinSoC": 10,
     "batteryLimitSoC": 95,
     "batteryStorageStrategy": 0,

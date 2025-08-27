@@ -224,6 +224,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config stateBatteryDischarging: ${this.config.stateBatteryDischarging}`);
         this.log.debug(`config stateBatterySoC: ${this.config.stateBatterySoC}`);
         this.log.debug(`config batteryPower: ${this.config.batteryPower}`);
+        this.log.debug(`config batteryChargePower: ${this.config.batteryChargePower}`);
         this.log.debug(`config batteryMinSoC: ${this.config.batteryMinSoC}`);
         this.log.debug(`config batteryLimitSoC: ${this.config.batteryLimitSoC}`);
         this.log.debug(`config batteryStorageStrategy: ${this.config.batteryStorageStrategy}`);
@@ -1406,7 +1407,7 @@ class Kecontact extends utils.Adapter {
                     return 0;
                 }
             } else {
-                return batteryPower - this.config.batteryPower;
+                return batteryPower - this.getBatteryChargePower();
             }
         } else if (
             this.isNotUsingBatteryWithPrioOnVehicle() ||
@@ -1419,13 +1420,34 @@ class Kecontact extends utils.Adapter {
         ) {
             const maxBatteryPower =
                 this.getStateDefault0(this.config.stateBatterySoC) > this.getMinimumBatteryStorageSocForCharging()
-                    ? this.config.batteryPower
+                    ? this.getBatteryDischargePower()
                     : 0;
             return maxBatteryPower + batteryPower;
         } else {
             return 0;
         }
         return batteryPower;
+    }
+
+    /**
+     * Get power that battery can deliver at maximum
+     *
+     * @returns power in watts with which battery can be discharged
+     */
+    getBatteryDischargePower() {
+        return this.config.batteryPower;
+    }
+
+    /**
+     * Get power with which battery can be charged at maximum
+     *
+     * @returns power in watts with which battery can be charged
+     */
+    getBatteryChargePower() {
+        if (this.config.batteryChargePower > 0) {
+            return this.config.batteryChargePower;
+        }
+        return this.config.batteryPower;
     }
 
     /**

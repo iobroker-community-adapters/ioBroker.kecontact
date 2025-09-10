@@ -38,7 +38,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.3",
+    "@iobroker/adapter-core": "^3.3.2",
     "@tsconfig/node20": "^20.1.6",
     "dgram": "^1.0.1",
     "os": "^0.1.1"

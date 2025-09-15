@@ -84,5 +84,7 @@
     "tooltip_batteryLimitSoC": "Pełne ładowanie baterii zostanie zmniejszone, gdy SOC (stan ładowania) wyrówna się do 100%. Ta wartość wskazuje, że ten efekt wejdzie w życie",
     "batteryLimitSoC": "SOC przechowywania akumulatorów, gdy uda się zmniejszyć moc ładowania",
     "authChargingTime": "czas na ładowanie po podłączeniu i autorytecie",
-    "tooltip_authChargingTime": "pojazd zostanie obciążony na ten czas, gdy tylko zostanie podłączony i wymagana jest autoryzacja (ma to zapobiec błędowi w KEBA, który w przeciwnym razie pojazd nie będzie późniejszy z wystarczającą nadwyżką"
+    "tooltip_authChargingTime": "pojazd zostanie obciążony na ten czas, gdy tylko zostanie podłączony i wymagana jest autoryzacja (ma to zapobiec błędowi w KEBA, który w przeciwnym razie pojazd nie będzie późniejszy z wystarczającą nadwyżką",
+    "batteryChargePower": "maksymalna moc, za pomocą której można naładować baterię",
+    "tooltip_batteryChargePower": "zasilanie, że magazyn akumulatora jest w stanie naładować maksymalnie (0 = tak samo jak maksymalna zasilanie baterii)"
 }

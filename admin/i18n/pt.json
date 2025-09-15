@@ -84,5 +84,7 @@
     "tooltip_batteryLimitSoC": "O carregamento total da bateria será reduzido, quando o SOC (estado de carga) marcará para 100%. Este valor indica quando esse efeito entrará em vigor",
     "batteryLimitSoC": "SOC de armazenamento de bateria quando a energia de carregamento reduzida entrará em vigor",
     "authChargingTime": "Hora de cobrar quando conectado e Auth está ligado",
-    "tooltip_authChargingTime": "O veículo será carregado para esse tempo assim que estiver conectado e a autorização for necessária (isso é para evitar um bug em keba que, de outra forma"
+    "tooltip_authChargingTime": "O veículo será carregado para esse tempo assim que estiver conectado e a autorização for necessária (isso é para evitar um bug em keba que, de outra forma",
+    "batteryChargePower": "Potência máxima com a qual a bateria pode ser carregada",
+    "tooltip_batteryChargePower": "Energia que o armazenamento da bateria é capaz de carregar no máximo (0 = o mesmo que a energia máxima da bateria)"
 }

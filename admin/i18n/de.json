@@ -84,5 +84,7 @@
     "tooltip_batteryLimitSoC": "Die Ladeleistung des Akkus wird kurz vor Erreichen der 100% SoC (Ladezustand) automatisch reduziert. Dieser Wert gibt an, ab welchem SoC dies eintritt",
     "batteryLimitSoC": "SOC der Batteriespeicherung bei reduzierter Ladekraft wird wirksam werden",
     "authChargingTime": "Zeit, die Fahrzeug sofort beim Anstecken lädt, Autorisierung aktiviert ist (0 = deaktiviert)",
-    "tooltip_authChargingTime": "Das Fahrzeug wird für diese Zeit geladen, sobald es angesteckt ist und eine Autorisierung erforderlich ist (Behebt einen Bug in der Keba-Firmware)"
+    "tooltip_authChargingTime": "Das Fahrzeug wird für diese Zeit geladen, sobald es angesteckt ist und eine Autorisierung erforderlich ist (Behebt einen Bug in der Keba-Firmware)",
+    "batteryChargePower": "maximale Leistung, mit der die Batterie aufgeladen werden kann",
+    "tooltip_batteryChargePower": "Strom dieser Batteriespeicherung kann maximal aufladen (0 = gleich wie die maximale Batterieleistung)."
 }

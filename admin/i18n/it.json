@@ -84,5 +84,7 @@
     "tooltip_batteryLimitSoC": "La ricarica a piena potenza della batteria verrà ridotta, quando SOC (Stato di carica) segnerà al 100%. Questo valore indica quando questo effetto avrà effetto",
     "batteryLimitSoC": "Il SoC di archiviazione della batteria quando la potenza di ricarica ridotta avrà effetto",
     "authChargingTime": "È ora di caricare quando è stato collegato e l'auth è accesa",
-    "tooltip_authChargingTime": "Il veicolo verrà addebitato per quel tempo non appena è collegato ed è necessaria l'autorizzazione (questo è per impedire un bug in keba che altrimenti il ​​veicolo non si caricherà in seguito con sufficiente surplus"
+    "tooltip_authChargingTime": "Il veicolo verrà addebitato per quel tempo non appena è collegato ed è necessaria l'autorizzazione (questo è per impedire un bug in keba che altrimenti il ​​veicolo non si caricherà in seguito con sufficiente surplus",
+    "batteryChargePower": "potenza massima con cui è possibile caricare la batteria",
+    "tooltip_batteryChargePower": "Accensione che lo stoccaggio della batteria è in grado di caricare al massimo (0 = uguale al massimo della batteria)"
 }

@@ -78,7 +78,7 @@
     "wallboxNotIncluded": "Verbrauch der Wallbox bei keinem der Energy-Meter enthalten",
     "watts": "W",
     "ampere": "A",
-    "lessInfoLogs": "Reduzieren Sie die Anzahl der Info -Protokolleinträge",
+    "lessInfoLogs": "Anzahl der Info-Einträge im Log reduzieren",
     "milliAmpere": "mA",
     "tooltip_lessInfoLogs": "Protokolleinträge zur Änderung der Stromstärke oder des fortgesetzten Ladens mit der Stufe debug statt Info schreiben.",
     "tooltip_batteryLimitSoC": "Die Ladeleistung des Akkus wird kurz vor Erreichen der 100% SoC (Ladezustand) automatisch reduziert. Dieser Wert gibt an, ab welchem SoC dies eintritt",
@@ -86,5 +86,5 @@
     "authChargingTime": "Zeit, die Fahrzeug sofort beim Anstecken lädt, Autorisierung aktiviert ist (0 = deaktiviert)",
     "tooltip_authChargingTime": "Das Fahrzeug wird für diese Zeit geladen, sobald es angesteckt ist und eine Autorisierung erforderlich ist (Behebt einen Bug in der Keba-Firmware)",
     "batteryChargePower": "maximale Leistung, mit der die Batterie aufgeladen werden kann",
-    "tooltip_batteryChargePower": "Strom dieser Batteriespeicherung kann maximal aufladen (0 = gleich wie die maximale Batterieleistung)."
+    "tooltip_batteryChargePower": "Leistung, mit der der Batteriespeicher maximal aufgeladen werden (0 = gleicher Wert wie die maximale Batterieleistung)"
 }

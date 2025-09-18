@@ -1,4 +1,11 @@
 # Older changes
+## 2.3.0 (2024-11-29)
+* (Sneak-L8) new option to limit charging station according to german §14a EnWG
+* (Sneak-L8) enable currTime for manual use and X2 even in passive mode
+* (Sneak-L8) minimum verison für js-controller now 5.0.19
+* (Sneak-L8) set currTimer timeout default value from 0 to 1
+* (Sneak-L8) support new option "setBoot" of c-series stating firmware 3.10.57
+
 ## 2.2.0 (2024-06-23)
 * (mcm1957) Adapter requires nodejs >= 18 and js-controller >= 5 now.
 * (mcm1957) Dependencies have been updated.

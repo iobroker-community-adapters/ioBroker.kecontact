@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "3.2.0",
+    "version": "3.3.0",
     "news": {
+      "3.3.0": {
+        "en": "new option to always charge with 1p oder 3p\nnew setting for discharging power of storage battery (if not equal to max battery power)\nupdated version requirements (admin 7.6.17 and core 3.3.2)",
+        "de": "Neue Option zum immer Laden mit 1p oder 3p.\nNeue Einstellung für die Entladeleistung des Speicherakkus (wenn diese nicht der maximalen Akkuleistung entspricht)\nAktualisierte Versionsanforderungen (Admin 7.6.17 und Core 3.3.2)",
+        "ru": "Новая опция для всегда заряжать с 1p или 3p.\nновая настройка для разряда хранящейся энергии аккумулятора (если не равна максимальной мощности аккумулятора)\nтребования к обновленной версии (admin 7.6.17 и core 3.3.2)",
+        "pt": "nova opção para sempre carregar com 1p ou 3p\nnova configuração para descarga de energia da bateria de armazenamento (se não for igual à potência máxima da bateria)\natualizados requisitos da versão (admin 7.6.17 e core 3.3.2)",
+        "nl": "Nieuwe optie om altijd op te laden met 1-fase of 3-fase.\nNieuwe instelling voor het ontladen van de energie van de opslagbatterij (indien niet gelijk aan het maximale batterijvermogen)\nbijgewerkte versievereisten (admin 7.6.17 en core 3.3.2)",
+        "fr": "nouvelle option pour toujours charger avec 1p ou 3p\nnouveau paramètre pour décharger la puissance de la batterie de stockage (si elle n'est pas égale à la puissance maximale de la batterie)\nexigences de version mises à jour (admin 7.6.17 et core 3.3.2)",
+        "it": "nuova opzione per caricare sempre con 1p o 3p\nnuova impostazione per la potenza di scarica della batteria di accumulo (se diversa dalla potenza massima della batteria)\nrequisiti della versione aggiornati (admin 7.6.17 e core 3.3.2)",
+        "es": "nueva opción para cargar siempre con 1p o 3p\nnueva configuración para la descarga de energía de la batería de almacenamiento (si no es igual a la potencia máxima de la batería)\nactualizados requisitos de versión (admin 7.6.17 y core 3.3.2)",
+        "pl": "Nowa opcja umożliwiająca zawsze ładowanie za pomocą 1p lub 3p.\nnowa opcja ustawienia rozładowania mocy baterii magazynowej (jeśli nie jest równa maksymalnej mocy baterii)\nzaktualizowane wymagania wersji (admin 7.6.17 i rdzeń 3.3.2)",
+        "uk": "нова опція завжди заряджати з 1ф або 3ф\nнове налаштування для розрядки потужності акумулятору (якщо воно не дорівнює максимальній потужності акумулятора)\nоновлені вимоги версії (адмін 7.6.17 та ядро 3.3.2)",
+        "zh-cn": "新选项：始终使用1p或3p进行充电\n存储电池放电功率的新设置（如果不等于最大电池功率）\n更新版本要求（管理员7.6.17和核心3.3.2）"
+      },
       "3.2.0": {
         "en": "new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging\noptimized strategy for battery charging\nnode.js >= 20 required",
         "de": "neue option, immer zu starten lade, wenn das fahrzeug gesteckt wird, wenn die berechtigung erforderlich ist, ladestation zu blockieren lade\noptimierte strategie für batterielade\nnode.js >= 20 erforderlich",
@@ -80,19 +93,6 @@
         "pl": "Adapter wymaga nodejs > = 18 i kontroler js- > = 5 teraz.\nZaktualizowano zależność.\nfix url do pobrania strony na stronie internetowej Keba\nrozwiązać problemy z kłami poprzez zastąpienie podwójnego przez pojedyncze cudzysłów",
         "uk": "Адаптер вимагає nodejs >= 18 і js-controller >= 5 тепер.\nОновлено залежність.\nвиправити URL-адресу для завантаження сторінок на сайті Keba\nвиправити проблеми розфарбовування за допомогою заміни подвійних лапок",
         "zh-cn": "适配器需要节点QQ18和js控制器QQ 5点了.\n附属关系已经更新.\nkeba 网站下载网页的校正url\n通过用单引号取代双引号来修正问题"
-      },
-      "2.1.1": {
-        "en": "fix error when chanigig dynamic SoC parameter",
-        "de": "fehler beheben, wenn chanigig dynamischer SoC Parameter",
-        "ru": "исправить ошибку при динамическом параметре chanigigig",
-        "pt": "corrigir erro quando o parâmetro SoC dinâmico chanigig",
-        "nl": "fout bij chanigig dynamische SoC parameter herstellen",
-        "fr": "correction de l'erreur lorsque le paramètre dynamique SoC dechanigig",
-        "it": "errore di correzione quando il parametro dinamico di chanigig SoC",
-        "es": "corrige el error cuando el parámetro SoC dinámico chanigig",
-        "pl": "naprawić błąd, gdy chanigig dynamiczny parametr SoC",
-        "uk": "виправлено помилку при механічній динамічній параметрі SoC",
-        "zh-cn": "chanigig 动态 SOC 参数时修复错误"
       }
     },
     "titleLang": {

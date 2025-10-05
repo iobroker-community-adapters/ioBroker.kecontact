@@ -168,6 +168,9 @@ class Kecontact extends utils.Adapter {
     stateMsgFromOtherwallbox = 'internal.message'; /*Message passed on from other instance*/
     stateX2Source = 'x2phaseSource'; /*X2 switch source */
     stateX2Switch = 'x2phaseSwitch'; /*X2 switch */
+    stateVehicleSoC = 'automatic.stateVehicleSoC'; /*SoC of vehicle currently to be charged*/
+    stateTargetSoC = 'automatic.targetSoC'; /*SoC up to this vehicle is to be charged*/
+    stateResetTargetSoC = 'automatic.resetTargetSoC'; /*reset target SoC after it has been reached?*/
 
     /**
      * @param [options] options for adapter start
@@ -204,6 +207,10 @@ class Kecontact extends utils.Adapter {
         if (this.loadChargingSessions) {
             //History Datenpunkte anlegen
             this.createHistory();
+        }
+        const stateForVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
+        if (this.isForeignStateSpecified(stateForVehicleSoC)) {
+            this.addForeignState(stateForVehicleSoC);
         }
 
         // Reset the connection indicator during startup
@@ -364,6 +371,10 @@ class Kecontact extends utils.Adapter {
                 if (this.isForeignStateSpecified(this.config.stateEnWG)) {
                     this.unsubscribeForeignStates(this.config.stateEnWG);
                 }
+                const stateForVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
+                if (this.isForeignStateSpecified(stateForVehicleSoC)) {
+                    this.unsubscribeForeignStates(stateForVehicleSoC);
+                }
             } catch (e) {
                 if (this.log) {
                     // got an exception 'TypeError: Cannot read property 'warn' of undefined'
@@ -518,6 +529,15 @@ class Kecontact extends utils.Adapter {
                     ) {
                         this.requestCurrentChargingValuesDataReport();
                     }
+                }
+            }
+
+            if (id == this.stateVehicleSoC) {
+                if (this.isForeignStateSpecified(oldValue)) {
+                    this.unsubscribeForeignStates(oldValue);
+                }
+                if (this.isForeignStateSpecified(newValue)) {
+                    this.addForeignState(newValue);
                 }
             }
 
@@ -1275,6 +1295,55 @@ class Kecontact extends utils.Adapter {
             max = limit;
         }
         return max;
+    }
+
+    /**
+     * get tagetSoC for charging session.
+     * Checks if a value for vehicleSoC is specified and return value from target SoC
+     */
+    getTagetSoC() {
+        const targetSoC = this.getStateDefault0(this.stateTargetSoC);
+        if (targetSoC == 0) {
+            return 0;
+        }
+        if (this.getVehicleSoC() < 100) {
+            return targetSoC;
+        }
+        return 0;
+    }
+
+    /**
+     * get current SoC for vehicle.
+     * If define get SoC of vehicle (or 100% if not)
+     */
+    getVehicleSoC() {
+        const stateVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
+        if (stateVehicleSoC) {
+            if (typeof stateVehicleSoC !== 'string' || stateVehicleSoC.trim() === '') {
+                return 100;
+            }
+        } else {
+            return 100;
+        }
+        const vehicleSoC = this.getStateDefault0(stateVehicleSoC);
+        if (typeof vehicleSoC !== 'number' || vehicleSoC == 0) {
+            return 100;
+        }
+        return vehicleSoC;
+    }
+
+    /**
+     * true, if taget SoC is to be resetted after vehicles reaches target SoC
+     */
+    isResetTargetSoC() {
+        return this.getStateDefaultFalse(this.stateResetTargetSoC);
+    }
+
+    /**
+     * Reset targetSoc to zero
+     */
+    resetTargetSoC() {
+        this.setStateAck(this.stateTargetSoC, 0);
     }
 
     resetChargingSessionData() {
@@ -2120,7 +2189,7 @@ class Kecontact extends utils.Adapter {
             this.log.debug('no charging calculated');
         } else {
             // if vehicle is currently charging and was not before, then save timestamp
-            if (this.isVehiclePlugged() && this.isPvAutomaticsActive()) {
+            if (this.isDynamicChargingActive()) {
                 curr = this.getAmperage(available, phases);
                 this.log.debug(`first calculation for current is ${curr}`);
                 if (curr > tempMax) {
@@ -2321,6 +2390,27 @@ class Kecontact extends utils.Adapter {
             this.regulateWallbox(curr);
             this.chargingToBeStarted = true;
         }
+    }
+
+    /**
+     * Check, if dynamic charging should be in effect
+     *
+     * @returns true, if dynamic charging should be in effect (= PV automatics)
+     */
+    isDynamicChargingActive() {
+        const targetSoc = this.getTagetSoC();
+        if (targetSoc > 0) {
+            const vehicleSoc = this.getVehicleSoC();
+            if (vehicleSoc > 0) {
+                if (vehicleSoc < targetSoc) {
+                    return false;
+                } else if (this.isResetTargetSoC()) {
+                    this.resetTargetSoC();
+                }
+            }
+        }
+
+        return this.isVehiclePlugged() && this.isPvAutomaticsActive();
     }
 
     /**

@@ -1117,7 +1117,49 @@
         "read": true,
         "write": true,
         "def": 0,
-        "desc": "With this state you can dynamically set a value of SoC /state of charge) above with battery storage can be used for charging vehicle"
+        "desc": "With this state you can dynamically set a value of SoC (state of charge) above with battery storage can be used for charging vehicle"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.stateVehicleSoC",
+      "type": "state",
+      "common": {
+        "name": "name of state holding SoC of vehicle currently to be charged",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": true,
+        "def": null,
+        "desc": "You can specify a state name that holds SoC (state of charge) of a vehicle to be charged. Needed for charging up to a target SoC"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.targetSoC",
+      "type": "state",
+      "common": {
+        "name": "vehicle shall be charged to that SoC without PV automatics",
+        "type": "number",
+        "role": "level",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "Set this value to temporarily charge vehicle without PV automatics unless vehicle SoC (state of charge) has reached this value"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.resetTargetSoC",
+      "type": "state",
+      "common": {
+        "name": "reset target SoC after reaching this value",
+        "type": "boolean",
+        "role": "switch",
+        "read": true,
+        "write": true,
+        "def": true,
+        "desc": "set this option if taget SoC should be cleared after target SoC is reached by vehible"
       },
       "native": {}
     },

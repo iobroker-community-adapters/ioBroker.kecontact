@@ -757,6 +757,18 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateMinimumSoCOfBatteryStorage} to ${newValue}`);
             // no real action to do
         };
+        this.stateChangeListeners[`${this.namespace}.${this.stateVehicleSoC}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateVehicleSoC} to ${newValue}`);
+            // no real action to do
+        };
+        this.stateChangeListeners[`${this.namespace}.${this.stateTargetSoC}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateTargetSoC} to ${newValue}`);
+            // no real action to do
+        };
+        this.stateChangeListeners[`${this.namespace}.${this.stateResetTargetSoC}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateResetTargetSoC} to ${newValue}`);
+            // no real action to do
+        };
 
         //sendUdpDatagram('i');   only needed for discovery
         this.requestReports();

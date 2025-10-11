@@ -628,7 +628,7 @@ class Kecontact extends utils.Adapter {
                     }
                 }
             }
-            // save all state value into internal store
+            // save all state values into internal store
             this.getStates('*', (err, obj) => {
                 if (err) {
                     this.log.error(`error reading states: ${err}`);
@@ -647,7 +647,7 @@ class Kecontact extends utils.Adapter {
                             }
                         }
                     } else {
-                        this.log.error('not states found');
+                        this.log.error('no states found');
                     }
                 }
             });
@@ -1330,6 +1330,7 @@ class Kecontact extends utils.Adapter {
      */
     getVehicleSoC() {
         const stateVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
+        this.log.debug(`vehicle SoC state value: ${stateVehicleSoC}`);
         if (stateVehicleSoC) {
             if (typeof stateVehicleSoC !== 'string' || stateVehicleSoC.trim() === '') {
                 return 100;
@@ -1338,6 +1339,7 @@ class Kecontact extends utils.Adapter {
             return 100;
         }
         const vehicleSoC = this.getStateDefault0(stateVehicleSoC);
+        this.log.debug(`vehicle SoC value: ${vehicleSoC}`);
         if (typeof vehicleSoC !== 'number' || vehicleSoC == 0) {
             return 100;
         }

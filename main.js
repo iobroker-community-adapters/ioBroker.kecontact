@@ -208,10 +208,6 @@ class Kecontact extends utils.Adapter {
             //History Datenpunkte anlegen
             this.createHistory();
         }
-        const stateForVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
-        if (this.isForeignStateSpecified(stateForVehicleSoC)) {
-            this.addForeignState(stateForVehicleSoC);
-        }
 
         // Reset the connection indicator during startup
         this.setState('info.connection', false, true);
@@ -769,6 +765,10 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateResetTargetSoC} to ${newValue}`);
             // no real action to do
         };
+        const stateForVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
+        if (this.isForeignStateSpecified(stateForVehicleSoC)) {
+            this.addForeignState(stateForVehicleSoC);
+        }
 
         //sendUdpDatagram('i');   only needed for discovery
         this.requestReports();

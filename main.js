@@ -637,12 +637,8 @@ class Kecontact extends utils.Adapter {
                             if (obj[id] !== null) {
                                 if (typeof obj[id] == 'object') {
                                     this.setStateInternal(id, obj[id].val);
-                                    this.log.debug(`found state ${id} with value ${obj[id].val}`);
                                     if (id.endsWith(`${this.stateVehicleSoC}`)) {
-                                        const stateForVehicleSoC = this.getStateInternal(obj[id].val);
-                                        this.log.debug(
-                                            `subscribe foreign state for vehicle SoC: ${obj[id].val} with value: ${stateForVehicleSoC}`,
-                                        );
+                                        const stateForVehicleSoC = obj[id].val;
                                         if (this.isForeignStateSpecified(stateForVehicleSoC)) {
                                             this.addForeignState(stateForVehicleSoC);
                                         }

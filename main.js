@@ -2413,8 +2413,10 @@ class Kecontact extends utils.Adapter {
         const targetSoc = this.getTagetSoC();
         if (targetSoc > 0) {
             const vehicleSoc = this.getVehicleSoC();
+            this.log.debug(`target SoC is ${targetSoc}%, vehicle SoC is ${vehicleSoc}%`);
             if (vehicleSoc > 0) {
                 if (vehicleSoc < targetSoc) {
+                    this.log.debug('SoC of vehicle below target, full power charging active');
                     return false;
                 } else if (this.isResetTargetSoC()) {
                     this.resetTargetSoC();

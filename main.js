@@ -2411,6 +2411,7 @@ class Kecontact extends utils.Adapter {
      */
     isDynamicChargingActive() {
         const targetSoc = this.getTagetSoC();
+        this.log.debug(`target SoC is ${targetSoc}%`);
         if (targetSoc > 0) {
             const vehicleSoc = this.getVehicleSoC();
             this.log.debug(`target SoC is ${targetSoc}%, vehicle SoC is ${vehicleSoc}%`);

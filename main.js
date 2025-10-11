@@ -630,15 +630,21 @@ class Kecontact extends utils.Adapter {
                     this.log.error(`error reading states: ${err}`);
                 } else {
                     if (obj) {
-                        for (const i in obj) {
-                            if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+                        for (const id in obj) {
+                            if (!Object.prototype.hasOwnProperty.call(obj, id)) {
                                 continue;
                             }
-                            if (obj[i] !== null) {
-                                if (typeof obj[i] == 'object') {
-                                    this.setStateInternal(i, obj[i].val);
+                            if (obj[id] !== null) {
+                                if (typeof obj[id] == 'object') {
+                                    this.setStateInternal(id, obj[id].val);
+                                    if (id.endsWith(`${this.stateVehicleSoC}`)) {
+                                        const stateForVehicleSoC = this.getStateInternal(obj[id].val);
+                                        if (this.isForeignStateSpecified(stateForVehicleSoC)) {
+                                            this.addForeignState(stateForVehicleSoC);
+                                        }
+                                    }
                                 } else {
-                                    this.log.error(`unexpected state value: ${obj[i]}`);
+                                    this.log.error(`unexpected state value: ${obj[id]}`);
                                 }
                             }
                         }
@@ -765,10 +771,6 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateResetTargetSoC} to ${newValue}`);
             // no real action to do
         };
-        const stateForVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
-        if (this.isForeignStateSpecified(stateForVehicleSoC)) {
-            this.addForeignState(stateForVehicleSoC);
-        }
 
         //sendUdpDatagram('i');   only needed for discovery
         this.requestReports();

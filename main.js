@@ -756,7 +756,7 @@ class Kecontact extends utils.Adapter {
                 this.unsubscribeForeignStates(oldValue);
             }
             if (this.isForeignStateSpecified(newValue)) {
-                this.subscribeForeignStates(newValue);
+                this.addForeignState(newValue);
             }
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateTargetSoC}`] = (_oldValue, newValue) => {

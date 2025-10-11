@@ -528,15 +528,6 @@ class Kecontact extends utils.Adapter {
                 }
             }
 
-            if (id == this.stateVehicleSoC) {
-                if (this.isForeignStateSpecified(oldValue)) {
-                    this.unsubscribeForeignStates(oldValue);
-                }
-                if (this.isForeignStateSpecified(newValue)) {
-                    this.addForeignState(newValue);
-                }
-            }
-
             if (state.ack) {
                 return;
             }
@@ -759,9 +750,14 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateMinimumSoCOfBatteryStorage} to ${newValue}`);
             // no real action to do
         };
-        this.stateChangeListeners[`${this.namespace}.${this.stateVehicleSoC}`] = (_oldValue, newValue) => {
+        this.stateChangeListeners[`${this.namespace}.${this.stateVehicleSoC}`] = (oldValue, newValue) => {
             this.log.debug(`set ${this.stateVehicleSoC} to ${newValue}`);
-            // no real action to do
+            if (this.isForeignStateSpecified(oldValue)) {
+                this.unsubscribeForeignStates(oldValue);
+            }
+            if (this.isForeignStateSpecified(newValue)) {
+                this.subscribeForeignStates(newValue);
+            }
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateTargetSoC}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateTargetSoC} to ${newValue}`);
@@ -2415,7 +2411,6 @@ class Kecontact extends utils.Adapter {
      */
     isDynamicChargingActive() {
         const targetSoc = this.getTagetSoC();
-        this.log.debug(`target SoC is ${targetSoc}%`);
         if (targetSoc > 0) {
             const vehicleSoc = this.getVehicleSoC();
             this.log.debug(`target SoC is ${targetSoc}%, vehicle SoC is ${vehicleSoc}%`);

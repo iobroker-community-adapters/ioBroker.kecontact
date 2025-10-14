@@ -2076,7 +2076,7 @@ class Kecontact extends utils.Adapter {
      * @param milliAmpere  geplante Ladestromstärke
      */
     isNoChargingDueToInteruptedStateOfWallbox(milliAmpere) {
-        if (milliAmpere <= 0) {
+        if (milliAmpere <= 0 || !this.isPvAutomaticsActive) {
             this.startWithState5Attempted = false;
             return false;
         }

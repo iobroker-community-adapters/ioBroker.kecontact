@@ -321,15 +321,6 @@ async makeHttpRequest(url, options = {}) {
 - Check data types and ranges
 - Handle missing or malformed data gracefully
 
-## Code Style and Standards
-
-- Follow JavaScript/TypeScript best practices
-- Use async/await for asynchronous operations
-- Implement proper resource cleanup in `unload()` method
-- Use semantic versioning for adapter releases
-- Include proper JSDoc comments for public methods
-
-
 #### Testing Both Success AND Failure Scenarios
 
 **IMPORTANT**: For every "it works" test, implement corresponding "it doesn't work and fails" tests. This ensures proper error handling and validates that your adapter fails gracefully when expected.

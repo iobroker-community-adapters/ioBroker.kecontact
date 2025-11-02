@@ -43,8 +43,10 @@ class Kecontact extends utils.Adapter {
     TYPE_E_SERIES = 4; // product ID for P30 is like KC-P30-EC240422-E00
     TYPE_X_SERIES = 5;
     TYPE_D_EDITION = 6; // product id (only P30) is KC-P30-EC220112-000-DE, there's no other
+    NO_SOC_DEFINED = -1;
 
     chargeTextAutomatic = 'pvAutomaticActive';
+    chargeTextAutomaticWithMinSoC = 'pvAutomaticWithMinSoc';
     chargeTextMax = 'pvAutomaticInactive';
 
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition
@@ -171,6 +173,7 @@ class Kecontact extends utils.Adapter {
     stateVehicleSoC = 'automatic.stateVehicleSoC'; /*SoC of vehicle currently to be charged*/
     stateTargetSoC = 'automatic.targetSoC'; /*SoC up to this vehicle is to be charged*/
     stateResetTargetSoC = 'automatic.resetTargetSoC'; /*reset target SoC after it has been reached?*/
+    stateMaxSoC = 'automatic.maxSoC'; /*charging up to SoC of vehicle*/
 
     /**
      * @param [options] options for adapter start
@@ -1309,14 +1312,14 @@ class Kecontact extends utils.Adapter {
 
     /**
      * get tagetSoC for charging session.
-     * Checks if a value for vehicleSoC is specified and return value from target SoC
+     * If vehicleSoC is specified and valid, return value from target SoC (otherwise 0)
      */
     getTagetSoC() {
         const targetSoC = this.getStateDefault0(this.stateTargetSoC);
         if (targetSoC == 0) {
             return 0;
         }
-        if (this.getVehicleSoC() < 100) {
+        if (this.getVehicleSoC() != this.NO_SOC_DEFINED) {
             return targetSoC;
         }
         return 0;
@@ -1324,22 +1327,21 @@ class Kecontact extends utils.Adapter {
 
     /**
      * get current SoC for vehicle.
-     * If define get SoC of vehicle (or 100% if not)
+     * If defined, get SoC of vehicle (or -1 if not)
      */
     getVehicleSoC() {
         const stateVehicleSoC = this.getStateInternal(this.stateVehicleSoC);
-        this.log.debug(`vehicle SoC state value: ${stateVehicleSoC}`);
         if (stateVehicleSoC) {
             if (typeof stateVehicleSoC !== 'string' || stateVehicleSoC.trim() === '') {
-                return 100;
+                return this.NO_SOC_DEFINED;
             }
         } else {
-            return 100;
+            return this.NO_SOC_DEFINED;
         }
         const vehicleSoC = this.getStateDefault0(stateVehicleSoC);
-        this.log.debug(`vehicle SoC value: ${vehicleSoC}`);
-        if (typeof vehicleSoC !== 'number' || vehicleSoC == 0) {
-            return 100;
+        this.log.silly(`vehicle SoC value: ${vehicleSoC}`);
+        if (vehicleSoC == 0) {
+            return this.NO_SOC_DEFINED;
         }
         return vehicleSoC;
     }
@@ -1960,7 +1962,12 @@ class Kecontact extends utils.Adapter {
         }
         let text;
         if (this.isPvAutomaticsActive()) {
-            text = I18n.translate(this.chargeTextAutomatic);
+            const targetSoc = this.getTagetSoC();
+            if (targetSoc > 0) {
+                text = I18n.translate(this.chargeTextAutomaticWithMinSoC, targetSoc);
+            } else {
+                text = I18n.translate(this.chargeTextAutomatic);
+            }
         } else {
             text = I18n.translate(this.chargeTextMax);
         }
@@ -2218,112 +2225,119 @@ class Kecontact extends utils.Adapter {
                         this.log.debug(`new current due to min charging by battery storage is ${curr}`);
                     }
                 }
-                const chargeTimestamp = this.getStateAsDate(this.stateChargeTimestamp);
-                const sw1p3pTimestamp = this.getStateAsDate(this.state1p3pSwTimestamp);
-                const consumptionTimestamp = this.getStateAsDate(this.stateConsumptionTimestamp);
+                const maxSoc = this.getStateDefault0(this.stateMaxSoC);
+                const vehicleSoc = this.getVehicleSoC();
+                if (maxSoc > 0 && vehicleSoc != this.NO_SOC_DEFINED && vehicleSoc >= maxSoc) {
+                    curr = 0;
+                    this.log.debug(`no charging because maxSoc of ${maxSoc}% reached`);
+                } else {
+                    const chargeTimestamp = this.getStateAsDate(this.stateChargeTimestamp);
+                    const sw1p3pTimestamp = this.getStateAsDate(this.state1p3pSwTimestamp);
+                    const consumptionTimestamp = this.getStateAsDate(this.stateConsumptionTimestamp);
 
-                if (this.has1P3PAutomatic()) {
-                    const switch1p3p = this.getStateDefault0(this.stateManual1p3p);
-                    const currWith1p = this.getAmperage(available, 1);
-                    let newValues = [];
-                    switch (switch1p3p) {
-                        case 1:
-                            newValues = this.prepareFor1pCharging(
-                                currWith1p,
-                                chargeTimestamp,
-                                newDate,
-                                consumptionTimestamp,
-                                sw1p3pTimestamp,
-                            );
-                            break;
-                        case 3:
-                            newValues = this.prepareFor3pCharging(
-                                currWith1p,
-                                chargeTimestamp,
-                                newDate,
-                                phases,
-                                sw1p3pTimestamp,
-                            );
-                            break;
-                        default:
-                            if (curr != currWith1p) {
-                                if (curr < this.getMinCurrent()) {
-                                    newValues = this.prepareFor1pCharging(
-                                        currWith1p,
-                                        chargeTimestamp,
-                                        newDate,
-                                        consumptionTimestamp,
-                                        sw1p3pTimestamp,
+                    if (this.has1P3PAutomatic()) {
+                        const switch1p3p = this.getStateDefault0(this.stateManual1p3p);
+                        const currWith1p = this.getAmperage(available, 1);
+                        let newValues = [];
+                        switch (switch1p3p) {
+                            case 1:
+                                newValues = this.prepareFor1pCharging(
+                                    currWith1p,
+                                    chargeTimestamp,
+                                    newDate,
+                                    consumptionTimestamp,
+                                    sw1p3pTimestamp,
+                                );
+                                break;
+                            case 3:
+                                newValues = this.prepareFor3pCharging(
+                                    currWith1p,
+                                    chargeTimestamp,
+                                    newDate,
+                                    phases,
+                                    sw1p3pTimestamp,
+                                );
+                                break;
+                            default:
+                                if (curr != currWith1p) {
+                                    if (curr < this.getMinCurrent()) {
+                                        newValues = this.prepareFor1pCharging(
+                                            currWith1p,
+                                            chargeTimestamp,
+                                            newDate,
+                                            consumptionTimestamp,
+                                            sw1p3pTimestamp,
+                                        );
+                                    } else {
+                                        newValues = this.prepareFor3pCharging(
+                                            currWith1p,
+                                            chargeTimestamp,
+                                            newDate,
+                                            phases,
+                                            sw1p3pTimestamp,
+                                        );
+                                    }
+                                }
+                        }
+                        if (newValues['phases'] !== undefined) {
+                            phases = newValues['phases'];
+                        }
+                        if (newValues['curr'] !== undefined) {
+                            curr = newValues['curr'];
+                        }
+                        if (newValues['newValueFor1p3pSwitching'] !== undefined) {
+                            newValueFor1p3pSwitching = newValues['newValueFor1p3pSwitching'];
+                        }
+                    }
+
+                    const addPower = this.getStateDefault0(this.stateAddPower);
+                    if (curr < this.getMinCurrent() && addPower > 0) {
+                        // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis 'addPower' zulassen
+                        this.log.debug(`check with additional power of: ${addPower}`);
+                        if (this.getAmperage(available + addPower, phases) >= this.getMinCurrent()) {
+                            this.log.debug(`Minimum amperage reached by addPower of ${addPower}`);
+                            curr = this.getMinCurrent();
+                        }
+                    }
+                    if (chargeTimestamp !== null) {
+                        if (curr < this.getMinCurrent()) {
+                            // if vehicle is currently charging or is allowed to do so then check limits for power off
+                            if (this.underusage > 0) {
+                                this.log.debug(
+                                    `check with additional power of: ${addPower} and underUsage: ${this.underusage}`,
+                                );
+                                curr = this.getAmperage(available + addPower + this.underusage, phases);
+                                if (curr >= this.getMinCurrent()) {
+                                    this.logInfoOrDebug(
+                                        'tolerated under-usage of charge power, continuing charging session',
                                     );
-                                } else {
-                                    newValues = this.prepareFor3pCharging(
-                                        currWith1p,
-                                        chargeTimestamp,
-                                        newDate,
-                                        phases,
-                                        sw1p3pTimestamp,
-                                    );
+                                    curr = this.getMinCurrent();
+                                    if (newValueFor1p3pSwitching == this.valueFor3pCharging) {
+                                        newValueFor1p3pSwitching = null; // then also stop possible 1p to 3p switching
+                                    }
                                 }
                             }
-                    }
-                    if (newValues['phases'] !== undefined) {
-                        phases = newValues['phases'];
-                    }
-                    if (newValues['curr'] !== undefined) {
-                        curr = newValues['curr'];
-                    }
-                    if (newValues['newValueFor1p3pSwitching'] !== undefined) {
-                        newValueFor1p3pSwitching = newValues['newValueFor1p3pSwitching'];
-                    }
-                }
-
-                const addPower = this.getStateDefault0(this.stateAddPower);
-                if (curr < this.getMinCurrent() && addPower > 0) {
-                    // Reicht der Überschuss noch nicht, um zu laden, dann ggfs. zusätzlichen Netzbezug bis 'addPower' zulassen
-                    this.log.debug(`check with additional power of: ${addPower}`);
-                    if (this.getAmperage(available + addPower, phases) >= this.getMinCurrent()) {
-                        this.log.debug(`Minimum amperage reached by addPower of ${addPower}`);
-                        curr = this.getMinCurrent();
-                    }
-                }
-                if (chargeTimestamp !== null) {
-                    if (curr < this.getMinCurrent()) {
-                        // if vehicle is currently charging or is allowed to do so then check limits for power off
-                        if (this.underusage > 0) {
-                            this.log.debug(
-                                `check with additional power of: ${addPower} and underUsage: ${this.underusage}`,
-                            );
-                            curr = this.getAmperage(available + addPower + this.underusage, phases);
-                            if (curr >= this.getMinCurrent()) {
+                        }
+                        if (curr < this.getMinCurrent()) {
+                            if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
                                 this.logInfoOrDebug(
-                                    'tolerated under-usage of charge power, continuing charging session',
+                                    `minimum charge time of ${this.minChargeSeconds}sec not reached, continuing charging session. ${chargeTimestamp}`,
                                 );
                                 curr = this.getMinCurrent();
-                                if (newValueFor1p3pSwitching == this.valueFor3pCharging) {
-                                    newValueFor1p3pSwitching = null; // then also stop possible 1p to 3p switching
-                                }
+                                newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching
                             }
                         }
-                    }
-                    if (curr < this.getMinCurrent()) {
-                        if (this.isContinueDueToMinChargingTime(newDate, chargeTimestamp)) {
-                            this.logInfoOrDebug(
-                                `minimum charge time of ${this.minChargeSeconds}sec not reached, continuing charging session. ${chargeTimestamp}`,
-                            );
-                            curr = this.getMinCurrent();
-                            newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching
+                        if (curr < this.getMinCurrent()) {
+                            if (this.isContinueDueToMinConsumptionTime(newDate)) {
+                                this.logInfoOrDebug(
+                                    `minimum grid consumption time of ${this.minConsumptionSeconds}sec not reached, continuing charging session. ConsumptionTimestamp: ${consumptionTimestamp}`,
+                                );
+                                curr = this.getMinCurrent();
+                                newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching
+                            }
+                        } else {
+                            this.setStateAck(this.stateConsumptionTimestamp, null);
                         }
-                    }
-                    if (curr < this.getMinCurrent()) {
-                        if (this.isContinueDueToMinConsumptionTime(newDate)) {
-                            this.logInfoOrDebug(
-                                `minimum grid consumption time of ${this.minConsumptionSeconds}sec not reached, continuing charging session. ConsumptionTimestamp: ${consumptionTimestamp}`,
-                            );
-                            curr = this.getMinCurrent();
-                            newValueFor1p3pSwitching = null; // than also stop possible 1p/3p switching
-                        }
-                    } else {
-                        this.setStateAck(this.stateConsumptionTimestamp, null);
                     }
                 }
             } else {

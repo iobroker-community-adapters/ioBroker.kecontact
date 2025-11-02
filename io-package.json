@@ -1150,6 +1150,20 @@
       "native": {}
     },
     {
+      "_id": "automatic.maxSoC",
+      "type": "state",
+      "common": {
+        "name": "charging up to SoC of vehicle",
+        "type": "number",
+        "role": "level",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "charging of vehicle stops when SoC (state of charge) has reached this value"
+      },
+      "native": {}
+    },
+    {
       "_id": "automatic.resetTargetSoC",
       "type": "state",
       "common": {

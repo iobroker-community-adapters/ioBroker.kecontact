@@ -766,6 +766,10 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateTargetSoC} to ${newValue}`);
             // no real action to do
         };
+        this.stateChangeListeners[`${this.namespace}.${this.stateMaxSoC}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateMaxSoC} to ${newValue}`);
+            // no real action to do
+        };
         this.stateChangeListeners[`${this.namespace}.${this.stateResetTargetSoC}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateResetTargetSoC} to ${newValue}`);
             // no real action to do

@@ -1,6 +1,5 @@
 {
     "pvAutomaticActive": "PV-оптимізована зарядка",
     "pvAutomaticInactive": "Повна зарядна потужність",
-    "pvAutomaticMinSoc": "зарядити автомобіль до %s %",
-    "pvAutomaticWithMinSoc": "Оптимізована для PV зарядка, швидка зарядка до SoC %s %"
+    "pvAutomaticMinSoc": "зарядити автомобіль до %s %"
 }

@@ -1,6 +1,5 @@
 {
     "pvAutomaticActive": "PV-geoptimaliseerd opladen",
     "pvAutomaticInactive": "Volledige oplaadkracht",
-    "pvAutomaticMinSoc": "voertuig opladen tot %s %",
-    "pvAutomaticWithMinSoc": "PV-geoptimaliseerd opladen, snel opladen tot SoC van %s %"
+    "pvAutomaticMinSoc": "voertuig opladen tot %s %"
 }

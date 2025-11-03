@@ -1,6 +1,5 @@
 {
     "pvAutomaticActive": "PV-optimiertes Laden",
     "pvAutomaticInactive": "volle Ladeleistung",
-    "pvAutomaticMinSoc": "Fahrzeug bis %s % aufladen",
-    "pvAutomaticWithMinSoc": "PV-optimiertes Laden, Schnellladung auf SoC von %s %"
+    "pvAutomaticMinSoc": "Fahrzeug bis %s % aufladen"
 }

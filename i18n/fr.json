@@ -1,6 +1,5 @@
 {
     "pvAutomaticActive": "Charge optimisée PV",
     "pvAutomaticInactive": "puissance de charge complète",
-    "pvAutomaticMinSoc": "charger le véhicule jusqu'à %s %",
-    "pvAutomaticWithMinSoc": "Charge optimisée pour le PV, charge rapide vers le SoC de %s %"
+    "pvAutomaticMinSoc": "charger le véhicule jusqu'à %s %"
 }

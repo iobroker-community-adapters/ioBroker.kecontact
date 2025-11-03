@@ -1,5 +1,5 @@
 {
     "pvAutomaticActive": "PV-optimized charging",
-    "pvAutomaticWithMinSoc": "PV-optimized charging, fast charge to SoC of %s %",
+    "pvAutomaticMinSoc": "charge vehicle to %s %",
     "pvAutomaticInactive": "full charging power"
 }

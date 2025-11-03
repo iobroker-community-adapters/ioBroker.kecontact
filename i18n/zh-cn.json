@@ -1,5 +1,6 @@
 {
     "pvAutomaticActive": "PV优化充电",
     "pvAutomaticInactive": "充分充电功率",
+    "pvAutomaticMinSoc": "为车辆充电至 %s %",
     "pvAutomaticWithMinSoc": "PV 优化充电，快速充电至 %s % 的 SoC"
 }

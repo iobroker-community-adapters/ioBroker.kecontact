@@ -46,7 +46,7 @@ class Kecontact extends utils.Adapter {
     NO_SOC_DEFINED = -1;
 
     chargeTextAutomatic = 'pvAutomaticActive';
-    chargeTextAutomaticWithMinSoC = 'pvAutomaticWithMinSoc';
+    chargeTextAutomaticWithMinSoC = 'pvAutomaticMinSoc';
     chargeTextMax = 'pvAutomaticInactive';
 
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition

@@ -452,7 +452,7 @@ class Kecontact extends utils.Adapter {
                 }
             }
 
-            // if the Wallbox have been disabled or enabled.
+            // if the Wallbox has been disabled or enabled.
             if (id == `${this.namespace}.${this.stateWallboxDisabled}`) {
                 if (oldValue != newValue) {
                     this.log.info(`change pause status of wallbox from ${oldValue} to ${newValue}`);
@@ -461,7 +461,7 @@ class Kecontact extends utils.Adapter {
                 }
             }
 
-            // if PV Automatic has been disable or enabled.
+            // if PV Automatic has been disabled or enabled.
             if (id == `${this.namespace}.${this.statePvAutomatic}`) {
                 if (oldValue != newValue) {
                     this.log.info(`change of photovoltaics automatic from ${oldValue} to ${newValue}`);
@@ -471,7 +471,16 @@ class Kecontact extends utils.Adapter {
                 }
             }
 
-            // if the state of the X1 Input has chaned.
+            // if target SoC has been changed.
+            if (id == `${this.namespace}.${this.stateTargetSoC}`) {
+                if (oldValue != newValue) {
+                    this.log.info(`change target SoC from ${oldValue} to ${newValue}`);
+                    this.displayChargeMode();
+                    this.forceUpdateOfCalculation();
+                }
+            }
+
+            // if the state of the X1 Input has changed.
             if (id == `${this.namespace}.${this.stateX1input}`) {
                 if (this.useX1switchForAutomatic) {
                     if (oldValue != newValue) {
@@ -482,7 +491,7 @@ class Kecontact extends utils.Adapter {
                 }
             }
 
-            // if the value for AddPower  was changes.
+            // if the value for AddPower was changed.
             if (id == `${this.namespace}.${this.stateAddPower}`) {
                 if (oldValue != newValue) {
                     this.log.info(`change additional power from grid consumption from ${oldValue} to ${newValue}`);
@@ -766,13 +775,12 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateTargetSoC} to ${newValue}`);
             // no real action to do
         };
-        this.stateChangeListeners[`${this.namespace}.${this.stateMaxSoC}`] = (_oldValue, newValue) => {
-            this.log.debug(`set ${this.stateMaxSoC} to ${newValue}`);
-            this.displayChargeMode();
-            // no real action to do
-        };
         this.stateChangeListeners[`${this.namespace}.${this.stateResetTargetSoC}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateResetTargetSoC} to ${newValue}`);
+            // no real action to do
+        };
+        this.stateChangeListeners[`${this.namespace}.${this.stateMaxSoC}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateMaxSoC} to ${newValue}`);
             // no real action to do
         };
 

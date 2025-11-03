@@ -119,6 +119,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 -->
 ### **WORK IN PROGRESS**
 * (Sneak-L8) new options to charge vehicle up to a specified SoC
+* (Sneak-L8) new option to stop charging at a certain SoC
 * (Sneak-L8) raise adapter-dev version from 1.4 to 1.5
 * (Sneak-L8) drop dependencies to chai, sinon and mocha
 

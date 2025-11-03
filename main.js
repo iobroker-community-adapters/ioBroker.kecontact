@@ -768,6 +768,7 @@ class Kecontact extends utils.Adapter {
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateMaxSoC}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateMaxSoC} to ${newValue}`);
+            this.displayChargeMode();
             // no real action to do
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateResetTargetSoC}`] = (_oldValue, newValue) => {
@@ -1361,7 +1362,7 @@ class Kecontact extends utils.Adapter {
      * Reset targetSoc to zero
      */
     resetTargetSoC() {
-        this.setStateAck(this.stateTargetSoC, 0);
+        this.setState(this.stateTargetSoC, 0); // no ack to execute stateChangeListener
     }
 
     resetChargingSessionData() {
@@ -1960,6 +1961,10 @@ class Kecontact extends utils.Adapter {
         return false;
     }
 
+    /**
+     * Show charge mode on display of charging station
+     *
+     */
     displayChargeMode() {
         if (this.isPassive) {
             return;

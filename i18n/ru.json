@@ -1,4 +1,5 @@
 {
     "pvAutomaticActive": "PV-оптимизированная зарядка",
-    "pvAutomaticInactive": "Полная зарядная сила"
+    "pvAutomaticInactive": "Полная зарядная сила",
+    "pvAutomaticWithMinSoc": "PV-оптимизированная зарядка, быстрая зарядка до SoC %s %"
 }

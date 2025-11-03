@@ -1,4 +1,5 @@
 {
     "pvAutomaticActive": "Carregamento otimizado para PV",
-    "pvAutomaticInactive": "Poder de carregamento total"
+    "pvAutomaticInactive": "Poder de carregamento total",
+    "pvAutomaticWithMinSoc": "Carregamento otimizado para PV, carregamento rápido para SoC de %s %"
 }

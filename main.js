@@ -52,6 +52,7 @@ class Kecontact extends utils.Adapter {
     wallboxWarningSent = false; // Warning for inacurate regulation with Deutshcland Edition
     wallboxUnknownSent = false; // Warning wallbox not recognized
     isPassive = true; // no automatic power regulation?
+    isSwitchedToNonPv = false;
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {Date | null} */
     lastDeviceData = null; // time of last check for device information
@@ -466,6 +467,9 @@ class Kecontact extends utils.Adapter {
                 if (oldValue != newValue) {
                     this.log.info(`change of photovoltaics automatic from ${oldValue} to ${newValue}`);
                     newValue = this.getBoolean(newValue);
+                    if (newValue === false) {
+                        this.isSwitchedToNonPv = true;
+                    }
                     this.displayChargeMode();
                     this.forceUpdateOfCalculation();
                 }
@@ -2358,13 +2362,16 @@ class Kecontact extends utils.Adapter {
                     }
                 }
             } else {
-                curr = tempMax; // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
-                this.log.debug(`new current due to vehicle not plugged or pv automatics not active is ${curr}`);
-                this.isMaxPowerCalculation = true;
-                if (this.isVehiclePlugged()) {
-                    newValueFor1p3pSwitching = this.valueFor3pCharging;
-                } else {
-                    newValueFor1p3pSwitching = this.valueFor1p3pOff;
+                // in non pv mode charge with maximum power only if charging is actibated
+                if (this.isSwitchedToNonPv === true || this.getStateDefaultFalse(this.stateWallboxEnabled)) {
+                    curr = tempMax; // no automatic active or vehicle not plugged to wallbox? Charging with maximum power possible
+                    this.log.debug(`new current due to vehicle not plugged or pv automatics not active is ${curr}`);
+                    this.isMaxPowerCalculation = true;
+                    if (this.isVehiclePlugged()) {
+                        newValueFor1p3pSwitching = this.valueFor3pCharging;
+                    } else {
+                        newValueFor1p3pSwitching = this.valueFor1p3pOff;
+                    }
                 }
             }
         }
@@ -2431,6 +2438,7 @@ class Kecontact extends utils.Adapter {
             }
             this.log.debug(`wallbox set to charging maximum of ${curr} mA`);
             this.regulateWallbox(curr);
+            this.isSwitchedToNonPv = false;
             this.chargingToBeStarted = true;
         }
     }

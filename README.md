@@ -165,6 +165,7 @@ This project is not affiliated directly or indirectly with the company KEBA AG.
 KeConnect is a registered trademark of KEBA AG.
 
 ## License
+
 Copyright (c) 2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>  
 
                                  Apache License

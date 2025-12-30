@@ -123,7 +123,8 @@
     },
     "authors": [
       "UncleSamSwiss <samuel.weibel@gmail.com>",
-      "Sneak-L8 <git@sengler.de>"
+      "Sneak-L8 <git@sengler.de>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "keywords": [
       "KeContact",

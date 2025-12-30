@@ -2,19 +2,11 @@
   "name": "iobroker.kecontact",
   "version": "3.3.0",
   "description": "Control your charging station and use automatic regulation e.g. to charge your vehicle by photovoltaic surplus",
-  "author": {
-    "name": "UncleSamSwiss",
-    "email": "samuel.weibel@gmail.com"
-  },
+  "author": "UncleSamSwiss <samuel.weibel@gmail.com>",
   "contributors": [
-    {
-      "name": "UncleSamSwiss",
-      "email": "samuel.weibel@gmail.com"
-    },
-    {
-      "name": "Sneak-L8",
-      "email": "git@sengler.de"
-    }
+    "UncleSamSwiss <samuel.weibel@gmail.com>",
+    "Sneak-L8 <git@sengler.de>",
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.kecontact",
   "license": "Apache-2.0",

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "3.3.0",
+    "version": "3.4.0",
     "news": {
+      "3.4.0": {
+        "en": "new options to charge vehicle up to a specified SoC\nnew option to stop charging at a certain SoC\nraise adapter-dev version from 1.4 to 1.5\ndrop dependencies to chai, sinon and mocha",
+        "de": "neue Optionen zum Aufladen von Fahrzeugen bis zu einer bestimmten SoC\nneue Möglichkeit, das Laden an einer bestimmten SoC zu stoppen\nheben adapter-dev-version von 1.4 bis 1.5\nabhängigkeiten von chai, sinon und mocha",
+        "ru": "новые возможности зарядки автомобиля до заданной SoC\nновый вариант остановки зарядки на определенном SoC\nподнять адаптер-дев версии с 1,4 до 1,5\nсбросить зависимости от чаи, синуса и моча",
+        "pt": "novas opções para carregar o veículo até um SoC especificado\nnova opção para parar de carregar em um certo SoC\nlevantar adaptador-dev versão de 1.4 para 1.5\ndependências de gota para chai, sinon e mocha",
+        "nl": "nieuwe opties om het voertuig op te laden tot een opgegeven SoC\nnieuwe optie om te stoppen met opladen bij een bepaalde SoC\nadapter-dev versie verhogen van 1.4 naar 1.5\ndrop afhankelijkheden van chai, sinon en mokka",
+        "fr": "nouvelles options pour charger le véhicule jusqu'à un SoC spécifié\nnouvelle option pour arrêter le chargement à un certain SoC\naugmenter la version adaptateur-dev de 1.4 à 1.5\nchute des dépendances au chai, au sinon et au moka",
+        "it": "nuove opzioni per caricare il veicolo fino a un SoC specificato\nnuova opzione per smettere di ricaricare a un certo SoC\nalzare la versione adattatore-dev da 1.4 a 1.5\ncadere dipendenze a chai, sinon e mocha",
+        "es": "nuevas opciones para cargar el vehículo hasta un SoC especificado\nnueva opción para dejar de cargar en un determinado SoC\nsubir la versión del adaptador-dev de 1.4 a 1.5\ndependencia de chai, sinon y mocha",
+        "pl": "nowe opcje ładowania pojazdu do określonego SoC\nnowa opcja zaprzestania pobierania opłat w określonym SoC\npodnieść adapter- dev wersji z 1.4 do 1.5\nspadek zależności do chai, sinon i mocha",
+        "uk": "нові варіанти заряджання автомобіля до вказаного SoC\nновий варіант для зупинки зарядки на певному SoC\nпідняти адаптер-dev версії від 1.4 до 1.5\nпадіння залежностей до чаї, синона і моча",
+        "zh-cn": "将车辆充电至特定索C的新选项\n停止在某个 SOC 充电的新选项\n将适配器版本从1.4提高到1.5\n放弃对chai、sinon和mocha的依赖"
+      },
       "3.3.0": {
         "en": "new option to always charge with 1p oder 3p\nnew setting for discharging power of storage battery (if not equal to max battery power)\nupdated version requirements (admin 7.6.17 and core 3.3.2)",
         "de": "Neue Option zum immer Laden mit 1p oder 3p.\nNeue Einstellung für die Entladeleistung des Speicherakkus (wenn diese nicht der maximalen Akkuleistung entspricht)\nAktualisierte Versionsanforderungen (Admin 7.6.17 und Core 3.3.2)",
@@ -80,19 +93,6 @@
         "pl": "nowa opcja ograniczenia stacji ładowania zgodnie z german § 14a EnWG\nwłączyć currTime do użytku ręcznego i X2 nawet w trybie pasywnym\nminimum verison für js- controller teraz 5.0.19\nustaw domyślną wartość currTimer timeout od 0 do 1\nobsługa nowej opcji \"setBoot\" z serii c- z podaniem firmware 3.10.57",
         "uk": "новий варіант для обмеження зарядної станції за німецькою §14a EnWG\nувімкніть currTime для ручного використання та X2 навіть у пасивному режимі\nмінімальний verison für js-controller тепер 5.0.19\nset currTimer timeout значення за замовчуванням від 0 до 1\nпідтримка нового варіанту \"setBoot\" прошивки c-series 3.10.57",
         "zh-cn": "根据德国§14a EnWG限制充电站的新选项\n允许手动使用 currTime , X2 甚至是被动模式\n最低控制器现在5.0.19\n设置 currTimer 超时默认值从 0 到 1\n支持 c 序列中的“ setBoot” 的新选项,该选项表示固件 3.10.57"
-      },
-      "2.2.0": {
-        "en": "Adapter requires nodejs >= 18 and js-controller >= 5 now.\nDependencies have been updated.\nfix url for download page at Keba website\nfix lint problems by replacing double by single quotes",
-        "de": "Adapter benötigt Knoten >= 18 und js-Controller >= 5 jetzt.\nAbhängigkeiten wurden aktualisiert.\nurl für Download-Seite auf Keba Website\nlint-probleme beheben, indem doppel durch einzelne zitate ersetzt werden",
-        "ru": "Адаптер требует узлов >= 18 и js-контроллер >= Сейчас 5.\nЗависимость была обновлена.\nисправить URL для загрузки страницы на сайте Keba\nисправить проблемы линта, заменив двойную на одиночные цитаты",
-        "pt": "Adapter requer nodejs >= 18 e js-controller >= 5 agora.\nAs dependências foram atualizadas.\ncorrigir url para página de download no site da Keba\ncorrigir problemas lint substituindo o dobro por citações únicas",
-        "nl": "Voor adapters zijn nodejs (m.u.v. 18 en js-controller) vereist Vijf nu.\nAfhankelijkheden zijn bijgewerkt.\nfix url voor download pagina op Keba website\nfix pluis problemen door het vervangen van dubbele door enkele citaten",
-        "fr": "Adaptateur nécessite nodejs >= 18 et js-controller >= 5 maintenant.\nLes dépendances ont été actualisées.\nfixer url pour télécharger la page sur le site de Keba\nrésoudre les problèmes de linte en remplaçant le double par des guillemets simples",
-        "it": "Adattatore richiede nodejs >= 18 e js-controller >= 5 ora.\nLe dipendenze sono state aggiornate.\ncorrezione url per la pagina di download su Keba sito\nrisolvere i problemi legati sostituendo il doppio da singole citazioni",
-        "es": "Adaptador requiere nodejs н= 18 y js-controller √= 5 ahora.\nSe han actualizado las dependencias.\nfijar url para la página de descarga en el sitio web de Keba\nsolucionar problemas de lint reemplazando el doble por citas individuales",
-        "pl": "Adapter wymaga nodejs > = 18 i kontroler js- > = 5 teraz.\nZaktualizowano zależność.\nfix url do pobrania strony na stronie internetowej Keba\nrozwiązać problemy z kłami poprzez zastąpienie podwójnego przez pojedyncze cudzysłów",
-        "uk": "Адаптер вимагає nodejs >= 18 і js-controller >= 5 тепер.\nОновлено залежність.\nвиправити URL-адресу для завантаження сторінок на сайті Keba\nвиправити проблеми розфарбовування за допомогою заміни подвійних лапок",
-        "zh-cn": "适配器需要节点QQ18和js控制器QQ 5点了.\n附属关系已经更新.\nkeba 网站下载网页的校正url\n通过用单引号取代双引号来修正问题"
       }
     },
     "titleLang": {

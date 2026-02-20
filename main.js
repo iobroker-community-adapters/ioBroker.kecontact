@@ -2898,19 +2898,23 @@ class Kecontact extends utils.Adapter {
                 return;
             }
             regexPattern.lastIndex = 0;
-            const list = regexPattern.exec(body);
-            if (list) {
-                this.log.warn(`${prefix}section found, examing ${list.length} firmware versions ...`);
-                let firmwareVersion = null;
-                list.forEach(element => {
-                    this.log.warn(`${prefix}examing element ${element}`);
+            let match;
+            let found = false;
+            let firmwareVersion = null;
+            while ((match = regexPattern.exec(body) !== null)) {
+                found = true;
+                this.log.debug(`${prefix}section found, examing ${match[1]} ...`);
+                const element = match[1];
+                if (element == null || element.length == 0) {
+                    this.log.warn(`${prefix}empty section found`);
+                } else {
                     this.regexFirmware.lastIndex = 0;
-                    const block = this.regexFirmware.exec(element);
-                    if (block) {
-                        if (block[1].length > 0) {
-                            this.log.debug(`${prefix}found firmware ${block[1]}`);
-                            if (firmwareVersion == null || firmwareVersion < block[1]) {
-                                firmwareVersion = block[1];
+                    const versionMatch = this.regexFirmware.exec(element);
+                    if (versionMatch) {
+                        if (versionMatch[1].length > 0) {
+                            this.log.debug(`${prefix}found firmware ${versionMatch[1]}`);
+                            if (firmwareVersion == null || firmwareVersion < versionMatch[1]) {
+                                firmwareVersion = versionMatch[1];
                             }
                         } else {
                             this.log.warn(`${prefix}empty firmware found in ${element}`);
@@ -2918,30 +2922,33 @@ class Kecontact extends utils.Adapter {
                     } else {
                         this.log.warn(`${prefix}no firmware found in ${element}`);
                     }
-                });
+                }
+            }
+            if (found == false) {
+                this.log.warn(`${prefix}no section found`);
+                this.log.debug(body);
+                return false;
+            }
+            this.setStateAck(this.stateFirmwareAvailable, firmwareVersion);
+            if (this.getWallboxModel() == this.MODEL_P30) {
                 let currFirmware = this.getStateInternal(this.stateFirmware);
                 this.regexCurrFirmware.lastIndex = 0;
                 const currFirmwareList = this.regexCurrFirmware.exec(currFirmware);
                 if (currFirmwareList) {
-                    currFirmware = `V${currFirmwareList[1]}`;
+                    currFirmware = `${currFirmwareList[1]}`;
                 } else {
                     this.log.error(`${prefix}current firmare unknown: ${currFirmware}`);
                     currFirmware = 'unknown';
                 }
-                this.setStateAck(this.stateFirmwareAvailable, firmwareVersion);
-                if (this.getWallboxModel() == this.MODEL_P30) {
-                    // Update check only for c-/e-Series, x-Series texts not comaptible
-                    if (firmwareVersion != null && firmwareVersion == currFirmware) {
-                        this.log.info(`${prefix}latest firmware installed`);
-                    } else {
-                        this.log.warn(
-                            `${prefix}current firmware ${currFirmware}, <a href="${this.firmwareUrl}">new firmware ${firmwareVersion} available</a>`,
-                        );
-                    }
+
+                // Update check only for c-/e-Series, x-Series texts not comaptible
+                if (firmwareVersion != null && firmwareVersion == currFirmware) {
+                    this.log.info(`${prefix}latest firmware installed`);
+                } else {
+                    this.log.warn(
+                        `${prefix}current firmware ${currFirmware}, <a href="${this.firmwareUrl}">new firmware ${firmwareVersion} available</a>`,
+                    );
                 }
-            } else {
-                this.log.warn(`${prefix}no section found`);
-                this.log.debug(body);
             }
         } else {
             this.log.warn(`${prefix}empty page, status code ${statusCode}`);

@@ -2900,13 +2900,15 @@ class Kecontact extends utils.Adapter {
             regexPattern.lastIndex = 0;
             const list = regexPattern.exec(body);
             if (list) {
+                this.log.warn(`${prefix}section found, examing ${list.length} firmware versions ...`);
                 let firmwareVersion = null;
                 list.forEach(element => {
+                    this.log.warn(`${prefix}examing element ${element}`);
                     this.regexFirmware.lastIndex = 0;
                     const block = this.regexFirmware.exec(element);
                     if (block) {
                         if (block[1].length > 0) {
-                            this.log.debug(`found firmware ${block[1]}`);
+                            this.log.debug(`${prefix}found firmware ${block[1]}`);
                             if (firmwareVersion == null || firmwareVersion < block[1]) {
                                 firmwareVersion = block[1];
                             }

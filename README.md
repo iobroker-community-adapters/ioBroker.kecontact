@@ -118,6 +118,10 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (Sneak-L8) checking of firmware version is back
+
 ### 3.4.0 (2026-01-17)
 * (Sneak-L8) new options to charge vehicle up to a specified SoC
 * (Sneak-L8) new option to stop charging at a certain SoC

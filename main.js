@@ -105,11 +105,12 @@ class Kecontact extends utils.Adapter {
     batteryStrategy = 0; // default = don't care for a battery storage
     startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
     voltage = 230; // calculate with european standard voltage of 230V
-    firmwareUrl = 'https://www.keba.com/en/emobility/service-support/downloads/downloads';
+    firmwareUrl = 'https://www.keba.com/de/emobility/service-support/downloads/downloads';
     regexP30cSeries =
-        /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 a-\/b-\/c-\/e-series((?:.|\n|\r)*?)<h3/gi;
-    //regexP30xSeries    = /<h3 .*class="headline *tw-h3 ">(?:(?:\s|\n|\r)*?)Updates KeContact P30 x-series((?:.|\n|\r)*?)<h3/gi;
-    regexFirmware = /<div class="mt-3">Firmware Update\s+((?:.)*?)<\/div>/gi;
+        /"@type": "Dataset",[\r\n ]*?"name": "Firmware\\u0020Update\\u0020\\u0028a\\u002D\\\/b\\u002D\\\/c\\u002D\\\/e\\u002Dseries\\u0029",[\r\n]?((.|\r|\n)*?)},/gi;
+    regexP30xSeries =
+        /"@type": "Dataset",[\r\n ]*?"name": "Software\\u002DUpdate\\u0020\\u0028x\\u002Dseries\\u0029",[\r\n]?((.|\r|\n)*?)},/gi;
+    regexFirmware = /"version": "(.*?)",/gi;
     regexCurrFirmware = /P30 v\s+((?:.)*?)\s+\(/gi;
 
     stateWallboxEnabled = 'enableUser'; /*Enable User*/
@@ -2876,7 +2877,7 @@ class Kecontact extends utils.Adapter {
                     case this.TYPE_D_EDITION:
                         return this.regexP30cSeries;
                     case this.TYPE_X_SERIES:
-                        return null; // regexP30xSeries; x-Series no longer supported for firmware check
+                        return this.regexP30xSeries;
                     default:
                         return null;
                 }
@@ -2899,32 +2900,46 @@ class Kecontact extends utils.Adapter {
             regexPattern.lastIndex = 0;
             const list = regexPattern.exec(body);
             if (list) {
-                this.regexFirmware.lastIndex = 0;
-                const block = this.regexFirmware.exec(list[1]);
-                if (block) {
-                    this.setStateAck(this.stateFirmwareAvailable, block[1]);
-                    const currFirmware = this.getStateInternal(this.stateFirmware);
-                    this.regexCurrFirmware.lastIndex = 0;
-                    const currFirmwareList = this.regexCurrFirmware.exec(currFirmware);
-                    if (currFirmwareList) {
-                        currFirmwareList[1] = `V${currFirmwareList[1]}`;
-                        if (block[1] == currFirmwareList[1]) {
-                            this.log.info(`${prefix}latest firmware installed`);
+                let firmwareVersion = null;
+                list.forEach(element => {
+                    this.regexFirmware.lastIndex = 0;
+                    const block = this.regexFirmware.exec(element);
+                    if (block) {
+                        if (block[1].length > 0) {
+                            this.log.debug(`found firmware ${block[1]}`);
+                            if (firmwareVersion == null || firmwareVersion < block[1]) {
+                                firmwareVersion = block[1];
+                            }
                         } else {
-                            this.log.warn(
-                                `${prefix}current firmware ${currFirmwareList[1]}, <a href="${this.firmwareUrl}">new firmware ${block[1]} available</a>`,
-                            );
+                            this.log.warn(`${prefix}empty firmware found in ${element}`);
                         }
                     } else {
-                        this.log.error(`${prefix}current firmare unknown: ${currFirmware}`);
+                        this.log.warn(`${prefix}no firmware found in ${element}`);
                     }
+                });
+                let currFirmware = this.getStateInternal(this.stateFirmware);
+                this.regexCurrFirmware.lastIndex = 0;
+                const currFirmwareList = this.regexCurrFirmware.exec(currFirmware);
+                if (currFirmwareList) {
+                    currFirmware = `V${currFirmwareList[1]}`;
                 } else {
-                    this.log.warn(`${prefix}no firmware found`);
+                    this.log.error(`${prefix}current firmare unknown: ${currFirmware}`);
+                    currFirmware = 'unknown';
+                }
+                this.setStateAck(this.stateFirmwareAvailable, firmwareVersion);
+                if (this.getWallboxModel() == this.MODEL_P30) {
+                    // Update check only for c-/e-Series, x-Series texts not comaptible
+                    if (firmwareVersion != null && firmwareVersion == currFirmware) {
+                        this.log.info(`${prefix}latest firmware installed`);
+                    } else {
+                        this.log.warn(
+                            `${prefix}current firmware ${currFirmware}, <a href="${this.firmwareUrl}">new firmware ${firmwareVersion} available</a>`,
+                        );
+                    }
                 }
             } else {
-                // disabled due to chenges on webpage of Keba
-                //adapter.log.warn(prefix + 'no section found');
-                //adapter.log.debug(body);
+                this.log.warn(`${prefix}no section found`);
+                this.log.debug(body);
             }
         } else {
             this.log.warn(`${prefix}empty page, status code ${statusCode}`);

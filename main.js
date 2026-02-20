@@ -2903,8 +2903,8 @@ class Kecontact extends utils.Adapter {
             let firmwareVersion = null;
             while ((match = regexPattern.exec(body) !== null)) {
                 found = true;
-                this.log.debug(`${prefix}section found, examing ${match[1]} ...`);
-                const element = match[1];
+                const element = match[0];
+                this.log.debug(`${prefix}section found, examing ${element} ...`);
                 if (element == null || element.length == 0) {
                     this.log.warn(`${prefix}empty section found`);
                 } else {

@@ -2901,9 +2901,9 @@ class Kecontact extends utils.Adapter {
             let match;
             let found = false;
             let firmwareVersion = null;
-            while ((match = regexPattern.exec(body) !== null)) {
+            while ((match = regexPattern.exec(body)) !== null) {
                 found = true;
-                const element = match;
+                const element = match[1];
                 this.log.debug(`${prefix}section found, examing ${element} ...`);
                 if (element == null || element.length == 0) {
                     this.log.warn(`${prefix}empty section found`);

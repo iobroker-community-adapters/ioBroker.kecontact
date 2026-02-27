@@ -2930,7 +2930,7 @@ class Kecontact extends utils.Adapter {
                 return false;
             }
             this.setStateAck(this.stateFirmwareAvailable, firmwareVersion);
-            if (this.getWallboxModel() == this.MODEL_P30) {
+            if (this.getWallboxType() !== this.TYPE_X_SERIES) {
                 let currFirmware = this.getStateInternal(this.stateFirmware);
                 this.regexCurrFirmware.lastIndex = 0;
                 const currFirmwareList = this.regexCurrFirmware.exec(currFirmware);

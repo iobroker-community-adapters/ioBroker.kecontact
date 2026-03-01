@@ -120,8 +120,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 -->
 
 ### **WORK IN PROGRESS**
-- (copilot) Adapter requires admin >= 7.7.22 now
+* (copilot) Adapter requires admin >= 7.7.22 now
 * (Sneak-L8) checking of firmware version is back
+* (Sneak-L8) updated dependencies
 
 ### 3.4.0 (2026-01-17)
 * (Sneak-L8) new options to charge vehicle up to a specified SoC

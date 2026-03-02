@@ -118,8 +118,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 3.5.0 (2026-03-02)
 * (copilot) Adapter requires admin >= 7.7.22 now
 * (Sneak-L8) checking of firmware version is back
 * (Sneak-L8) updated dependencies
@@ -145,12 +144,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) fix wording error ("regard" changed to grid consumption)
 * (Sneak-L8) fixed some english translations
 * (Sneak-L8) renamed state "regardTimestamp" to "consumptionTimestamp" - please delete old state
-
-### 3.0.1 (2025-03-15)
-* (Sneak-L8) fix error sentry IOBROKER-KECONTACT-29 an IOBROKER-KECONTACT-2A
-* (Sneak-L8) minimum js-controller now >= 7 due to I18n
-* (Sneak-L8) fix roles of states in io-package.json
-* (Sneak-L8) log of config on level debug instead of info
 
 ## Legal
 

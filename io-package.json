@@ -1453,5 +1453,34 @@
       },
       "native": {}
     }
+  ],
+  "notifications": [
+    {
+      "scope": "kecontact",
+      "name": {
+        "en": "Keba KeContact adapter",
+        "de": "Keba KeContact-Adapter"
+      },
+      "description": {
+        "en": "This notification informs about new firmware updates availableostal Plenticore inverter.",
+        "de": "Diese Benachrichtigung informiert über neu verfügbare Firmware-Updates."
+      },
+      "categories": [
+        {
+          "category": "update",
+          "name": {
+            "en": "Keba KeContect update",
+            "de": "Keba KeContact-Update"
+          },
+          "description": {
+            "en": "A new firmware update is available.",
+            "de": "Ein neues Firmware-Update ist verfügbar"
+          },
+          "regex": [],
+          "limit": 1,
+          "severity": "notify"
+        }
+      ]
+    }
   ]
 }

@@ -1459,22 +1459,58 @@
       "scope": "kecontact",
       "name": {
         "en": "Keba KeContact adapter",
-        "de": "Keba KeContact-Adapter"
+        "de": "Keba KeContact Adapter",
+        "ru": "Адаптер Keba KeContact",
+        "pt": "Keba KeContact adaptador",
+        "nl": "Keba KeContact-adapter",
+        "fr": "Adaptateur Keba KeContact",
+        "it": "Keba KeContact adattatore",
+        "es": "Adaptador Keba KeContact",
+        "pl": "Adapter Keba KeContact",
+        "uk": "Кеба КеКонтакт адаптер",
+        "zh-cn": "Keba KeContact 适配器"
       },
       "description": {
-        "en": "This notification informs about new firmware updates availableostal Plenticore inverter.",
-        "de": "Diese Benachrichtigung informiert über neu verfügbare Firmware-Updates."
+        "en": "This notification informs about new available firmware updates.",
+        "de": "Diese Benachrichtigung informiert über neue verfügbare Firmware-Updates.",
+        "ru": "Это уведомление информирует о новых доступных обновлениях прошивки.",
+        "pt": "Esta notificação informa sobre novas atualizações de firmware disponíveis.",
+        "nl": "Deze kennisgeving informeert over nieuwe beschikbare firmware updates.",
+        "fr": "Cette notification informe sur les nouvelles mises à jour firmware disponibles.",
+        "it": "Questa notifica informa su nuovi aggiornamenti firmware disponibili.",
+        "es": "Esta notificación informa sobre nuevas actualizaciones de firmware disponibles.",
+        "pl": "Niniejsze powiadomienie informuje o nowych dostępnych aktualizacjach oprogramowania firmowego.",
+        "uk": "Це повідомлення повідомляє про нові доступні оновлення мікропрограми.",
+        "zh-cn": "本通知通报新的可用固件更新情况."
       },
       "categories": [
         {
           "category": "update",
           "name": {
             "en": "Keba KeContect update",
-            "de": "Keba KeContact-Update"
-          },
+            "de": "Keba KeContect Update",
+            "ru": "Обновление Keba KeContect",
+            "pt": "Atualização do Keba KeContect",
+            "nl": "Keba KeContect update",
+            "fr": "Mise à jour Keba KeContect",
+            "it": "Aggiornamento Keba KeContect",
+            "es": "Keba KeContect update",
+            "pl": "Keba KeContentation aktualizacja",
+            "uk": "Keba KeContect оновлення",
+            "zh-cn": "更新 Keba KeContect"
+},
           "description": {
             "en": "A new firmware update is available.",
-            "de": "Ein neues Firmware-Update ist verfügbar"
+            "de": "Ein neues Firmware-Update ist verfügbar.",
+            "ru": "Доступно новое обновление прошивки.",
+            "pt": "Uma nova atualização de firmware está disponível.",
+            "nl": "Een nieuwe firmware update is beschikbaar.",
+            "fr": "Une nouvelle mise à jour du firmware est disponible.",
+            "it": "È disponibile un nuovo aggiornamento firmware.",
+            "es": "Está disponible una nueva actualización de firmware.",
+            "pl": "Nowa aktualizacja oprogramowania firmowego jest dostępna.",
+            "uk": "Доступне оновлення мікропрограми.",
+            "zh-cn": "已有新的固件更新."
           },
           "regex": [],
           "limit": 1,

@@ -1204,6 +1204,20 @@
       "native": {}
     },
     {
+      "_id": "statistics.notifiedFirmware",
+      "type": "state",
+      "common": {
+        "name": "version of last admin notification about new firmware",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false,
+        "def": null,
+        "desc": "cache to prevent adapter to repeatedly notify admin about new firmware if there is no change in available firmware version"
+      },
+      "native": {}
+    },
+    {
       "_id": "statistics.surplus",
       "type": "state",
       "common": {

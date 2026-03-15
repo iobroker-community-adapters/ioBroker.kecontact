@@ -118,6 +118,10 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (Sneak-L8) information about new firmware also via admin notification
+
 ### 3.5.0 (2026-03-02)
 * (copilot) Adapter requires admin >= 7.7.22 now
 * (Sneak-L8) checking of firmware version is back

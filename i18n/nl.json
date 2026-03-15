@@ -1,4 +1,5 @@
 {
+    "newFirmware": "nieuwe firmwareversie beschikbaar: %s",
     "pvAutomaticActive": "PV-geoptimaliseerd opladen",
     "pvAutomaticInactive": "Volledige oplaadkracht",
     "pvAutomaticMinSoc": "voertuig opladen tot %s %"

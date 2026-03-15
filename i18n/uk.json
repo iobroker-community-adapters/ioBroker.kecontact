@@ -1,4 +1,5 @@
 {
+    "newFirmware": "доступна нова версія мікропрограми: %s",
     "pvAutomaticActive": "PV-оптимізована зарядка",
     "pvAutomaticInactive": "Повна зарядна потужність",
     "pvAutomaticMinSoc": "зарядити автомобіль до %s %"

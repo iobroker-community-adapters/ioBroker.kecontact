@@ -1,4 +1,5 @@
 {
+    "newFirmware": "nuova versione firmware disponibile: %s",
     "pvAutomaticActive": "Ricarica ottimizzata per il PV",
     "pvAutomaticInactive": "Potenza di ricarica completa",
     "pvAutomaticMinSoc": "carica il veicolo fino a %s %"

@@ -1,4 +1,5 @@
 {
+    "newFirmware": "доступна новая версия прошивки: %s",
     "pvAutomaticActive": "PV-оптимизированная зарядка",
     "pvAutomaticInactive": "Полная зарядная сила",
     "pvAutomaticMinSoc": "зарядить автомобиль до %s %"

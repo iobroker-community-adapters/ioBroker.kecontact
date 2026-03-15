@@ -1,4 +1,5 @@
 {
+    "newFirmware": "新固件版本可用：%s",
     "pvAutomaticActive": "PV优化充电",
     "pvAutomaticInactive": "充分充电功率",
     "pvAutomaticMinSoc": "为车辆充电至 %s %"

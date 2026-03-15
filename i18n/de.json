@@ -1,4 +1,5 @@
 {
+    "newFirmware": "Neue Firmware-Version verfügbar: %s",
     "pvAutomaticActive": "PV-optimiertes Laden",
     "pvAutomaticInactive": "volle Ladeleistung",
     "pvAutomaticMinSoc": "Fahrzeug bis %s % aufladen"

@@ -139,6 +139,7 @@ class Kecontact extends utils.Adapter {
     stateX1input = 'input';
     stateFirmware = 'firmware'; /*current running version of firmware*/
     stateFirmwareAvailable = 'statistics.availableFirmware'; /*current version of firmware available at keba.com*/
+    stateFirmwareNotification = 'statistics.notifiedFirmware'; /*version of last admin notification about new firmware*/
     stateSurplus = 'statistics.surplus'; /*current surplus for PV automatics*/
     stateMaxPower = 'statistics.maxPower'; /*maximum power for wallbox*/
     stateMaxAmperage = 'statistics.maxAmperage'; /*maximum amperage for wallbox*/
@@ -2930,6 +2931,14 @@ class Kecontact extends utils.Adapter {
                 return false;
             }
             this.setStateAck(this.stateFirmwareAvailable, firmwareVersion);
+            const lastFirmwareNotified = this.getStateInternal(this.stateFirmwareNotification);
+            if (lastFirmwareNotified !== firmwareVersion) {
+                if (lastFirmwareNotified && lastFirmwareNotified != '') {
+                    const text = I18n.translate('newFirmware', firmwareVersion);
+                    this.registerNotification('kecontact', 'update', `${text}`);
+                }
+                this.setStateAck(this.stateFirmwareNotification, firmwareVersion);
+            }
             if (this.getWallboxType() !== this.TYPE_X_SERIES) {
                 let currFirmware = this.getStateInternal(this.stateFirmware);
                 this.regexCurrFirmware.lastIndex = 0;

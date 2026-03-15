@@ -1,4 +1,5 @@
 {
+    "newFirmware": "nouvelle version du micrologiciel disponible : %s",
     "pvAutomaticActive": "Charge optimisée PV",
     "pvAutomaticInactive": "puissance de charge complète",
     "pvAutomaticMinSoc": "charger le véhicule jusqu'à %s %"

@@ -1509,7 +1509,7 @@
             "it": "È disponibile un nuovo aggiornamento firmware.",
             "es": "Está disponible una nueva actualización de firmware.",
             "pl": "Nowa aktualizacja oprogramowania firmowego jest dostępna.",
-            "uk": "Доступне оновлення мікропрограми.",
+            "xx": "Доступне оновлення мікропрограми.",
             "zh-cn": "已有新的固件更新."
           },
           "regex": [],

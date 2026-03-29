@@ -9,7 +9,7 @@
 const utils = require('@iobroker/adapter-core');
 
 // Load your modules here, e.g.:
-const dgram = require('dgram');
+const dgram = require('node:dgram');
 const axios = require('axios');
 const I18n = require('@iobroker/adapter-core').I18n;
 

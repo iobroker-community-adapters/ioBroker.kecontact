@@ -121,6 +121,7 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 
 ### **WORK IN PROGRESS**
 * (Sneak-L8) information about new firmware also via admin notification (also works for x-series)
+* (Sneak-L8) updated dependencies
 
 ### 3.5.0 (2026-03-02)
 * (copilot) Adapter requires admin >= 7.7.22 now

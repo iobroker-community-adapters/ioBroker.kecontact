@@ -118,6 +118,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (@mcm1957) Adapter requires node.js >= 22 now.
+-  
 ### 3.6.0 (2026-03-29)
 * (Sneak-L8) information about new firmware also via admin notification (also works for x-series)
 * (Sneak-L8) updated dependencies

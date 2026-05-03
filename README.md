@@ -146,6 +146,8 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) optimized strategy for battery charging
 * (Sneak-L8) node.js >= 20 required
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Legal
 
 This project is not affiliated directly or indirectly with the company KEBA AG.

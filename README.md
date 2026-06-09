@@ -119,8 +119,9 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (@mcm1957) Adapter requires node.js >= 22 now.
--  
+* (@mcm1957) Adapter requires node.js >= 22 now.
+* (Sneak-L8) Minimum time between phase switching has also to be respected when using state for phase switch, thanks to SmartNightly
+  
 ### 3.6.0 (2026-03-29)
 * (Sneak-L8) information about new firmware also via admin notification (also works for x-series)
 * (Sneak-L8) updated dependencies

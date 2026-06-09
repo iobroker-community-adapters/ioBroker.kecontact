@@ -913,6 +913,11 @@ class Kecontact extends utils.Adapter {
             }
         }
 
+        if (this.isX2PhaseSwitch() || this.isForeignStateSpecified(this.config.state1p3pSwitch)) {
+            this.min1p3pSwSec = 305;
+            this.log.info(`Using min time between phase switching of: ${this.min1p3pSwSec} sec`);
+        }
+
         if (this.isX2PhaseSwitch()) {
             if (this.isForeignStateSpecified(this.config.state1p3pSwitch)) {
                 everythingFine = false;

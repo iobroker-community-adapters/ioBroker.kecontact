@@ -58,8 +58,8 @@ class Kecontact extends utils.Adapter {
     intervalDeviceDataUpdate = 24 * 60 * 60 * 1000; // check device data (e.g. firmware) every 24 hours => 'report 1'
     intervalPassiveUpdate = 10 * 60 * 1000; // check charging information every 10 minutes
     // eslint-disable-next-line jsdoc/check-tag-names
-    /** @type {NodeJS.Timeout | null} */
-    timerDataUpdate = null; // interval object for calculating timer
+    /** @type {ioBroker.Interval | undefined} */
+    timerDataUpdate = undefined; // interval object for calculating timer
     intervalActiceUpdate = 15 * 1000; // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {Date | null} */
@@ -2543,14 +2543,14 @@ class Kecontact extends utils.Adapter {
 
     disableChargingTimer() {
         if (this.timerDataUpdate) {
-            clearInterval(this.timerDataUpdate);
-            this.timerDataUpdate = null;
+            this.clearInterval(this.timerDataUpdate);
+            this.timerDataUpdate = undefined;
         }
     }
 
     enableChargingTimer(time) {
         this.disableChargingTimer();
-        this.timerDataUpdate = setInterval(this.requestReports.bind(this), time);
+        this.timerDataUpdate = this.setInterval(this.requestReports.bind(this), time);
     }
 
     forceUpdateOfCalculation() {

@@ -27,8 +27,8 @@ class Kecontact extends utils.Adapter {
     /** @type {dgram.Socket | null} */
     rxSocketBroadcast = null;
     // eslint-disable-next-line jsdoc/check-tag-names
-    /** @type {NodeJS.Timeout | null} */
-    sendDelayTimer = null;
+    /** @type {ioBroker.Interval | undefined} */
+    sendDelayTimer = undefined;
 
     states = {}; // contains all actual state values
     stateChangeListeners = {};
@@ -2651,15 +2651,15 @@ class Kecontact extends utils.Adapter {
         }
         if (!this.sendDelayTimer) {
             this.sendNextQueueDatagram();
-            this.sendDelayTimer = setInterval(this.sendNextQueueDatagram.bind(this), 300);
+            this.sendDelayTimer = this.setInterval(this.sendNextQueueDatagram.bind(this), 300);
         }
     }
 
     sendNextQueueDatagram() {
         if (this.sendQueue.length === 0) {
-            if (this.sendDelayTimer !== null) {
+            if (this.sendDelayTimer) {
                 clearInterval(this.sendDelayTimer);
-                this.sendDelayTimer = null;
+                this.sendDelayTimer = undefined;
             }
             return;
         }

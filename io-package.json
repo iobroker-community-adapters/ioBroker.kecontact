@@ -966,7 +966,7 @@
         "name": "unlock socket of charging station",
         "type": "boolean",
         "role": "switch",
-        "read": false,
+        "read": true,
         "write": true,
         "desc": "The command unlock unlocks the socket of the device. The charging process has to be stopped first (e.g. via currtime 0 1 or ena 0)"
       }

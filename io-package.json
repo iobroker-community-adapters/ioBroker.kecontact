@@ -310,7 +310,7 @@
       "common": {
         "name": "Firmware Version",
         "type": "string",
-        "role": "text.firmware",
+        "role": "info.firmware",
         "read": true,
         "write": false
       },
@@ -918,7 +918,7 @@
         "name": "number of report to be obtained",
         "type": "number",
         "role": "level",
-        "read": false,
+        "read": true,
         "write": true,
         "desc": "Number of report (1-3, 1xx) to get from charging station"
       }
@@ -1131,7 +1131,7 @@
         "role": "text",
         "read": true,
         "write": true,
-        "def": null,
+        "def": "",
         "desc": "You can specify a state name that holds SoC (state of charge) of a vehicle to be charged. Needed for charging up to a target SoC"
       },
       "native": {}
@@ -1197,7 +1197,7 @@
         "role": "text",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "current version of firmware found on keba.com website"
       },
       "native": {}
@@ -1211,7 +1211,7 @@
         "role": "text",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "cache to prevent adapter to repeatedly notify admin about new firmware if there is no change in available firmware version"
       },
       "native": {}
@@ -1226,7 +1226,7 @@
         "unit": "W",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "Surplus used for last calculation of PV automatics"
       },
       "native": {}
@@ -1241,7 +1241,7 @@
         "unit": "W",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "maximum amount of watts available for charging station in case of power limitation"
       },
       "native": {}
@@ -1256,7 +1256,7 @@
         "unit": "mA",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "maximum amount of mA available for charging station in case of amperage limitation"
       },
       "native": {}
@@ -1270,7 +1270,7 @@
         "role": "value",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "number of phases with which vehicle is currently charging"
       },
       "native": {}
@@ -1284,7 +1284,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when car was last plugged to wallbox, null if unplugged"
       },
       "native": {}
@@ -1298,7 +1298,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when car was first started to charge after plugged to wallbox, null if not charging"
       },
       "native": {}
@@ -1312,7 +1312,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when vehicle was plugged to wallbox and neccessary authorization was successfel"
       },
       "native": {}
@@ -1326,7 +1326,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when charging was continued even when there were no longer a surplus"
       },
       "native": {}
@@ -1340,7 +1340,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when last phase switch occured"
       },
       "native": {}
@@ -1354,7 +1354,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when car was plugged to wallbox for last charging process"
       },
       "native": {}
@@ -1368,7 +1368,7 @@
         "role": "date",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "date and time when car was unplugged from wallbox for last charging process"
       },
       "native": {}
@@ -1383,7 +1383,7 @@
         "unit": "kWh",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "Power consumption of the last loading session in Wh."
       },
       "native": {}
@@ -1397,7 +1397,7 @@
         "role": "value",
         "read": true,
         "write": false,
-        "def": null,
+        "def": 0,
         "desc": "unique session ID"
       },
       "native": {}
@@ -1411,7 +1411,7 @@
         "role": "text",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "RFID token used for charging session"
       },
       "native": {}
@@ -1425,7 +1425,7 @@
         "role": "text",
         "read": true,
         "write": false,
-        "def": null,
+        "def": "",
         "desc": "RFID class used for charging session"
       },
       "native": {}
@@ -1447,7 +1447,7 @@
         "role": "text",
         "read": true,
         "write": true,
-        "def": null,
+        "def": "",
         "desc": "messages received from other instances for this wallbox"
       },
       "native": {}

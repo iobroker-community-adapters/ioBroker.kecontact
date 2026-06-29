@@ -2014,6 +2014,7 @@ class Kecontact extends utils.Adapter {
 
     /**
      * Returns the rounded value for charging amperage possible based on the defined power and phases given to the function.
+     * A defined negative addPower will be added to preserve power for other consumers. The value is rounded according to amperageDelta.
      *
      * @param power power in Watts used for calculation
      * @param phases number of phases to be used for calculation
@@ -2021,9 +2022,11 @@ class Kecontact extends utils.Adapter {
      * @returns the values for the amperage based on amperageDelta and parameters.
      */
     getAmperage(power, phases, forceRoundOff = false) {
-        const curr = ((power / this.voltage) * 1000) / phases;
+        const addPower = this.getStateDefault0(this.stateAddPower);
+        const delta = addPower < 0 ? -addPower : 0;
+        const curr = (((power + delta) / this.voltage) * 1000) / phases;
         this.log.debug(
-            `power: ${power} / voltage: ${this.voltage} * 1000 / delta: ${this.amperageDelta} / phases: ${phases} * delta = ${curr}`,
+            `power: ${power} - ${delta} / voltage: ${this.voltage} * 1000 / delta: ${this.amperageDelta} / phases: ${phases} * delta = ${curr}`,
         );
         return this.getRoundedAmperage(curr, forceRoundOff);
     }

@@ -2471,11 +2471,11 @@ class Kecontact extends utils.Adapter {
     /**
      * tries to setup everything for charging with 1p
      *
-     * @param {*} currWith1p current if charging with 1p
-     * @param {*} chargeTimestamp timestamp when charging was started
-     * @param {*} newDate current timestamp
-     * @param {*} consumptionTimestamp timestamp when charging fell into consumption from grid
-     * @param {*} sw1p3pTimestamp timestamp of last 1p3p switch
+     * @param {number} currWith1p current if charging with 1p
+     * @param {Date|null} chargeTimestamp timestamp when charging was started
+     * @param {Date} newDate current timestamp
+     * @param {Date|null} consumptionTimestamp timestamp when charging fell into consumption from grid
+     * @param {Date|null} sw1p3pTimestamp timestamp of last 1p3p switch
      */
     prepareFor1pCharging(currWith1p, chargeTimestamp, newDate, consumptionTimestamp, sw1p3pTimestamp) {
         let result = [];
@@ -2505,11 +2505,11 @@ class Kecontact extends utils.Adapter {
     /**
      * tries to setup everything for charging with 3p
      *
-     * @param {*} currWith1p current if charging with 1p
-     * @param {*} chargeTimestamp timestamp when charging was started
-     * @param {*} newDate current timestamp
-     * @param {*} phases number of phases to be used for calculation
-     * @param {*} sw1p3pTimestamp timestamp of last 1p3p switch
+     * @param {number} currWith1p current if charging with 1p
+     * @param {Date|null} chargeTimestamp timestamp when charging was started
+     * @param {Date} newDate current timestamp
+     * @param {number} phases number of phases to be used for calculation
+     * @param {Date|null} sw1p3pTimestamp timestamp of last 1p3p switch
      */
     prepareFor3pCharging(currWith1p, chargeTimestamp, newDate, phases, sw1p3pTimestamp) {
         let result = [];

@@ -2024,7 +2024,7 @@ class Kecontact extends utils.Adapter {
     getAmperage(power, phases, forceRoundOff = false) {
         const addPower = this.getStateDefault0(this.stateAddPower);
         const delta = addPower < 0 ? -addPower : 0;
-        const curr = (((power + delta) / this.voltage) * 1000) / phases;
+        const curr = (((power - delta) / this.voltage) * 1000) / phases;
         this.log.debug(
             `power: ${power} - ${delta} / voltage: ${this.voltage} * 1000 / delta: ${this.amperageDelta} / phases: ${phases} * delta = ${curr}`,
         );

@@ -242,10 +242,10 @@
                 },
                 "addpower": {
                     "type": "number",
-                    "label": "addpower2",
+                    "label": "addPower2",
                     "min": 0,
                     "default": 300,
-                    "tooltip": "tooltip_addpower2",
+                    "tooltip": "tooltip_addPower2",
                     "xs": 12,
                     "sm": 11,
                     "md": 5,

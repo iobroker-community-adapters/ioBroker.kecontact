@@ -240,12 +240,12 @@
                     "lg": 1,
                     "xl": 1
                 },
-                "minTime": {
+                "addpower": {
                     "type": "number",
-                    "label": "minTime",
+                    "label": "addpower2",
                     "min": 0,
                     "default": 300,
-                    "tooltip": "tooltip_minTime",
+                    "tooltip": "tooltip_addpower2",
                     "xs": 12,
                     "sm": 11,
                     "md": 5,

@@ -120,14 +120,14 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.7.0 (2026-07-14)
 * (Sneak-L8) addPower can now also be used to preserve power for other consumers by specifying negative value
 * (@mcm1957) Adapter requires node.js >= 22 now.
 * (Sneak-L8) Minimum time between phase switching has also to be respected when using state for phase switch, thanks to SmartNightly
 * (Sneak-L8) fix errors [E0036], [S0082] and [S5004] found by repository checker
 * (Sneak-L8) fix errors [E6025], [W1130], [W1132], [W1134],  [W5060] and [W6023] found by repository checker
 * (Sneak-L8) fix warning [W0034] found by repository checker
-  
+
 ### 3.6.0 (2026-03-29)
 * (Sneak-L8) information about new firmware also via admin notification (also works for x-series)
 * (Sneak-L8) updated dependencies
@@ -147,11 +147,6 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
 * (Sneak-L8) new option to always charge with 1p oder 3p
 * (Sneak-L8) new setting for discharging power of storage battery (if not equal to max battery power)
 * (Sneak-L8) updated version requirements (admin 7.6.17 and core 3.3.2)
-
-### 3.2.0 (2025-07-13)
-* (Sneak-L8) new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging
-* (Sneak-L8) optimized strategy for battery charging
-* (Sneak-L8) node.js >= 20 required
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

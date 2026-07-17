@@ -762,7 +762,7 @@ class Kecontact extends utils.Adapter {
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateMaxGridPower}`] = (oldValue, newValue) => {
             if (this.maxGridPowerActive !== true) {
-                this.log.info('maxGridPower limitation not in effect - value change with no effect')
+                this.log.info('maxGridPower limitation not in effect - value change with no effect');
                 return;
             }
             let oldValuetext;

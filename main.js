@@ -531,9 +531,6 @@ class Kecontact extends utils.Adapter {
                     this.log.info(
                         `change of maximum grid power limitation from ${oldMaxGridPowerActive} to ${this.maxGridPowerActive}`,
                     );
-                    if (this.maxGridPowerActive == true) {
-                        this.forceUpdateOfCalculation();
-                    }
                 }
             }
 
@@ -759,12 +756,40 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateLimitCurrent} to ${newValue}`);
             // no real action to do
         };
-        this.stateChangeListeners[`${this.namespace}.${this.stateManual1p3p}`] = (_oldValue, newValue) => {
-            this.log.debug(`set ${this.stateManual1p3p} to ${newValue}`);
-            // no real action to do
-        };
         this.stateChangeListeners[`${this.namespace}.${this.stateLimitCurrent1p}`] = (_oldValue, newValue) => {
             this.log.debug(`set ${this.stateLimitCurrent1p} to ${newValue}`);
+            // no real action to do
+        };
+        this.stateChangeListeners[`${this.namespace}.${this.stateMaxGridPower}`] = (oldValue, newValue) => {
+            if (this.maxGridPowerActive !== true) {
+                this.log.info('maxGridPower limitation not in effect - value change with no effect')
+                return;
+            }
+            let oldValuetext;
+            let newValueText;
+            if (oldValue == 0) {
+                if (this.config.maxPower > 0) {
+                    oldValuetext = `${this.config.maxPower} W (from config)`;
+                } else {
+                    oldValuetext = 'no limitation';
+                }
+            } else {
+                oldValuetext = `${oldValue} W`;
+            }
+            if (newValue == 0) {
+                if (this.config.maxPower > 0) {
+                    newValueText = `${this.config.maxPower} W (from config)`;
+                } else {
+                    newValueText = 'no limitation';
+                }
+            } else {
+                newValueText = `${newValue} W`;
+            }
+            this.log.info(`change of maximum grid power limitation from ${oldValuetext} to ${newValueText}`);
+            this.forceUpdateOfCalculation();
+        };
+        this.stateChangeListeners[`${this.namespace}.${this.stateManual1p3p}`] = (_oldValue, newValue) => {
+            this.log.debug(`set ${this.stateManual1p3p} to ${newValue}`);
             // no real action to do
         };
         this.stateChangeListeners[`${this.namespace}.${this.stateBatteryStrategy}`] = (_oldValue, newValue) => {

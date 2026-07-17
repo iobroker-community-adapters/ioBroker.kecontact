@@ -534,7 +534,7 @@
                     "size": 2,
                     "text": "powerLimitation"
                 },
-                "maxGridPower": {
+                "maxPower": {
                     "type": "number",
                     "label": "maxPower",
                     "min": 0,

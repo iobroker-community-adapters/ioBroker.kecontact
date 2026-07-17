@@ -253,7 +253,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config regardTime: ${this.config.regardTime}`);
         this.log.debug(`config stateEnWG: ${this.config.stateEnWG}`);
         this.log.debug(`config dynamicEnWG: ${this.config.dynamicEnWG}`);
-        this.log.debug(`config maxGridPower: ${this.config.maxGridPower}`);
+        this.log.debug(`config maxPower: ${this.config.maxPower}`);
         this.log.debug(`config stateEnergyMeter1: ${this.config.stateEnergyMeter1}`);
         this.log.debug(`config stateEnergyMeter2: ${this.config.stateEnergyMeter2}`);
         this.log.debug(`config stateEnergyMeter3: ${this.config.stateEnergyMeter3}`);
@@ -520,6 +520,19 @@ class Kecontact extends utils.Adapter {
                         (this.maxAmperageDeltaLimit / 1000) * this.voltage
                     ) {
                         this.requestCurrentChargingValuesDataReport();
+                    }
+                }
+            }
+
+            if (id == this.stateMaxGridPower) {
+                const oldMaxGridPowerActive = this.maxGridPowerActive;
+                this.maxGridPowerActive = this.config.maxPower > 0 || newValue > 0;
+                if (oldMaxGridPowerActive != this.maxGridPowerActive) {
+                    this.log.info(
+                        `change of maximum grid power limitation from ${oldMaxGridPowerActive} to ${this.maxGridPowerActive}`,
+                    );
+                    if (this.maxGridPowerActive == true) {
+                        this.forceUpdateOfCalculation();
                     }
                 }
             }
@@ -946,12 +959,8 @@ class Kecontact extends utils.Adapter {
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnWG) && everythingFine;
         }
 
-        if (this.config.maxGridPower && this.config.maxGridPower > 0) {
+        if (this.config.maxPower && this.config.maxPower > 0) {
             this.maxGridPowerActive = true;
-            if (this.config.maxGridPower <= 0) {
-                this.log.warn('max. power negative or zero - power limitation deactivated');
-                this.maxGridPowerActive = false;
-            }
         }
         if (this.maxGridPowerActive) {
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnergyMeter1) && everythingFine;
@@ -1601,7 +1610,7 @@ class Kecontact extends utils.Adapter {
         }
         const maxGridPower = this.getStateDefault0(this.stateMaxGridPower);
         if (maxGridPower == 0) {
-            return this.config.maxGridPower;
+            return this.config.maxPower;
         }
         return maxGridPower;
     }

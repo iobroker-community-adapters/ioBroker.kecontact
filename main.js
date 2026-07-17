@@ -161,7 +161,7 @@ class Kecontact extends utils.Adapter {
     stateAddPower = 'automatic.addPower'; /*additional grid consumption to run charging session*/
     stateLimitCurrent = 'automatic.limitCurrent'; /*maximum amperage for charging*/
     stateLimitCurrent1p = 'automatic.limitCurrent1p'; /*maximum amperage for charging when 1p 3p switch set to 1p */
-    stateMaxGridPower = 'automatics.maxGridPower'; /*maximum grid power for wallbox*/
+    stateMaxGridPower = 'automatic.maxGridPower'; /*maximum grid power for wallbox*/
     stateManualPhases = 'automatic.calcPhases'; /*count of phases to calculate with for KeContact Deutschland-Edition*/
     stateManual1p3p = 'automatic.1p3pCharging'; /*switch to permanently charge with 1p or 3p*/
     stateBatteryStrategy = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/

@@ -69,8 +69,8 @@ class Kecontact extends utils.Adapter {
     loadChargingSessions = false;
     photovoltaicsActive = false; // is photovoltaics automatic active?
     useX1switchForAutomatic = true;
-    maxPowerActive = false; // is limiter for maximum power active?
-    lastPower = 0; // max power value when checking maxPower
+    maxGridPowerActive = false; // is limiter for maximum grid power active?
+    lastGridPower = 0; // max power value when checking maxGridPower
     maxAmperageActive = false; // is limiter for maximum amperage active?
     lastAmperagePhase1; // last amperage value of phase 1 when checking maxAmperage
     lastAmperagePhase2; // last amperage value of phase 2 when checking maxAmperage
@@ -161,6 +161,7 @@ class Kecontact extends utils.Adapter {
     stateAddPower = 'automatic.addPower'; /*additional grid consumption to run charging session*/
     stateLimitCurrent = 'automatic.limitCurrent'; /*maximum amperage for charging*/
     stateLimitCurrent1p = 'automatic.limitCurrent1p'; /*maximum amperage for charging when 1p 3p switch set to 1p */
+    stateMaxGridPower = 'automatics.maxGridPower'; /*maximum grid power for wallbox*/
     stateManualPhases = 'automatic.calcPhases'; /*count of phases to calculate with for KeContact Deutschland-Edition*/
     stateManual1p3p = 'automatic.1p3pCharging'; /*switch to permanently charge with 1p or 3p*/
     stateBatteryStrategy = 'automatic.batteryStorageStrategy'; /*strategy to use for battery storage dynamically*/
@@ -252,7 +253,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config regardTime: ${this.config.regardTime}`);
         this.log.debug(`config stateEnWG: ${this.config.stateEnWG}`);
         this.log.debug(`config dynamicEnWG: ${this.config.dynamicEnWG}`);
-        this.log.debug(`config maxPower: ${this.config.maxPower}`);
+        this.log.debug(`config maxGridPower: ${this.config.maxGridPower}`);
         this.log.debug(`config stateEnergyMeter1: ${this.config.stateEnergyMeter1}`);
         this.log.debug(`config stateEnergyMeter2: ${this.config.stateEnergyMeter2}`);
         this.log.debug(`config stateEnergyMeter3: ${this.config.stateEnergyMeter3}`);
@@ -508,13 +509,16 @@ class Kecontact extends utils.Adapter {
                 this.stateFor1p3pAck = state.ack;
             }
 
-            if (this.maxPowerActive === true && typeof newValue == 'number') {
+            if (this.maxGridPowerActive === true && typeof newValue == 'number') {
                 if (
                     id == this.config.stateEnergyMeter1 ||
                     id == this.config.stateEnergyMeter2 ||
                     id == this.config.stateEnergyMeter3
                 ) {
-                    if (this.getTotalPower() - this.lastPower > (this.maxAmperageDeltaLimit / 1000) * this.voltage) {
+                    if (
+                        this.getTotalPower() - this.lastGridPower >
+                        (this.maxAmperageDeltaLimit / 1000) * this.voltage
+                    ) {
                         this.requestCurrentChargingValuesDataReport();
                     }
                 }
@@ -942,14 +946,14 @@ class Kecontact extends utils.Adapter {
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnWG) && everythingFine;
         }
 
-        if (this.config.maxPower && this.config.maxPower > 0) {
-            this.maxPowerActive = true;
-            if (this.config.maxPower <= 0) {
+        if (this.config.maxGridPower && this.config.maxGridPower > 0) {
+            this.maxGridPowerActive = true;
+            if (this.config.maxGridPower <= 0) {
                 this.log.warn('max. power negative or zero - power limitation deactivated');
-                this.maxPowerActive = false;
+                this.maxGridPowerActive = false;
             }
         }
-        if (this.maxPowerActive) {
+        if (this.maxGridPowerActive) {
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnergyMeter1) && everythingFine;
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnergyMeter2) && everythingFine;
             everythingFine = this.addForeignStateFromConfig(this.config.stateEnergyMeter3) && everythingFine;
@@ -967,7 +971,7 @@ class Kecontact extends utils.Adapter {
                     )
                 ) {
                     this.log.error('no energy meters defined - power limitation deactivated');
-                    this.maxPowerActive = false;
+                    this.maxGridPowerActive = false;
                 }
             }
         }
@@ -1587,15 +1591,32 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
+     * Get a max grid power value from settings or state
+     *
+     * @returns the maximum grid power allowed in watts
+     */
+    getMaxGridPower() {
+        if (this.maxGridPowerActive !== true) {
+            return 0;
+        }
+        const maxGridPower = this.getStateDefault0(this.stateMaxGridPower);
+        if (maxGridPower == 0) {
+            return this.config.maxGridPower;
+        }
+        return maxGridPower;
+    }
+
+    /**
      * If the maximum power available is defined and max power limitation is active, a reduced value is returned, otherwise no real limit.
      *
      * @returns the total power available in watts
      */
     getTotalPowerAvailable() {
-        // Wenn keine Leistungsbegrenzung eingestelt ist, dann max. liefern
-        if (this.maxPowerActive && this.config.maxPower > 0) {
-            this.lastPower = this.getTotalPower();
-            return this.config.maxPower - this.lastPower;
+        // Wenn keine Leistungsbegrenzung eingestellt ist, dann max. liefern
+        const maxGridPower = this.getMaxGridPower();
+        if (maxGridPower > 0) {
+            this.lastGridPower = this.getTotalPower();
+            return maxGridPower - this.lastGridPower;
         }
         return 999999; // return default maximum
     }
@@ -2158,7 +2179,7 @@ class Kecontact extends utils.Adapter {
         this.chargingToBeStarted = false;
 
         // first of all check maximum power allowed
-        if (this.maxPowerActive === true) {
+        if (this.maxGridPowerActive === true) {
             // Always calculate with three phases for safety reasons
             const maxPower = this.getTotalPowerAvailable();
             this.setStateAck(this.stateMaxPower, Math.round(maxPower));

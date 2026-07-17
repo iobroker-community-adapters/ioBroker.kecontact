@@ -202,7 +202,7 @@
     "regardTime": 180,
     "stateEnWG": "",
     "dynamicEnWG": false,
-    "maxPower": 0,
+    "maxGridPower": 0,
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",
     "stateEnergyMeter3": "",
@@ -1033,7 +1033,7 @@
         "read": true,
         "write": true,
         "def": 0,
-        "desc": "The amount of dynamic charing current will be limited to this value (0 = no limitation)"
+        "desc": "The amount of dynamic charging current will be limited to this value (0 = no limitation)"
       },
       "native": {}
     },
@@ -1041,7 +1041,7 @@
       "_id": "automatic.limitCurrent1p",
       "type": "state",
       "common": {
-        "name": "limit dynamic charging to this value of amperage in case of using 1p 3p switch ans set to 1 (0 = use limitation from limitCurrent)",
+        "name": "limit dynamic charging to this value of amperage in case of using 1p 3p switch and set to 1 (0 = use limitation from limitCurrent)",
         "type": "number",
         "role": "level.current.max",
         "unit": "mA",
@@ -1049,6 +1049,21 @@
         "write": true,
         "def": 0,
         "desc": "The amount of dynamic charing current will be limited to this value if 1p 3p switch is set to 1p (0 = use limitation from limitCurrent))"
+      },
+      "native": {}
+    },
+    {
+      "_id": "automatic.maxGridPower",
+      "type": "state",
+      "common": {
+        "name": "limit dynamic charging to this value of grid power (0 = limitation from settings)",
+        "type": "number",
+        "role": "level.max",
+        "unit": "W",
+        "read": true,
+        "write": true,
+        "def": 0,
+        "desc": "The power of dynamic charing will be limited, so grid power consumption will not exceed this value (0 = use limitation from settings of adapter)"
       },
       "native": {}
     },

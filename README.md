@@ -120,6 +120,10 @@ To charge your vehicle with a constant amperage of 6A regardless of surplus, set
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (Sneak-L8) possibility to regulate max grid power not only in settings but also dynamically by seperate state
+* (Sneak-L8) fix missing Tests for addPower setting due to label change
+
 ### 3.7.0 (2026-07-14)
 * (Sneak-L8) addPower can now also be used to preserve power for other consumers by specifying negative value
 * (@mcm1957) Adapter requires node.js >= 22 now.

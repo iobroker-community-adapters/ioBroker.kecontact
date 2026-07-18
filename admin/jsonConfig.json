@@ -200,9 +200,9 @@
                 },
                 "addPower": {
                     "type": "number",
-                    "label": "addPower",
+                    "label": "addPower2",
                     "default": 0,
-                    "tooltip": "tooltip_addPower",
+                    "tooltip": "tooltip_addPower2",
                     "xs": 12,
                     "sm": 11,
                     "md": 5,

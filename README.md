@@ -114,6 +114,7 @@ Additionally there are some states to influence behaviour of photovoltaics autom
 Sample:
 To charge your vehicle with a constant amperage of 6A regardless of surplus, set photovoltaics to false and limitCurrent to 6000.
 
+A german description of how the adapter works can be found [here](kecontact.md)
 
 ## Changelog
 <!--

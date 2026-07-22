@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "kecontact",
-    "version": "3.7.0",
+    "version": "3.8.0",
     "news": {
+      "3.8.0": {
+        "en": "possibility to regulate max grid power not only in settings but also dynamically by seperate state\nfix missing Tests for addPower setting due to label change",
+        "de": "möglichkeit, die maximale netzleistung nicht nur in einstellungen, sondern auch dynamisch durch getrennten zustand zu regulieren\nbeheben Sie fehlende Tests für die AddPower-Einstellung aufgrund von Etikettenänderungen",
+        "ru": "возможность регулировать максимальную мощность сети не только в настройках, но и динамически с помощью отдельного состояния\nисправить недостающие тесты для установки addPower из-за изменения метки",
+        "pt": "possibilidade de regular a potência máxima da rede não só em configurações, mas também dinamicamente por estado separado\ncorrigir testes em falta para a configuração addPower devido à alteração da etiqueta",
+        "nl": "mogelijkheid om max netstroom te reguleren niet alleen in instellingen, maar ook dynamisch door afzonderlijke toestand\nfix ontbrekende Tests voor addPower instelling als gevolg van label verandering",
+        "fr": "possibilité de régler la puissance maximale du réseau non seulement dans les réglages, mais aussi dynamiquement par état séparé\ncorrection des tests manquants pour le réglage addPower en raison du changement d'étiquette",
+        "it": "possibilità di regolare la potenza massima della griglia non solo nelle impostazioni ma anche dinamicamente dallo stato seperato\ncorreggere i test mancanti per l'impostazione addPower a causa del cambiamento dell'etichetta",
+        "es": "posibilidad de regular la potencia máxima de la cuadrícula no sólo en la configuración sino también dinámicamente por estado de seperato\npruebas faltantes para addPower configuración debido al cambio de etiquetas",
+        "pl": "możliwość regulacji maksymalnej mocy sieci nie tylko w ustawieniach, ale również dynamicznie przez stan seperatu\nnaprawić brakujące testy dla ustawienia addPower ze względu na zmianę etykiety",
+        "uk": "можливість регулювати максимальну потужність сітки не тільки в налаштуваннях, але і динамічно за допомогою відокремленого стану\nвиправити відсутні тести для налаштування AddPower через зміни етикетки",
+        "zh-cn": "不仅在设置中而且通过固态动态调节最大电网功率的可能性\n由于标签更改, 缺少用于添加Power 设置的测试"
+      },
       "3.7.0": {
         "en": "addPower can now also be used to preserve power for other consumers by specifying negative value\nAdapter requires node.js >= 22 now.\nMinimum time between phase switching has also to be respected when using state for phase switch, thanks to SmartNightly\nfix errors [E0036], [S0082] and [S5004] found by repository checker\nfix errors [E6025], [W1130], [W1132], [W1134],  [W5060] and [W6023] found by repository checker\nfix warning [W0034] found by repository checker",
         "de": "addPower kann nun auch verwendet werden, um Strom für andere Verbraucher zu sparen, indem ein negativer Wert angegeben wird.\nDer Adapter benötigt jetzt node.js >= 22.\nDank SmartNightly muss auch bei der Verwendung des Phasenzustands für die Phasenumschaltung die Mindestzeit zwischen den Phasenumschaltungen eingehalten werden.\nDie vom Repository-Prüfer gefundenen Fehler [E0036], [S0082] und [S5004] wurden behoben.\nDie vom Repository-Prüfer gefundenen Fehler [E6025], [W1130], [W1132], [W1134], [W5060] und [W6023] wurden behoben.\nWarnung [W0034] vom Repository-Prüfer gefunden.",
@@ -80,19 +93,6 @@
         "pl": "nowa opcja, aby zawsze rozpocząć ładowanie, gdy pojazd jest podłączony, jeśli wymagane jest zezwolenie, aby uniemożliwić stacji ładowania do blokowania ładowania\nzoptymalizowana strategia ładowania akumulatorów\nnode.js > = 20 wymaganych",
         "uk": "новий варіант, щоб завжди почати заряджання, коли автомобіль підключений, якщо авторизація необхідна для запобігання зарядки станції для блокування зарядки\nоптимізована стратегія зарядки акумулятора\nnode.js >= 20 потрібно",
         "zh-cn": "如果需要授权以防止充电站阻塞充电,则在车辆被堵塞时总是开始充电的新选项\n电池充电的优化策略\n需要20个节点"
-      },
-      "3.1.0": {
-        "en": "new option to reduce log entries on info level (write them with debug level)\nfix wording error (\"regard\" changed to grid consumption)\nfixed some english translations\nrenamed state \"regardTimestamp\" to \"consumptionTimestamp\" - please delete old state",
-        "de": "neue option, um log-einträge auf info-ebene zu reduzieren (schreiben sie sie mit debug-ebene)\nfix-wortungsfehler (\"regard\" geändert zum netzverbrauch)\neinige englische übersetzungen\numbenannt Zustand \"regardTimestamp\" zu \"consumptionTimestamp\" - bitte löschen alten Zustand",
-        "ru": "новый вариант сокращения входов в журнал на информационном уровне (запись их с помощью уровня отладки)\nисправление ошибки формулировки («в зависимости от» изменено на потребление сетки)\nнекоторые английские переводы\nпереименовано в \"regardTimestamp\" - пожалуйста, удалите старое состояние",
-        "pt": "nova opção para reduzir entradas de log no nível info (escreve-as com nível de depuração)\ncorrigir erro de redação (\"regard\" alterado para consumo de grade)\nfixo algumas traduções em inglês\nrenomeado estado \"regardTimestamp\" para \"consumptionTimestamp\" - por favor excluir estado velho",
-        "nl": "nieuwe optie om log items te verminderen op infoniveau (schrijf ze met debug level)\nfout in de formulering vast te stellen (\"veranderd in netverbruik\")\nenkele engelse vertalingen gerepareerd\nhernoemde staat \"respectTimestamp\" naar \"consumptionTimestamp\" - verwijder oude staat",
-        "fr": "nouvelle option pour réduire les entrées de journal au niveau info (écrire avec le niveau de débogage)\ncorriger l'erreur de formulation (\"regard\" changé à la consommation du réseau)\ncorrigé quelques traductions anglaises\nrebaptisé état \"regardTimestamp\" vers \"consommationTimestamp\" - veuillez supprimer l'ancien état",
-        "it": "nuova opzione per ridurre le voci di registro sul livello info (scrivile con livello di debug)\ncorrezione errore di wording (\"regard\" cambiato in consumo di griglia)\nfisso alcune traduzioni in inglese\nribattezzato stato \"regardTimestamp\" a \"consumTimestamp\" - si prega di eliminare vecchio stato",
-        "es": "nueva opción para reducir las entradas de registro en el nivel de información (escribirlas con nivel de depuración)\ncorregir error de redacción (\"regard\" cambiado al consumo de red)\nfijo algunas traducciones de inglés\nrenombrado estado \"regardTimestamp\" a \"consumptionTimestamp\" - por favor eliminar viejo estado",
-        "pl": "nowa opcja zmniejszenia wpisów dziennika na poziomie informacji (napisz je na poziomie debugowania)\nbłąd sformułowania (\"regard\" zmieniony na zużycie sieci)\nnaprawił kilka angielskich tłumaczeń\nprzemianowany stan \"regardTimestamp\" na \"consumptionTimestamp\" - usuń stary stan",
-        "uk": "новий варіант для зменшення записів журналу на рівні інформації (записати їх на рівні debug)\nвиправлено помилку словосполучення (\"regard\" змінено до споживання сітки)\nвиправлено деякі англійські переклади\nперейменований стан \"regardTimestamp\" до \"consumptionTimestamp\" - будь ласка, видаліть старий стан",
-        "zh-cn": "在信息级别上减少日志条目的新选项( 用调试级别写入)\n固定措辞错误 (“ 注意” 改为网格消耗)\n修复一些英语翻译\n请删除旧状态"
       }
     },
     "titleLang": {

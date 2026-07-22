@@ -121,7 +121,7 @@ A german description of how the adapter works can be found [here](kecontact.md)
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.8.0 (2026-07-22)
 * (Sneak-L8) possibility to regulate max grid power not only in settings but also dynamically by seperate state
 * (Sneak-L8) fix missing Tests for addPower setting due to label change
 
@@ -147,11 +147,6 @@ A german description of how the adapter works can be found [here](kecontact.md)
 * (Sneak-L8) new option to stop charging at a certain SoC
 * (Sneak-L8) raise adapter-dev version from 1.4 to 1.5
 * (Sneak-L8) drop dependencies to chai, sinon and mocha
-
-### 3.3.0 (2025-09-18)
-* (Sneak-L8) new option to always charge with 1p oder 3p
-* (Sneak-L8) new setting for discharging power of storage battery (if not equal to max battery power)
-* (Sneak-L8) updated version requirements (admin 7.6.17 and core 3.3.2)
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

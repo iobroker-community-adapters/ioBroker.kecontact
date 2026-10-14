@@ -122,6 +122,7 @@ A german description of how the adapter works can be found [here](kecontact.md)
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* fix endless interrupted/charging loop when PV automatics is enabled during an active charging session without surplus [#628]
 * (Sneak-L8) push test script from 6.1.2 to 6.2.1, fix error [S0064]
 * (Sneak-L8) add email address to license information, fix [S4050] and [S4051]
 

@@ -469,6 +469,21 @@ class Kecontact extends utils.Adapter {
                 if (oldValue != newValue) {
                     this.log.info(`change of photovoltaics automatic from ${oldValue} to ${newValue}`);
                     newValue = this.getBoolean(newValue);
+                    // Issue #628: when PV automatics is switched on mid-session, re-anchor the
+                    // minimum-charge-time timer so a stale chargeTimestamp (set before PV automatics
+                    // was active) cannot force an endless interrupted->charging loop while there is
+                    // no surplus. Clearing it lets isContinueDueToMinChargingTime() return false, so
+                    // the next regulation cycle with negative surplus reaches stopCharging().
+                    // chargingToBeStarted is also cleared so the immediately following
+                    // checkWallboxPower() cycle does not re-anchor chargeTimestamp to 'now' via its
+                    // top-of-function guard (which would restart a fresh minimum-charge-time window).
+                    if (newValue === true && this.getStateAsDate(this.stateChargeTimestamp) !== null) {
+                        this.log.info(
+                            'photovoltaics automatic enabled during active charging session, resetting minimum charge time anchor',
+                        );
+                        this.setStateAck(this.stateChargeTimestamp, null);
+                        this.chargingToBeStarted = false;
+                    }
                     this.displayChargeMode();
                     this.forceUpdateOfCalculation();
                 }

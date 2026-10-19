@@ -99,6 +99,48 @@ function firePvAutomaticChange(adapter, newVal) {
     adapter.onStateChange(id, { val: newVal, ack: false });
 }
 
+describe('issue #591 - state 5 recovery retries', () => {
+    function createState5Adapter() {
+        const adapter = createAdapter();
+        adapter.setStateInternal(adapter.stateWallboxState, 5);
+        adapter.setStateInternal(adapter.stateWallboxEnabled, true);
+        adapter.setStateInternal(adapter.stateWallboxCurrent, 6000);
+        adapter.isPvAutomaticsActive = () => true;
+
+        const commands = [];
+        adapter.sendUdpDatagram = message => commands.push(message);
+        return { adapter, commands };
+    }
+
+    it('sends the first recovery command despite stale enabled/current states', () => {
+        const { adapter, commands } = createState5Adapter();
+
+        adapter.regulateWallbox(6000);
+
+        expect(commands).to.deep.equal(['currtime 6000 1']);
+        expect(adapter.state5RecoveryAttempts).to.equal(1);
+    });
+
+    it('retries after ten minutes, but stops after three sent attempts', () => {
+        const { adapter, commands } = createState5Adapter();
+
+        adapter.regulateWallbox(6000);
+        adapter.regulateWallbox(6000);
+        expect(commands).to.have.length(1);
+
+        adapter.state5RecoveryLastAttempt = Date.now() - adapter.state5RecoveryInterval;
+        adapter.regulateWallbox(6000);
+        adapter.state5RecoveryLastAttempt = Date.now() - adapter.state5RecoveryInterval;
+        adapter.regulateWallbox(6000);
+        expect(commands).to.have.length(3);
+
+        adapter.state5RecoveryLastAttempt = Date.now() - adapter.state5RecoveryInterval;
+        adapter.regulateWallbox(6000);
+        expect(commands).to.have.length(3);
+        expect(adapter.state5RecoveryAttempts).to.equal(3);
+    });
+});
+
 describe('issue #628 - PV automatics toggled on mid-session must not loop', () => {
     describe('isContinueDueToMinChargingTime', () => {
         it('returns true for a recent (stale) timestamp within minChargeSeconds', () => {

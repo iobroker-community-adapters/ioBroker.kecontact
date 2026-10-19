@@ -66,6 +66,10 @@ class Kecontact extends utils.Adapter {
     lastCalculating = null; // time of last check for charging information
     intervalCalculating = 25 * 1000; // calculate charging poser every 25(-30) seconds
     chargingToBeStarted = false; // tried to start charging session last time?
+    state5RecoveryAttempts = 0;
+    state5RecoveryLastAttempt = 0;
+    state5RecoveryMaxAttempts = 3;
+    state5RecoveryInterval = 10 * 60 * 1000;
     loadChargingSessions = false;
     photovoltaicsActive = false; // is photovoltaics automatic active?
     useX1switchForAutomatic = true;
@@ -103,7 +107,6 @@ class Kecontact extends utils.Adapter {
     retries1p3pSwitching = 0;
     valueFor1p3pSwitching = null; // value for switch
     batteryStrategy = 0; // default = don't care for a battery storage
-    startWithState5Attempted = false; // switch, whether a start command was tried once even with state of 5
     voltage = 230; // calculate with european standard voltage of 230V
     firmwareUrl = 'https://www.keba.com/de/emobility/service-support/downloads/downloads';
     regexP30cSeries =
@@ -1464,7 +1467,13 @@ class Kecontact extends utils.Adapter {
             if (milliAmpere > 0) {
                 this.log.debug('No charging due to interupted charging station');
             }
-            milliAmpere = 0;
+            return;
+        }
+
+        const isState5RecoveryAttempt =
+            milliAmpere > 0 && this.isPvAutomaticsActive() && this.getStateDefault0(this.stateWallboxState) == 5;
+        if (isState5RecoveryAttempt) {
+            oldValue = 0;
         }
 
         if (milliAmpere != oldValue) {
@@ -1485,6 +1494,10 @@ class Kecontact extends utils.Adapter {
                 }
             }
             this.sendUdpDatagram(`currtime ${milliAmpere} 1`, true);
+            if (isState5RecoveryAttempt) {
+                this.state5RecoveryAttempts++;
+                this.state5RecoveryLastAttempt = Date.now();
+            }
         }
     }
 
@@ -2174,25 +2187,26 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
-     * Checks whether charging station is in state 5 (no charging due to no RFID, power limitation or conditions of vehicle).
-     * After one attempt was made, no futher attempts should be done.
+     * Checks whether a start attempt from state 5 should be suppressed.
      *
-     * @param milliAmpere  geplante Ladestromstärke
+     * @param milliAmpere planned charging current
+     * @returns true if the recovery attempt is blocked by the retry limit or interval
      */
     isNoChargingDueToInteruptedStateOfWallbox(milliAmpere) {
-        if (milliAmpere <= 0 || !this.isPvAutomaticsActive()) {
-            this.startWithState5Attempted = false;
+        if (!this.isPvAutomaticsActive() || this.getStateDefault0(this.stateWallboxState) != 5) {
+            this.state5RecoveryAttempts = 0;
+            this.state5RecoveryLastAttempt = 0;
             return false;
         }
-        if (this.getStateDefault0(this.stateWallboxState) == 5) {
-            if (this.startWithState5Attempted === true) {
-                return true;
-            }
-            this.startWithState5Attempted = true;
-        } else {
-            this.startWithState5Attempted = false;
+        if (milliAmpere <= 0) {
+            return false;
         }
-        return false;
+        if (this.state5RecoveryAttempts >= this.state5RecoveryMaxAttempts) {
+            return true;
+        }
+        return (
+            this.state5RecoveryAttempts > 0 && Date.now() - this.state5RecoveryLastAttempt < this.state5RecoveryInterval
+        );
     }
 
     /**

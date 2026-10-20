@@ -311,3 +311,77 @@ describe('issue #628 - PV automatics toggled on mid-session must not loop', () =
         });
     });
 });
+
+describe('no vehicle plugged -> regulation loop must not run (PV automatics)', () => {
+    /**
+     * Build a Kecontact instance for the exact bug scenario: PV (surplus) automatics active,
+     * NO vehicle plugged in (wallbox rebooted after a power-cut). A single checkWallboxPower()
+     * cycle must NOT issue any stop/'currtime 0' command nor disable the box.
+     *
+     * @returns {{adapter: object, stopCalls: boolean[], regulateCalls: number[], datagrams: string[]}}
+     */
+    function createNoVehicleAdapter() {
+        const adapter = createAdapter();
+
+        adapter.minChargeSeconds = 300;
+        adapter.minConsumptionSeconds = 0;
+        adapter.underusage = 0;
+        adapter.minAmperage = 6000;
+        adapter.isMaxPowerCalculation = false;
+        adapter.isPassive = false;
+        adapter.lastCalculating = null; // force a real calculation this cycle
+        adapter.intervalCalculating = 25 * 1000;
+        adapter.maxGridPowerActive = false;
+        adapter.maxAmperageActive = false;
+        adapter.config = { authChargingTime: 0, lessInfoLogs: false };
+
+        adapter.getMaxCurrent = () => 16000;
+        adapter.getMinCurrent = () => 6000;
+        adapter.get1p3pPhases = () => 3;
+        adapter.getMaxCurrentEnWG = () => -1;
+        adapter.check1p3pSwitching = () => false;
+        adapter.isPvAutomaticsActive = () => true;
+        adapter.isVehiclePlugged = () => false; // no car connected
+        adapter.isVehicleCharging = () => false; // 0 W, nothing plugged
+        adapter.getSurplusWithoutWallbox = () => -4000;
+        adapter.isX2PhaseSwitch = () => false;
+
+        const stopCalls = [];
+        adapter.stopCharging = () => stopCalls.push(true);
+        const regulateCalls = [];
+        adapter.regulateWallbox = milliAmpere => regulateCalls.push(milliAmpere);
+        const datagrams = [];
+        adapter.sendUdpDatagram = message => datagrams.push(message);
+        adapter.set1p3pSwitching = value => regulateCalls.push(`1p3p:${value}`);
+
+        return { adapter, stopCalls, regulateCalls, datagrams };
+    }
+
+    it('does not stop charging or send currtime 0 when no vehicle is plugged', () => {
+        const { adapter, stopCalls, regulateCalls, datagrams } = createNoVehicleAdapter();
+
+        adapter.checkWallboxPower();
+
+        // The box must not be disabled and no stop command may be issued.
+        expect(stopCalls).to.have.length(0); // stopCharging() NOT called
+        expect(regulateCalls).to.not.include(0); // no currtime-0 regulate
+        expect(datagrams).to.not.include('currtime 0 1'); // no stop datagram sent
+    });
+
+    it('still regulates normally once a vehicle is plugged in (control case)', () => {
+        const { adapter, regulateCalls } = createNoVehicleAdapter();
+
+        // Same PV-automatics setup, but now a vehicle is plugged with positive surplus.
+        adapter.isVehiclePlugged = () => true;
+        adapter.isDynamicChargingActive = () => true;
+        adapter.has1P3PAutomatic = () => false;
+        adapter.isUsingBatteryForMinimumChargingOfVehicle = () => false;
+        adapter.getVehicleSoC = () => adapter.NO_SOC_DEFINED;
+        adapter.getAmperage = () => 8000; // plenty of surplus -> above minimum
+
+        adapter.checkWallboxPower();
+
+        // Regulation ran with a non-zero current, proving normal behaviour is untouched.
+        expect(regulateCalls).to.include(8000);
+    });
+});

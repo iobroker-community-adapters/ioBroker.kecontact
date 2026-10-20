@@ -2309,6 +2309,16 @@ class Kecontact extends utils.Adapter {
             `pvAutomaticsActive: ${this.isPvAutomaticsActive()}, vehicleIsPlugged: ${this.isVehiclePlugged()}`,
         );
 
+        // if PV automatics is active but no vehicle is plugged there is nothing to regulate; skip the
+        // stop/regulate loop entirely so that we do NOT spam stopCharging()/'currtime 0 1' and keep the
+        // box disabled while nothing is connected. Scoped to the PV-automatics case only: the non-PV
+        // unplugged path below deliberately charges with maximum power (max-power/manual mode) and must
+        // not be changed. Normal regulation resumes automatically once a vehicle is plugged in again.
+        if (this.isPvAutomaticsActive() && !this.isVehiclePlugged()) {
+            this.log.debug('no vehicle plugged, skipping regulation');
+            return;
+        }
+
         // lock wallbox if requested or available amperage below minimum
         if (
             this.getStateDefaultFalse(this.stateWallboxDisabled) === true ||

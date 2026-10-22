@@ -1863,6 +1863,7 @@ class Kecontact extends utils.Adapter {
                 ) {
                     this.stateFor1p3pAck = false;
                     this.log.info(`switching 1p3p to ${this.valueFor1p3pSwitching} ...`);
+                    this.setStateAck(this.state1p3pSwTimestamp, new Date().toString());
                     this.setForeignState(this.stateFor1p3pCharging, this.valueFor1p3pSwitching);
                     this.doNextStepOf1p3pSwitching();
                     return true;

@@ -122,7 +122,8 @@ A german description of how the adapter works can be found [here](kecontact.md)
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-* skip the regulation loop when PV automatics is active but no vehicle is plugged, so the wallbox is no longer repeatedly stopped/disabled while nothing is connected
+* (FernetMenta) skip the regulation loop when PV automatics is active but no vehicle is plugged, so the wallbox is no longer repeatedly stopped/disabled while nothing is connected
+* (GermanBluefox) timestamp of phase switch is now also stored when switching via state, so minimum time between phase switches is respected [[#588](https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues/588)]
 * (Sneak-L8) fix 1p/3p switch can deadlock in state 5 [[#591](https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues/591)]
 * (FernetMenta) fix endless interrupted/charging loop when PV automatics is enabled during an active charging session without surplus [[#628](https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues/591)]
 * (Sneak-L8) push test script from 6.1.2 to 6.2.1, fix error [S0064]

@@ -1457,8 +1457,13 @@ class Kecontact extends utils.Adapter {
         // if wallbox is currently not allowed to charge, skip the stop process, so that we do NOT spam
         // stopCharging()/'currtime 0 1'
         if (this.getStateDefaultFalse(this.stateWallboxEnabled)) {
-            this.regulateWallbox(0);
-            this.resetChargingSessionData();
+            if (this.getStateDefault0(this.stateWallboxCurrent) > 0) {
+                this.sendUdpDatagram(`ena 0`, true);
+                this.log.info(`disable charging station due to current 0`);
+            } else {
+                this.regulateWallbox(0);
+                this.resetChargingSessionData();
+            }
         }
     }
 

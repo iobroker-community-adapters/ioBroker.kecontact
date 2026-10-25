@@ -99,6 +99,65 @@ function firePvAutomaticChange(adapter, newVal) {
     adapter.onStateChange(id, { val: newVal, ack: false });
 }
 
+describe('stopCharging', () => {
+    it('disables the wallbox when charging is active', () => {
+        const adapter = createAdapter();
+        adapter.setStateInternal(adapter.stateWallboxEnabled, true);
+        adapter.setStateInternal(adapter.stateWallboxCurrent, 6000);
+
+        const datagrams = [];
+        adapter.sendUdpDatagram = (...args) => datagrams.push(args);
+        const regulateCalls = [];
+        adapter.regulateWallbox = value => regulateCalls.push(value);
+        let resetCalls = 0;
+        adapter.resetChargingSessionData = () => resetCalls++;
+
+        adapter.stopCharging();
+
+        expect(datagrams).to.deep.equal([['ena 0', true]]);
+        expect(regulateCalls).to.deep.equal([]);
+        expect(resetCalls).to.equal(0);
+    });
+
+    it('regulates to zero and resets session data when no current is flowing', () => {
+        const adapter = createAdapter();
+        adapter.setStateInternal(adapter.stateWallboxEnabled, true);
+        adapter.setStateInternal(adapter.stateWallboxCurrent, 0);
+
+        const datagrams = [];
+        adapter.sendUdpDatagram = (...args) => datagrams.push(args);
+        const regulateCalls = [];
+        adapter.regulateWallbox = value => regulateCalls.push(value);
+        let resetCalls = 0;
+        adapter.resetChargingSessionData = () => resetCalls++;
+
+        adapter.stopCharging();
+
+        expect(datagrams).to.deep.equal([]);
+        expect(regulateCalls).to.deep.equal([0]);
+        expect(resetCalls).to.equal(1);
+    });
+
+    it('does nothing when the wallbox is disabled', () => {
+        const adapter = createAdapter();
+        adapter.setStateInternal(adapter.stateWallboxEnabled, false);
+        adapter.setStateInternal(adapter.stateWallboxCurrent, 6000);
+
+        const datagrams = [];
+        adapter.sendUdpDatagram = (...args) => datagrams.push(args);
+        const regulateCalls = [];
+        adapter.regulateWallbox = value => regulateCalls.push(value);
+        let resetCalls = 0;
+        adapter.resetChargingSessionData = () => resetCalls++;
+
+        adapter.stopCharging();
+
+        expect(datagrams).to.deep.equal([]);
+        expect(regulateCalls).to.deep.equal([]);
+        expect(resetCalls).to.equal(0);
+    });
+});
+
 describe('issue #591 - state 5 recovery retries', () => {
     function createState5Adapter() {
         const adapter = createAdapter();
@@ -279,16 +338,17 @@ describe('issue #628 - PV automatics toggled on mid-session must not loop', () =
             adapter.isNoChargingDueToInteruptedStateOfWallbox = () => false;
             adapter.set1p3pSwitching = () => false;
             adapter.isX2PhaseSwitch = () => false;
-            adapter.sendUdpDatagram = () => {};
+            const datagrams = [];
+            adapter.sendUdpDatagram = (...args) => datagrams.push(args);
 
             const commands = [];
             adapter.regulateWallbox = milliAmpere => commands.push(milliAmpere);
 
-            return { adapter, commands };
+            return { adapter, commands, datagrams };
         }
 
-        it('stops charging (currtime 0) instead of forcing getMinCurrent() on the first post-toggle cycle', () => {
-            const { adapter, commands } = createFullCycleAdapter();
+        it('disables charging instead of forcing getMinCurrent() on the first post-toggle cycle', () => {
+            const { adapter, commands, datagrams } = createFullCycleAdapter();
 
             // Active session started with PV automatics OFF: chargeTimestamp set in the past but
             // still within minChargeSeconds, and chargingToBeStarted latched true (the max-power
@@ -296,17 +356,19 @@ describe('issue #628 - PV automatics toggled on mid-session must not loop', () =
             const chargeTs = new Date(Date.now() - 60 * 1000);
             adapter.setStateInternal(adapter.stateChargeTimestamp, chargeTs.toString());
             adapter.setStateInternal(adapter.statePvAutomatic, false);
+            adapter.setStateInternal(adapter.stateWallboxEnabled, true);
+            adapter.setStateInternal(adapter.stateWallboxCurrent, 6000);
             adapter.chargingToBeStarted = true;
 
             // User toggles PV automatics ON mid-session -> handler + one regulation cycle.
             firePvAutomaticChange(adapter, true);
 
-            // With the fix the regulation cycle reaches stopCharging() -> regulateWallbox(0).
-            // Without the fix the stale/re-anchored timestamp forces getMinCurrent() (6000).
-            expect(commands).to.include(0);
+            // The current is active, so stopCharging() disables the wallbox with ena 0 rather
+            // than regulating to zero. Without the timestamp fix it would keep charging at 6000.
+            expect(datagrams).to.deep.equal([['ena 0', true]]);
             expect(commands).to.not.include(6000);
 
-            // stopCharging() clears the anchor via resetChargingSessionData().
+            // The PV toggle handler cleared the stale minimum-charge-time anchor.
             expect(adapter.getStateAsDate(adapter.stateChargeTimestamp)).to.equal(null);
         });
     });
@@ -318,7 +380,7 @@ describe('no vehicle plugged -> regulation loop must not run (PV automatics)', (
      * NO vehicle plugged in (wallbox rebooted after a power-cut). A single checkWallboxPower()
      * cycle must NOT issue any stop/'currtime 0' command nor disable the box.
      *
-     * @returns {{adapter: object, stopCalls: boolean[], regulateCalls: number[], datagrams: string[]}}
+     * @returns {{adapter: object, regulateCalls: (number|string)[], datagrams: string[]}}
      */
     function createNoVehicleAdapter() {
         const adapter = createAdapter();
@@ -346,26 +408,25 @@ describe('no vehicle plugged -> regulation loop must not run (PV automatics)', (
         adapter.getSurplusWithoutWallbox = () => -4000;
         adapter.isX2PhaseSwitch = () => false;
 
-        const stopCalls = [];
-        adapter.stopCharging = () => stopCalls.push(true);
         const regulateCalls = [];
         adapter.regulateWallbox = milliAmpere => regulateCalls.push(milliAmpere);
         const datagrams = [];
         adapter.sendUdpDatagram = message => datagrams.push(message);
         adapter.set1p3pSwitching = value => regulateCalls.push(`1p3p:${value}`);
 
-        return { adapter, stopCalls, regulateCalls, datagrams };
+        return { adapter, regulateCalls, datagrams };
     }
 
-    it('does not stop charging or send currtime 0 when no vehicle is plugged', () => {
-        const { adapter, stopCalls, regulateCalls, datagrams } = createNoVehicleAdapter();
+    it('does not send a stop command when no vehicle is plugged', () => {
+        const { adapter, regulateCalls, datagrams } = createNoVehicleAdapter();
 
         adapter.checkWallboxPower();
 
-        // The box must not be disabled and no stop command may be issued.
-        expect(stopCalls).to.have.length(0); // stopCharging() NOT called
+        // stopCharging() may run for a zero calculated current, but the disabled wallbox
+        // must not receive any command.
         expect(regulateCalls).to.not.include(0); // no currtime-0 regulate
         expect(datagrams).to.not.include('currtime 0 1'); // no stop datagram sent
+        expect(datagrams).to.not.include('ena 0'); // no wallbox-disable command sent
     });
 
     it('still regulates normally once a vehicle is plugged in (control case)', () => {

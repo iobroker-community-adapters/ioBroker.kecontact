@@ -122,6 +122,7 @@ A german description of how the adapter works can be found [here](kecontact.md)
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22.19.0 now
 * (FernetMenta) skip the regulation loop when PV automatics is active but no vehicle is plugged, so the wallbox is no longer repeatedly stopped/disabled while nothing is connected
 * (GermanBluefox) timestamp of phase switch is now also stored when switching via state, so minimum time between phase switches is respected [[#588](https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues/588)]
 * (Sneak-L8) fix 1p/3p switch can deadlock in state 5 [[#591](https://github.com/iobroker-community-adapters/ioBroker.kecontact/issues/591)]

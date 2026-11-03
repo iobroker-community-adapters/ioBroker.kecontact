@@ -1,9 +1,15 @@
 # Older changes
+## 3.4.0 (2026-01-17)
+* (Sneak-L8) new options to charge vehicle up to a specified SoC
+* (Sneak-L8) new option to stop charging at a certain SoC
+* (Sneak-L8) raise adapter-dev version from 1.4 to 1.5
+* (Sneak-L8) drop dependencies to chai, sinon and mocha
+
+
 ## 3.3.0 (2025-09-18)
 * (Sneak-L8) new option to always charge with 1p oder 3p
 * (Sneak-L8) new setting for discharging power of storage battery (if not equal to max battery power)
 * (Sneak-L8) updated version requirements (admin 7.6.17 and core 3.3.2)
-
 
 ## 3.2.0 (2025-07-13)
 * (Sneak-L8) new option to always start charging when vehicle is plugged if authorization is required to prevent charging station to block charging

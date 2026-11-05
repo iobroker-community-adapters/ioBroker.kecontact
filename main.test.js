@@ -57,8 +57,13 @@ const adapterCoreStub = {
     '@global': true,
 };
 
+const dnsPromisesStub = {
+    lookup: async host => [{ address: host, family: 4 }],
+};
+
 const Kecontact = proxyquire('./main.js', {
     '@iobroker/adapter-core': adapterCoreStub,
+    'node:dns/promises': dnsPromisesStub,
 });
 
 /**
@@ -87,6 +92,147 @@ function createAdapter() {
 
     return adapter;
 }
+
+describe('wallbox host resolution', () => {
+    it('resolves a hostname to all IPv4 addresses', async () => {
+        const originalLookup = dnsPromisesStub.lookup;
+        const lookupOptions = [];
+        dnsPromisesStub.lookup = async (host, options) => {
+            lookupOptions.push({ host, options });
+            return [
+                { address: '192.168.1.10', family: 4 },
+                { address: '192.168.1.11', family: 4 },
+            ];
+        };
+
+        try {
+            const adapter = createAdapter();
+            const addresses = await adapter.resolveHostAddresses('wallbox.local');
+
+            expect(addresses).to.deep.equal(new Set(['192.168.1.10', '192.168.1.11']));
+            expect(lookupOptions).to.deep.equal([
+                { host: 'wallbox.local', options: { all: true, family: 4 } },
+            ]);
+        } finally {
+            dnsPromisesStub.lookup = originalLookup;
+        }
+    });
+
+    it('rejects hosts that do not resolve to an IPv4 address', async () => {
+        const originalLookup = dnsPromisesStub.lookup;
+        dnsPromisesStub.lookup = async () => [];
+
+        try {
+            const adapter = createAdapter();
+            let error;
+            try {
+                await adapter.resolveHostAddresses('unknown-wallbox.local');
+            } catch (err) {
+                error = err;
+            }
+
+            expect(error).to.be.instanceOf(Error);
+            expect(error.message).to.include('No IPv4 addresses found');
+        } finally {
+            dnsPromisesStub.lookup = originalLookup;
+        }
+    });
+
+    it('propagates DNS lookup errors for invalid numeric address spellings', async () => {
+        const originalLookup = dnsPromisesStub.lookup;
+        const lookupError = Object.assign(new Error('getaddrinfo ENOTFOUND 0.0.0.00'), { code: 'ENOTFOUND' });
+        dnsPromisesStub.lookup = async () => {
+            throw lookupError;
+        };
+
+        try {
+            const adapter = createAdapter();
+            let error;
+            try {
+                await adapter.resolveHostAddresses('0.0.0.00');
+            } catch (err) {
+                error = err;
+            }
+
+            expect(error).to.equal(lookupError);
+        } finally {
+            dnsPromisesStub.lookup = originalLookup;
+        }
+    });
+
+    it('matches incoming messages against the resolved addresses', () => {
+        const adapter = createAdapter();
+        adapter.config = { host: 'wallbox.local' };
+        adapter.hostAddresses = new Set(['192.168.1.10', '192.168.1.11']);
+
+        expect(adapter.isMessageFromWallboxOfThisInstance({ address: '192.168.1.11' })).to.equal(true);
+        expect(adapter.isMessageFromWallboxOfThisInstance({ address: '192.168.1.12' })).to.equal(false);
+    });
+
+    it('rejects a resolved loopback address in the configuration check', () => {
+        const adapter = createAdapter();
+        adapter.config = { host: 'localhost' };
+        adapter.hostAddresses = new Set(['127.0.0.1']);
+
+        expect(adapter.checkConfig()).to.equal(false);
+    });
+
+    it('allows a hostname that resolves to a usable wallbox address', () => {
+        const adapter = createAdapter();
+        adapter.config = { host: 'wallbox.local' };
+        adapter.hostAddresses = new Set(['192.168.1.10']);
+
+        expect(adapter.checkConfig()).to.equal(true);
+    });
+
+    it('broadcasts forwarded messages to all adapter instances through the messagebox', () => {
+        const adapter = createAdapter();
+        adapter.name = 'kecontact';
+        const sentMessages = [];
+        adapter.sendTo = (...args) => sentMessages.push(args);
+
+        adapter.sendMessageToOtherInstances(Buffer.from(' test '), { address: '192.168.1.20' });
+
+        expect(sentMessages).to.deep.equal([
+            [
+                'kecontact',
+                'wallboxMessage',
+                { sourceAddress: '192.168.1.20', message: 'test' },
+            ],
+        ]);
+    });
+
+    it('handles a broadcast message only when its source matches this instance', () => {
+        const adapter = createAdapter();
+        adapter.hostAddresses = new Set(['192.168.1.10']);
+        const handledMessages = [];
+        adapter.handleMessage = (...args) => handledMessages.push(args);
+
+        adapter.onMessage({
+            command: 'wallboxMessage',
+            message: { sourceAddress: '192.168.1.10', message: 'report 1' },
+        });
+        adapter.onMessage({
+            command: 'wallboxMessage',
+            message: { sourceAddress: '192.168.1.20', message: 'report 1' },
+        });
+
+        expect(handledMessages).to.deep.equal([['report 1', 'instance']]);
+    });
+
+    it('ignores malformed messagebox payloads', () => {
+        const adapter = createAdapter();
+        const handledMessages = [];
+        adapter.handleMessage = (...args) => handledMessages.push(args);
+
+        adapter.onMessage({
+            command: 'wallboxMessage',
+            message: { sourceAddress: '192.168.1.10', message: Buffer.from('report 1') },
+        });
+
+        expect(handledMessages).to.deep.equal([]);
+    });
+});
 
 /**
  * Simulate an ioBroker state change for the PV automatics datapoint.

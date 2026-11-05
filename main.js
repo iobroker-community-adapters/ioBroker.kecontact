@@ -10,6 +10,7 @@ const utils = require('@iobroker/adapter-core');
 
 // Load your modules here, e.g.:
 const dgram = require('node:dgram');
+const dns = require('node:dns/promises');
 const axios = require('axios');
 const I18n = require('@iobroker/adapter-core').I18n;
 
@@ -26,6 +27,9 @@ class Kecontact extends utils.Adapter {
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {dgram.Socket | null} */
     rxSocketBroadcast = null;
+    // eslint-disable-next-line jsdoc/check-tag-names
+    /** @type {Set<string>} */
+    hostAddresses = new Set();
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {ioBroker.Interval | undefined} */
     sendDelayTimer = undefined;
@@ -173,7 +177,6 @@ class Kecontact extends utils.Adapter {
     stateLastChargeStart = 'statistics.lastChargeStart'; /*Timestamp when *last* charging session was started*/
     stateLastChargeFinish = 'statistics.lastChargeFinish'; /*Timestamp when *last* charging session was finished*/
     stateLastChargeAmount = 'statistics.lastChargeAmount'; /*Energy charging in *last* session in kWh*/
-    stateMsgFromOtherwallbox = 'internal.message'; /*Message passed on from other instance*/
     stateX2Source = 'x2phaseSource'; /*X2 switch source */
     stateX2Switch = 'x2phaseSwitch'; /*X2 switch */
     stateVehicleSoC = 'automatic.stateVehicleSoC'; /*SoC of vehicle currently to be charged*/
@@ -191,8 +194,8 @@ class Kecontact extends utils.Adapter {
         });
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
+        this.on('message', this.onMessage.bind(this));
         // this.on('objectChange', this.onObjectChange.bind(this));
-        // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
     }
 
@@ -208,6 +211,14 @@ class Kecontact extends utils.Adapter {
             return;
         }
         await I18n.init(__dirname, this);
+
+        try {
+            this.hostAddresses = await this.resolveHostAddresses(this.config.host);
+        } catch (err) {
+            this.log.error(`Could not resolve wallbox host "${this.config.host}" to an IPv4 address: ${err.message}`);
+            this.log.error('start of adapter not possible due to wrong address of wallbox');
+            return;
+        }
 
         if (!this.checkConfig()) {
             this.log.error('start of adapter not possible due to config errors');
@@ -595,23 +606,32 @@ class Kecontact extends utils.Adapter {
         }
     }
 
-    // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
-    // /**
-    //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-    //  * Using this method requires "common.messagebox" property to be set to true in io-package.json
-    //  * @param {ioBroker.Message} obj
-    //  */
-    // onMessage(obj) {
-    //     if (typeof obj === 'object' && obj.message) {
-    //         if (obj.command === 'send') {
-    //             // e.g. send email or pushover or whatever
-    //             this.log.info('send command');
+    /**
+     * Handles a UDP message forwarded by another kecontact instance.
+     *
+     * @param {ioBroker.Message} obj message delivered through the adapter messagebox
+     */
+    onMessage(obj) {
+        if (!obj || obj.command !== 'wallboxMessage') {
+            return;
+        }
 
-    //             // Send response in callback if required
-    //             if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-    //         }
-    //     }
-    // }
+        const payload = obj.message;
+        if (
+            !payload ||
+            typeof payload !== 'object' ||
+            typeof payload.sourceAddress !== 'string' ||
+            typeof payload.message !== 'string'
+        ) {
+            this.log.warn('Ignoring invalid wallbox message received through the messagebox');
+            return;
+        }
+
+        if (this.hostAddresses.has(payload.sourceAddress)) {
+            this.log.debug(`Message from ${payload.sourceAddress} received through the messagebox`);
+            this.handleMessage(payload.message, 'instance');
+        }
+    }
 
     setupUdpCommunication() {
         this.txSocket = dgram.createSocket('udp4');
@@ -814,9 +834,6 @@ class Kecontact extends utils.Adapter {
             this.log.debug(`set ${this.stateBatteryStrategy} to ${newValue}`);
             // no real action to do
         };
-        this.stateChangeListeners[`${this.namespace}.${this.stateMsgFromOtherwallbox}`] = (_oldValue, newValue) => {
-            this.handleWallboxExchange(newValue);
-        };
         this.stateChangeListeners[`${this.namespace}.${this.stateMinimumSoCOfBatteryStorage}`] = (
             _oldValue,
             newValue,
@@ -892,7 +909,7 @@ class Kecontact extends utils.Adapter {
      */
     checkConfig() {
         let everythingFine = true;
-        if (this.config.host == '0.0.0.0' || this.config.host == '127.0.0.1') {
+        if ([...this.hostAddresses].some(address => address === '0.0.0.0' || address.startsWith('127.'))) {
             this.log.warn(`Can't start adapter for invalid IP address: ${this.config.host}`);
             everythingFine = false;
         }
@@ -1136,47 +1153,32 @@ class Kecontact extends utils.Adapter {
         return true;
     }
 
-    isMessageFromWallboxOfThisInstance(remote) {
-        return remote.address == this.config.host;
+    async resolveHostAddresses(host) {
+        if (typeof host !== 'string' || host.trim() === '') {
+            throw new Error('Host must be a non-empty string');
+        }
+
+        const addresses = await dns.lookup(host.trim(), { all: true, family: 4 });
+        if (addresses.length === 0) {
+            throw new Error(`No IPv4 addresses found for "${host}"`);
+        }
+        return new Set(addresses.map(({ address }) => address));
     }
 
-    sendMessageToOtherInstance(message, remote) {
-        // save message for other instances by setting value into state
-        const prefix = 'system.adapter.';
-        const adapterpart = `${this.name}.`;
-        const suffix = '.uptime';
-        this.getForeignObjects(`${prefix + adapterpart}*${suffix}`, (err, objects) => {
-            if (err) {
-                this.log.error(`Error while fetching other instances: ${err}`);
-                return;
-            }
-            if (objects) {
-                for (const item in objects) {
-                    if (Object.prototype.hasOwnProperty.call(objects, item) && item.endsWith(suffix)) {
-                        const namespace = item.slice(prefix.length, -suffix.length);
-                        this.getForeignObject(prefix + namespace, (err, object) => {
-                            if (err) {
-                                this.log.error(`Error while fetching other instances: ${err}`);
-                                return;
-                            }
-                            if (object) {
-                                if (Object.prototype.hasOwnProperty.call(object, 'native')) {
-                                    if (Object.prototype.hasOwnProperty.call(object.native, 'host')) {
-                                        if (object.native.host == remote.address) {
-                                            this.setForeignState(
-                                                `${namespace}.${this.stateMsgFromOtherwallbox}`,
-                                                message.toString().trim(),
-                                            );
-                                            this.log.debug(`Message from ${remote.address} send to ${namespace}`);
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
+    isMessageFromWallboxOfThisInstance(remote) {
+        return this.hostAddresses.has(remote.address);
+    }
+
+    sendMessageToOtherInstances(message, remote) {
+        const payload = {
+            sourceAddress: remote.address,
+            message: message.toString().trim(),
+        };
+        try {
+            this.sendTo(this.name, 'wallboxMessage', payload);
+        } catch (err) {
+            this.log.error(`Could not forward wallbox message from ${remote.address}: ${err.message}`);
+        }
     }
 
     // handle incomming message from wallbox
@@ -1187,7 +1189,7 @@ class Kecontact extends utils.Adapter {
             // Mark that connection is established by incomming data
             this.handleMessage(message, 'received');
         } else {
-            this.sendMessageToOtherInstance(message, remote);
+            this.sendMessageToOtherInstances(message, remote);
         }
     }
 
@@ -1198,12 +1200,6 @@ class Kecontact extends utils.Adapter {
             // handle only message from wallbox linked to this instance, ignore other wallboxes sending broadcasts
             this.handleMessage(message, 'broadcast');
         }
-    }
-
-    // handle incomming message from other instance for this wallbox
-    handleWallboxExchange(message) {
-        this.log.debug(`datagram from other instance: "${message}"`);
-        this.handleMessage(message, 'instance');
     }
 
     handleMessage(message, origin) {

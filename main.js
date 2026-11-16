@@ -451,7 +451,8 @@ class Kecontact extends utils.Adapter {
                         this.reset1p3pSwitching();
                     }
                     if (!this.isPvAutomaticsActive()) {
-                        this.set1p3pSwitching(this.valueFor3pCharging);
+                        const manual1p3p = this.getManual1p3pValue();
+                        this.set1p3pSwitching(manual1p3p !== null ? manual1p3p : this.valueFor3pCharging);
                     }
                     this.initChargingSession();
                     this.forceUpdateOfCalculation();
@@ -1935,6 +1936,22 @@ class Kecontact extends utils.Adapter {
     }
 
     /**
+     * returns the value for 1p/3p switch if charging with 1p or 3p is forced manually (automatic.1p3pCharging)
+     *
+     * @returns valueFor1pCharging or valueFor3pCharging if forced, null if 1p/3p is chosen automatically
+     */
+    getManual1p3pValue() {
+        switch (this.getStateDefault0(this.stateManual1p3p)) {
+            case 1:
+                return this.valueFor1pCharging;
+            case 3:
+                return this.valueFor3pCharging;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Return the number of phases currently possible if no switch to 1p would be in progress
      *
      * @returns number of phases for charging of 3p would be in effect
@@ -2463,7 +2480,9 @@ class Kecontact extends utils.Adapter {
                 this.log.debug(`new current due to vehicle not plugged or pv automatics not active is ${curr}`);
                 this.isMaxPowerCalculation = true;
                 if (this.isVehiclePlugged()) {
-                    newValueFor1p3pSwitching = this.valueFor3pCharging;
+                    // respect manually forced 1p/3p charging, otherwise charge with 3p
+                    const manual1p3p = this.getManual1p3pValue();
+                    newValueFor1p3pSwitching = manual1p3p !== null ? manual1p3p : this.valueFor3pCharging;
                 } else {
                     newValueFor1p3pSwitching = this.valueFor1p3pOff;
                 }

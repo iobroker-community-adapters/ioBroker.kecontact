@@ -64,6 +64,13 @@ class Kecontact extends utils.Adapter {
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {ioBroker.Interval | undefined} */
     timerDataUpdate = undefined; // interval object for calculating timer
+    intervalFailsafeHeartbeat = 30 * 1000; // resend current to wallbox every 30 seconds to avoid failsafe mode (§14a EnWG)
+    failsafeTimeout = 60; // failsafe timeout in seconds
+    failsafeCurrent = 0; // failsafe current in mA
+    dipSwitchX1 = 0x80; // bit of DSW1.1 (use of input X1) in hex value of 'DIP-Sw1'
+    // eslint-disable-next-line jsdoc/check-tag-names
+    /** @type {ioBroker.Interval | undefined} */
+    timerFailsafeHeartbeat = undefined; // interval object for failsafe heartbeat
     intervalActiceUpdate = 15 * 1000; // check current power (and calculate PV-automatics/power limitation every 15 seconds (report 2+3))
     // eslint-disable-next-line jsdoc/check-tag-names
     /** @type {Date | null} */
@@ -123,6 +130,11 @@ class Kecontact extends utils.Adapter {
     stateWallboxEnabled = 'enableUser'; /*Enable User*/
     stateWallboxCurrent = 'currentUser'; /*Current User*/
     stateWallboxMaxCurrent = 'currentHardware'; /*Maximum Current Hardware*/
+    stateWallboxEnabledBySystem = 'enableSys'; /*Enable System*/
+    stateWallboxOfferedCurrent = 'maxCurrent'; /*Maximum Current offered to vehicle*/
+    stateWallboxCurrentFailsafe = 'currentFailsafe'; /*Current Failsafe*/
+    stateWallboxTimeoutFailsafe = 'timeoutFailsafe'; /*Current Failsafe Timer*/
+    stateWallboxDipSwitch1 = 'DIP-Sw1'; /*Hex Value of Dip Switch 1 Setting*/
     stateWallboxCurrentWithTimer = 'currentTimer'; /*Current value for currTime */
     stateTimeForCurrentChange = 'timeoutCurrentTimer'; /*Timer value for currTime */
     stateWallboxPhase1 = 'i1'; /*Current 1*/
@@ -267,6 +279,7 @@ class Kecontact extends utils.Adapter {
         this.log.debug(`config regardTime: ${this.config.regardTime}`);
         this.log.debug(`config stateEnWG: ${this.config.stateEnWG}`);
         this.log.debug(`config dynamicEnWG: ${this.config.dynamicEnWG}`);
+        this.log.debug(`config failsafeEnWG: ${this.config.failsafeEnWG}`);
         this.log.debug(`config maxPower: ${this.config.maxPower}`);
         this.log.debug(`config stateEnergyMeter1: ${this.config.stateEnergyMeter1}`);
         this.log.debug(`config stateEnergyMeter2: ${this.config.stateEnergyMeter2}`);
@@ -344,6 +357,10 @@ class Kecontact extends utils.Adapter {
                 }
 
                 this.disableChargingTimer();
+                if (this.timerFailsafeHeartbeat) {
+                    this.clearInterval(this.timerFailsafeHeartbeat);
+                    this.timerFailsafeHeartbeat = undefined;
+                }
 
                 if (this.txSocket !== null) {
                     this.txSocket.close();
@@ -867,6 +884,12 @@ class Kecontact extends utils.Adapter {
         //sendUdpDatagram('i');   only needed for discovery
         this.requestReports();
         this.enableChargingTimer(this.isPassive ? this.intervalPassiveUpdate : this.intervalActiceUpdate);
+        if (this.config.failsafeEnWG === true) {
+            this.timerFailsafeHeartbeat = this.setInterval(
+                this.sendFailsafeHeartbeat.bind(this),
+                this.intervalFailsafeHeartbeat,
+            );
+        }
     }
 
     /**
@@ -1297,6 +1320,10 @@ class Kecontact extends utils.Adapter {
                 } else if (key != 'ID') {
                     this.log.warn(`Unknown value received: ${key}=${message[key]}`);
                 }
+            }
+            if (message.ID == 2) {
+                // Check failsafe settings of wallbox after processing 'report 2'
+                this.checkFailsafe();
             }
             if (message.ID == 3) {
                 // Do calculation after processing 'report 3'
@@ -2677,6 +2704,64 @@ class Kecontact extends utils.Adapter {
         this.requestChargingDataReport();
     }
 
+    /**
+     * Sets failsafe settings of wallbox (stored persistently) according to config, if they differ from the wallbox values
+     */
+    checkFailsafe() {
+        const timeout = this.getStateInternal(this.stateWallboxTimeoutFailsafe);
+        const current = this.getStateInternal(this.stateWallboxCurrentFailsafe);
+        if (timeout == null || current == null) {
+            return;
+        }
+        if (this.config.failsafeEnWG === true) {
+            if (this.getNumber(timeout) !== this.failsafeTimeout || this.getNumber(current) !== this.failsafeCurrent) {
+                this.log.info(`activating failsafe with timeout of ${this.failsafeTimeout} seconds`);
+                this.sendUdpDatagram(`failsafe ${this.failsafeTimeout} ${this.failsafeCurrent} 1`, true);
+            } else if (this.isFailsafeTriggered() && !this.isDisabledByX1()) {
+                this.log.info('wallbox is in failsafe mode, enable it again');
+                this.sendUdpDatagram('ena 1', true);
+                const currentUser = this.getStateDefault0(this.stateWallboxCurrent);
+                if (currentUser >= 6000) {
+                    this.sendUdpDatagram(`curr ${currentUser}`, true);
+                }
+            }
+        } else if (this.getNumber(timeout) !== 0) {
+            this.log.info('deactivating failsafe');
+            this.sendUdpDatagram('failsafe 0 0 1', true);
+        }
+    }
+
+    /**
+     * Check, if the wallbox is in failsafe mode (not enabled by system and offered current is the failsafe current)
+     *
+     * @returns true, if failsafe mode was triggered
+     */
+    isFailsafeTriggered() {
+        return (
+            !this.getStateDefaultFalse(this.stateWallboxEnabledBySystem) &&
+            this.getStateDefault0(this.stateWallboxOfferedCurrent) ===
+                this.getStateDefault0(this.stateWallboxCurrentFailsafe)
+        );
+    }
+
+    /**
+     * Check, if the wallbox is disabled by the input X1 (DSW1.1 is on and X1 is open)
+     *
+     * @returns true, if wallbox is disabled by X1
+     */
+    isDisabledByX1() {
+        const dipSwitch1 = parseInt(this.getStateInternal(this.stateWallboxDipSwitch1), 16);
+        return (dipSwitch1 & this.dipSwitchX1) !== 0 && !this.getStateDefaultFalse(this.stateX1input);
+    }
+
+    /**
+     * Sends enable state to wallbox regularly to prevent wallbox from failsafe mode
+     */
+    sendFailsafeHeartbeat() {
+        // 'ena' with the current state of the wallbox resets the failsafe timer without changing anything
+        this.sendUdpDatagram(`ena ${this.getStateDefaultFalse(this.stateWallboxEnabled) ? 1 : 0}`, true);
+        this.log.debug('failsafe heartbeat sent');
+    }
     /**
      * Requests data report with ID 1 from charging station (containing permanent values from charging station)
      */

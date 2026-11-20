@@ -203,6 +203,7 @@
     "regardTime": 180,
     "stateEnWG": "",
     "dynamicEnWG": false,
+    "failsafeEnWG": false,
     "maxPower": 0,
     "stateEnergyMeter1": "",
     "stateEnergyMeter2": "",

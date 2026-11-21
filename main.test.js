@@ -592,3 +592,145 @@ describe('no vehicle plugged -> regulation loop must not run (PV automatics)', (
         expect(regulateCalls).to.include(8000);
     });
 });
+describe('failsafe mode for §14a EnWG', () => {
+    /**
+     * Create an adapter with failsafe option and collect all datagrams sent to the wallbox
+     *
+     * @param {boolean} failsafeEnWG value of config option
+     * @returns {object} the configured adapter instance with array 'datagrams'
+     */
+    function createFailsafeAdapter(failsafeEnWG) {
+        const adapter = createAdapter();
+        adapter.config = { failsafeEnWG };
+        adapter.datagrams = [];
+        adapter.sendUdpDatagram = (...args) => adapter.datagrams.push(args);
+        return adapter;
+    }
+    /**
+     * Set state values of a wallbox reporting failsafe settings and its enable states
+     *
+     * @param {object} adapter the adapter instance
+     * @param {object} values state values to set
+     */
+    function setWallboxStates(adapter, values) {
+        const defaults = {
+            timeoutFailsafe: 60,
+            currentFailsafe: 0,
+            enableSys: true,
+            enableUser: true,
+            maxCurrent: 16000,
+            currentUser: 16000,
+            input: true,
+            'DIP-Sw1': '0xa2',
+        };
+        const all = Object.assign(defaults, values);
+        for (const id of Object.keys(all)) {
+            adapter.setStateInternal(id, all[id]);
+        }
+    }
+    describe('checkFailsafe - configuration of wallbox', () => {
+        it('activates failsafe with 60 s, 0 mA, saved, if wallbox has other settings', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { timeoutFailsafe: 0 });
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([['failsafe 60 0 1', true]]);
+        });
+        it('activates failsafe, if only the failsafe current differs', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { currentFailsafe: 6000 });
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([['failsafe 60 0 1', true]]);
+        });
+        it('sends nothing, if wallbox already has the settings', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, {});
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+        it('sends nothing, if settings of wallbox are not yet known', () => {
+            const adapter = createFailsafeAdapter(true);
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+        it('deactivates failsafe, if option is off but wallbox has failsafe active', () => {
+            const adapter = createFailsafeAdapter(false);
+            setWallboxStates(adapter, {});
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([['failsafe 0 0 1', true]]);
+        });
+        it('sends nothing, if option is off and failsafe of wallbox is already off', () => {
+            const adapter = createFailsafeAdapter(false);
+            setWallboxStates(adapter, { timeoutFailsafe: 0 });
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+    });
+    describe('checkFailsafe - recovery from triggered failsafe', () => {
+        const failsafeTriggered = { enableSys: false, enableUser: false, maxCurrent: 0 };
+        it('enables the wallbox and sets the current again', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, failsafeTriggered);
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([
+                ['ena 1', true],
+                ['curr 16000', true],
+            ]);
+        });
+        it('does not set a current below 6000 mA', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, Object.assign({ currentUser: 0 }, failsafeTriggered));
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([['ena 1', true]]);
+        });
+        it('does nothing, if wallbox is enabled by system', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { maxCurrent: 0 });
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+        it('does nothing, if offered current is not the failsafe current', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { enableSys: false, maxCurrent: 6000 });
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+        it('does nothing, if wallbox is disabled by open input X1 (DSW1.1 on)', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, Object.assign({ input: false, 'DIP-Sw1': '0xa2' }, failsafeTriggered));
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+        it('recovers, if input X1 is closed (DSW1.1 on)', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, Object.assign({ input: true, 'DIP-Sw1': '0xa2' }, failsafeTriggered));
+            adapter.checkFailsafe();
+            expect(adapter.datagrams.length).to.equal(2);
+        });
+        it('recovers, if input X1 is open but not used (DSW1.1 off)', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, Object.assign({ input: false, 'DIP-Sw1': '0x24' }, failsafeTriggered));
+            adapter.checkFailsafe();
+            expect(adapter.datagrams.length).to.equal(2);
+        });
+        it('does not recover, if option is off', () => {
+            const adapter = createFailsafeAdapter(false);
+            setWallboxStates(adapter, Object.assign({ timeoutFailsafe: 0 }, failsafeTriggered));
+            adapter.checkFailsafe();
+            expect(adapter.datagrams).to.deep.equal([]);
+        });
+    });
+    describe('sendFailsafeHeartbeat', () => {
+        it('sends enable state "on" of the wallbox', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { enableUser: true });
+            adapter.sendFailsafeHeartbeat();
+            expect(adapter.datagrams).to.deep.equal([['ena 1', true]]);
+        });
+        it('sends enable state "off" of the wallbox without enabling it', () => {
+            const adapter = createFailsafeAdapter(true);
+            setWallboxStates(adapter, { enableUser: false });
+            adapter.sendFailsafeHeartbeat();
+            expect(adapter.datagrams).to.deep.equal([['ena 0', true]]);
+        });
+    });
+});

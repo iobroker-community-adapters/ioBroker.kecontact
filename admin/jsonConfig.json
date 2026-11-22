@@ -519,6 +519,17 @@
                     "lg": 6,
                     "xl": 4,
                     "newLine": false
+                },
+                "failsafeEnWG": {
+                    "type": "checkbox",
+                    "label": "failsafeEnWG",
+                    "tooltip": "tooltip_failsafeEnWG",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 9,
+                    "lg": 6,
+                    "xl": 4,
+                    "newLine": true
                 }
             }
         },
